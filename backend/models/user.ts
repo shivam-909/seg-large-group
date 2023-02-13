@@ -1,10 +1,14 @@
 import { QueryDocumentSnapshot } from "firebase-admin/firestore";
 
 class User {
-    id: string;
+    username: string;
+    hashedPassword: string;
+    email: string;
 
-    constructor(id: string) {
-        this.id = id;
+    constructor(username: string, hashedPassword: string, email: string) {
+        this.username = username;
+        this.hashedPassword = hashedPassword;
+        this.email = email;
     }
 }
 

@@ -1,5 +1,9 @@
 import { Request, Response } from "express";
 import DB from "../../db/db";
+import { CreateUser, RetrieveUser } from "../../db/users";
+import User from "../../models/user";
+import bcrypt from 'bcrypt';
+import { GenerateKeyPair, ValidPassword } from "../utility";
 
 
 // Login accepts a request containing a username and password, and return a JWT 
@@ -14,14 +18,36 @@ export function Login(db: DB): (req: Request, res: Response) => void {
 // access key and refresh token.
 export function Register(db: DB): (req: Request, res: Response) => void {
     return (req: Request, res: Response) => {
-        res.send("unimplemented");
-    }
-}
+        const { username, password, email } = req.body;
 
-// Logout accepts a request containing a refresh token, and invalidate the token.
-export function Logout(db: DB): (req: Request, res: Response) => void {
-    return (req: Request, res: Response) => {
-        res.send("unimplemented");
+        RetrieveUser(db, username).then((user: User | null) => {
+            if (user) {
+                res.status(400).send("username already taken");
+                return
+            }
+        });
+
+        if (!ValidPassword(password)) {
+            res.status(400).send("invalid password");
+            return
+        }
+
+        const hash = bcrypt.hashSync(password, 10);
+
+        const user = new User(username, hash, email);
+
+        CreateUser(db, user).then(() => {
+            res.status(200).send("user created");
+        }).catch((err) => {
+            res.status(500).json(err.message);
+        });
+
+        let { access, refresh } = GenerateKeyPair(username);
+
+        res.status(200).json({
+            access: access,
+            refresh: refresh,
+        });
     }
 }
 
