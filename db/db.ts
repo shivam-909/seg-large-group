@@ -13,7 +13,9 @@ class DB {
     db: Firestore;
 
     constructor() {
-        initializeApp(FirebaseServiceAccount);
+        initializeApp({
+            credential: cert(FirebaseServiceAccount),
+        });
 
         this.db = getFirestore();
     }
