@@ -1,6 +1,6 @@
 import './LoginPage.css';
 
-function App() {
+function LoginPage() {
   return (
     <div className="App">
       <header className="App-header">
@@ -15,4 +15,4 @@ function App() {
   );
 }
 
-export default App;
+export default LoginPage;
