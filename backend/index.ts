@@ -1,9 +1,9 @@
 import express, { Express, Request, Response } from 'express';
 import dotenv from 'dotenv';
-import { HealthCheck, Route } from './routes/utility';
 import DB from './db/db';
-import { Login, Register, Refresh } from './routes/auth/auth';
+import { Login, Register, Refresh } from './service/routes/auth';
 import multer from 'multer';
+import { HealthCheck, Route } from './service/routes/routes';
 
 dotenv.config();
 

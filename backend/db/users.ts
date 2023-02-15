@@ -1,6 +1,6 @@
-import { Firestore } from "firebase-admin/firestore";
 import User from "../models/user";
 import DB from "./db";
+import { Error } from "../service/public";
 
 export async function CreateUser(db: DB, user: User) {
     const docRef = db.UserCollection().doc(user.username);
@@ -12,28 +12,37 @@ export async function CreateUser(db: DB, user: User) {
     });
 }
 
-export async function RetrieveUser(db: DB, username: string): Promise<User | null> {
-
+export async function RetrieveUser(db: DB, username: string): Promise<User> {
     const docRef = db.UserCollection().doc(username);
-    const snapshot = await docRef.get();
 
-    if (snapshot.exists) {
-        return snapshot.data()!;
+    try {
+        const doc = await docRef.get();
+        if (doc.exists) {
+            return doc.data() as User;
+        } else {
+            throw {
+                message: "user does not exist",
+            }
+        }
+    } catch (err) {
+        throw err
     }
-
-    return null
 }
 
-export function UpdateUser(db: DB, user: User) {
+export async function UpdateUser(db: DB, user: User): Promise<void> {
     const docRef = db.UserCollection().doc(user.username);
 
-    docRef.update({
-        'username': user.username,
-    });
+    try {
+        await docRef.update({
+            'username': user.username,
+        })
+    } catch (err) {
+        throw err
+    }
 }
 
-export function DeleteUser(db: DB, username: string) {
+export async function DeleteUser(db: DB, username: string) {
     const docRef = db.UserCollection().doc(username);
 
-    docRef.delete();
+    await docRef.delete();
 }
