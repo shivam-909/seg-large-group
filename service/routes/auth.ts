@@ -9,10 +9,33 @@ import { GenerateKeyPair, VerifyJWT } from "../tokens";
 
 
 // Login accepts a request containing a username and password, and return a JWT 
-// acccess key and refresh token.
+// access key and refresh token.
 export function Login(db: DB): Handler {
   return (req: Request, res: Response) => {
-    res.send("unimplemented");
+    const { username, password, email } = req.body;
+
+    RetrieveUser(db, email).then((user: User | null) => {
+      if (user) {
+        const hashedPassword = bcrypt.hashSync(password, 10);
+        if (user.hashedPassword == hashedPassword) {
+          let { access, refresh } = GenerateKeyPair(username);
+
+          res.status(200).json({
+            access: access,
+            refresh: refresh,
+          });
+          return
+        }
+        else {
+          res.status(401).send("invalid password");
+          return
+        }
+      }
+      else {
+        res.status(404).send("email not registered");
+        return
+      }
+    });
   }
 }
 
