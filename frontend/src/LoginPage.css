@@ -1,8 +1,8 @@
-.App {
+.LoginPage {
   text-align: center;
 }
 
-.App-header {
+.LoginPage-header {
   background-color: #282c34;
   min-height: 100vh;
   display: flex;
@@ -13,7 +13,7 @@
   color: white;
 }
 
-.App-text {
+.LoginPage-text {
   background-color: #282c34;
   display: flex;
   flex-direction: column;
@@ -24,7 +24,7 @@
   padding: 10px;
 }
 
-.App-link {
+.LoginPage-link {
   color: #61dafb;
 }
 

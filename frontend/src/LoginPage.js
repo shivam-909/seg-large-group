@@ -18,10 +18,10 @@ function LoginPage() {
     }
   }
   return (
-    <div className="App">
-      <header className="App-header">
+    <div className="LoginPage">
+      <header className="LoginPage-header">
         Login Page
-        <div className='App-text'>
+        <div className='LoginPage-text'>
         <input id='email' className='email-input' placeholder="Email"/>
         <div>
           <input id='password' type="password" className='password-input' placeholder="Password"/>
