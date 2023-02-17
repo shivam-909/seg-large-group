@@ -1,14 +1,18 @@
 import './LoginPage.css';
 
 function LoginPage() {
+  function loginButton(){
+    let email = document.getElementById("email").value
+    let password = document.getElementById("password").value
+  }
   return (
     <div className="App">
       <header className="App-header">
         Login Page
         <div className='App-text'>
-        <input className='App-input' placeholder="Email"/>
-        <input className='App-input' placeholder="Password"/>
-        <button className='App-button'>Enter</button>
+        <input id='email' className='App-input' placeholder="Email"/>
+        <input id='password' className='App-input' placeholder="Password"/>
+        <button className='App-button' onClick={loginButton}>Enter</button>
         </div>
       </header>
     </div>
