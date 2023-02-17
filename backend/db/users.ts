@@ -1,37 +1,48 @@
-import { Firestore } from "firebase-admin/firestore";
 import User from "../models/user";
 import DB from "./db";
+import { Error } from "../service/public";
 
-export function CreateUser(db: DB, user: User) {
-    const docRef = db.UserCollection().doc(user.id);
+export async function CreateUser(db: DB, user: User) {
+    const docRef = db.UserCollection().doc(user.username);
 
-    docRef.set({
-        'id': user.id,
+    await docRef.set({
+        'username': user.username,
+        'hashedPassword': user.hashedPassword,
+        'email': user.email,
     });
 }
 
-export async function RetrieveUser(db: DB, id: string): Promise<User | null> {
+export async function RetrieveUser(db: DB, username: string): Promise<User> {
+    const docRef = db.UserCollection().doc(username);
 
-    const docRef = db.UserCollection().doc(id);
-    const snapshot = await docRef.get();
-
-    if (snapshot.exists) {
-        return snapshot.data()!;
+    try {
+        const doc = await docRef.get();
+        if (doc.exists) {
+            return doc.data() as User;
+        } else {
+            throw {
+                message: "user does not exist",
+            }
+        }
+    } catch (err) {
+        throw err
     }
-
-    return null
 }
 
-export function UpdateUser(db: DB, user: User) {
-    const docRef = db.UserCollection().doc(user.id);
+export async function UpdateUser(db: DB, user: User): Promise<void> {
+    const docRef = db.UserCollection().doc(user.username);
 
-    docRef.update({
-        'id': user.id,
-    });
+    try {
+        await docRef.update({
+            'username': user.username,
+        })
+    } catch (err) {
+        throw err
+    }
 }
 
-export function DeleteUser(db: DB, id: string) {
-    const docRef = db.UserCollection().doc(id);
+export async function DeleteUser(db: DB, username: string) {
+    const docRef = db.UserCollection().doc(username);
 
-    docRef.delete();
+    await docRef.delete();
 }
