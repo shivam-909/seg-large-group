@@ -1,5 +1,4 @@
 import './LoginPage.css';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 function LoginPage() {
   function loginButton(){
