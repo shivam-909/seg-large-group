@@ -2,8 +2,10 @@ import './LoginPage.css';
 
 function LoginPage() {
   function loginButton(){
-    let email = document.getElementById("email").value
-    let password = document.getElementById("password").value
+    let email = document.getElementById("email").value;
+    let password = document.getElementById("password").value;
+    console.log(email);
+    console.log(password);
   }
   function hidePassword() {
     let passwordField = document.getElementById("password");
@@ -13,7 +15,7 @@ function LoginPage() {
       eye.className = "fa-solid fa-eye-slash";
     } else {
       passwordField.type = "password";
-      eye.className = "fa-solid fa-eye"
+      eye.className = "fa-solid fa-eye";
     }
   }
   return (
