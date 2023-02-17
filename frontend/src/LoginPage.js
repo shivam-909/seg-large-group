@@ -12,7 +12,7 @@ function LoginPage() {
         <div className='App-text'>
         <input id='email' className='App-input' placeholder="Email"/>
         <input id='password' className='App-input' placeholder="Password"/>
-        <button className='App-button' onClick={loginButton}>Enter</button>
+        <button className='button' onClick={loginButton}>Enter</button>
         </div>
       </header>
     </div>

@@ -35,10 +35,17 @@
   margin: 5px;
 }
 
-.App-button {
+.button {
   background-color: #61dafb;
   border-radius: 10px;
   font-size: calc(10px + 2vmin);
   padding: 10px;
   margin: 5px;
+}
+.button:hover {background-color: #50b1cc}
+
+.button:active {
+  background-color: #479db5;
+  /* box-shadow: 0 5px #666; */
+  transform: translateY(2px);
 }
