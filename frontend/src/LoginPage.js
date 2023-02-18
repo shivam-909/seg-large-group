@@ -6,8 +6,10 @@ function LoginPage() {
     let password = document.getElementById("password").value;
     console.log(email);
     console.log(password);
+    // API backend needed to be added.
   }
   function hidePassword() {
+    // Toggles the password field visibility and icon.
     let passwordField = document.getElementById("password");
     let eye = document.getElementById("toggleEye");
     if (passwordField.type === "password") {
@@ -27,6 +29,13 @@ function LoginPage() {
         <div>
           <input id='password' type="password" className='password-input' placeholder="Password"/>
           <button type='checkbox' className='togglePasswordButton' onClick={hidePassword}><i id='toggleEye' className="fa-solid fa-eye"></i></button>
+        </div>
+        <div>
+          <input class='w-5 h-5 inline-block' type='checkbox'/> 
+          <a> Remember Me</a>
+        </div>
+        <div class='mt-5'>
+        New user? <a className='LoginPage-link' href='/'>Sign up.</a>
         </div>
         <button className='button' onClick={loginButton}>Enter <i class="fa-solid fa-right-to-bracket"></i></button>
         </div>

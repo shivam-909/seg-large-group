@@ -19,7 +19,7 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
+  font-size: calc(8px + 2vmin);
   color: white;
   padding: 10px;
 }
@@ -34,6 +34,7 @@
   padding: 10px;
   margin: 5px;
   width: calc(250px + 15vmin);
+  color: black;
 }
 
 .password-input {
@@ -42,6 +43,7 @@
   padding: 10px;
   margin: 5px;
   width: calc(190px + 15vmin);
+  color: black;
 }
 
 .button {
@@ -49,7 +51,8 @@
   border-radius: 10px;
   font-size: calc(10px + 2vmin);
   padding: 10px;
-  margin: 5px;
+  margin: 10px;
+  color: black;
 }
 .button:hover {background-color: #50b1cc}
 
@@ -64,11 +67,12 @@
   color: white;
   border-color: #0000;
   border-radius: 10px;
-  font-size: calc(10px + 2vmin);
+  font-size: calc(15px + 2vmin);
+  max-width: 50px;
+  max-height: 20px;
   padding: 10px;
   margin: 5px;
 }
 .togglePasswordButton:hover {
   transform: scale(1.1);
-  animation-duration: 2s;
 }
