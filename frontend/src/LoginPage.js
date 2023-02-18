@@ -11,10 +11,12 @@ function LoginPage() {
     if (rememberPass === true){
       localStorage.setItem("email", email)
       localStorage.setItem("password", password)
+      localStorage.setItem("rememberPass", true)
     }
     else{
-      localStorage.removeItem("email", " ")
-      localStorage.removeItem("password", " ")
+      localStorage.removeItem("email")
+      localStorage.removeItem("password")
+      localStorage.removeItem("rememberPass")
     }
     // API backend needed to be added.
   }
@@ -41,7 +43,7 @@ function LoginPage() {
           <button type='checkbox' className='togglePasswordButton' onClick={hidePassword}><i id='toggleEye' className="fa-solid fa-eye"></i></button>
         </div>
         <div>
-          <input id='rememberPass' class='w-5 h-5 inline-block' type='checkbox'/> Remember Me
+          <input id='rememberPass' class='w-5 h-5 inline-block' type='checkbox' defaultChecked={localStorage.getItem("rememberPass")}/> Remember Me
         </div>
         <div class='mt-5'>
         New user? <a className='LoginPage-link' href='/#'>Sign up.</a>
