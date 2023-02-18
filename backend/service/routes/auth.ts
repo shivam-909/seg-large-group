@@ -51,39 +51,52 @@ export function Register(db: DB): Handler {
     }).catch((err) => {
       const message = getErrorMessage(err);
       if (message != "user does not exist") {
-        res.status(500).json(message);
-        return
+        return res.status(500).json(
+          {
+            msg: message,
+          }
+        );
       }
     });
 
     // Sanity check for user.
     if (user!) {
-      res.status(400).send("user already exists");
-      return
+      return res.status(400).send("user already exists");
     }
 
     if (!ValidPassword(password)) {
-      res.status(400).send("invalid password");
-      return
+      return res.status(400).send("invalid password");
     }
 
-    const hash = bcrypt.hashSync(password, 10);
-    const newUser = new User(username, hash, email);
+    const hash = ((): string | Error => {
+      try {
+        return bcrypt.hashSync(password, 10)
+      } catch (e) {
+        return {
+          message: getErrorMessage(e),
+        }
+      }
+    })();
+
+    if (hash instanceof Error) {
+      return res.status(500).json({
+        msg: "failed to hash password" + getErrorMessage(hash)
+      })
+    }
+
+    const newUser = new User(username, hash as string, email);
     CreateUser(db, newUser).then(() => {
-      res.status(200).send("user created");
       return
     }).catch((err) => {
-      res.status(500).json(err.message);
-      return
+      return res.status(500).json(err.message);
     });
 
     let { access, refresh } = GenerateKeyPair(username);
 
-    res.status(200).json({
+    return res.status(200).json({
       access: access,
       refresh: refresh,
     });
-    return
   }
 }
 

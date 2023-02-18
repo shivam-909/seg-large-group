@@ -4,21 +4,19 @@
 
 https://nodejs.org/en/download/
 
-* Install the latest version of npm
+* Install the latest version of npm : `npm install -g npm`
 
-`npm install -g npm`
-
-* Install all dependencies
-
-`npm install`
+* Install all dependencies : `npm install`
 
 * Run the server in development mode
 
-`npm run dev`
+  - First, run `npm run build`
 
-* Optional: Build the server into a distributable located in `/dist`
+  - Then copy `admin-sdk.json` into `/dist/config/`
 
-`npm run build`
+  - `npm run dev`
+
+
 
 # Project structure
 
