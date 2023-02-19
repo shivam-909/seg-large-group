@@ -12,20 +12,20 @@ export async function CreateUser(db: DB, user: User) {
     });
 }
 
-export async function RetrieveUser(db: DB, username: string): Promise<User> {
-    const docRef = db.UserCollection().doc(username);
+export async function RetrieveUser(db: DB, email: string): Promise<User> {
+    const docRef = db.UserCollection();
+    const snapshot = await docRef.where('email', '==', email).get();
 
-    try {
-        const doc = await docRef.get();
-        if (doc.exists) {
-            return doc.data() as User;
-        } else {
-            throw {
-                message: "user does not exist",
-            }
+    if (snapshot.size == 1) {
+        return snapshot.docs[0].data() as User;
+    } else if (snapshot.empty) {
+        throw {
+            message: "user does not exist",
         }
-    } catch (err) {
-        throw err
+    } else {
+        throw {
+            message: "multiple emails match",
+        }
     }
 }
 
