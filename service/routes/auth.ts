@@ -14,33 +14,22 @@ export function Login(db: DB): Handler {
   return (req: Request, res: Response) => {
     const { email, password } = req.body;
 
-    let user: User;
-    RetrieveUser(db, email).then((u) => {
-      user = u;
-    }).catch((err) => {
-      const message = getErrorMessage(err);
-      if (message != "user does not exist") {
-        res.status(500).json(message);
-        return
-      }
-    });
-
-    if (user!) {
-      const hashedPassword = bcrypt.hashSync(password, 10);
-      if (user.hashedPassword == hashedPassword) {
+    RetrieveUser(db, email).then((user) => {
+      const match = bcrypt.compareSync(password, user.hashedPassword);
+      if (match) {
         let { access, refresh } = GenerateKeyPair(user.username);
 
-        res.status(200).json({
+        return res.status(200).json({
           access: access,
           refresh: refresh,
         });
-        return
       }
       else {
-        res.status(401).send("invalid password");
-        return
+        return res.status(401).send("invalid password");
       }
-    }
+    }).catch((err) => {
+      return res.status(400).json(err.message);
+    });
   }
 }
 
