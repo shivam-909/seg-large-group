@@ -5,9 +5,6 @@ function LoginPage() {
     let email = document.getElementById("email").value;
     let password = document.getElementById("password").value;
     let rememberPass = document.getElementById("rememberPass").checked;
-    // console.log(email);
-    // console.log(password);
-    // Stores password and email locally if the user allowed it.
     if (rememberPass === true){
       localStorage.setItem("email", email)
       localStorage.setItem("password", password)

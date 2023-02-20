@@ -14,3 +14,33 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+.default-input {
+  border-radius: 10px;
+  font-size: calc(10px + 1.2vmax);
+  padding: 10px;
+  margin: 5px;
+  width: calc(130px + 15vmax);
+  color: black;
+}
+.default-button {
+  background-color: #61dafb;
+  border-radius: 10px;
+  font-size: calc(10px + 1.2vmax);
+  padding: 10px;
+  margin: 10px;
+  color: black;
+}
+.default-button:hover {background-color: #50b1cc}
+
+.default-button:active {
+  background-color: #479db5;
+  /* box-shadow: 0 5px #666; */
+  transform: translateY(2px);
+}
+.default-dropdown {
+  border-radius: 10px;
+  font-size: calc(6px + 1.2vmax);
+  padding: 10px;
+  margin: 5px;
+  color: black;
+}
