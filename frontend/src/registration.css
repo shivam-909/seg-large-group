@@ -15,10 +15,13 @@
 }
 
 .registrationBody{
-    font-family: 'Nunito', sans-serif;
-    color: #384047;
-
+    max-width: 400px;
+    margin: 10px auto;
+    padding: 20px 20px;
+    background: #e7ebec;
+    border-radius: 8px
 }
+
 .firstName-input{
     color: black;
     padding: 10px;
@@ -60,13 +63,22 @@
 }
 
 .registrationButton{
-    padding: 10px;
+    /* padding: 10px;
     margin: 5px;
     color: black;
-    background-color: oldlace;
+    background-color: oldlace; */
+    padding: 18px 20px 18px 20px;
+    color: #FFF;
+    background-color: #4bc970;
+    font-size: 18px;
+    text-align: center;
+    font-style: normal;
+    width: 100%;
+    margin-bottom: 10px;
 }
 
-.registrationButton:hover {background-color: bisque}
+.registrationButton:hover {background-color: #282c34;
+}
 
 .loginButton{
     padding: 10px;

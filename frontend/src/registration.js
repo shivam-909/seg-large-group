@@ -67,9 +67,10 @@ function registrationForm(){
                 <input type="password"  placeholder="Confirm Password" id="confirmPassword" className= "confirmPassword-input" />
             </div>
 
+
             <div className="button">             
                 {/* <button onClick={() =>handleSubmit()} type="submit" className= "signUpButton">Register</button> */}
-                <button type="submit" className= "signUpButton">Register</button>
+                <button type="submit" className= "registrationButton">Register</button>
             </div>
         {/* <button className= "loginButton">Already have an account? Login here! </button>  */}
         </div>
