@@ -36,7 +36,12 @@ function registrationForm(){
     //     }
     return(
         <div className= "registration">
-        <header className="registration-header">Registration</header>
+        <div className="header-body">
+            <h1 className= "registration-header"for="registration" >Registration</h1>
+        </div>
+
+        <div className= "registrationBody">
+
             <div className="firstName">
                 <label for="firstName">First Name </label>
                 <input type="text" placeholder="First Name" id="firstName" name="firstName" className= "firstName-input"/>
@@ -62,11 +67,12 @@ function registrationForm(){
                 <input type="password"  placeholder="Confirm Password" id="confirmPassword" className= "confirmPassword-input" />
             </div>
 
-            <div>             
+            <div className="button">             
                 {/* <button onClick={() =>handleSubmit()} type="submit" className= "signUpButton">Register</button> */}
                 <button type="submit" className= "signUpButton">Register</button>
             </div>
         {/* <button className= "loginButton">Already have an account? Login here! </button>  */}
+        </div>
         </div>
     )
 }
