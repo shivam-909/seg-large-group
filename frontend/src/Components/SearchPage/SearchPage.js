@@ -1,5 +1,3 @@
-import './LoginPage.css';
-
 function SearchPage() {
   return (
     <div className="LoginPage">
