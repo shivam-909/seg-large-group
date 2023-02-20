@@ -1,8 +1,8 @@
 import { render, screen } from '@testing-library/react';
-import registration from './Registration';
+import Registration from './Registration';
 
 test('renders Registration Page', () => {
-  render(<registration />);
-  const linkElement = screen.getByText("Sign Up Page");
+  render(<Registration/>);
+  const linkElement = screen.getByText("Registration");
   expect(linkElement).toBeInTheDocument();
 });
