@@ -1,11 +1,11 @@
 import User from "../models/user";
-import updateUser from "../models/updateUser";
 import DB from "./db";
 
 export async function CreateUser(db: DB, user: User) {
     const docRef = db.UserCollection().doc(user.email);
 
     await docRef.set({
+        'username': user.username,
         'email': user.email,
         'hashedPassword': user.hashedPassword,
     });
@@ -28,11 +28,13 @@ export async function RetrieveUser(db: DB, email: string): Promise<User> {
     }
 }
 
-export async function UpdateUser(db: DB, user: User, data: updateUser): Promise<void> {
-    const docRef = db.UserCollection().doc(user.id);
+export async function UpdateUser(db: DB, user: User): Promise<void> {
+    const docRef = db.UserCollection().doc(user.username);
 
     try {
-        await docRef.update(data)
+        await docRef.update({
+            'username': user.username,
+        })
     } catch (err) {
         throw err
     }
