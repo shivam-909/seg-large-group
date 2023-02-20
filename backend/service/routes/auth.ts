@@ -17,7 +17,7 @@ export function Login(db: DB): Handler {
     RetrieveUser(db, email).then((user) => {
       const match = bcrypt.compareSync(password, user.hashedPassword);
       if (match) {
-        let { access, refresh } = GenerateKeyPair(user.username);
+        let { access, refresh } = GenerateKeyPair(user.id);
 
         return res.status(200).json({
           access: access,

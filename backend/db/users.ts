@@ -1,14 +1,13 @@
 import User from "../models/user";
+import updateUser from "../models/updateUser";
 import DB from "./db";
-import { Error } from "../service/public";
 
 export async function CreateUser(db: DB, user: User) {
-    const docRef = db.UserCollection().doc(user.username);
+    const docRef = db.UserCollection().doc(user.email);
 
     await docRef.set({
-        'username': user.username,
-        'hashedPassword': user.hashedPassword,
         'email': user.email,
+        'hashedPassword': user.hashedPassword,
     });
 }
 
@@ -29,20 +28,18 @@ export async function RetrieveUser(db: DB, email: string): Promise<User> {
     }
 }
 
-export async function UpdateUser(db: DB, user: User): Promise<void> {
-    const docRef = db.UserCollection().doc(user.username);
+export async function UpdateUser(db: DB, user: User, data: updateUser): Promise<void> {
+    const docRef = db.UserCollection().doc(user.id);
 
     try {
-        await docRef.update({
-            'username': user.username,
-        })
+        await docRef.update(data)
     } catch (err) {
         throw err
     }
 }
 
-export async function DeleteUser(db: DB, username: string) {
-    const docRef = db.UserCollection().doc(username);
+export async function DeleteUser(db: DB, id: string) {
+    const docRef = db.UserCollection().doc(id);
 
     await docRef.delete();
 }
