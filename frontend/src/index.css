@@ -16,16 +16,16 @@ code {
 }
 .default-input {
   border-radius: 10px;
-  font-size: calc(10px + 2vmin);
+  font-size: calc(10px + 1.2vmax);
   padding: 10px;
   margin: 5px;
-  width: calc(250px + 15vmin);
+  width: calc(130px + 15vmax);
   color: black;
 }
 .default-button {
   background-color: #61dafb;
   border-radius: 10px;
-  font-size: calc(10px + 2vmin);
+  font-size: calc(10px + 1.2vmax);
   padding: 10px;
   margin: 10px;
   color: black;
@@ -39,7 +39,7 @@ code {
 }
 .default-dropdown {
   border-radius: 10px;
-  font-size: calc(10px + 2vmin);
+  font-size: calc(6px + 1.2vmax);
   padding: 10px;
   margin: 5px;
   color: black;
