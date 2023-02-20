@@ -1,0 +1,69 @@
+.registration{
+    text-align: center;
+}
+
+.registration-header{
+    align-items: center;
+    background-color: white;
+    font-size: medium;
+}
+
+.firstName-input{
+    color: black;
+    padding: 10px;
+    margin: 5px;
+    border-radius: 10px;
+    background-color: oldlace;
+}
+
+.lastName-input{  
+    color: black;
+    padding: 10px;
+    margin: 5px;
+    border-radius: 10px;
+    background-color: oldlace;
+}
+
+.email-input{
+    color: black;
+    padding: 10px;
+    margin: 5px;
+    border-radius: 10px;
+    background-color: oldlace;
+}
+
+.password-input{
+    color: black;
+    padding: 10px;
+    margin: 5px;
+    border-radius: 10px;
+    background-color: oldlace;
+}
+
+.confirmPassword-input{
+    color: black;
+    padding: 10px;
+    margin: 5px;
+    border-radius: 10px;
+    background-color: oldlace;
+}
+
+.registrationButton{
+    padding: 10px;
+    margin: 5px;
+    color: black;
+    background-color: oldlace;
+}
+
+.registrationButton:hover {background-color: bisque}
+
+.loginButton{
+    padding: 10px;
+    margin: 5px;
+    color: black;
+    background-color: oldlace;
+}
+
+.loginButton:hover {background-color: bisque}
+
+
