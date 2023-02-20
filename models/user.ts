@@ -1,22 +1,13 @@
 import { QueryDocumentSnapshot } from "firebase-admin/firestore";
 
 class User {
-    first_name: string;
-    last_name: string;
-    date_of_birth: Date;
+
+    username: string;
     email: string;
     hashedPassword: string;
-    is_company: {
-        type: boolean,
-        default: false
-    };
-    company_name: string;
-    location: string;
-    pfp_url: string;
-    saved_jobs: string[];
-    notifications: string[];
 
-    constructor(id: string, email: string, hashedPassword: string) {
+    constructor(username: string, email: string, hashedPassword: string) {
+        this.username = username;
         this.email = email;
         this.hashedPassword = hashedPassword;
     }
