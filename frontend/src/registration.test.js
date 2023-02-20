@@ -1,5 +1,5 @@
 import { render, screen } from '@testing-library/react';
-import registration from './registration';
+import registration from './Registration';
 
 test('renders Registration Page', () => {
   render(<registration />);
