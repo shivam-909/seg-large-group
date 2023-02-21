@@ -21,16 +21,12 @@ export async function createJobListing(db: DB, jobListing: JobListing) {
 
 export async function retrieveJobListing(db: DB, id: string): Promise<JobListing | null> {
   const docRef = db.JobListingCollection().doc(id);
-
-  try {
-    const doc = await docRef.get();
-    if (doc.exists) {
-      return doc.data() as JobListing;
-    } else {
-      return null
-    }
-  } catch (err) {
-    throw err;
+  const doc = await docRef.get();
+  if (doc.exists) {
+    return doc.data() as JobListing;
+  } 
+  else {
+    return null
   }
 }
 
