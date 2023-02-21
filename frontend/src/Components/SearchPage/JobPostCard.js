@@ -5,8 +5,8 @@ import PlaceholderCard from "./PlaceholderCard";
 function JobPostCard(props) {
     return (
         <div className='border-2 border-darker-grey rounded-xl w-[410px] p-4'>
-            {props.age <= 3 && <p className='text-xs text-green-600 mb-1'>new</p>}
-            <p className='font-bold'>{props.title}</p>
+            {props.age <= 3 && <p className='text-xs mb-1 text-green'>new</p>}
+            <p className='font-bold text-xl'>{props.title}</p>
             <p>{props.companyName}</p>
             <p className='mb-3'>{props.location}</p>
 
@@ -36,7 +36,7 @@ function JobPostCard(props) {
                 </div>
             }
 
-            {props.benefits &&
+            {props.benefits.length > 0 &&
                 <div>
                     <p className='italic text-xs my-1'>Benefits</p>
                     <div className='space-x-1.5'>
@@ -47,7 +47,7 @@ function JobPostCard(props) {
                 </div>
             }
 
-            <p className='mt-2 text-sm'>Posted {props.age} day{props.age!=='1' && 's'} ago</p>
+            {props.age < 2 ? <p className='mt-2 text-sm'>Posted {props.age===0 ? 'today' : '1 day ago'}.</p> : <p className='mt-2 text-sm'>Posted {props.age} days ago</p>}
         </div>
     );
 }
