@@ -1,5 +1,5 @@
 import DB from "../db/db";
-import faker from "faker";
+import { faker } from '@faker-js/faker';
 import JobListing from "../models/job";
 import { createJobListing } from "../db/jobs";
 
