@@ -1,12 +1,12 @@
 import { QueryDocumentSnapshot } from "firebase-admin/firestore";
 
 class User {
-    username: string;
+    idField: string;
     hashedPassword: string;
     email: string;
 
-    constructor(username: string, hashedPassword: string, email: string) {
-        this.username = username;
+    constructor(id: string, hashedPassword: string, email: string) {
+        this.idField = id;
         this.hashedPassword = hashedPassword;
         this.email = email;
     }
@@ -15,7 +15,6 @@ class User {
 export const UserConverter = {
     toFirestore: (user: User) => user,
     fromFirestore: (snapshot: QueryDocumentSnapshot) => snapshot.data() as User
-
 }
 
 export default User;
