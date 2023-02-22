@@ -1,0 +1,78 @@
+.LoginPage {
+  text-align: center;
+}
+
+.LoginPage-header {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(30px + 2vmin);
+  color: white;
+}
+
+.LoginPage-text {
+  background-color: #282c34;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(8px + 2vmin);
+  color: white;
+  padding: 10px;
+}
+
+.LoginPage-link {
+  color: #61dafb;
+}
+
+.text-input {
+  border-radius: 10px;
+  font-size: calc(10px + 2vmin);
+  padding: 5px 5px 5px 10px;
+  margin: 5px;
+  width: calc(250px + 15vmin);
+  color: black;
+}
+
+/*.password-input {*/
+/*  border-radius: 10px;*/
+/*  font-size: calc(10px + 2vmin);*/
+/*  padding: 10px;*/
+/*  margin: 5px;*/
+/*  width: calc(190px + 15vmin);*/
+/*  color: black;*/
+/*}*/
+
+.button {
+  background-color: #61dafb;
+  border-radius: 10px;
+  font-size: calc(10px + 2vmin);
+  padding: 10px;
+  margin: 10px;
+  color: black;
+}
+.button:hover {background-color: #50b1cc}
+
+.button:active {
+  background-color: #479db5;
+  /* box-shadow: 0 5px #666; */
+  transform: translateY(2px);
+}
+
+.togglePasswordButton {
+  background-color: #0000;
+  color: white;
+  border-color: #0000;
+  border-radius: 10px;
+  font-size: calc(15px + 2vmin);
+  max-width: 50px;
+  max-height: 20px;
+  padding: 10px;
+  margin: 5px;
+}
+.togglePasswordButton:hover {
+  transform: scale(1.1);
+}
