@@ -8,7 +8,7 @@ function SearchPage() {
       <header className="LoginPage-header">
           Search Page
           <SearchBar/>
-        </header>
+      </header>
     </div>
   );
 }
