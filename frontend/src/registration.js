@@ -34,6 +34,7 @@ function registrationForm(){
     //     const handleSubmit = () => {
     //         console.log(firstName, lastName, emailAddress, password, confirmPassword)
     //     }
+
     return(
         <div className= "registration">
         <div className="header-body">
@@ -42,31 +43,30 @@ function registrationForm(){
 
         <div className= "registrationBody">
 
-            <div className="firstName">
+            <div className="name-labels">
                 <label for="firstName">First Name </label>
-                <input type="text" placeholder="First Name" id="firstName" name="firstName" className= "firstName-input"/>
+                <input type="text" placeholder="First Name" id="firstName" name="firstName" className= "text-input"/>
             </div>
 
-            <div className="lastName">
+            <div className="name-labels">
                 <label for="lastName">Last Name </label>
-                <input type="text" placeholder="Last Name" id="lastName" name="lastName" className= "lastName-input"/>
+                <input type="text" placeholder="Last Name" id="lastName" name="lastName" className= "text-input"/>
             </div>
 
-            <div className="emailAddress">
+            <div className="name-labels">
                 <label for="emailAddress">Email Address </label>
-                <input type="emailAddress" placeholder="example@gmail.com" id="emailAddress" name="emailAddress" className= "emailAddress-input" />
+                <input type="emailAddress" placeholder="example@gmail.com" id="emailAddress" name="emailAddress" className= "text-input" />
             </div>
 
-            <div className="password">
+            <div className="name-labels">
                 <label for="password">Password </label>
-                <input type="password" placeholder="Password" id="password" name="password" className= "password-input" />
+                <input type="password" placeholder="Password" id="password" name="password" className= "text-input" />
             </div>
 
-            <div className="confirmPassword">
+            <div className="name-labels">
                 <label for="confirmPassword">Confirm Password </label>
-                <input type="password"  placeholder="Confirm Password" id="confirmPassword" className= "confirmPassword-input" />
+                <input type="password"  placeholder="Confirm Password" id="confirmPassword" className= "text-input" />
             </div>
-
 
             <div className="button">             
                 {/* <button onClick={() =>handleSubmit()} type="submit" className= "signUpButton">Register</button> */}

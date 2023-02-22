@@ -14,6 +14,10 @@
     color: white;
 }
 
+.name-labels{
+    color: black;
+}
+
 .registrationBody{
     max-width: 400px;
     margin: 10px auto;
@@ -22,7 +26,7 @@
     border-radius: 8px
 }
 
-.firstName-input{
+.text-input{
     color: black;
     padding: 10px;
     margin: 5px;
@@ -31,30 +35,6 @@
 }
 
 .lastName-input{  
-    color: black;
-    padding: 10px;
-    margin: 5px;
-    border-radius: 10px;
-    background-color: oldlace;
-}
-
-.emailAddress-input{
-    color: black;
-    padding: 10px;
-    margin: 5px;
-    border-radius: 10px;
-    background-color: oldlace;
-}
-
-.password-input{
-    color: black;
-    padding: 10px;
-    margin: 5px;
-    border-radius: 10px;
-    background-color: oldlace;
-}
-
-.confirmPassword-input{
     color: black;
     padding: 10px;
     margin: 5px;
