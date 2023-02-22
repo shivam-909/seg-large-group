@@ -1,12 +1,14 @@
-import salaryIcon from './salaryIcon.png';
-import suitcaseIcon from './suitcaseIcon.png';
-import clockIcon from './clockIcon.png';
+import salaryIcon from '../../icons/salaryIcon.png';
+import suitcaseIcon from '../../icons/suitcaseIcon.png';
+import clockIcon from '../../icons/clockIcon.png';
 import PlaceholderCard from "./PlaceholderCard";
+import Urgent from "./Urgent";
+import JobPostAge from "./JobPostAge";
 function JobPostCard(props) {
     return (
-        <div className='border-2 border-[#d8d4d4] rounded-xl w-[410px] p-4'>
-            {props.age <= 3 && <p className='text-xs text-green-600 mb-1'>new</p>}
-            <p className='font-bold'>{props.title}</p>
+        <div className='border-2 border-darker-grey rounded-xl w-[410px] p-4'>
+            {props.age <= 3 && <p className='text-xs mb-1 text-green'>new</p>}
+            <p className='font-bold text-xl'>{props.title}</p>
             <p>{props.companyName}</p>
             <p className='mb-3'>{props.location}</p>
 
@@ -18,12 +20,7 @@ function JobPostCard(props) {
                 ))}
             </div>
 
-            {props.urgent &&
-                <div className='flex items-center space-x-1 mb-3'>
-                    <img src={clockIcon} alt=''/>
-                    <p className='text-sm'>Urgently needed</p>
-                </div>
-            }
+            <Urgent urgent={props.urgent} icon={clockIcon}/>
 
             {props.requirements.length > 0 &&
                 <div>
@@ -36,7 +33,7 @@ function JobPostCard(props) {
                 </div>
             }
 
-            {props.benefits &&
+            {props.benefits.length > 0 &&
                 <div>
                     <p className='italic text-xs my-1'>Benefits</p>
                     <div className='space-x-1.5'>
@@ -47,7 +44,7 @@ function JobPostCard(props) {
                 </div>
             }
 
-            <p className='mt-2 text-sm'>Posted {props.age} day{props.age!=='1' && 's'} ago</p>
+            <JobPostAge age={props.age}/>
         </div>
     );
 }
