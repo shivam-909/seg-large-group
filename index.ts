@@ -5,6 +5,7 @@ import { Login, Register, Refresh } from './service/routes/auth';
 import multer from 'multer';
 import { HealthCheck, Route } from './service/routes/routes';
 import { ErrorToCode } from './service/public';
+import {AddListing, SeedJobs} from "./service/routes/jobs";
 
 dotenv.config();
 
@@ -22,6 +23,12 @@ app.get('/', HealthCheck);
 app.post('/auth/login', upload.none(), Route(app, Login));
 app.post('/auth/register', upload.none(), Route(app, Register));
 app.post('/auth/refresh', upload.none(), Route(app, Refresh));
+
+app.post('/job/add', upload.none(), Route(app, AddListing));
+app.post('/jobs/seed', Route(app, SeedJobs));
+
+
+
 
 app.use((err: any, req: Request, res: Response, next: NextFunction) => {
     console.error(err.stack);
