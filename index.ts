@@ -5,6 +5,7 @@ import { Login, Register, Refresh } from './service/routes/auth';
 import multer from 'multer';
 import { HealthCheck, Route } from './service/routes/routes';
 import { ErrorToCode } from './service/public';
+import {RetrieveApplication} from "./db/applications";
 
 dotenv.config();
 
