@@ -72,9 +72,15 @@ function registrationForm(){
                 {/* <button onClick={() =>handleSubmit()} type="submit" className= "signUpButton">Register</button> */}
                 <button type="submit" className= "registrationButton">Register</button>
             </div>
+
+            
         {/* <button className= "loginButton">Already have an account? Login here! </button>  */}
         </div>
         </div>
     )
 }
+
+const Google = props => (
+    <a href="#" id="googleIcon"></a>
+);
 export default registrationForm;
