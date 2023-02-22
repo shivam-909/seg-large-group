@@ -2,10 +2,11 @@ import DB from "../db/db";
 import { faker } from '@faker-js/faker';
 import JobListing from "../models/job";
 import { createJobListing } from "../db/jobs";
+import { randomUUID } from "crypto";
 
 function generateJobListing(): JobListing {
   return new JobListing(
-      faker.datatype.uuid(),
+      randomUUID(),
       faker.name.jobTitle(),
       faker.datatype.number({
         'min': 30000,
