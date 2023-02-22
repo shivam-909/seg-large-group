@@ -2,6 +2,8 @@ import salaryIcon from '../../icons/salaryIcon.png';
 import suitcaseIcon from '../../icons/suitcaseIcon.png';
 import clockIcon from '../../icons/clockIcon.png';
 import PlaceholderCard from "./PlaceholderCard";
+import Urgent from "./Urgent";
+import JobPostAge from "./JobPostAge";
 function JobPostCard(props) {
     return (
         <div className='border-2 border-darker-grey rounded-xl w-[410px] p-4'>
@@ -18,12 +20,7 @@ function JobPostCard(props) {
                 ))}
             </div>
 
-            {props.urgent &&
-                <div className='flex items-center space-x-1 mb-3'>
-                    <img src={clockIcon} alt=''/>
-                    <p className='text-sm'>Urgently needed</p>
-                </div>
-            }
+            <Urgent urgent={props.urgent} icon={clockIcon}/>
 
             {props.requirements.length > 0 &&
                 <div>
@@ -47,7 +44,7 @@ function JobPostCard(props) {
                 </div>
             }
 
-            {props.age < 2 ? <p className='mt-2 text-sm'>Posted {props.age===0 ? 'today' : '1 day ago'}.</p> : <p className='mt-2 text-sm'>Posted {props.age} days ago</p>}
+            <JobPostAge age={props.age}/>
         </div>
     );
 }

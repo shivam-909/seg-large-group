@@ -10,6 +10,7 @@ module.exports = {
       'dark-theme-grey': '#282c34',
       'green': '#16a34a',
       'white': '#ffffff',
+      'dim-background': 'rgba(0, 0, 0, 0.5)',
     },
     extend: {},
   },
