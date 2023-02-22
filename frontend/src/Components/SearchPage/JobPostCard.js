@@ -1,10 +1,10 @@
-import salaryIcon from './salaryIcon.png';
-import suitcaseIcon from './suitcaseIcon.png';
-import clockIcon from './clockIcon.png';
+import salaryIcon from '../../icons/salaryIcon.png';
+import suitcaseIcon from '../../icons/suitcaseIcon.png';
+import clockIcon from '../../icons/clockIcon.png';
 import PlaceholderCard from "./PlaceholderCard";
 function JobPostCard(props) {
     return (
-        <div className='border-2 border-[#d8d4d4] rounded-xl w-[410px] p-4'>
+        <div className='border-2 border-darker-grey rounded-xl w-[410px] p-4'>
             {props.age <= 3 && <p className='text-xs text-green-600 mb-1'>new</p>}
             <p className='font-bold'>{props.title}</p>
             <p>{props.companyName}</p>
