@@ -1,8 +1,8 @@
-.LoginPage {
+.ProfilePage {
   text-align: center;
 }
 
-.LoginPage-header {
+.ProfilePage-header {
   background-color: #282c34;
   min-height: 100vh;
   display: flex;
@@ -13,7 +13,7 @@
   color: white;
 }
 
-.LoginPage-text {
+.ProfilePage-text {
   background-color: #282c34;
   display: flex;
   flex-direction: column;
@@ -24,7 +24,7 @@
   padding: 10px;
 }
 
-.LoginPage-link {
+.ProfilePage-link {
   color: #61dafb;
 }
 
@@ -62,17 +62,13 @@
   transform: translateY(2px);
 }
 
-.togglePasswordButton {
-  background-color: #0000;
-  color: white;
-  border-color: #0000;
-  border-radius: 10px;
-  font-size: calc(15px + 2vmin);
-  max-width: 50px;
-  max-height: 20px;
+.edit-btn {
+  background-color: #61dafb;
+  top: 20px;
+  right: 20px;
+  border-radius: 5px;
+  font-size: calc(10px + 2vmin);
   padding: 10px;
-  margin: 5px;
-}
-.togglePasswordButton:hover {
-  transform: scale(1.1);
+  margin: 10px;
+  color: black;
 }

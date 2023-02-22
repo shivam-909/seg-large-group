@@ -2,19 +2,16 @@ import './LoginPage.css';
 
 function Welcome() {
   return (
-    <div className="welcome">
-      <header>
+    <div class="LoginPage">
+      <header className="LoginPage-header">
         Welcome
         <div class='mt-5'>
-        <a class='welcome' href="/#">Job Seekers</a>
-        <a class='welcome' href="/#">Employers</a>
-        </div>
-        <div class='mt-5'>
-        New user? <a class='welcome' href='/#'>Sign up</a>
+        <a className='button' href="/LoginPage">Login In</a>
+        <a className='button' href="/LoginPage">Sign Up</a>
         </div>
       </header>
     </div>
   );
 }
 
-export default LoginPage;
+export default Welcome;
