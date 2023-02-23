@@ -43,9 +43,9 @@ export function Login(db: DB): Handler {
 // access key and refresh token.
 export function Register(db: DB): Handler {
   return async (req: Request, res: Response, next: NextFunction) => {
-    const { password, email } = req.body;
+    const { firstName, lastName, email, password, isCompany, companyName, pfpUrl, location, savedJobs, notifications } = req.body;
 
-    let user: User | null = await RetrieveUserByEmail(db, email)
+    let user: User | null = await RetrieveUserByEmail(db, email);
 
     // Sanity check for user.
     if (user !== null) {
@@ -75,9 +75,8 @@ export function Register(db: DB): Handler {
       })
     }
 
-    const newID = randomUUID();
-
-    const newUser = new User(newID, hash as string, email);
+    const newId = randomUUID();
+    const newUser = new User(newId, firstName, lastName, email, hash as string, isCompany, companyName, pfpUrl, location, savedJobs, notifications)
 
     await CreateUser(db, newUser).then(() => {
       return
