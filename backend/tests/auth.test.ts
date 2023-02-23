@@ -10,6 +10,7 @@ import app from "../index";
 let server: Server;
 beforeEach(async () => {
     server = app.listen(3000);
+
 });
 
 afterEach(async () => {
