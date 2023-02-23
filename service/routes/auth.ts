@@ -82,7 +82,7 @@ export function Register(db: DB): Handler {
       return
     })
 
-    let { access, refresh } = GenerateKeyPair(newUser.id);
+    let { access, refresh } = GenerateKeyPair(newUser.idField);
 
     return res.status(200).json({
       access: access,

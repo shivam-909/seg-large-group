@@ -2,10 +2,10 @@ import User from "../models/user";
 import DB from "./db";
 
 export async function CreateUser(db: DB, user: User) {
-    const docRef = db.UserCollection().doc(user.id);
+    const docRef = db.UserCollection().doc(user.idField);
 
     await docRef.set({
-        id: user.id,
+        idField: user.idField,
         firstName: user.firstName,
         lastName: user.lastName,
         email: user.email,
@@ -42,11 +42,11 @@ export async function RetrieveUserByEmail(db: DB, email: string): Promise<User |
 }
 
 export async function UpdateUser(db: DB, user: User): Promise<void> {
-    const docRef = db.UserCollection().doc(user.id);
+    const docRef = db.UserCollection().doc(user.idField);
 
     try {
         await docRef.update({
-            id: user.id,
+            idField: user.idField,
             firstName: user.firstName,
             lastName: user.lastName,
             email: user.email,

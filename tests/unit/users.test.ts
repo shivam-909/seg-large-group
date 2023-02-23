@@ -11,7 +11,20 @@ test('create user, retrieve user by email, delete user', async () => {
     const id = randomUUID();
     const email = 'test_crd_user@example.com';
     const password = 'password';
-    const user = new User(id, password, email);
+    const user = new User(
+        id,
+        "John",
+        "Doe",
+        email,
+        password,
+        false,
+        "",
+        "",
+        "",
+        [],
+        [],
+    );
+
     await CreateUser(db, user);
 
     // Retrieve the user by email.
@@ -22,3 +35,4 @@ test('create user, retrieve user by email, delete user', async () => {
 
     // Delete the user.
     await db.UserCollection().doc(id).delete();
+});
