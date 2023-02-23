@@ -11,7 +11,7 @@ test('create user, retrieve user by email and id, delete user', async () => {
     const id = randomUUID();
     const firstName = 'John';
     const lastName = 'Doe';
-    const email = 'example@example.com';
+    const email = `example-${id}@example.com`;
     const password = 'Password123!';
     const isCompany = false;
     const companyName = '';
@@ -41,6 +41,6 @@ test('create user, retrieve user by email and id, delete user', async () => {
     await DeleteUser(db, id);
 
     // Verify that the user is deleted.
-    const deletedUser = await RetrieveUserByEmail(db, id);
+    const deletedUser = await RetrieveUserById(db, id);
     expect(deletedUser).toBeNull();
 });
