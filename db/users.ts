@@ -1,39 +1,54 @@
 import User from "../models/user";
 import DB from "./db";
+import { Error } from "../service/public";
 
 export async function CreateUser(db: DB, user: User) {
-    const docRef = db.UserCollection().doc(user.email);
+    const docRef = db.UserCollection().doc(user.idField);
 
     await docRef.set({
-        'username': user.username,
-        'email': user.email,
+        'idField': user.idField,
         'hashedPassword': user.hashedPassword,
+        'email': user.email,
     });
 }
 
-export async function RetrieveUser(db: DB, email: string): Promise<User> {
-    const docRef = db.UserCollection();
-    const snapshot = await docRef.where('email', '==', email).get();
+export async function RetrieveUser(db: DB, id: string): Promise<User | null> {
+    const docRef = db.UserCollection().doc(id);
+    const doc = await docRef.get();
 
-    if (snapshot.size == 1) {
-        return snapshot.docs[0].data() as User;
-    } else if (snapshot.empty) {
-        throw {
-            message: "user does not exist",
-        }
+    if (doc.exists) {
+        return doc.data() as User;
     } else {
-        throw {
-            message: "multiple emails match",
-        }
+        return null
     }
 }
 
+export async function RetrieveUserByEmail(db: DB, email: string): Promise<User | null> {
+    const snapshot = await db.UserCollection().where('email', '==', email).get();
+
+    if (snapshot.empty) {
+        console.log("no user with email");
+        return null;
+    }
+
+    if (snapshot.size > 1) {
+        throw {
+            message: "multiple users with same email",
+        }
+    }
+
+    const doc = snapshot.docs[0];
+    const user = doc.data() as User;
+    return user;
+}
+
 export async function UpdateUser(db: DB, user: User): Promise<void> {
-    const docRef = db.UserCollection().doc(user.username);
+    const docRef = db.UserCollection().doc(user.idField);
 
     try {
         await docRef.update({
-            'username': user.username,
+            'idField': user.idField,
+            'email': user.email,
         })
     } catch (err) {
         throw err
