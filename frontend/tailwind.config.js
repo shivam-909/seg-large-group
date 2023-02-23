@@ -11,6 +11,7 @@ module.exports = {
       'green': '#16a34a',
       'white': '#ffffff',
       'dim-background': 'rgba(0, 0, 0, 0.5)',
+      'grey-contrast': '#5A5A5A',
     },
     extend: {},
   },
