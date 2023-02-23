@@ -1,14 +1,15 @@
 import Navbar from "../Navbar/Navbar";
+import NewNavbar from "./NewNavbar";
 import SearchBar from "./SearchBar";
+import Filters from "./Filters";
+import JobDetailsCard from "./JobDetailsCard";
+import JobPostCard from "./JobPostCard";
+import Dropdown from "./Dropdown";
 
 function SearchPage() {
   return (
-    <div className="LoginPage">
-      <Navbar/>
-      <header className="LoginPage-header">
-          Search Page
-          <SearchBar/>
-      </header>
+    <div>
+        <NewNavbar/>
     </div>
   );
 }
