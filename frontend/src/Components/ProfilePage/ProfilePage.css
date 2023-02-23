@@ -28,21 +28,21 @@
   color: #61dafb;
 }
 
+.text-input {
+  border-radius: 10px;
+  font-size: calc(10px + 2vmin);
+  padding: 5px 5px 5px 10px;
+  margin: 5px;
+  width: calc(250px + 15vmin);
+  color: black;
+}
+
 .email-input {
   border-radius: 10px;
   font-size: calc(10px + 2vmin);
   padding: 10px;
   margin: 5px;
   width: calc(250px + 15vmin);
-  color: black;
-}
-
-.password-input {
-  border-radius: 10px;
-  font-size: calc(10px + 2vmin);
-  padding: 10px;
-  margin: 5px;
-  width: calc(190px + 15vmin);
   color: black;
 }
 
@@ -63,6 +63,16 @@
 }
 
 .edit-btn {
+  background-color: #61dafb;
+  top: 20px;
+  right: 20px;
+  border-radius: 5px;
+  font-size: calc(10px + 2vmin);
+  padding: 10px;
+  margin: 10px;
+  color: black;
+}
+.save-btn {
   background-color: #61dafb;
   top: 20px;
   right: 20px;
