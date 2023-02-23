@@ -61,7 +61,7 @@ export function Register(db: DB): Handler {
 
     const hash = ((): string | Error => {
       try {
-        return bcrypt.hashSync(password, 10)
+        return bcrypt.hashSync(password, 10);
       } catch (e) {
         return {
           message: getErrorMessage(e),

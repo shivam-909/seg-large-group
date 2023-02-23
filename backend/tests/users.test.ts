@@ -12,7 +12,7 @@ test('create user, retrieve user by email and id, delete user', async () => {
     const firstName = 'John';
     const lastName = 'Doe';
     const email = 'example@example.com';
-    const password = 'password';
+    const password = 'Password123!';
     const isCompany = false;
     const companyName = '';
     const pfpUrl = '';
@@ -41,6 +41,6 @@ test('create user, retrieve user by email and id, delete user', async () => {
     await DeleteUser(db, id);
 
     // Verify that the user is deleted.
-    const deletedUser = await RetrieveUserByEmail(db, email);
+    const deletedUser = await RetrieveUserByEmail(db, id);
     expect(deletedUser).toBeNull();
 });
