@@ -1,4 +1,4 @@
-import { Application, Handler, Request, Response } from "express";
+import { Application, Request, Response } from "express";
 import { HandlerWrapper } from "../public";
 
 // Route wraps a handler function to provide the database connection.
