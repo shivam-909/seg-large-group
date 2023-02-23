@@ -5,9 +5,17 @@ export async function CreateUser(db: DB, user: User) {
     const docRef = db.UserCollection().doc(user.id);
 
     await docRef.set({
-        'id': user.id,
-        'hashedPassword': user.hashedPassword,
-        'email': user.email,
+        id: user.id,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        email: user.email,
+        hashedPassword: user.hashedPassword,
+        isCompany: user.isCompany,
+        companyName: user.companyName,
+        pfpUrl: user.pfpUrl,
+        location: user.location,
+        savedJobs: user.savedJobs,
+        notifications: user.notifications,
     });
 }
 
@@ -23,14 +31,14 @@ export async function RetrieveUserById(db: DB, id: string): Promise<User | null>
 }
 
 export async function RetrieveUserByEmail(db: DB, email: string): Promise<User | null> {
-    const docRef = db.UserCollection().doc(email);
-    const doc = await docRef.get();
+    const snapshot = await db.UserCollection().where('email', '==', email).get();
 
-    if (doc.exists) {
-        return doc.data() as User;
-    } else {
+    if (snapshot.size === 0) {
         return null;
     }
+
+    const doc = snapshot.docs[0];
+    return doc.data() as User;
 }
 
 export async function UpdateUser(db: DB, user: User): Promise<void> {
@@ -38,8 +46,17 @@ export async function UpdateUser(db: DB, user: User): Promise<void> {
 
     try {
         await docRef.update({
-            'id': user.id,
-            'email': user.email,
+            id: user.id,
+            firstName: user.firstName,
+            lastName: user.lastName,
+            email: user.email,
+            hashedPassword: user.hashedPassword,
+            isCompany: user.isCompany,
+            companyName: user.companyName,
+            pfpUrl: user.pfpUrl,
+            location: user.location,
+            savedJobs: user.savedJobs,
+            notifications: user.notifications,
         })
     } catch (err) {
         throw err
