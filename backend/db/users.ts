@@ -1,53 +1,44 @@
 import User from "../models/user";
 import DB from "./db";
-import { Error } from "../service/public";
 
 export async function CreateUser(db: DB, user: User) {
-    const docRef = db.UserCollection().doc(user.idField);
+    const docRef = db.UserCollection().doc(user.id);
 
     await docRef.set({
-        'idField': user.idField,
+        'id': user.id,
         'hashedPassword': user.hashedPassword,
         'email': user.email,
     });
 }
 
-export async function RetrieveUser(db: DB, id: string): Promise<User | null> {
+export async function RetrieveUserById(db: DB, id: string): Promise<User | null> {
     const docRef = db.UserCollection().doc(id);
     const doc = await docRef.get();
 
     if (doc.exists) {
         return doc.data() as User;
     } else {
-        return null
+        return null;
     }
 }
 
 export async function RetrieveUserByEmail(db: DB, email: string): Promise<User | null> {
-    const snapshot = await db.UserCollection().where('email', '==', email).get();
+    const docRef = db.UserCollection().doc(email);
+    const doc = await docRef.get();
 
-    if (snapshot.empty) {
-        console.log("no user with email");
+    if (doc.exists) {
+        return doc.data() as User;
+    } else {
         return null;
     }
-
-    if (snapshot.size > 1) {
-        throw {
-            message: "multiple users with same email",
-        }
-    }
-
-    const doc = snapshot.docs[0];
-    const user = doc.data() as User;
-    return user;
 }
 
 export async function UpdateUser(db: DB, user: User): Promise<void> {
-    const docRef = db.UserCollection().doc(user.idField);
+    const docRef = db.UserCollection().doc(user.id);
 
     try {
         await docRef.update({
-            'idField': user.idField,
+            'id': user.id,
             'email': user.email,
         })
     } catch (err) {
