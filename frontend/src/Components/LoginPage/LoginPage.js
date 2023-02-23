@@ -36,8 +36,8 @@ function LoginPage() {
   }
 
   return (
-      <div className='bg-dark-theme-grey min-h-screen items-center justify-center flex'>
-          <div className='bg-lighter-grey rounded-md sm:min-w-1/6 inline-grid px-12 py-7 space-y-3'>
+      <div className='bg-lighter-grey min-h-screen items-center justify-center flex'>
+          <div className='bg-white rounded-md sm:min-w-1/6 inline-grid px-12 py-7 space-y-3'>
             <p className='mb-6 font-bold text-2xl flex justify-center'>Sign in to your account</p>
 
             <TextInputBox id='email' cache={localStorage.getItem("email")} placeholder='Email address'/>
@@ -51,7 +51,7 @@ function LoginPage() {
 
             <div className='p-0.5'></div>
 
-            <button className='bg-dark-theme-grey rounded-md text-lighter-grey p-2.5 flex items-center justify-center space-x-2' onClick={loginButton}>
+            <button className='bg-dark-theme-grey rounded-md text-white p-2.5 flex items-center justify-center space-x-2' onClick={loginButton}>
               <p>Sign In</p>
               <i className="fa-solid fa-right-to-bracket"></i>
             </button>
