@@ -1,5 +1,4 @@
 import './ProfilePage.css';
-//import TextInputBox from './Components/LoginPage/TextInputBox.js';
 import React, {useState} from 'react';
 
 function EmployerProfilePage() {
@@ -42,6 +41,7 @@ function EmployerProfilePage() {
             </>  )}
         </div>
         <div className='text-input' id="profile">
+        {isEditing && <button className="'bg-dark-theme-grey rounded-md text-white p-2.5 flex items-center justify-center space-x-2'" onClick={SaveOnClick} >Save Profile</button>}
         {isEditing && (
           <>
            <p><strong>Company Name:</strong> <input type="text" id="companyName" value= {profile.companyName} onChange={EditProfile}/></p>
@@ -51,7 +51,6 @@ function EmployerProfilePage() {
            <p><strong>Company Description:</strong>  <input type="text" id="companyDescrip" value= {profile.companyDescrip} onChange={EditProfile}/></p>
           </>)}
         </div>
-        {isEditing && <button className="save-btn" onClick={SaveOnClick} >Save Profile</button>}
    </div>
  </div>
   );
