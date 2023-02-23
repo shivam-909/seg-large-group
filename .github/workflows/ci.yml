@@ -32,8 +32,9 @@ jobs:
       - run: npm run build --if-present
       - run: npm install forever -g
       - run: cp ./config/admin-sdk.json ./dist/config/admin-sdk.json
-      - run: forever ./dist/index.js
+      - run: forever start ./dist/index.js
       - run: npm run test
+      - run: forever stop ./dist/index.js
 
   build-frontend:
     runs-on: ubuntu-latest
