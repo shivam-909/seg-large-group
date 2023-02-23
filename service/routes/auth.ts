@@ -2,9 +2,9 @@ import { NextFunction, Request, Response } from "express";
 import bcrypt from 'bcrypt';
 import 'express-async-errors';
 import DB from "../../db/db";
-import {CreateUser, RetrieveUserByEmail } from "../../db/users";
+import { CreateUser, RetrieveUserByEmail } from "../../db/users";
 import User from "../../models/user";
-import { Error, ErrorUserExists, getErrorMessage, Handler } from "../public";
+import { Error, ErrorFailedToHashPassword, ErrorInvalidPassword, ErrorUserExists, getErrorMessage, Handler } from "../public";
 import { GenerateKeyPair, VerifyJWT } from "../tokens";
 import { randomUUID } from "crypto";
 
@@ -12,33 +12,33 @@ import { randomUUID } from "crypto";
 // Login accepts a request containing an id and password, and return a JWT
 // access key and refresh token.
 export function Login(db: DB): Handler {
-  return (req: Request, res: Response) => {
+  return async (req: Request, res: Response) => {
     const { email, password } = req.body;
 
-    RetrieveUserByEmail(db, email).then(user => {
-      if (user === null) {
-        return res.status(401).send("user does not exist");
-      }
-      const match = bcrypt.compareSync(password, user.hashedPassword);
-      if (match) {
-        let { access, refresh } = GenerateKeyPair(user.id);
+    let user: User | null = await RetrieveUserByEmail(db, email)
 
-        return res.status(200).json({
-          access: access,
-          refresh: refresh,
-        });
-      }
-      else {
-        return res.status(401).send("invalid password");
-      }
-    }).catch(err => {
-        return res.status(500).json({
-            msg: err.message,
-        });
+    if (user === null) {
+      res.status(403).send("invalid credentials");
+      return
+    }
+
+    const match = bcrypt.compareSync(password, user.hashedPassword);
+
+    if (!match) {
+      res.status(403).send("invalid credentials");
+      return
+    }
+
+    let { access, refresh } = GenerateKeyPair(user.idField);
+
+    res.status(200).json({
+      access: access,
+      refresh: refresh,
     });
   }
 }
 
+// Expects multi-part form.
 // Register accepts a request containing an email and password, and return a JWT
 // access key and refresh token.
 export function Register(db: DB): Handler {
@@ -55,7 +55,7 @@ export function Register(db: DB): Handler {
 
     if (!ValidPassword(password)) {
       return res.status(400).json({
-        msg: "invalid password"
+        msg: ErrorInvalidPassword,
       })
     }
 
@@ -71,7 +71,7 @@ export function Register(db: DB): Handler {
 
     if (hash instanceof Error) {
       return res.status(500).json({
-        msg: "failed to hash password",
+        msg: ErrorFailedToHashPassword,
       })
     }
 
