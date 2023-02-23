@@ -28,23 +28,23 @@
   color: #61dafb;
 }
 
-.email-input {
+.text-input {
   border-radius: 10px;
   font-size: calc(10px + 2vmin);
-  padding: 10px;
+  padding: 5px 5px 5px 10px;
   margin: 5px;
   width: calc(250px + 15vmin);
   color: black;
 }
 
-.password-input {
-  border-radius: 10px;
-  font-size: calc(10px + 2vmin);
-  padding: 10px;
-  margin: 5px;
-  width: calc(190px + 15vmin);
-  color: black;
-}
+/*.password-input {*/
+/*  border-radius: 10px;*/
+/*  font-size: calc(10px + 2vmin);*/
+/*  padding: 10px;*/
+/*  margin: 5px;*/
+/*  width: calc(190px + 15vmin);*/
+/*  color: black;*/
+/*}*/
 
 .button {
   background-color: #61dafb;

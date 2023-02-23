@@ -13,7 +13,7 @@ export default function Navbar() {
         <ul>
             <li className="text-2xl"><a href="/"><i className="fa-solid fa-house"></i></a></li>
             <div>
-                <li className='float-right right-6'><a className="text-2xl" href="##" onClick={showProfile}><i class="fa-solid fa-user"></i></a></li>
+                <li className='float-right right-6'><a className="text-2xl" href="##" onClick={showProfile}><i className="fa-solid fa-user"></i></a></li>
             </div>
         </ul>
         <div className="top-16" id="expandProfile">
