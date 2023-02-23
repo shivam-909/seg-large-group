@@ -27,10 +27,9 @@ function UserProfilePage() {
     }
 
   return (
-    <div className='bg-dark-theme-grey min-h-screen items-center justify-center flex'>
-      <div className='bg-lighter-grey rounded-md sm:min-w-1/6 inline-grid px-12 py-7 space-y-3'>
-        <header className='mb-6 font-bold text-2xl flex justify-center'>Your Profile Page</header>
-        Your Profile:
+    <div className='bg-lighter-grey min-h-screen items-center justify-center flex'>
+        <div className='bg-white rounded-md sm:min-w-1/6 inline-grid px-12 py-7 space-y-3'>
+          <header className='mb-6 font-bold text-2xl flex justify-center'>Your Profile Page</header>
         {!isEditing && <button className="edit-btn" onClick={EditOnClick} >Edit Profile</button>}
         <div className='ProfilePage-text' id="profile">
           {!isEditing && (
@@ -43,7 +42,6 @@ function UserProfilePage() {
             <p><strong>Previous Employment: </strong> <br />{!isEditing && <span id="previousEmployment">{profile.previousEmployment}</span>}</p>
             </>)}
         </div>
-        {isEditing && <button className="save-btn" onClick={SaveOnClick} >Save Profile</button>}
         <div className='text-input' id="profile">
         {isEditing && (
           <>
@@ -55,6 +53,7 @@ function UserProfilePage() {
            <p><strong>Previous Employment: </strong> <input type="text" id="previousEmployment" value= {profile.previousEmployment} onChange={EditProfile}/></p>
           </> )}
         </div>
+        {isEditing && <button className="save-btn" onClick={SaveOnClick} >Save Profile</button>}
       </div>
     </div>
   );

@@ -27,8 +27,8 @@ function EmployerProfilePage() {
     }
 
   return (
-  <div className='bg-dark-theme-grey min-h-screen items-center justify-center flex'>
-    <div className='bg-lighter-grey rounded-md sm:min-w-1/6 inline-grid px-12 py-7 space-y-3'>
+    <div className='bg-lighter-grey min-h-screen items-center justify-center flex'>
+      <div className='bg-white rounded-md sm:min-w-1/6 inline-grid px-12 py-7 space-y-3'>
       <header className='mb-6 font-bold text-2xl flex justify-center'>Your Profile Page</header>
         {!isEditing && <button className='edit-btn' onClick={EditOnClick} >Edit Profile</button>}
         <div className='ProfilePage-text' id="profile">
@@ -41,7 +41,6 @@ function EmployerProfilePage() {
             <p><strong>Company Description:</strong> <br />{!isEditing && <span id="companyDescrip">{profile.companyDescrip}</span>}</p>
             </>  )}
         </div>
-        {isEditing && <button className="save-btn" onClick={SaveOnClick} >Save Profile</button>}
         <div className='text-input' id="profile">
         {isEditing && (
           <>
@@ -52,6 +51,7 @@ function EmployerProfilePage() {
            <p><strong>Company Description:</strong>  <input type="text" id="companyDescrip" value= {profile.companyDescrip} onChange={EditProfile}/></p>
           </>)}
         </div>
+        {isEditing && <button className="save-btn" onClick={SaveOnClick} >Save Profile</button>}
    </div>
  </div>
   );
