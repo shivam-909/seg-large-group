@@ -49,15 +49,15 @@ function JobList() {
             }
         }, 500);
     };
-    // if (document.readyState === 'complete') {
-    //     console.log("ready")
-    //     window.addEventListener("scroll", handleInfiniteScroll);
-    //     addCards(currentPage);
-    // }
-    window.onload = function () {
+    if (document.readyState === 'complete') {
+        console.log("ready")
         window.addEventListener("scroll", handleInfiniteScroll);
         addCards(currentPage);
     }
+    // window.onload = function () {
+    //     window.addEventListener("scroll", handleInfiniteScroll);
+    //     addCards(currentPage);
+    // }
     return (
         <div>
             <div id="container"></div>
