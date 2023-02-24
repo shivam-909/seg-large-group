@@ -6,6 +6,7 @@ import multer from 'multer';
 import { HealthCheck, Route } from './service/routes/routes';
 import { ErrorToCode } from './service/public';
 
+export const db = new DB();
 
 export const run = () => {
     dotenv.config();
@@ -16,7 +17,6 @@ export const run = () => {
     // Routes with upload.none() provided will accept a form.
     const upload = multer();
 
-    const db = new DB();
     app.set('db', db);
 
     app.get('/', HealthCheck);

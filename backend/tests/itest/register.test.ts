@@ -1,3 +1,6 @@
+import DB from "../../db/db";
+import { DeleteUser, RetrieveUserByEmail } from "../../db/users";
+
 test('register user', async () => {
 
     const email = "itest_register_user@example.com"
@@ -9,17 +12,21 @@ test('register user', async () => {
 
     formData.append('email', email);
     formData.append('password', 'Password123!');
+    formData.append('first_name', 'John');
+    formData.append('last_name', 'Doe');
+    formData.append('is_company', 'false');
 
     const response = await fetch('http://localhost:3000/auth/register', {
         method: 'POST',
         body: formData,
     });
 
+    const body = await response.json() as any;
+
     expect(response.status).toEqual(200);
-    expect(response.body).not.toBeNull();
+    expect(body).not.toBeNull();
 
     // read the body as json
-    const body = await response.json() as any;
 
     expect(body).toHaveProperty('access');
     expect(body).toHaveProperty('refresh');
@@ -32,11 +39,11 @@ test('register user', async () => {
 
     // Clean up by deleting the newly created user.
 
-    // const db = new DB();
+    const db = new DB();
 
-    // const user = await RetrieveUserByEmail(db, 'example@example.com');
+    const user = await RetrieveUserByEmail(db, email);
 
-    // expect(user).not.toBeNull();
+    expect(user).not.toBeNull();
 
-    // await DeleteUser(db, user!.idField);
+    await DeleteUser(db, user!.idField);
 });
