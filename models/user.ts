@@ -1,4 +1,5 @@
 import { QueryDocumentSnapshot } from "firebase-admin/firestore";
+import JobListing from "./job";
 
 class User {
     id: string;
@@ -10,10 +11,10 @@ class User {
     companyName: string;
     pfpUrl: string;
     location: string;
-    savedJobs: string[];
+    savedJobs: JobListing[];
     notifications: string[];
 
-    constructor(id: string, firstName: string, lastName: string, email: string, hashedPassword: string, isCompany: boolean, companyName: string, pfpUrl: string, location: string, savedJobs: string[], notifications: string[]) {
+    constructor(id: string, firstName: string, lastName: string, email: string, hashedPassword: string, isCompany: boolean, companyName: string, pfpUrl: string, location: string, savedJobs: JobListing[], notifications: string[]) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
