@@ -1,4 +1,4 @@
-import { QueryDocumentSnapshot } from "firebase-admin/firestore";
+import {QueryDocumentSnapshot} from "firebase-admin/firestore";
 
 class JobListing {
   id: string;
@@ -41,9 +41,13 @@ class JobListing {
 }
 
 export const JobListingConverter = {
-  toFirestore: (jobListing: JobListing) => jobListing,
+  toFirestore: (jobListing: JobListing) => {
+    return {...jobListing};
+  },
   fromFirestore: (snapshot: QueryDocumentSnapshot) =>
-    snapshot.data() as JobListing,
+      snapshot.data() as JobListing,
 };
+
+
 
 export default JobListing;

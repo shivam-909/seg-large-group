@@ -1,7 +1,7 @@
 import JobListing from "../models/job";
 import DB from "./db";
 
-export async function createJobListing(db: DB, jobListing: JobListing) {
+export async function createJobListing(db: DB, jobListing: JobListing): Promise<JobListing> {
   const docRef = db.JobListingCollection().doc(jobListing.id);
 
   await docRef.set({
@@ -17,7 +17,10 @@ export async function createJobListing(db: DB, jobListing: JobListing) {
     benefits: jobListing.benefits,
     requirements: jobListing.requirements,
   });
+
+  return jobListing;
 }
+
 
 export async function retrieveJobListing(db: DB, id: string): Promise<JobListing | null> {
   const docRef = db.JobListingCollection().doc(id);

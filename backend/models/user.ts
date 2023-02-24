@@ -3,29 +3,62 @@ import JobListing from "./job";
 
 class User {
     id: string;
-    firstName: string;
-    lastName: string;
     email: string;
     hashedPassword: string;
-    isCompany: boolean;
-    companyName: string;
     pfpUrl: string;
     location: string;
-    savedJobs: JobListing[];
     notifications: string[];
 
-    constructor(id: string, firstName: string, lastName: string, email: string, hashedPassword: string, isCompany: boolean, companyName: string, pfpUrl: string, location: string, savedJobs: JobListing[], notifications: string[]) {
+    constructor(id: string, email: string, hashedPassword: string, pfpUrl: string, location: string, notifications: string[]) {
         this.id = id;
-        this.firstName = firstName;
-        this.lastName = lastName;
         this.email = email;
         this.hashedPassword = hashedPassword;
-        this.isCompany = isCompany;
-        this.companyName = companyName;
         this.pfpUrl = pfpUrl;
         this.location = location;
-        this.savedJobs = savedJobs;
         this.notifications = notifications;
+    }
+}
+
+class Company extends User {
+    companyName: string;
+    jobsAvail: JobListing[];
+
+    constructor(id: string,
+                companyName: string,
+                email: string,
+                hashedPassword: string,
+                pfpUrl: string,
+                location: string,
+                notifications: string[],
+                jobsAvail:JobListing[])
+
+    {
+        super(id, email, hashedPassword, pfpUrl, location, notifications);
+        this.companyName = companyName;
+        this.jobsAvail = jobsAvail;
+    }
+}
+
+class Searcher extends User {
+    firstName: string;
+    lastName: string;
+    savedJobs: JobListing[];
+
+    constructor(id: string,
+                firstName: string,
+                lastName: string,
+                email: string,
+                hashedPassword: string,
+                pfpUrl: string,
+                location: string,
+                savedJobs: JobListing[],
+                notifications: string[])
+
+    {
+        super(id, email, hashedPassword, pfpUrl, location, notifications);
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.savedJobs = savedJobs;
     }
 }
 
@@ -34,4 +67,14 @@ export const UserConverter = {
     fromFirestore: (snapshot: QueryDocumentSnapshot) => snapshot.data() as User
 }
 
-export default User;
+export const CompanyConverter = {
+    toFirestore: (company: Company) => company,
+    fromFirestore: (snapshot: QueryDocumentSnapshot) => snapshot.data() as Company
+}
+
+export const SearcherConverter = {
+    toFirestore: (searcher: Searcher) => searcher,
+    fromFirestore: (snapshot: QueryDocumentSnapshot) => snapshot.data() as Searcher
+}
+
+export { User, Company, Searcher };
