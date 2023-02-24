@@ -1,6 +1,6 @@
 import { CollectionReference, DocumentData, Firestore } from 'firebase-admin/firestore';
 import { FirebaseServiceAccount } from '../config/config';
-import { UserConverter } from '../models/user';
+import {UserConverter, SearcherConverter, CompanyConverter} from '../models/user';
 import { JobListingConverter } from '../models/job';
 
 const { initializeApp, cert } = require('firebase-admin/app');
@@ -8,6 +8,7 @@ const { getFirestore } = require('firebase-admin/firestore');
 
 interface DB {
     UserCollection(): CollectionReference<DocumentData>;
+    JobListingCollection(): CollectionReference<DocumentData>;
 }
 
 class DB {
@@ -28,6 +29,15 @@ class DB {
     JobListingCollection() {
         return this.db.collection('jobs').withConverter(JobListingConverter);
     }
+
+    SearcherCollection() {
+        return this.db.collection('searcher').withConverter(SearcherConverter);
+    }
+
+    CompanyCollection() {
+        return this.db.collection('company').withConverter(CompanyConverter);
+    }
+
 }
 
 export default DB;

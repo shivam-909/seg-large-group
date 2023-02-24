@@ -1,70 +1,142 @@
-import User from "../models/user";
+import { Company, Searcher } from "../models/user";
 import DB from "./db";
+import {JobListingConverter} from "../models/job";
 
-export async function CreateUser(db: DB, user: User) {
-    const docRef = db.UserCollection().doc(user.id);
+
+
+
+
+export async function CreateCompany(db: DB, company: Company) {
+    const docRef = db.CompanyCollection().doc(company.id);
 
     await docRef.set({
-        id: user.id,
-        firstName: user.firstName,
-        lastName: user.lastName,
-        email: user.email,
-        hashedPassword: user.hashedPassword,
-        isCompany: user.isCompany,
-        companyName: user.companyName,
-        pfpUrl: user.pfpUrl,
-        location: user.location,
-        savedJobs: user.savedJobs,
-        notifications: user.notifications,
+        id: company.id,
+        companyName: company.companyName,
+        email: company.email,
+        hashedPassword: company.hashedPassword,
+        pfpUrl: company.pfpUrl,
+        location: company.location,
+        notifications: company.notifications,
+        jobsAvail: company.jobsAvail
     });
 }
 
-export async function RetrieveUserById(db: DB, id: string): Promise<User | null> {
-    const docRef = db.UserCollection().doc(id);
+export async function RetrieveCompanyById(db: DB, id: string): Promise<Company | null> {
+    const docRef = db.CompanyCollection().doc(id);
     const doc = await docRef.get();
 
     if (doc.exists) {
-        return doc.data() as User;
+        return doc.data() as Company;
     } else {
         return null;
     }
 }
 
-export async function RetrieveUserByEmail(db: DB, email: string): Promise<User | null> {
-    const snapshot = await db.UserCollection().where('email', '==', email).get();
+export async function RetrieveCompanyByEmail(db: DB, email: string): Promise<Company | null> {
+    const snapshot = await db.CompanyCollection().where('email', '==', email).get();
 
     if (snapshot.size === 0) {
         return null;
     }
 
     const doc = snapshot.docs[0];
-    return doc.data() as User;
+    return doc.data() as Company;
 }
 
-export async function UpdateUser(db: DB, user: User): Promise<void> {
-    const docRef = db.UserCollection().doc(user.id);
-
+export async function UpdateCompany(db: DB, company: Company): Promise<void> {
+    const docRef = db.CompanyCollection().doc(company.id);
     try {
-        await docRef.update({
-            id: user.id,
-            firstName: user.firstName,
-            lastName: user.lastName,
-            email: user.email,
-            hashedPassword: user.hashedPassword,
-            isCompany: user.isCompany,
-            companyName: user.companyName,
-            pfpUrl: user.pfpUrl,
-            location: user.location,
-            savedJobs: user.savedJobs,
-            notifications: user.notifications,
-        })
+        const jobListingDocs = company.jobsAvail.map(JobListingConverter.toFirestore);
+        const myData = {
+            companyName: company.companyName,
+            email: company.email,
+            hashedPassword: company.hashedPassword,
+            pfpUrl: company.pfpUrl,
+            Location: company.location,
+            notifications: company.notifications,
+            jobsAvail: jobListingDocs,
+        };
+        await docRef.update(myData);
     } catch (err) {
-        throw err
+        throw err;
     }
 }
 
-export async function DeleteUser(db: DB, id: string) {
-    const docRef = db.UserCollection().doc(id);
 
-    await docRef.delete();
+
+export async function DeleteCompany(db: DB, companyId: string) {
+    const docRef = db.CompanyCollection().doc(companyId);
+    try {
+        await docRef.delete();
+    } catch (err) {
+        throw err;
+    }
+}
+
+export async function CreateSearcher(db: DB, searcher: Searcher) {
+    const docRef = db.SearcherCollection().doc(searcher.id);
+
+    await docRef.set({
+        id: searcher.id,
+        firstName: searcher.firstName,
+        lastName: searcher.lastName,
+        email: searcher.email,
+        hashedPassword: searcher.hashedPassword,
+        pfpUrl: searcher.pfpUrl,
+        location: searcher.location,
+        savedJobs: searcher.savedJobs,
+        notifications: searcher.notifications,
+    });
+}
+
+export async function RetrieveSearcherById(db: DB, id: string): Promise<Searcher | null> {
+    const docRef = db.SearcherCollection().doc(id);
+    const doc = await docRef.get();
+
+    if (doc.exists) {
+        return doc.data() as Searcher;
+    } else {
+        return null;
+    }
+}
+
+export async function RetrieveSearcherByEmail(db: DB, email: string): Promise<Searcher | null> {
+    const snapshot = await db.SearcherCollection().where('email', '==', email).get();
+
+    if (snapshot.size === 0) {
+        return null;
+    }
+
+    const doc = snapshot.docs[0];
+    return doc.data() as Searcher;
+}
+
+export async function UpdateSearcher(db: DB, searcher: Searcher): Promise<void> {
+    const docRef = db.SearcherCollection().doc(searcher.id);
+
+    try {
+        await docRef.update({
+            id: searcher.id,
+            firstName: searcher.firstName,
+            lastName: searcher.lastName,
+            email: searcher.email,
+            hashedPassword: searcher.hashedPassword,
+            pfpUrl: searcher.pfpUrl,
+            location: searcher.location,
+            savedJobs:searcher.savedJobs,
+            notifications:searcher.notifications
+        });
+    } catch (err) {
+        throw err;
+    }
+}
+
+export async function DeleteSearcher(db: DB, searcherId: string): Promise<void> {
+    const docRef = db.SearcherCollection().doc(searcherId);
+
+    try {
+        await docRef.delete();
+    } catch (err) {
+        throw err;
+    }
 }

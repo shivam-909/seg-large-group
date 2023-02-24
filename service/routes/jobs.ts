@@ -3,7 +3,6 @@ import DB from "../../db/db";
 import JobListing from "../../models/job";
 import { createJobListing, retrieveJobListing} from "../../db/jobs";
 import { Error, getErrorMessage, Handler } from "../public";
-import {seedJobListings} from "../../seeder/seed";
 import { randomUUID } from "crypto";
 
 export function AddListing(db: DB): Handler {
@@ -46,18 +45,3 @@ export function GetListing(db: DB): Handler {
     };
 }
 
-
-
-
-export function SeedJobs(db: DB): Handler {
-    return async (req: Request, res: Response, next: NextFunction) => {
-        try {
-            await seedJobListings(db);
-            res.status(200).json({
-                message: 'Job listings seeded successfully'
-            });
-        } catch (err) {
-            next(err);
-        }
-    };
-}
