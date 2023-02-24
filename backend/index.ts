@@ -6,6 +6,7 @@ import multer from 'multer';
 import { HealthCheck, Route } from './service/routes/routes';
 import { ErrorToCode } from './service/public';
 import {AddListing, SeedJobs, GetListing} from "./service/routes/jobs";
+import {SeedUsers} from "./service/routes/users";
 
 dotenv.config();
 
@@ -27,6 +28,8 @@ app.post('/auth/refresh', upload.none(), Route(app, Refresh));
 app.post('/jobs/add', upload.none(), Route(app, AddListing));
 app.post('/jobs/seed', Route(app, SeedJobs));
 app.get('/jobs/:id', Route(app, GetListing));
+
+app.post('/users/seed', Route(app, SeedUsers));
 
 
 app.use((err: any, req: Request, res: Response, next: NextFunction) => {
