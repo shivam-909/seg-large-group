@@ -48,6 +48,4 @@ export const JobListingConverter = {
       snapshot.data() as JobListing,
 };
 
-
-
 export default JobListing;
