@@ -1,54 +1,62 @@
 import User from "../models/user";
 import DB from "./db";
-import { Error } from "../service/public";
 
 export async function CreateUser(db: DB, user: User) {
-    const docRef = db.UserCollection().doc(user.idField);
+    const docRef = db.UserCollection().doc(user.id);
 
     await docRef.set({
-        'idField': user.idField,
-        'hashedPassword': user.hashedPassword,
-        'email': user.email,
+        id: user.id,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        email: user.email,
+        hashedPassword: user.hashedPassword,
+        isCompany: user.isCompany,
+        companyName: user.companyName,
+        pfpUrl: user.pfpUrl,
+        location: user.location,
+        savedJobs: user.savedJobs,
+        notifications: user.notifications,
     });
 }
 
-export async function RetrieveUser(db: DB, id: string): Promise<User | null> {
+export async function RetrieveUserById(db: DB, id: string): Promise<User | null> {
     const docRef = db.UserCollection().doc(id);
     const doc = await docRef.get();
 
     if (doc.exists) {
         return doc.data() as User;
     } else {
-        return null
+        return null;
     }
 }
 
 export async function RetrieveUserByEmail(db: DB, email: string): Promise<User | null> {
     const snapshot = await db.UserCollection().where('email', '==', email).get();
 
-    if (snapshot.empty) {
-        console.log("no user with email");
+    if (snapshot.size === 0) {
         return null;
     }
 
-    if (snapshot.size > 1) {
-        throw {
-            message: "multiple users with same email",
-        }
-    }
-
     const doc = snapshot.docs[0];
-    const user = doc.data() as User;
-    return user;
+    return doc.data() as User;
 }
 
 export async function UpdateUser(db: DB, user: User): Promise<void> {
-    const docRef = db.UserCollection().doc(user.idField);
+    const docRef = db.UserCollection().doc(user.id);
 
     try {
         await docRef.update({
-            'idField': user.idField,
-            'email': user.email,
+            id: user.id,
+            firstName: user.firstName,
+            lastName: user.lastName,
+            email: user.email,
+            hashedPassword: user.hashedPassword,
+            isCompany: user.isCompany,
+            companyName: user.companyName,
+            pfpUrl: user.pfpUrl,
+            location: user.location,
+            savedJobs: user.savedJobs,
+            notifications: user.notifications,
         })
     } catch (err) {
         throw err

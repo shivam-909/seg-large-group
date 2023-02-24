@@ -1,0 +1,74 @@
+.registration{
+    text-align: center;
+    background-size: auto;
+}
+
+.header-body{
+    background-color: white;
+}
+
+.registration-header{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-size: calc(30px + 2vmin);
+    color: #282c34;
+}
+
+.toggleButton{
+    color: black;
+}
+
+.registration-body{
+    margin: 10px 100px;
+    padding: 20px 20px;
+    position: absolute;
+    top: 50%;
+    -ms-transform: translateY(-50%);
+    transform: translateY(-50%);
+    background-color: rgb(191, 190, 190);
+    border-radius: 8px;
+}
+
+.text-input{
+    color: black;
+    margin: 10px ;
+    border-radius: 10px;
+    background-color: white;
+    border: 3px solid #282c34;  
+}
+
+.registrationButton{
+    /* padding: 10px;
+    margin: 5px;
+    color: black;
+    background-color: oldlace; */
+    background-color: black;
+    border-radius: 10px;
+    border: 7px solid 282c34;  
+    font-size: calc(10px + 2vmin);
+    padding: 10px;
+    margin: 10px;
+    color: white;
+    align-items: center;
+    justify-content: center;
+
+}
+
+.registrationButton:hover {
+    background-color: white; 
+    color: black;
+}
+
+.registrationButton:active {
+    background-color: #479db5;
+    transform: translateY(2px);
+  }
+
+
+.RegistrationPage-link {
+    color: #61dafb;
+  }
+
+
