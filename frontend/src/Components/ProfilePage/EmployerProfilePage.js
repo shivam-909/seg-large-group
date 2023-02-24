@@ -11,6 +11,7 @@ function EmployerProfilePage() {
     });
 
     const[isEditing, setIsEditing]= useState(false);
+
     function EditOnClick(){
       setIsEditing(true);
     }
@@ -27,10 +28,10 @@ function EmployerProfilePage() {
 
   return (
     <div className='bg-lighter-grey min-h-screen items-center justify-center flex'>
-      <div className='bg-white rounded-md sm:min-w-1/6 inline-grid px-12 py-7 space-y-3'>
-      <header className='mb-6 font-bold text-2xl flex justify-center'>Your Profile Page</header>
+     <div className='bg-white rounded-md sm:min-w-1/6 inline-grid px-12 py-7 space-y-3'>
+        <header className='mb-6 font-bold text-2xl flex justify-center'>Your Profile Page</header>
         {!isEditing && <button className='edit-btn' onClick={EditOnClick} >Edit Profile</button>}
-        <div className='ProfilePage-text' id="profile">
+        <div className='text-input' id="profile">
           {!isEditing && (
             <>
             <p><strong>Company Name:</strong> <br />{!isEditing && <span id="companyName">{profile.companyName}</span>}</p>
@@ -41,7 +42,7 @@ function EmployerProfilePage() {
             </>  )}
         </div>
         <div className='text-input' id="profile">
-        {isEditing && <button className="'bg-dark-theme-grey rounded-md text-white p-2.5 flex items-center justify-center space-x-2'" onClick={SaveOnClick} >Save Profile</button>}
+        {isEditing && <button className="save-btn" onClick={SaveOnClick} >Save Profile</button>}
         {isEditing && (
           <>
            <p><strong>Company Name:</strong> <input type="text" id="companyName" value= {profile.companyName} onChange={EditProfile}/></p>
@@ -55,5 +56,4 @@ function EmployerProfilePage() {
  </div>
   );
 }
-
 export default EmployerProfilePage;
