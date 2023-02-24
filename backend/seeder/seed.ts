@@ -37,7 +37,7 @@ export async function RetrieveRandomJobs(db: DB): Promise<JobListing[]> {
 
     const shuffledJobIds = jobIds.sort(() => 0.5 - Math.random());
 
-    const numJobs = Math.floor(Math.random() * 10) + 1; // Generate random number between 1-10
+    const numJobs = Math.floor(Math.random() * 10) + 1;
     const randomJobIds = shuffledJobIds.slice(0, numJobs);
 
     return await Promise.all(
@@ -55,10 +55,15 @@ export async function RetrieveRandomJobs(db: DB): Promise<JobListing[]> {
 
 async function generateCompany(db: DB): Promise<Company> {
     const jobsAvailArr: JobListing[] = [];
+    const companyName = faker.company.name();
+    const email = `support@${companyName.toLowerCase().replace(/[^a-zA-Z0-9]/g, '')}.${faker.internet.domainSuffix()}`;
+
+
+
     return new Company(
         randomUUID(),
-        faker.company.name(),
-        faker.internet.email(),
+        companyName,
+        email,
         faker.internet.password(),
         faker.image.avatar(),
         faker.address.city(),
@@ -69,12 +74,16 @@ async function generateCompany(db: DB): Promise<Company> {
 
 async function generateSearcher(db: DB): Promise<Searcher> {
     const savedJobs = await RetrieveRandomJobs(db);
+    const firstName = faker.name.firstName();
+    const lastName = faker.name.lastName();
+    const email = faker.internet.email(firstName, lastName);
+
 
     return new Searcher(
         randomUUID(),
-        faker.name.firstName(),
-        faker.name.lastName(),
-        faker.internet.email(),
+        firstName,
+        lastName,
+        email,
         faker.internet.password(),
         faker.image.avatar(),
         faker.address.city(),
@@ -117,7 +126,7 @@ async function generateJobListing(db: DB): Promise<JobListing> {
 
 
 export async function seedCompanies(db: DB): Promise<void> {
-    const numCompanies = 10;
+    const numCompanies = 20;
 
     const companyPromises: Promise<Company>[] = [];
     for (let i = 0; i < numCompanies; i++) {
@@ -136,7 +145,7 @@ export async function seedCompanies(db: DB): Promise<void> {
 }
 
 export async function seedSearchers(db: DB): Promise<void> {
-    const numSearchers = 10;
+    const numSearchers = 50;
 
     const searcherPromises: Promise<Searcher>[] = [];
     for (let i = 0; i < numSearchers; i++) {
@@ -156,8 +165,10 @@ export async function seedSearchers(db: DB): Promise<void> {
 
 
 export async function seedJobListings(db: DB): Promise<void> {
-    for (let i = 0; i < 20; i++) {
-        const jobListing = await generateJobListing(db); // use await to get the actual JobListing object
+    const numListings = 15;
+
+    for (let i = 0; i < numListings; i++) {
+        const jobListing = await generateJobListing(db);
         await createJobListing(db, jobListing);
     }
     console.log(`Seeded job listings`);
