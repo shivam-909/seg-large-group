@@ -3,8 +3,9 @@ import dotenv from 'dotenv';
 import DB from './db/db';
 import { Login, Register, Refresh } from './service/routes/auth';
 import multer from 'multer';
-import { HealthCheck, Route } from './service/routes/routes';
+import { Echo, HealthCheck, Route } from './service/routes/routes';
 import { ErrorToCode } from './service/public';
+import { AuthMW, ErrorMW } from './service/middleware';
 
 export const db = new DB();
 
@@ -25,11 +26,13 @@ export const run = () => {
     app.post('/auth/register', upload.none(), Route(app, Register));
     app.post('/auth/refresh', upload.none(), Route(app, Refresh));
 
-    app.use((err: any, req: Request, res: Response, next: NextFunction) => {
-        console.error(err.stack);
-        const code = ErrorToCode.get(err) || 500;
-        res.status(code).json({ message: err || 'internal server error' });
-    });
+    // Error handling middleware
+    app.use(ErrorMW);
+
+    // Authentication middleware
+    app.use("/api/*", AuthMW);
+
+    app.post("/api/echo", Echo);
 
     app.listen(port, () => {
         console.log(`server running on port ${port}`);
