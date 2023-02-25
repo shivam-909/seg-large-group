@@ -1,11 +1,11 @@
 import { NextFunction, Request, Response } from "express";
 import DB from "../../db/db";
 import JobListing from "../../models/job";
-import { createJobListing, retrieveJobListing} from "../../db/jobs";
+import { createJobListing, retrieveJobListing, deleteJobsByCompanyID} from "../../db/jobs";
 import { Error, getErrorMessage, Handler } from "../public";
 import { randomUUID } from "crypto";
 
-export function AddListing(db: DB): Handler {
+export function addListingRoute(db: DB): Handler {
     return async (req: Request, res: Response, next: NextFunction) => {
         const { title, compensation, description, location, schedule, companyName, type, datePosted, benefits, requirements } = req.body;
         const newID = randomUUID();
@@ -24,7 +24,7 @@ export function AddListing(db: DB): Handler {
     }
 }
 
-export function GetListing(db: DB): Handler {
+export function getListingRoute(db: DB): Handler {
     return async (req: Request, res: Response, next: NextFunction) => {
         const { id } = req.params;
 

@@ -1,4 +1,5 @@
 import {QueryDocumentSnapshot} from "firebase-admin/firestore";
+import {Searcher} from "./user";
 
 class JobListing {
   id: string;
@@ -7,7 +8,7 @@ class JobListing {
   description: string;
   location: string;
   schedule: string;
-  companyName: string;
+  companyID: string;
   type: string;
   datePosted: Date;
   benefits: string[];
@@ -20,7 +21,7 @@ class JobListing {
     description: string,
     location: string,
     schedule: string,
-    companyName: string,
+    companyID: string,
     type: string,
     datePosted: Date,
     benefits: string[],
@@ -32,7 +33,7 @@ class JobListing {
     this.description = description;
     this.location = location;
     this.schedule = schedule;
-    this.companyName = companyName;
+    this.companyID = companyID;
     this.type = type;
     this.datePosted = datePosted;
     this.benefits = benefits;
@@ -41,11 +42,8 @@ class JobListing {
 }
 
 export const JobListingConverter = {
-  toFirestore: (jobListing: JobListing) => {
-    return {...jobListing};
-  },
-  fromFirestore: (snapshot: QueryDocumentSnapshot) =>
-      snapshot.data() as JobListing,
-};
+  toFirestore: (jobListing: JobListing) => jobListing,
+  fromFirestore: (snapshot: QueryDocumentSnapshot) => snapshot.data() as JobListing
+}
 
 export default JobListing;

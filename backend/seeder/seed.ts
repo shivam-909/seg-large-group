@@ -1,11 +1,10 @@
 import DB from "../db/db";
 import {faker} from '@faker-js/faker';
 import JobListing from "../models/job";
-import {createJobListing, retrieveJobListing} from "../db/jobs";
-import {CreateCompany, CreateSearcher, RetrieveCompanyById, UpdateCompany} from "../db/users";
-import { Searcher, Company} from "../models/user";
+import {createJobListing} from "../db/jobs";
+import {createCompany, createSearcher, retrieveCompanyById, updateCompany} from "../db/users";
+import {Company, Searcher} from "../models/user";
 import {randomUUID} from "crypto";
-
 
 
 export async function GetAllJobIDs(db: DB): Promise<string[]> {
@@ -32,29 +31,18 @@ export async function GetAllCompanyIDs(db: DB): Promise<string[]> {
     return companyIds;
 }
 
-export async function RetrieveRandomJobs(db: DB): Promise<JobListing[]> {
+export async function RetrieveRandomJobIDs(db: DB): Promise<string[]> {
     const jobIds = await GetAllJobIDs(db);
 
     const shuffledJobIds = jobIds.sort(() => 0.5 - Math.random());
 
     const numJobs = Math.floor(Math.random() * 10) + 1;
-    const randomJobIds = shuffledJobIds.slice(0, numJobs);
-
-    return await Promise.all(
-        randomJobIds.map(async (jobId) => {
-            const jobListing = await retrieveJobListing(db, jobId);
-            if (jobListing) {
-                return jobListing;
-            } else {
-                throw new Error(`JobListing with id ${jobId} does not exist`);
-            }
-        })
-    );
+    return shuffledJobIds.slice(0, numJobs);
 }
 
 
+
 async function generateCompany(db: DB): Promise<Company> {
-    const jobsAvailArr: JobListing[] = [];
     const companyName = faker.company.name();
     const email = `support@${companyName.toLowerCase().replace(/[^a-zA-Z0-9]/g, '')}.${faker.internet.domainSuffix()}`;
 
@@ -67,13 +55,12 @@ async function generateCompany(db: DB): Promise<Company> {
         faker.internet.password(),
         faker.image.avatar(),
         faker.address.city(),
-        [faker.lorem.words(), faker.lorem.words(), faker.lorem.words()],
-        jobsAvailArr
+        [faker.lorem.words(), faker.lorem.words(), faker.lorem.words()]
     );
 }
 
 async function generateSearcher(db: DB): Promise<Searcher> {
-    const savedJobs = await RetrieveRandomJobs(db);
+    const savedJobs = await RetrieveRandomJobIDs(db);
     const firstName = faker.name.firstName();
     const lastName = faker.name.lastName();
     const email = faker.internet.email(firstName, lastName);
@@ -95,14 +82,15 @@ async function generateSearcher(db: DB): Promise<Searcher> {
 async function generateJobListing(db: DB): Promise<JobListing> {
     const companyIds = await GetAllCompanyIDs(db);
     const companyId = companyIds[Math.floor(Math.random() * companyIds.length)];
-    const company = await RetrieveCompanyById(db, companyId);
+    const company = await retrieveCompanyById(db, companyId);
+    const jobListingID = randomUUID();
 
     if (!company) {
         throw new Error('Company not found');
     }
 
     const jobListing = new JobListing(
-        randomUUID(),
+        jobListingID,
         faker.name.jobTitle(),
         faker.datatype.number({
             'min': 30000,
@@ -111,15 +99,14 @@ async function generateJobListing(db: DB): Promise<JobListing> {
         faker.lorem.paragraph(),
         company.location,
         faker.helpers.arrayElement(["Full-time", "Part-time", "Contract"]),
-        company.companyName,
+        company.id,
         faker.helpers.arrayElement(["Engineering", "Sales", "Marketing", "Finance"]),
         faker.date.past(),
         [faker.lorem.words(), faker.lorem.words(), faker.lorem.words()],
         [faker.lorem.words(), faker.lorem.words(), faker.lorem.words()]
     );
 
-    company.jobsAvail.push(jobListing);
-    await UpdateCompany(db, company);
+    await updateCompany(db, company);
 
     return jobListing;
 }
@@ -137,7 +124,7 @@ export async function seedCompanies(db: DB): Promise<void> {
 
     const createPromises: Promise<void>[] = [];
     for (const company of companies) {
-        createPromises.push(CreateCompany(db, company));
+        createPromises.push(createCompany(db, company));
     }
 
     await Promise.all(createPromises);
@@ -156,7 +143,7 @@ export async function seedSearchers(db: DB): Promise<void> {
 
     const createPromises: Promise<void>[] = [];
     for (const searcher of searchers) {
-        createPromises.push(CreateSearcher(db, searcher));
+        createPromises.push(createSearcher(db, searcher));
     }
 
     await Promise.all(createPromises);

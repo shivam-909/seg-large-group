@@ -5,8 +5,9 @@ import DB from './db/db';
 import multer from 'multer';
 import { HealthCheck, Route } from './service/routes/routes';
 import { ErrorToCode } from './service/public';
-import {AddListing,  GetListing} from "./service/routes/jobs";
-import {SeedCompanies, SeedSearchers, SeedJobs, SeedAll} from "./service/routes/seeder";
+import {addListingRoute,  getListingRoute} from "./service/routes/jobs";
+import {seedCompaniesRoute, seedSearchersRoute, seedJobs, seedAllRoute} from "./service/routes/seeder";
+import {GetCompany, DeleteCompany} from "./service/routes/users";
 
 dotenv.config();
 
@@ -25,13 +26,18 @@ app.get('/', HealthCheck);
 // app.post('/auth/register', upload.none(), Route(app, Register));
 // app.post('/auth/refresh', upload.none(), Route(app, Refresh));
 
-app.post('/jobs/add', upload.none(), Route(app, AddListing));
-app.post('/jobs/seed', Route(app, SeedJobs));
-app.get('/jobs/:id', Route(app, GetListing));
+app.post('/jobs/add', upload.none(), Route(app, addListingRoute));
+app.post('/jobs/seed', Route(app, seedJobs));
+app.get('/jobs/:id', Route(app, getListingRoute));
 
-app.post('/users/seed_companies', Route(app, SeedCompanies));
-app.post('/users/seed_searchers', Route(app, SeedSearchers));
-app.post('/seed_all', Route(app, SeedAll));
+app.post('/users/seed_companies', Route(app, seedCompaniesRoute));
+app.post('/users/seed_searchers', Route(app, seedSearchersRoute));
+app.post('/seed_all', Route(app, seedAllRoute));
+app.delete('/companies/:id', DeleteCompany(db));
+
+
+app.get('/user/:id', Route(app, GetCompany));
+
 
 
 app.use((err: any, req: Request, res: Response, next: NextFunction) => {

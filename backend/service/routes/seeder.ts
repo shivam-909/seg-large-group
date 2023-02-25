@@ -3,7 +3,7 @@ import {Handler} from "../public";
 import {NextFunction, Request, Response} from "express";
 import {seedCompanies, seedJobListings, seedSearchers} from "../../seeder/seed";
 
-export function SeedJobs(db: DB): Handler {
+export function seedJobs(db: DB): Handler {
     return async (req: Request, res: Response, next: NextFunction) => {
         try {
             await seedJobListings(db);
@@ -16,7 +16,7 @@ export function SeedJobs(db: DB): Handler {
     };
 }
 
-export function SeedCompanies(db: DB): Handler {
+export function seedCompaniesRoute(db: DB): Handler {
     return async (req: Request, res: Response, next: NextFunction) => {
         try {
             await seedCompanies(db);
@@ -29,7 +29,7 @@ export function SeedCompanies(db: DB): Handler {
     };
 }
 
-export function SeedSearchers(db: DB): Handler {
+export function seedSearchersRoute(db: DB): Handler {
     return async (req: Request, res: Response, next: NextFunction) => {
         try {
             await seedSearchers(db);
@@ -42,7 +42,7 @@ export function SeedSearchers(db: DB): Handler {
     };
 }
 
-export function SeedAll(db: DB): Handler {
+export function seedAllRoute(db: DB): Handler {
     return async (req: Request, res: Response, next: NextFunction) => {
         try {
             await seedCompanies(db);
