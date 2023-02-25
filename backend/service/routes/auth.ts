@@ -7,6 +7,7 @@ import User from "../../models/user";
 import { Error, ErrorFailedToHashPassword, ErrorInvalidEmail, ErrorInvalidPassword, ErrorMissingCompanyName, ErrorMissingFirstName, ErrorMissingLastName, ErrorUserExists, getErrorMessage, Handler } from "../public";
 import { GenerateKeyPair, VerifyJWT } from "../tokens";
 import { randomUUID } from "crypto";
+import SendEmail from "./emails";
 
 
 // Login accepts a request containing an id and password, and return a JWT
@@ -15,18 +16,16 @@ export function Login(db: DB): Handler {
   return async (req: Request, res: Response) => {
     const { email, password } = req.body;
 
-    let user: User | null = await RetrieveUserByEmail(db, email)
+    let user: User | null = await RetrieveUserByEmail(db, email);
 
     if (user === null) {
-      res.status(403).send("invalid credentials");
-      return
+      return res.status(403).send("invalid credentials");
     }
 
     const match = bcrypt.compareSync(password, user.hashedPassword);
 
     if (!match) {
-      res.status(403).send("invalid credentials");
-      return
+      return res.status(403).send("invalid credentials");
     }
 
     let { access, refresh } = GenerateKeyPair(user.idField);
@@ -35,6 +34,8 @@ export function Login(db: DB): Handler {
       access: access,
       refresh: refresh,
     });
+
+    await SendEmail("donotreply.joblink@gmail.com", email, "Verify your email address", `<h1>Hi ${user.firstName}!</h1><br><h2>Click <a href="http://localhost:3000/verify/${user.idField}">here</a> to verify your email address.</h2>`);
   }
 }
 
@@ -43,34 +44,32 @@ export function Login(db: DB): Handler {
 // access key and refresh token.
 export function Register(db: DB): Handler {
   return async (req: Request, res: Response, next: NextFunction) => {
-    var {
-      first_name,
-      last_name,
+    let {
+      firstName,
+      lastName,
       email,
       password,
-      is_company,
-      company_name,
+      isCompany,
+      companyName,
       pfp_url,
       location
     } = req.body;
 
-    const isCompany = is_company === "true";
-
     const valid = ValidateRegistrationForm(
-      first_name,
-      last_name,
-      email,
-      password,
-      isCompany,
-      company_name,
+        firstName,
+        lastName,
+        email,
+        password,
+        isCompany === "true",
+        companyName,
     );
 
     if (valid != "") {
       next(valid);
     }
 
-    if (company_name === undefined) {
-      company_name = "";
+    if (isCompany === undefined) {
+      companyName = "";
     }
 
     if (pfp_url === undefined) {
@@ -85,8 +84,7 @@ export function Register(db: DB): Handler {
 
     // Sanity check for user.
     if (user !== null) {
-      next(ErrorUserExists)
-      return
+      return next(ErrorUserExists)
     }
 
     const hash = ((): string | Error => {
@@ -100,19 +98,18 @@ export function Register(db: DB): Handler {
     })();
 
     if (hash instanceof Error) {
-      next(ErrorFailedToHashPassword)
-      return
+      return next(ErrorFailedToHashPassword)
     }
 
     const newId = randomUUID();
     const newUser = new User(
       newId,
-      first_name,
-      last_name,
+      firstName,
+      lastName,
       email,
       hash as string,
       isCompany,
-      company_name,
+      companyName,
       pfp_url,
       location,
       [], [])
@@ -140,18 +137,15 @@ export function Refresh(): Handler {
     const claims = VerifyJWT(refresh_token);
 
     if (!claims.id) {
-      res.status(401).send("invalid refresh token");
-      return
+      return res.status(401).send("invalid refresh token");
     }
 
     if (claims.type !== 'refresh') {
-      res.status(401).send("invalid refresh token");
-      return
+      return res.status(401).send("invalid refresh token");
     }
 
     if (claims.exp < Date.now()) {
-      res.status(401).send("refresh token expired");
-      return
+      return res.status(401).send("refresh token expired");
     }
 
     let { access, refresh } = GenerateKeyPair(claims.id);
@@ -204,19 +198,14 @@ function ValidateRegistrationForm(
 }
 
 function ValidEmail(email: string): boolean {
-
-  console.log(email);
-
   const parts = email.split("@");
   if (parts.length !== 2) {
     return false;
   }
 
-  if (parts[1].length > 64) {
-    return false;
-  }
+  return parts[1].length <= 64;
 
-  return true;
+
 }
 
 export function ValidPassword(password: string): boolean {

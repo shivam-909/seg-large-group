@@ -5,6 +5,8 @@ import { Login, Register, Refresh } from './service/routes/auth';
 import multer from 'multer';
 import { HealthCheck, Route } from './service/routes/routes';
 import { ErrorToCode } from './service/public';
+import {VerifyUserByEmail} from "./service/routes/users";
+
 
 export const db = new DB();
 
@@ -24,8 +26,9 @@ export const run = () => {
     app.post('/auth/login', upload.none(), Route(app, Login));
     app.post('/auth/register', upload.none(), Route(app, Register));
     app.post('/auth/refresh', upload.none(), Route(app, Refresh));
+    app.get('/verify/:id', upload.none(), Route(app, VerifyUserByEmail));
 
-    app.use((err: any, req: Request, res: Response, next: NextFunction) => {
+    app.use((err: any, req: Request, res: Response) => {
         console.error(err.stack);
         const code = ErrorToCode.get(err) || 500;
         res.status(code).json({ message: err || 'internal server error' });

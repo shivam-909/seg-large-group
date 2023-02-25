@@ -6,6 +6,7 @@ class User {
     lastName: string;
     email: string;
     hashedPassword: string;
+    isVerified: boolean;
     isCompany: boolean;
     companyName: string;
     pfpUrl: string;
@@ -19,6 +20,7 @@ class User {
         this.lastName = lastName;
         this.email = email;
         this.hashedPassword = hashedPassword;
+        this.isVerified = false;
         this.isCompany = isCompany;
         this.companyName = companyName;
         this.pfpUrl = pfpUrl;
