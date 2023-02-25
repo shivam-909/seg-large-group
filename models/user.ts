@@ -21,7 +21,6 @@ class User {
 
 class Company extends User {
     companyName: string;
-    jobsAvail: JobListing[];
 
     constructor(id: string,
                 companyName: string,
@@ -29,20 +28,18 @@ class Company extends User {
                 hashedPassword: string,
                 pfpUrl: string,
                 location: string,
-                notifications: string[],
-                jobsAvail:JobListing[])
+                notifications: string[])
 
     {
         super(id, email, hashedPassword, pfpUrl, location, notifications);
         this.companyName = companyName;
-        this.jobsAvail = jobsAvail;
     }
 }
 
 class Searcher extends User {
     firstName: string;
     lastName: string;
-    savedJobs: JobListing[];
+    savedJobs: string[];
 
     constructor(id: string,
                 firstName: string,
@@ -51,7 +48,7 @@ class Searcher extends User {
                 hashedPassword: string,
                 pfpUrl: string,
                 location: string,
-                savedJobs: JobListing[],
+                savedJobs: string[],
                 notifications: string[])
 
     {
