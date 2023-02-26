@@ -24,7 +24,7 @@ app.post('/auth/login', upload.none(), Route(app, Login));
 app.post('/auth/register', upload.none(), Route(app, Register));
 app.post('/auth/refresh', upload.none(), Route(app, Refresh));
 
-app.post('/storage/upload', upload.none(), Route(app, uploadFile));
+app.post('/storage/upload', upload.single('file'), Route(app, uploadFile));
 
 
 app.use((err: any, req: Request, res: Response, next: NextFunction) => {
