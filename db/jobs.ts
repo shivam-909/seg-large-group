@@ -1,7 +1,5 @@
 import JobListing from "../models/job";
 import DB from "./db";
-import {WriteResult} from "@google-cloud/firestore";
-import job from "../models/job";
 
 export async function createJobListing(db: DB, jobListing: JobListing): Promise<JobListing> {
   const docRef = db.JobListingCollection().doc(jobListing.id);
@@ -70,7 +68,6 @@ export async function deleteJobsByCompanyID(db: DB, companyId: string) {
   const jobCollectionRef = db.JobListingCollection();
   const jobsSnapshot = await jobCollectionRef.where('companyID', '==', companyId).get();
   jobsSnapshot.forEach(jobDoc => {
-    console.log(jobDoc.id)
     deleteJobListing(db, jobDoc.id);
   });
 }
