@@ -1,0 +1,30 @@
+.header{
+    color: black;
+    text-align: center;
+    padding: 20px;
+
+}
+
+.labels{
+    color:black;
+    padding: 20px;
+    padding-left:5px;
+    padding-bottom: 0%;
+
+
+}
+
+.fileLabels{
+    color: black;
+}
+
+.uploadButton{
+    color: white;
+    background-color: black;
+    margin: 5px;
+}
+
+.uploadButton:hover{
+    background-color: #61dafb;
+    color: black
+}
