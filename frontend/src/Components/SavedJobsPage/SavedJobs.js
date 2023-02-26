@@ -19,7 +19,7 @@ function SavedJobs() {
          <Tab>Rejected</Tab>
          <Tab>Archived</Tab>
        </TabList>
-<TabPanel>
+<TabPanel className="title">
          <p>Saved Jobs</p>
        </TabPanel>
        <TabPanel>
