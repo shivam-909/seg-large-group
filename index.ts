@@ -2,6 +2,7 @@ import express, { Express, NextFunction, Request, Response } from 'express';
 import dotenv from 'dotenv';
 import DB from './db/db';
 import { Login, Register, Refresh } from './service/routes/auth';
+import { uploadFile } from './service/storage/storage';
 import multer from 'multer';
 import { HealthCheck, Route } from './service/routes/routes';
 import { ErrorToCode } from './service/public';
@@ -22,6 +23,9 @@ app.get('/', HealthCheck);
 app.post('/auth/login', upload.none(), Route(app, Login));
 app.post('/auth/register', upload.none(), Route(app, Register));
 app.post('/auth/refresh', upload.none(), Route(app, Refresh));
+
+app.post('/storage/upload', upload.none(), Route(app, uploadFile));
+
 
 app.use((err: any, req: Request, res: Response, next: NextFunction) => {
     console.error(err.stack);
