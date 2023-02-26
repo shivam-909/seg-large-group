@@ -34,12 +34,10 @@ export function Login(db: DB): Handler {
       access: access,
       refresh: refresh,
     });
-
-    await SendEmail("donotreply.joblink@gmail.com", email, "Verify your email address", `<h1>Hi ${user.firstName}!</h1><br><h2>Click <a href="http://localhost:3000/verify/${user.idField}">here</a> to verify your email address.</h2>`);
   }
 }
 
-// Expects multi-part form.
+// Expects multipart form.
 // Register accepts a request containing an email and password, and return a JWT
 // access key and refresh token.
 export function Register(db: DB): Handler {
@@ -51,7 +49,7 @@ export function Register(db: DB): Handler {
       password,
       isCompany,
       companyName,
-      pfp_url,
+      pfpUrl,
       location
     } = req.body;
 
@@ -72,8 +70,8 @@ export function Register(db: DB): Handler {
       companyName = "";
     }
 
-    if (pfp_url === undefined) {
-      pfp_url = "";
+    if (pfpUrl === undefined) {
+      pfpUrl = "";
     }
 
     if (location === undefined) {
@@ -110,7 +108,7 @@ export function Register(db: DB): Handler {
       hash as string,
       isCompany,
       companyName,
-      pfp_url,
+      pfpUrl,
       location,
       [], [])
 
@@ -120,10 +118,12 @@ export function Register(db: DB): Handler {
 
     let { access, refresh } = GenerateKeyPair(newUser.idField);
 
-    return res.status(200).json({
+    res.status(200).json({
       access: access,
       refresh: refresh,
     });
+
+    return await SendEmail("donotreply.joblink@gmail.com", email, "Verify your email address", `<h1>Hi ${firstName}!</h1><br><h2>Click <a href="http://localhost:3000/verify/${newId}">here</a> to verify your email address.</h2>`);
   }
 }
 

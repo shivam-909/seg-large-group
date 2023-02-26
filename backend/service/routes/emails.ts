@@ -4,21 +4,24 @@ import Mail from 'nodemailer/lib/mailer';
 
 export default async function SendEmail(from: string, to: string, subject: string, html: string) {
     const transporter: Mail = createTransport({
-        service: 'gmail',
+        host: 'smtp.gmail.com',
+        port: 587,
+        secure: false,
+        requireTLS: true,
         auth: {
-            user: '',
-            pass: '',
+            user: from,
+            pass: 'cbpwsvhrijfnqhhx',
         },
     });
 
-    await transporter.sendMail({
+    return await transporter.sendMail({
         from: from,
         to: to,
         subject: subject,
         html: html
     }).catch(() => {
         throw {
-            message: 'Could not send email'
+            message: 'could not send email'
         };
     });
 }

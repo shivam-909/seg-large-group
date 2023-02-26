@@ -19,6 +19,8 @@ export function VerifyUserByEmail(db: DB): Handler {
 
         user.isVerified = true;
 
-        await UpdateUser(db, user);
-      };
+        await UpdateUser(db, user).then(() => {
+            return res.status(200).send("user verified");
+        });
+    };
 }
