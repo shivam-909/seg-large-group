@@ -1,38 +1,46 @@
 import { QueryDocumentSnapshot } from "firebase-admin/firestore";
-import JobListing from "./job";
 
 class User {
-    id: string;
+    userID: string;
     email: string;
     hashedPassword: string;
     pfpUrl: string;
     location: string;
     notifications: string[];
+    companyID?: string;
+    searcherID?: string;
 
-    constructor(id: string, email: string, hashedPassword: string, pfpUrl: string, location: string, notifications: string[]) {
-        this.id = id;
+
+    constructor(userID: string, email: string, hashedPassword: string, pfpUrl: string, location: string, notifications: string[], searcherID?: string, companyID?: string) {
+        this.userID = userID;
         this.email = email;
         this.hashedPassword = hashedPassword;
         this.pfpUrl = pfpUrl;
         this.location = location;
         this.notifications = notifications;
+        this.companyID = companyID;
+        this.searcherID = searcherID;
     }
 }
 
+
 class Company extends User {
     companyName: string;
+    companyID: string;
 
-    constructor(id: string,
+    constructor(userID: string,
                 companyName: string,
                 email: string,
                 hashedPassword: string,
                 pfpUrl: string,
                 location: string,
-                notifications: string[])
+                notifications: string[],
+                companyID: string,)
 
     {
-        super(id, email, hashedPassword, pfpUrl, location, notifications);
+        super(userID, email, hashedPassword, pfpUrl, location, notifications);
         this.companyName = companyName;
+        this.companyID = companyID;
     }
 }
 
@@ -40,8 +48,9 @@ class Searcher extends User {
     firstName: string;
     lastName: string;
     savedJobs: string[];
+    searcherID: string;
 
-    constructor(id: string,
+    constructor(userID: string,
                 firstName: string,
                 lastName: string,
                 email: string,
@@ -49,13 +58,15 @@ class Searcher extends User {
                 pfpUrl: string,
                 location: string,
                 savedJobs: string[],
-                notifications: string[])
+                notifications: string[],
+                searcherID: string,)
 
     {
-        super(id, email, hashedPassword, pfpUrl, location, notifications);
+        super(userID, email, hashedPassword, pfpUrl, location, notifications);
         this.firstName = firstName;
         this.lastName = lastName;
         this.savedJobs = savedJobs;
+        this.searcherID = searcherID;
     }
 }
 

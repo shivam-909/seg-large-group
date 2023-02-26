@@ -6,15 +6,14 @@ import multer from 'multer';
 import { HealthCheck, Route } from './service/routes/routes';
 import { ErrorToCode } from './service/public';
 import {addListingRoute,  getListingRoute} from "./service/routes/jobs";
-import {seedCompaniesRoute, seedSearchersRoute, seedJobs, seedAllRoute} from "./service/routes/seeder";
-import {GetCompany, DeleteCompany} from "./service/routes/users";
+import {seedAllRoute} from "./service/routes/seeder";
+import {updateUserRoute, deleteUserRoute, getUserRoute} from "./service/routes/users";
 
 dotenv.config();
 
 const app: Express = express();
 const port = process.env.PORT || 3000;
 
-// Routes with upload.none() provided will accept a form.
 const upload = multer();
 
 const db = new DB();
@@ -27,17 +26,13 @@ app.get('/', HealthCheck);
 // app.post('/auth/refresh', upload.none(), Route(app, Refresh));
 
 app.post('/jobs/add', upload.none(), Route(app, addListingRoute));
-app.post('/jobs/seed', Route(app, seedJobs));
 app.get('/jobs/:id', Route(app, getListingRoute));
 
-app.post('/users/seed_companies', Route(app, seedCompaniesRoute));
-app.post('/users/seed_searchers', Route(app, seedSearchersRoute));
+app.get('/user/:id', Route(app, getUserRoute));
+app.put('/users/:id', upload.none(), Route(app, updateUserRoute));
+app.delete('/user/:id', upload.none(), Route(app, deleteUserRoute));
+
 app.post('/seed_all', Route(app, seedAllRoute));
-app.delete('/companies/:id', DeleteCompany(db));
-
-
-app.get('/user/:id', Route(app, GetCompany));
-
 
 
 app.use((err: any, req: Request, res: Response, next: NextFunction) => {
