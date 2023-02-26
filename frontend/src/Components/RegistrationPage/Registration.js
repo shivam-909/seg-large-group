@@ -83,8 +83,8 @@ function registrationForm(){
                    
                         <PhoneInput defaultCountry="UK"  placeholder="Mobile Number" id="mobileNumber" name="mobileNumber" className="text-input" />
                     
-                        <TextInputBoxWithIcon type="password" placeholder="Password" id="password" name="password" className= "text-input" icon={<img id='toggleEye' src={showIcon} alt='' onClick={togglePasswordVisibility} className='cursor-pointer'/>}/>
-                        <TextInputBoxWithIcon type="password" placeholder="Confirm password" id="password" name="password" className= "text-input" icon={<img id='toggleEye' src={showIcon} alt='' onClick={togglePasswordVisibility} className='cursor-pointer'/>}/>
+                        <TextInputBoxWithIcon type="password" placeholder="Password" id="password" name="password" className= "password-input" icon={<img id='toggleEye' src={showIcon} alt='' onClick={togglePasswordVisibility} className='cursor-pointer'/>}/>
+                        <TextInputBoxWithIcon type="password" placeholder="Confirm password" id="cofirmPassword" name="cofirmPassword" className= "password-input" icon={<img id='toggleEye' src={showIcon} alt='' onClick={togglePasswordVisibility} className='cursor-pointer'/>}/>
                     
                     </div>
                     

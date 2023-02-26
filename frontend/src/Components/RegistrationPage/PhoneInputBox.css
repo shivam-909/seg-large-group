@@ -1,12 +1,16 @@
 .number-input{
     color: black;
-    margin: 10px ;
+    margin-right: 40px ;
+    margin-left: 40px;
+    margin-top: 10px;
+    margin-bottom: 10px;
     border-radius: 10px;
     background-color: white;
     border: 3px solid #282c34;  
     text-align: center;
     padding-top: 20px;
+    padding-left: 20px;
     display: flex;
     flex-direction: column;
-
+    width: 350px;
 }

@@ -37,6 +37,7 @@
     border-radius: 10px;
     background-color: white;
     border: 3px solid #282c34;  
+    
 }
 
 .registrationButton{
@@ -56,6 +57,7 @@
 
 }
 
+
 .registrationButton:hover {
     background-color: white; 
     color: black;
@@ -65,7 +67,6 @@
     background-color: #479db5;
     transform: translateY(2px);
   }
-
 
 .RegistrationPage-link {
     color: #61dafb;
