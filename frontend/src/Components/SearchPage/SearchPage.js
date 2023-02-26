@@ -1,16 +1,19 @@
 import Navbar from "../Navbar/Navbar";
-import NewNavbar from "./NewNavbar";
 import SearchBar from "./SearchBar";
-import Filters from "./Filters";
-import JobDetailsCard from "./JobDetailsCard";
-import JobPostCard from "./JobPostCard";
-import Dropdown from "./Dropdown";
-
+import JobList from "./JobList";
 function SearchPage() {
   return (
-    <div>
-        <NewNavbar/>
-    </div>
+      <div>
+          <Navbar/>
+          <div className="bg-lighter-grey min-h-screen items-center justify-center flex">
+              <header className="mt-24 bg-white rounded-md sm:min-w-1/6 inline-grid px-12 py-7 space-y-3">
+                  <SearchBar/>
+                  <div className="">
+                      <JobList/>
+                  </div>
+              </header>
+          </div>
+      </div>
   );
 }
 
