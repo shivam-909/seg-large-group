@@ -17,7 +17,7 @@ function RegisterPage() {
     let curRole = document.getElementById(role === "Seeker-Fields" ? "Company-Fields" : "Seeker-Fields");
     let newRole = document.getElementById(role);
     curRole.className = "invisible absolute top-96"
-    newRole.className = " "
+    newRole.className = "space-x-2"
 
   }
   function togglePasswordVisibility(field, icon) {
