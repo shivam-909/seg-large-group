@@ -5,7 +5,7 @@ import hideIcon from '../../icons/hideIcon.png';
 import TextInputBoxWithIcon from "../LoginPage/TextInputBoxWithIcon";
 import BinaryOption from "../Buttons/BinaryOption";
 import {useState} from "react";
-import { validateField } from "../Validation/validate";
+import { validateField, setVisible } from "../Validation/validate";
 
 function RegisterPage() {
   const [errorMsg] = useState("")
@@ -33,15 +33,6 @@ function RegisterPage() {
     let newRole = document.getElementById(role);
     setVisible(curRole,false)
     newRole.className = "space-x-2"
-  }
-  function setVisible(elem,flag){
-    let obj = document.getElementById(elem)
-    if(flag){
-      obj.className = ""
-    }
-    else{
-      obj.className = "invisible absolute top-0"
-    }
   }
   function togglePasswordVisibility(field, icon) {
     if (document.readyState === "complete") {

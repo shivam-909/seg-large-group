@@ -9,7 +9,7 @@ export const validateField = function(field, regex){
         errorText.className = "block text-red left-2 relative";
     }
 }
-function setVisible(elem,flag){
+export const setVisible = function(elem,flag){
     let obj = document.getElementById(elem)
     if(flag){
         obj.className = ""
