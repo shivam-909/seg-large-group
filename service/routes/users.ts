@@ -5,7 +5,7 @@ import { Error, getErrorMessage, Handler } from "../public";
 
 export function getUserRoute(db: DB): Handler {
     return async (req: Request, res: Response, next: NextFunction) => {
-        const { id } = req.params;
+        const id = req.params.id;
 
         try {
             const user = await retrieveUserById(db, id);
@@ -13,7 +13,7 @@ export function getUserRoute(db: DB): Handler {
                 res.status(200).json(user);
             } else {
                 res.status(404).json({
-                    message: 'User not found'
+                    message: `User ${id} not found`
                 });
             }
         } catch (err) {
@@ -26,16 +26,11 @@ export function getUserRoute(db: DB): Handler {
 
 export function updateUserRoute(db: DB): Handler {
     return async (req: Request, res: Response, next: NextFunction) => {
-        const { id } = req.params;
+        const id = req.params.id;
         const userData = req.body;
 
         try {
             const user = await retrieveUserById(db, id);
-            if (!user) {
-                return res.status(404).json({
-                    msg: "User not found"
-                });
-            }
 
             const updatedUser = { ...user, ...userData };
             await updateUser(db, updatedUser);
@@ -54,12 +49,11 @@ export function updateUserRoute(db: DB): Handler {
 export function deleteUserRoute(db: DB): Handler {
     return async (req: Request, res: Response, next: NextFunction) => {
         const id = req.params.id;
-        const user = { userID: id };
 
         try {
-            await deleteUser(db, user);
+            await deleteUser(db, id);
             res.status(200).json({
-                msg: "User has been deleted",
+                msg: `User ${id} has been deleted`,
             });
         } catch (err) {
             next({

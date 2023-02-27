@@ -25,12 +25,8 @@ export async function createJobListing(db: DB, jobListing: JobListing): Promise<
 export async function retrieveJobListing(db: DB, id: string): Promise<JobListing | null> {
   const docRef = db.JobListingCollection().doc(id);
   const doc = await docRef.get();
-  if (doc.exists) {
-    return doc.data() as JobListing;
-  } 
-  else {
-    return null
-  }
+
+  return doc.data() as JobListing;
 }
 
 export async function updateJobListing(db: DB, jobListing: JobListing): Promise<void> {
@@ -61,6 +57,8 @@ export async function deleteJobListing(db: DB, id: string) {
   await deleteJobFromSaved(db, id)
 }
 
+
+
 export async function deleteJobsByCompanyID(db: DB, companyId: string) {
   if (!companyId) {
     throw new Error('Company ID is not defined');
@@ -71,6 +69,8 @@ export async function deleteJobsByCompanyID(db: DB, companyId: string) {
     deleteJobListing(db, jobDoc.id);
   });
 }
+
+
 
 
 export async function deleteJobFromSaved(db: DB, jobId: string): Promise<void> {

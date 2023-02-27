@@ -5,7 +5,7 @@ import DB from './db/db';
 import multer from 'multer';
 import { HealthCheck, Route } from './service/routes/routes';
 import { ErrorToCode } from './service/public';
-import {addListingRoute,  getListingRoute} from "./service/routes/jobs";
+import {addListingRoute, deleteListingRoute, getListingRoute} from "./service/routes/jobs";
 import {seedAllRoute} from "./service/routes/seeder";
 import {updateUserRoute, deleteUserRoute, getUserRoute} from "./service/routes/users";
 
@@ -15,7 +15,7 @@ export const run = () => {
     dotenv.config();
 
     const app: Express = express();
-    const port = process.env.PORT || 3000;
+    const port = process.env.PORT || 8000;
 
     // Routes with upload.none() provided will accept a form.
     const upload = multer();
@@ -28,6 +28,7 @@ export const run = () => {
 
     app.post('/jobs/add', upload.none(), Route(app, addListingRoute));
     app.get('/jobs/:id', Route(app, getListingRoute));
+    app.delete('/jobs/:id', upload.none(), Route(app, deleteListingRoute));
 
     app.get('/user/:id', Route(app, getUserRoute));
     app.put('/users/:id', upload.none(), Route(app, updateUserRoute));

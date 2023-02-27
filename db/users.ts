@@ -66,7 +66,7 @@ export async function retrieveUserById(db: DB, id: string): Promise<Company | Se
             throw new Error('Not a User type');
         }
     } else {
-        throw new Error('No such document exists');
+        throw new Error(`User ${id} not found`);
     }
 }
 
@@ -82,7 +82,7 @@ export async function retrieveUserByEmail<T extends toRetrieve>(db: DB, email: s
     } else if (!searcherSnapshot.empty) {
         snapshot = searcherSnapshot as FirebaseFirestore.QuerySnapshot<User>;
     } else {
-        return null;
+        throw new Error(`User ${email} does not exist`);
     }
 
     const doc = snapshot.docs[0];
@@ -124,10 +124,8 @@ export async function updateUser<T extends { userID: string; }>(db: DB, user: T)
     }
 }
 
-export async function deleteUser<T extends { userID: string }>(db: DB, user: T): Promise<void> {
-    const { userID } = user;
-
-    const to_delete = await retrieveUserById(db, user.userID);
+export async function deleteUser(db: DB, userID: string): Promise<void> {
+    const to_delete = await retrieveUserById(db, userID);
     if (!to_delete) {
         throw new Error(`User with ID ${userID} not found`);
     }
@@ -140,10 +138,7 @@ export async function deleteUser<T extends { userID: string }>(db: DB, user: T):
     } else if ('searcherID' in to_delete) {
         const searcherDocRef = db.SearcherCollection().doc(to_delete?.searcherID!);
         await searcherDocRef.delete();
-    } else {
-        throw new Error('Invalid user type');
+
+        await userDocRef.delete();
     }
-
-    await userDocRef.delete();
 }
-
