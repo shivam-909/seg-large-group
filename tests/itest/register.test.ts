@@ -45,5 +45,5 @@ test('register user', async () => {
 
     expect(user).not.toBeNull();
 
-    await deleteUser(db, user!.idField);
+    await deleteUser(db, user!.userID);
 });

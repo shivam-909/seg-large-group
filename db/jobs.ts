@@ -4,22 +4,18 @@ import DB from "./db";
 export async function createJobListing(db: DB, jobListing: JobListing): Promise<JobListing> {
   const docRef = db.JobListingCollection().doc(jobListing.id);
 
-  await docRef.set({
-    id: jobListing.id,
-    title: jobListing.title,
-    compensation: jobListing.compensation,
-    description: jobListing.description,
-    location: jobListing.location,
-    schedule: jobListing.schedule,
-    companyID: jobListing.companyID,
-    type: jobListing.type,
-    datePosted: jobListing.datePosted,
-    benefits: jobListing.benefits,
-    requirements: jobListing.requirements,
-  });
+  try {
+    await docRef.set({
+      ...jobListing,
+      id: jobListing.id,
+    });
+  } catch (err) {
+    throw err;
+  }
 
   return jobListing;
 }
+
 
 
 export async function retrieveJobListing(db: DB, id: string): Promise<JobListing | null> {
@@ -32,23 +28,15 @@ export async function retrieveJobListing(db: DB, id: string): Promise<JobListing
 export async function updateJobListing(db: DB, jobListing: JobListing): Promise<void> {
   const docRef = db.JobListingCollection().doc(jobListing.id);
 
+  const { id, ...listingData } = jobListing;
+
   try {
-    await docRef.update({
-      title: jobListing.title,
-      compensation: jobListing.compensation,
-      description: jobListing.description,
-      location: jobListing.location,
-      schedule: jobListing.schedule,
-      companyID: jobListing.companyID,
-      type: jobListing.type,
-      datePosted: jobListing.datePosted,
-      benefits: jobListing.benefits,
-      requirements: jobListing.requirements,
-    });
+    await docRef.update(listingData);
   } catch (err) {
     throw err;
   }
 }
+
 
 export async function deleteJobListing(db: DB, id: string) {
   const docRef = db.JobListingCollection().doc(id);
