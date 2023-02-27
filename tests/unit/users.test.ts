@@ -2,8 +2,8 @@
 
 import { randomUUID } from "crypto";
 import DB from "../../db/db";
-import { CreateUser, RetrieveUserByEmail } from "../../db/users";
-import User from "../../models/user";
+import { createUser, retrieveUserByEmail } from "../../db/users";
+import {User} from "../../models/user";
 
 test('create user, retrieve user by email, delete user', async () => {
     // Create a user in the db.
@@ -25,10 +25,10 @@ test('create user, retrieve user by email, delete user', async () => {
         [],
     );
 
-    await CreateUser(db, user);
+    await createUser(db, user);
 
     // Retrieve the user by email.
-    const retrievedUser = await RetrieveUserByEmail(db, email);
+    const retrievedUser = await retrieveUserByEmail(db, email);
     expect(retrievedUser).not.toBeNull();
     expect(retrievedUser?.idField).toEqual(id);
     expect(retrievedUser?.email).toEqual(email);
