@@ -7,9 +7,9 @@ import { randomUUID } from "crypto";
 
 export function addListingRoute(db: DB): Handler {
     return async (req: Request, res: Response, next: NextFunction) => {
-        const { title, compensation, description, location, schedule, companyName, type, datePosted, benefits, requirements } = req.body;
+        const { title, compensation, description, location, schedule, companyID, type, datePosted, benefits, requirements } = req.body;
         const newID = randomUUID();
-        const newJobListing = new JobListing(newID, title, compensation, description, location, schedule, companyName, type, datePosted, benefits, requirements);
+        const newJobListing = new JobListing(newID, title, compensation, description, location, schedule, companyID, type, datePosted, benefits, requirements);
 
         try {
             let listing = await createJobListing(db, newJobListing);
@@ -34,7 +34,7 @@ export function getListingRoute(db: DB): Handler {
                 res.status(200).json(jobListing);
             } else {
                 res.status(404).json({
-                    message: `Job listing {id} not found`,
+                    message: `Job listing ${id} not found`,
                 });
             }
         } catch (err) {
@@ -59,5 +59,6 @@ export function deleteListingRoute(db: DB): Handler {
                 message: getErrorMessage(err),
             });
         }
+
     };
 }

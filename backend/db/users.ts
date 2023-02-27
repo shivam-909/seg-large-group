@@ -17,9 +17,8 @@ export async function createUser(db: DB, user: User) {
     let typeID: string | null = null;
 
     if (user.companyID) {
-        const companyUser: Omit<Company, 'userID'> & Pick<User, 'userID'> = {
+        const companyUser: Company = {
             ...baseUser,
-            userID: user.userID,
             companyID: user.companyID,
             companyName: (user as Company).companyName,
         };
@@ -27,9 +26,8 @@ export async function createUser(db: DB, user: User) {
         type = 'company';
         typeID = user.companyID;
     } else if (user.searcherID) {
-        const searcherUser: Omit<Searcher, 'userID'> & Pick<User, 'userID'> = {
+        const searcherUser: Searcher = {
             ...baseUser,
-            userID: user.userID,
             searcherID: user.searcherID,
             firstName: (user as Searcher).firstName,
             lastName: (user as Searcher).lastName,
@@ -66,13 +64,11 @@ export async function retrieveUserById(db: DB, id: string): Promise<Company | Se
             throw new Error('Not a User type');
         }
     } else {
-        throw new Error(`User ${id} not found`);
+        return null
     }
 }
 
-type toRetrieve = Company | Searcher;
-
-export async function retrieveUserByEmail<T extends toRetrieve>(db: DB, email: string): Promise<T | null> {
+export async function retrieveUserByEmail(db: DB, email:string): Promise<Company | Searcher | null> {
     const companySnapshot = await db.CompanyCollection().where('email', '==', email).get();
     const searcherSnapshot = await db.SearcherCollection().where('email', '==', email).get();
 
@@ -82,14 +78,14 @@ export async function retrieveUserByEmail<T extends toRetrieve>(db: DB, email: s
     } else if (!searcherSnapshot.empty) {
         snapshot = searcherSnapshot as FirebaseFirestore.QuerySnapshot<User>;
     } else {
-        throw new Error(`User ${email} does not exist`);
+        return null
     }
 
     const doc = snapshot.docs[0];
-    return doc.data() as T;
+    return doc.data() as Company | Searcher;
 }
 
-export async function updateUser<T extends { userID: string; }>(db: DB, user: T): Promise<void> {
+export async function updateUser(db: DB, user: Company | Searcher): Promise<void> {
     const { userID, ...userData } = user;
 
     let companyDocRef: FirebaseFirestore.DocumentReference;
@@ -105,15 +101,14 @@ export async function updateUser<T extends { userID: string; }>(db: DB, user: T)
     }
 
     const companyUpdate = companyDocRef.update(userData);
-    const baseData: { [key: string]: any } = {};
 
-    if ('email' in user) baseData['email'] = user.email;
-    if ('hashedPassword' in user) baseData['hashedPassword'] = user.hashedPassword;
-    if ('pfpUrl' in user) baseData['pfpUrl'] = user.pfpUrl;
-    if ('location' in user) baseData['location'] = user.location;
-    if ('notifications' in user) baseData['notifications'] = user.notifications;
-    if ('companyID' in user) baseData['companyID'] = (user as unknown as Company).companyID;
-    else if ('searcherID' in user) baseData['searcherID'] = (user as unknown as Searcher).searcherID;
+    const baseData: { [key: string]: any } = {};
+    const updateKeys = ['email', 'hashedPassword', 'pfpUrl', 'location', 'notifications', 'companyID', 'searcherID'];
+    for (const key in user) {
+        if (updateKeys.includes(key)) {
+            baseData[key] = (user as any)[key];
+        }
+    }
 
     const userUpdate = userDocRef.update(baseData);
 
@@ -123,6 +118,7 @@ export async function updateUser<T extends { userID: string; }>(db: DB, user: T)
         throw err;
     }
 }
+
 
 export async function deleteUser(db: DB, userID: string): Promise<void> {
     const to_delete = await retrieveUserById(db, userID);

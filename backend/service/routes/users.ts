@@ -26,11 +26,16 @@ export function getUserRoute(db: DB): Handler {
 
 export function updateUserRoute(db: DB): Handler {
     return async (req: Request, res: Response, next: NextFunction) => {
-        const id = req.params.id;
+        const { id } = req.params;
         const userData = req.body;
 
         try {
             const user = await retrieveUserById(db, id);
+            if (!user) {
+                return res.status(404).json({
+                    msg: `User ${id} not found`
+                });
+            }
 
             const updatedUser = { ...user, ...userData };
             await updateUser(db, updatedUser);

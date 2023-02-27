@@ -8,6 +8,7 @@ import { ErrorToCode } from './service/public';
 import {addListingRoute, deleteListingRoute, getListingRoute} from "./service/routes/jobs";
 import {seedAllRoute} from "./service/routes/seeder";
 import {updateUserRoute, deleteUserRoute, getUserRoute} from "./service/routes/users";
+import {Login, Refresh, Register} from "./service/routes/auth";
 
 export const db = new DB();
 
@@ -22,9 +23,9 @@ export const run = () => {
 
     app.set('db', db);
 
-    // app.post('/auth/login', upload.none(), Route(app, Login));
-    // app.post('/auth/register', upload.none(), Route(app, Register));
-    // app.post('/auth/refresh', upload.none(), Route(app, Refresh));
+    app.post('/auth/login', upload.none(), Route(app, Login));
+    app.post('/auth/register', upload.none(), Route(app, Register));
+    app.post('/auth/refresh', upload.none(), Route(app, Refresh));
 
     app.post('/jobs/add', upload.none(), Route(app, addListingRoute));
     app.get('/jobs/:id', Route(app, getListingRoute));
