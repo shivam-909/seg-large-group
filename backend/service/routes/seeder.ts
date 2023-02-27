@@ -1,5 +1,5 @@
 import DB from "../../db/db";
-import {Handler} from "../public";
+import {getErrorMessage, Handler} from "../public";
 import {NextFunction, Request, Response} from "express";
 import {seedCompanies, seedJobListings, seedSearchers} from "../../seeder/seed";
 
@@ -14,7 +14,9 @@ export function seedAllRoute(db: DB): Handler {
                 message: 'All data seeded successfully'
             });
         } catch (err) {
-            next(err);
+            next({
+                message: getErrorMessage(err),
+            });
         }
     };
 }
