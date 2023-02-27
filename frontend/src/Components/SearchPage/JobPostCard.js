@@ -6,7 +6,7 @@ import Urgent from "./Urgent";
 import JobPostAge from "./JobPostAge";
 function JobPostCard(props) {
     return (
-        <div className='border-2 border-darker-grey rounded-xl w-[410px] p-4'>
+        <div className='border-2 border-darker-grey rounded-xl p-4 w-[450px]'>
             {props.age <= 3 && <p className='text-xs mb-1 text-green'>new</p>}
             <p className='font-bold text-xl'>{props.title}</p>
             <p>{props.companyName}</p>
