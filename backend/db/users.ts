@@ -63,34 +63,30 @@ export async function retrieveUserById(db: DB, id: string): Promise<Company | Se
             doc = await docRef.get();
             return doc.data() as Searcher;
         } else {
-            return null;
+            throw new Error('Not a User type');
         }
+    } else {
+        throw new Error('No such document exists');
+    }
+}
+
+type toRetrieve = Company | Searcher;
+
+export async function retrieveUserByEmail<T extends toRetrieve>(db: DB, email: string): Promise<T | null> {
+    const companySnapshot = await db.CompanyCollection().where('email', '==', email).get();
+    const searcherSnapshot = await db.SearcherCollection().where('email', '==', email).get();
+
+    let snapshot: FirebaseFirestore.QuerySnapshot<User>;
+    if (!companySnapshot.empty) {
+        snapshot = companySnapshot as FirebaseFirestore.QuerySnapshot<User>;
+    } else if (!searcherSnapshot.empty) {
+        snapshot = searcherSnapshot as FirebaseFirestore.QuerySnapshot<User>;
     } else {
         return null;
     }
-}
-
-export async function retrieveCompanyByEmail(db: DB, email: string): Promise<Company | null> {
-    const snapshot = await db.CompanyCollection().where('email', '==', email).get();
-
-    if (snapshot.size === 0) {
-        return null;
-    }
 
     const doc = snapshot.docs[0];
-    return doc.data() as Company;
-}
-
-
-export async function retrieveSearcherByEmail(db: DB, email: string): Promise<Searcher | null> {
-    const snapshot = await db.SearcherCollection().where('email', '==', email).get();
-
-    if (snapshot.size === 0) {
-        return null;
-    }
-
-    const doc = snapshot.docs[0];
-    return doc.data() as Searcher;
+    return doc.data() as T;
 }
 
 export async function updateUser<T extends { userID: string; }>(db: DB, user: T): Promise<void> {
@@ -98,12 +94,12 @@ export async function updateUser<T extends { userID: string; }>(db: DB, user: T)
 
     let companyDocRef: FirebaseFirestore.DocumentReference;
     let userDocRef: FirebaseFirestore.DocumentReference;
+    userDocRef = db.UserCollection().doc(userID);
+
     if ('companyID' in user) {
         companyDocRef = db.CompanyCollection().doc((user as unknown as Company).companyID);
-        userDocRef = db.UserCollection().doc(userID);
     } else if ('searcherID' in user) {
         companyDocRef = db.SearcherCollection().doc((user as unknown as Searcher).searcherID);
-        userDocRef = db.UserCollection().doc(userID);
     } else {
         throw new Error('Invalid user type');
     }
