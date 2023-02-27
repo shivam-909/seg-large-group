@@ -5,10 +5,11 @@ import hideIcon from '../../icons/hideIcon.png';
 import TextInputBoxWithIcon from "../LoginPage/TextInputBoxWithIcon";
 import BinaryOption from "../Buttons/BinaryOption";
 import {useState} from "react";
+import { validateField } from "../Validation/validate";
 
 function RegisterPage() {
   const [errorMsg, setErrorMsg] = useState("")
-  function checkPasswordMatch(){
+  const checkPasswordMatch = function(){
     let pass = document.getElementById("password").value;
     let confirmPass = document.getElementById("confirmPass").value;
     if (confirmPass == pass){
@@ -17,17 +18,6 @@ function RegisterPage() {
     else{
       setVisible("confirmPassError", true);
       let errorText = document.getElementById("confirmPassError");
-      errorText.className = "block text-red left-2 relative";
-    }
-  }
-  function validateField(field, regex, msg){
-    let obj = document.getElementById(field);
-    if (regex.test(obj.value)){
-      setVisible(field+"Error", false);
-    }
-    else{
-      setVisible(field+"Error", true);
-      let errorText = document.getElementById(field + "Error");
       errorText.className = "block text-red left-2 relative";
     }
   }
@@ -78,11 +68,11 @@ function RegisterPage() {
             <BinaryOption option1={"Job Seeker"} function1={() => {toggleRole("Seeker-Fields")}} function2={() => {toggleRole("Company-Fields")}} option2={"Company"}/>
             <div id="Seeker-Fields" className="space-x-2 inline">
               <div className={"inline float-left"}>
-              <TextInputBox id='FirstName' onChange={()=>{validateField("FirstName",/^[A-Za-z]+$/,"Invalid First Name")}} placeholder='First Name'/>
+              <TextInputBox id='FirstName' onChange={()=>{validateField("FirstName",/^[A-Za-z]+$/)}} placeholder='First Name'/>
                 <span id="FirstNameError" className={"invisible absolute top-0"}>Invalid First Name</span>
               </div>
               <div className={"inline float-right"}>
-                <TextInputBox id='LastName' onChange={()=>{validateField("LastName",/^[A-Za-z]+$/,"Invalid Last Name")}} placeholder='Last Name'/>
+                <TextInputBox id='LastName' onChange={()=>{validateField("LastName",/^[A-Za-z]+$/)}} placeholder='Last Name'/>
                 <span id="LastNameError" className={"invisible absolute top-0"}>Invalid Last Name</span>
               </div>
             </div>
@@ -92,12 +82,12 @@ function RegisterPage() {
 
             <div className={"w-full"}>
               {/*eslint-disable-next-line*/}
-            <TextInputBox id='email' className="w-full" onChange={()=>{validateField("email",/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/,"Invalid Email")}} placeholder='Email address'/>
+            <TextInputBox id='email' className="w-full" onChange={()=>{validateField("email",/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/)}} placeholder='Email address'/>
             <span id="emailError" className={"invisible absolute top-0"}>Invalid Email</span>
             </div>
 
             <div>
-            <TextInputBoxWithIcon id='password' type='password' onChange={()=>{validateField("password",/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{8,20})/,"Invalid Password"); checkPasswordMatch()}} placeholder='Password' icon={<img id='togglePassword' src={showIcon} alt='' onClick={() => {togglePasswordVisibility("password","togglePassword")}} className='cursor-pointer'/>}/>
+            <TextInputBoxWithIcon id='password' type='password' onChange={()=>{validateField("password",/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{8,20})/); checkPasswordMatch()}} placeholder='Password' icon={<img id='togglePassword' src={showIcon} alt='' onClick={() => {togglePasswordVisibility("password","togglePassword")}} className='cursor-pointer'/>}/>
             <span id="passwordError" className={"invisible absolute top-0"}>Invalid Password</span>
             </div>
 
