@@ -8,11 +8,11 @@ import {useState} from "react";
 import { validateField } from "../Validation/validate";
 
 function RegisterPage() {
-  const [errorMsg, setErrorMsg] = useState("")
+  const [errorMsg] = useState("")
   const checkPasswordMatch = function(){
     let pass = document.getElementById("password").value;
     let confirmPass = document.getElementById("confirmPass").value;
-    if (confirmPass == pass){
+    if (confirmPass === pass){
       setVisible("confirmPassError", false);
     }
     else{
