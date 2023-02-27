@@ -118,7 +118,7 @@ function RegisterPage() {
               <i className="fa-solid fa-right-to-bracket"></i>
             </button>
 
-            <p className='text-center pt-4'>Already a user? <a className='LoginPage-link' href='/#'>Sign in.</a></p>
+            <p className='text-center pt-4'>Already a user? <a className='LoginPage-link' href='/login'>Sign in.</a></p>
           </div>
       </div>
   );
