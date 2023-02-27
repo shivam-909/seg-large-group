@@ -5,13 +5,13 @@ import TempDetail from "./TempDetail";
 import Filters from "./Filters";
 
 function SearchPage() {
-    const [changePage, setChangePage] = useState(false);
+    const [loadResults, setLoadResults] = useState(false);
     const [showJobTitleInputErrorMessage, setShowJobTitleInputErrorMessage] = useState(false);
     const [showLocationInputErrorMessage, setShowLocationInputErrorMessage] = useState(false);
 
     function showResults() {
         if (isJobTitleInputValid() & isLocationInputValid()) {
-            setChangePage(true);
+            setLoadResults(true);
         }
     }
 
@@ -34,11 +34,11 @@ function SearchPage() {
     return (
         <div className='mt-24 space-y-5 flex-col'>
             <SearchBar onclick={showResults} onJobTitleInputChange={() => setShowJobTitleInputErrorMessage(false)} onLocationInputChange={() => setShowLocationInputErrorMessage(false)} displayJobTitleInputErrorMessage={showJobTitleInputErrorMessage} displayLocationInputErrorMessage={showLocationInputErrorMessage}/>
-            {changePage &&
+            {loadResults &&
                 <div className='space-y-12'>
                     <Filters/>
                     <div className='flex mx-96 space-x-5 pl-72'>
-                        <div className="justify-end bg-white inline-grid space-y-3">
+                        <div className="justify-end inline-grid space-y-3">
                             <TempCard/>
                             <TempCard/>
                             <TempCard/>
