@@ -8,7 +8,8 @@ import { randomUUID } from "crypto";
 
 export function AddApplication(db: DB): Handler {
     return async (req: Request, res: Response, next: NextFunction) => {
-        const { id, status, searcher, jobListing } = req.body;
+
+        const { status, searcher, jobListing } = req.body;
         const newID = randomUUID();
         const newApplication = new Application(newID, status, searcher, jobListing);
 

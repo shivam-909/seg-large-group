@@ -48,20 +48,20 @@ export async function RetrieveRandomJobIDs(db: DB): Promise<string[]> {
 }
 
 
-export async function GetCompanyListings(db: DB, companyID: string): Promise<string[]> {
-    const jobListingsSnapshot = await db.JobListingCollection()
-        .where("companyID", "==", companyID)
-        .get();
-
-    const jobListingIds: string[] = [];
-
-    jobListingsSnapshot.forEach((doc) => {
-        const jobListing = doc.data() as JobListing;
-        jobListingIds.push(jobListing.id);
-    });
-
-    return jobListingIds;
-}
+// export async function GetCompanyListings(db: DB, companyID: string): Promise<string[]> {
+//     const jobListingsSnapshot = await db.JobListingCollection()
+//         .where("companyID", "==", companyID)
+//         .get();
+//
+//     const jobListingIds: string[] = [];
+//
+//     jobListingsSnapshot.forEach((doc) => {
+//         const jobListing = doc.data() as JobListing;
+//         jobListingIds.push(jobListing.id);
+//     });
+//
+//     return jobListingIds;
+// }
 
 
 async function generateCompany(db: DB): Promise<Company> {
@@ -243,11 +243,12 @@ export async function RetrieveRandomJobListingId(db: DB): Promise<string> {
 
 
 
-function GetRandomStatus(): Status {
-    const statusValues = Object.values(Status);
+function GetRandomStatus(): string {
+    const statusValues = Object.values(Status).filter((value) => typeof value === 'string');
     const randomIndex = Math.floor(Math.random() * statusValues.length);
-    return statusValues[randomIndex] as Status;
+    return statusValues[randomIndex] as string;
 }
+
 
 async function generateApplicationListing(db: DB): Promise<Application> {
     const randomSearcher = await RetrieveRandomSearcherId(db);

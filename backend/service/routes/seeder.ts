@@ -11,6 +11,7 @@ export function seedAllRoute(db: DB): Handler {
             await seedJobListings(db);
             await seedSearchers(db);
             await seedApplicationListings(db);
+
             res.status(200).json({
                 message: 'All data seeded successfully'
             });
