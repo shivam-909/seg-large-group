@@ -1,5 +1,5 @@
-import { JWT_SECRET } from '../config/config';
-import { GenerateKeyPair } from '../service/tokens';
+import { JWT_SECRET } from '../../config/config';
+import { GenerateKeyPair } from '../../service/tokens';
 import jwt from 'jsonwebtoken';
 
 test('jwt generation', () => {

@@ -1,7 +1,7 @@
 import { QueryDocumentSnapshot } from "firebase-admin/firestore";
 
 class User {
-    id: string;
+    idField: string;
     firstName: string;
     lastName: string;
     email: string;
@@ -14,7 +14,7 @@ class User {
     notifications: string[];
 
     constructor(id: string, firstName: string, lastName: string, email: string, hashedPassword: string, isCompany: boolean, companyName: string, pfpUrl: string, location: string, savedJobs: string[], notifications: string[]) {
-        this.id = id;
+        this.idField = id;
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
