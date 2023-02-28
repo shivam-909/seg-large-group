@@ -37,8 +37,8 @@ function SearchPage() {
             {loadResults &&
                 <div className='space-y-12'>
                     <Filters/>
-                    <div className='flex mx-96 space-x-5 pl-72'>
-                        <div className="justify-end inline-grid space-y-3">
+                    <div className='flex items-start justify-center space-x-5 mx-8'>
+                        <div className='space-y-3'>
                             <TempCard/>
                             <TempCard/>
                             <TempCard/>
@@ -46,9 +46,7 @@ function SearchPage() {
                             <TempCard/>
                             <TempCard/>
                         </div>
-                        <div className='w-1/2'>
-                            <TempDetail/>
-                        </div>
+                        <TempDetail/>
                     </div>
                 </div>
             }
