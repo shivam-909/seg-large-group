@@ -2,6 +2,7 @@ import { CollectionReference, DocumentData, Firestore } from 'firebase-admin/fir
 import { FirebaseServiceAccount } from '../config/config';
 import {UserConverter, SearcherConverter, CompanyConverter} from '../models/user';
 import { JobListingConverter } from '../models/job';
+import Notification, {NotificationConverter} from "../models/notification";
 
 const { initializeApp, cert } = require('firebase-admin/app');
 const { getFirestore } = require('firebase-admin/firestore');
@@ -36,6 +37,10 @@ class DB {
 
     CompanyCollection() {
         return this.db.collection('company').withConverter(CompanyConverter);
+    }
+
+    NotificationCollection() {
+        return this.db.collection('notification').withConverter(NotificationConverter);
     }
 
 }

@@ -1,5 +1,4 @@
 import {QueryDocumentSnapshot} from "firebase-admin/firestore";
-import {Searcher} from "./user";
 
 class JobListing {
   id: string;
