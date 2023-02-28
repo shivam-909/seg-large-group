@@ -7,7 +7,8 @@ export default class PhoneInputGfg extends React.Component {
   constructor(props) {
     super(props);
     this.state = { phone: "" };
-  }
+}
+  
   render(){
     return (
       <div className="number-input">
