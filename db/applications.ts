@@ -29,8 +29,6 @@ export async function RetrieveAllApplications(db: DB): Promise<QuerySnapshot> {
     return await docRef.get();
 }
 
-
-
 export async function UpdateApplication(db: DB, application: Application): Promise<void> {
     const docRef = db.ApplicationCollection().doc(application.id);
 
@@ -47,6 +45,6 @@ export async function UpdateApplication(db: DB, application: Application): Promi
 
 export async function DeleteApplication(db: DB, id: string) {
     const docRef = db.ApplicationCollection().doc(id);
-
     await docRef.delete();
 }
+

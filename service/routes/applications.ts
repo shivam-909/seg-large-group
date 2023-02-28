@@ -58,3 +58,17 @@ export function SeedApplications(db: DB): Handler {
         }
     };
 }
+
+export function DeleteApplications(db:DB): Handler{
+    return async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            await seedApplicationListings(db);
+            res.status(200).json({
+                message: 'Applications seeded successfully'
+            });
+        } catch (err) {
+            next(err);
+        }
+    };
+
+}
