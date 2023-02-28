@@ -243,11 +243,12 @@ export async function RetrieveRandomJobListingId(db: DB): Promise<string> {
 
 
 
-function GetRandomStatus(): Status {
-    const statusValues = Object.values(Status);
+function GetRandomStatus(): string {
+    const statusValues = Object.values(Status).filter((value) => typeof value === 'string');
     const randomIndex = Math.floor(Math.random() * statusValues.length);
-    return statusValues[randomIndex] as Status;
+    return statusValues[randomIndex] as string;
 }
+
 
 async function generateApplicationListing(db: DB): Promise<Application> {
     const randomSearcher = await RetrieveRandomSearcherId(db);
