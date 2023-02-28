@@ -9,7 +9,8 @@ export async function CreateApplication(db: DB, application: Application) {
     await docRef.set({
         'id': application.id,
         'status': application.status,
-        'user': application.user,
+        'searcher': application.searcher,
+        'jobListing' : application.jobListing
     });
 }
 
@@ -36,7 +37,10 @@ export async function UpdateApplication(db: DB, application: Application): Promi
         await docRef.update({
             'id': application.id,
             'status': application.status,
-            'user': application.user,
+            'searcher': application.searcher,
+            'jobListing' : application.jobListing
+
+
         })
     } catch (err) {
         throw err
