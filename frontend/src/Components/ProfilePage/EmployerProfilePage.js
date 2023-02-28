@@ -40,9 +40,7 @@ function EmployerProfilePage() {
             <p><strong>Address:</strong> <br />{!isEditing && <span id="address">{profile.address}</span>}</p>
             <p><strong>Company Description:</strong> <br />{!isEditing && <span id="companyDescrip">{profile.companyDescrip}</span>}</p>
             </>  )}
-        </div>
-        <div className='text-input' id="profile">
-        {isEditing && <button className="save-btn" onClick={SaveOnClick} >Save Profile</button>}
+      {isEditing && <button className="save-btn" onClick={SaveOnClick} >Save Profile</button>}
         {isEditing && (
           <>
            <p><strong>Company Name:</strong> <input type="text" id="companyName" value= {profile.companyName} onChange={EditProfile}/></p>
