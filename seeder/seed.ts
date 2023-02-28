@@ -1,18 +1,13 @@
 import DB from "../db/db";
 import {faker} from '@faker-js/faker';
-import JobListing, {JobListingConverter} from "../models/job";
-import Notification from "../models/notification";
+import JobListing from "../models/job";
 import {createJobListing} from "../db/jobs";
 import {createUser, retrieveUserById} from "../db/users";
 import {Company, Searcher, User} from "../models/user";
 import {randomUUID} from "crypto";
-import { CreateApplication } from "../db/applications";
+import {CreateApplication} from "../db/applications";
 import Application from "../models/application";
-import { Status } from "../models/enums/status.enum";
-import {companyNotification, searcherNotification} from "../models/enums/userNotification.enum";
-import {createNotification} from "../db/notifications";
-import {firestore} from "firebase-admin";
-import notification from "../models/notification";
+import {Status} from "../models/enums/status.enum";
 
 
 export async function GetAllJobIDs(db: DB): Promise<string[]> {
@@ -211,29 +206,42 @@ export async function GetCompanyIDFromUserID(db: DB, userID: string): Promise<st
 }
 
 
-export async function GetAllUserIds(db: DB): Promise<string[]> {
-    const snapshot = await db.UserCollection().get();
-    const userIds: string[] = [];
+export async function GetAllSearcherIds(db: DB): Promise<string[]> {
+    const snapshot = await db.SearcherCollection().get();
+    const searcherIds: string[] = [];
 
     snapshot.forEach(doc => {
         const userId = doc.id;
-        userIds.push(userId);
+        searcherIds.push(userId);
     });
 
-    return userIds;
+    return searcherIds;
 }
 
-export async function RetrieveRandomUser(db: DB): Promise<User> {
-    const userIds = await GetAllUserIds(db);
-    const randomUserId = userIds[Math.floor(Math.random() * userIds.length)];
-    const randomUser = await retrieveUserById(db, randomUserId);
-
-    if (randomUser === null) {
-        throw new Error('Failed to retrieve random user');
-    }
-
-    return randomUser;
+export async function RetrieveRandomSearcherId(db: DB): Promise<string> {
+    const searcherIds = await GetAllSearcherIds(db);
+    return searcherIds[Math.floor(Math.random() * searcherIds.length)];
 }
+
+
+export async function GetAllJobListingIds(db: DB): Promise<string[]> {
+    const snapshot = await db.JobListingCollection().get();
+    const jobListingIds: string[] = [];
+
+    snapshot.forEach(doc => {
+        const jobListingId = doc.id;
+        jobListingIds.push(jobListingId);
+    });
+
+    return jobListingIds;
+}
+
+export async function RetrieveRandomJobListingId(db: DB): Promise<string> {
+    const jobListingIds = await GetAllJobListingIds(db);
+    return jobListingIds[Math.floor(Math.random() * jobListingIds.length)];
+}
+
+
 
 function GetRandomStatus(): Status {
     const statusValues = Object.values(Status);
@@ -242,11 +250,14 @@ function GetRandomStatus(): Status {
 }
 
 async function generateApplicationListing(db: DB): Promise<Application> {
-    const randomUser = await RetrieveRandomUser(db);
+    const randomSearcher = await RetrieveRandomSearcherId(db);
+    const randomJobListing = await RetrieveRandomJobListingId(db);
+
     return new Application(
         randomUUID(),
         GetRandomStatus(),
-        randomUser
+        randomSearcher,
+        randomJobListing
     );
 }
 
