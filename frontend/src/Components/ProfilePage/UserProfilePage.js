@@ -3,12 +3,12 @@ import React, {useState} from 'react';
 
 function UserProfilePage() {
     const[profile, setMyProfile] = useState({
-      firstName:"Jack",
-      lastName:"Smith",
-      email:"j.s@hotmail.com",
-      skills:"Jave, python",
-      education:"Uni",
-      previousEmployment:"No employment"
+      firstName:"Please enter you first name",
+      lastName:"Please enter your last name ",
+      email:"Please enter your email",
+      skills:"Please enter your skills",
+      education:"Please enter your academic qualifications",
+      previousEmployment:"Please enter any previous employment"
     });
 
     const[isEditing, setIsEditing]= useState(false);

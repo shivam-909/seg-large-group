@@ -3,11 +3,11 @@ import React, {useState} from 'react';
 
 function EmployerProfilePage() {
     const[profile, setMyProfile] = useState({
-      companyName:"Jack",
-      email:"j.s@hotmail.com",
-      phoneNum:"Jave, python",
-      address:"Uni",
-      companyDescrip:"No employment"
+      companyName:"Please Enter Company Name ",
+      email:"Please enter your email",
+      phoneNum:"Please enter your phone number",
+      address:"Please enter your address",
+      companyDescrip:"Please enter your Company Description"
     });
 
     const[isEditing, setIsEditing]= useState(false);
