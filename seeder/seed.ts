@@ -48,20 +48,20 @@ export async function RetrieveRandomJobIDs(db: DB): Promise<string[]> {
 }
 
 
-export async function GetCompanyListings(db: DB, companyID: string): Promise<string[]> {
-    const jobListingsSnapshot = await db.JobListingCollection()
-        .where("companyID", "==", companyID)
-        .get();
-
-    const jobListingIds: string[] = [];
-
-    jobListingsSnapshot.forEach((doc) => {
-        const jobListing = doc.data() as JobListing;
-        jobListingIds.push(jobListing.id);
-    });
-
-    return jobListingIds;
-}
+// export async function GetCompanyListings(db: DB, companyID: string): Promise<string[]> {
+//     const jobListingsSnapshot = await db.JobListingCollection()
+//         .where("companyID", "==", companyID)
+//         .get();
+//
+//     const jobListingIds: string[] = [];
+//
+//     jobListingsSnapshot.forEach((doc) => {
+//         const jobListing = doc.data() as JobListing;
+//         jobListingIds.push(jobListing.id);
+//     });
+//
+//     return jobListingIds;
+// }
 
 
 async function generateCompany(db: DB): Promise<Company> {
