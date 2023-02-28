@@ -262,7 +262,7 @@ async function generateApplicationListing(db: DB): Promise<Application> {
 }
 
 export async function seedApplicationListings(db: DB): Promise<void> {
-    for (let i = 0; i < 20; i++) {
+    for (let i = 0; i < 10; i++) {
         const applicationListing = await generateApplicationListing(db);
         await CreateApplication(db, applicationListing);
     }
