@@ -3,6 +3,8 @@ import { FirebaseServiceAccount } from '../config/config';
 import {UserConverter, SearcherConverter, CompanyConverter} from '../models/user';
 import { JobListingConverter } from '../models/job';
 import Notification, {NotificationConverter} from "../models/notification";
+import {ApplicationConverter} from "../models/application";
+
 
 const { initializeApp, cert } = require('firebase-admin/app');
 const { getFirestore } = require('firebase-admin/firestore');
@@ -10,6 +12,7 @@ const { getFirestore } = require('firebase-admin/firestore');
 interface DB {
     UserCollection(): CollectionReference<DocumentData>;
     JobListingCollection(): CollectionReference<DocumentData>;
+    ApplicationCollection(): CollectionReference<DocumentData>;
 }
 
 class DB {
@@ -41,6 +44,10 @@ class DB {
 
     NotificationCollection() {
         return this.db.collection('notification').withConverter(NotificationConverter);
+    }
+
+    ApplicationCollection() {
+        return this.db.collection('application').withConverter(ApplicationConverter);
     }
 
 }
