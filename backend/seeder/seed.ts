@@ -1,10 +1,15 @@
 import DB from "../db/db";
 import {faker} from '@faker-js/faker';
-import JobListing from "../models/job";
+import JobListing, {JobListingConverter} from "../models/job";
+import Notification from "../models/notification";
 import {createJobListing} from "../db/jobs";
 import {createUser, retrieveUserById} from "../db/users";
-import {Company, Searcher} from "../models/user";
+import {Company, Searcher, User} from "../models/user";
 import {randomUUID} from "crypto";
+import {companyNotification, searcherNotification} from "../models/enums/userNotification.enum";
+import {createNotification} from "../db/notifications";
+import {firestore} from "firebase-admin";
+import notification from "../models/notification";
 
 
 export async function GetAllJobIDs(db: DB): Promise<string[]> {
@@ -44,33 +49,54 @@ export async function RetrieveRandomJobIDs(db: DB): Promise<string[]> {
     return shuffledJobIds.slice(0, numJobs);
 }
 
+export async function GetCompanyListings(db: DB, companyID: string): Promise<string[]> {
+    const jobListingsSnapshot = await db.JobListingCollection()
+        .where("companyID", "==", companyID)
+        .get();
+
+    const jobListingIds: string[] = [];
+
+    jobListingsSnapshot.forEach((doc) => {
+        const jobListing = doc.data() as JobListing;
+        jobListingIds.push(jobListing.id);
+    });
+
+    return jobListingIds;
+}
 
 
-async function generateCompany(): Promise<Company> {
+
+
+async function generateCompany(db: DB): Promise<Company> {
+    const id = randomUUID()
     const companyName = faker.company.name();
     const email = `support@${companyName.toLowerCase().replace(/[^a-zA-Z0-9]/g, '')}.${faker.internet.domainSuffix()}`;
+    const notifications:string[] = []
+
 
     return new Company(
-        randomUUID(),
+        id,
         companyName,
         email,
         faker.internet.password(),
         faker.image.avatar(),
         faker.address.city(),
-        [faker.lorem.words(), faker.lorem.words(), faker.lorem.words()],
+        notifications,
         randomUUID()
     );
 }
 
 
 async function generateSearcher(db: DB): Promise<Searcher> {
+    const id = randomUUID()
     const savedJobs = await RetrieveRandomJobIDs(db);
     const firstName = faker.name.firstName();
     const lastName = faker.name.lastName();
     const email = faker.internet.email(firstName, lastName);
+    const notifications:string[] = []
 
     return new Searcher(
-        randomUUID(),
+        id,
         firstName,
         lastName,
         email,
@@ -78,7 +104,7 @@ async function generateSearcher(db: DB): Promise<Searcher> {
         faker.image.avatar(),
         faker.address.city(),
         savedJobs,
-        [faker.lorem.words(), faker.lorem.words(), faker.lorem.words()],
+        notifications,
         randomUUID()
     );
 }
@@ -113,12 +139,14 @@ async function generateJobListing(db: DB): Promise<JobListing> {
 }
 
 
+
+
 export async function seedCompanies(db: DB): Promise<void> {
     const numCompanies = 5;
 
     const companyPromises: Promise<Company>[] = [];
     for (let i = 0; i < numCompanies; i++) {
-        companyPromises.push(generateCompany());
+        companyPromises.push(generateCompany(db));
     }
 
     const companies = await Promise.all(companyPromises);
@@ -160,6 +188,26 @@ export async function seedJobListings(db: DB): Promise<void> {
         await createJobListing(db, jobListing);
     }
     console.log(`Seeded job listings`);
+}
+
+
+export async function GetCompanyIDFromUserID(db: DB, userID: string): Promise<string | null> {
+    const userDoc = await db.UserCollection().doc(userID).get();
+    if (!userDoc.exists) {
+        return null;
+    }
+    const userData = userDoc.data() as User;
+    if (!userData.companyID) {
+        return null;
+    }
+    else {
+        const companyDoc = await db.CompanyCollection().doc(userData.companyID).get();
+
+        if (!companyDoc.exists) {
+            return null;
+        }
+        return companyDoc.id;
+    }
 }
 
 
