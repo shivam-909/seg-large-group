@@ -3,11 +3,12 @@ import React, {useState} from 'react';
 
 function EmployerProfilePage() {
     const[profile, setMyProfile] = useState({
-      companyName:"Please Enter Company Name ",
-      email:"Please enter your email",
-      phoneNum:"Please enter your phone number",
-      address:"Please enter your address",
-      companyDescrip:"Please enter your Company Description"
+      companyName:"",
+      email:"",
+      phoneNum:"",
+      address:"",
+      companyDescrip:"",
+      webAddress:""
     });
 
     const[isEditing, setIsEditing]= useState(false);
@@ -16,7 +17,18 @@ function EmployerProfilePage() {
       setIsEditing(true);
     }
     function SaveOnClick(){
-      setIsEditing(false);
+      const checkNum =  /^\d{10}$/;
+      const checkEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (profile.companyName == "" || profile.email == "" ||profile.phoneNum == ""){
+        alert("Please fill out all necessary filled");
+      }
+      else if (!checkNum.test(profile.phoneNum) || !checkEmail.test(profile.email)){
+        alert("Please ensure you have entered a valid phone number and email address");
+      }
+      else {
+        setIsEditing(false);
+      }
+    }
     }
     function EditProfile(event){
       const{id, value} = event.target;
@@ -34,20 +46,29 @@ function EmployerProfilePage() {
         <div className='text-input' id="profile">
           {!isEditing && (
             <>
-            <p><strong>Company Name:</strong> <br />{!isEditing && <span id="companyName">{profile.companyName}</span>}</p>
-            <p><strong>Email:</strong> <br />{!isEditing && <span id="firstName">{profile.email}</span>}</p>
-            <p><strong>Phone Number:</strong>  <br />{!isEditing && <span id="phoneNum">{profile.phoneNum}</span>}</p>
-            <p><strong>Address:</strong> <br />{!isEditing && <span id="address">{profile.address}</span>}</p>
-            <p><strong>Company Description:</strong> <br />{!isEditing && <span id="companyDescrip">{profile.companyDescrip}</span>}</p>
+            <p><strong><u>Contact Info</u></strong></p>
+            <p><strong><span>&#42;</span>Company Name: </strong> <input type="text" id="firstName" placeholder = "Please enter your First Name" value= {profile.firstName} disabled/></p>
+            <p><strong>Phone Number: </strong> <input type="tel" id="phoneNum" placeholder = "Please enter your Phone Number" value= {profile.phoneNum} disabled/></p>
+            <p><strong><span>&#42;</span>Email: </strong> <input type="email" id="email" placeholder = "Please enter your Email" value= {profile.email} disabled/></p>
+            <p><strong>Address: </strong> <input type="text" id="address" placeholder = "Please enter your Address" value= {profile.address} disabled/></p>
+
+            <p><strong><br /><u>Description</u></strong></p>
+            <p><strong>Company Description: </strong> <input type="text" id="companyDescrip" placeholder = "Please enter your Company Description" value= {profile.companyDescrip} disabled/></p>
+            <p><strong>Visit our Website: </strong> <input type="text" id="webAddress" placeholder = "Add you Website link" value= {profile.webAddress} disabled/></p>
             </>  )}
+
       {isEditing && <button className="save-btn" onClick={SaveOnClick} >Save Profile</button>}
         {isEditing && (
           <>
-           <p><strong>Company Name:</strong> <input type="text" id="companyName" value= {profile.companyName} onChange={EditProfile}/></p>
-           <p><strong>Email: </strong> <input type="text" id="email" value= {profile.email} onChange={EditProfile}/></p>
-           <p><strong>Phone Number: </strong> <input type="text" id="phoneNum" value= {profile.phoneNum} onChange={EditProfile}/></p>
+          <p><strong><u>Contact Info</u></strong></p>
+           <p><strong><span>&#42;</span>Company Name:</strong> <input type="text" id="companyName" value= {profile.companyName} onChange={EditProfile}/></p>
+           <p><strong>Phone Number: </strong> <input type="tel" id="phoneNum" value= {profile.phoneNum} onChange={EditProfile}/></p>
+           <p><strong><span>&#42;</span>Email: </strong> <input type="email" id="email" value= {profile.email} onChange={EditProfile}/></p>
            <p><strong>Address: </strong> <input type="text" id="address" value= {profile.address} onChange={EditProfile}/></p>
+
+           <p><strong><br /><u>Description</u></strong></p>
            <p><strong>Company Description:</strong>  <input type="text" id="companyDescrip" value= {profile.companyDescrip} onChange={EditProfile}/></p>
+           <p><strong>Visit our Website: </strong> <input type="text" id="webAddress" placeholder = "Add you Website link" value= {profile.webAddress} onChange={EditProfile}/></p>
           </>)}
         </div>
    </div>

@@ -1,100 +1,173 @@
 .ProfilePage {
-  text-align: center;
+  text-align: left;
 }
 
 .ProfilePage-header {
-  background-color: #282c34;
+  background-color: #1E90FF;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  font-size: calc(30px + 2vmin);
+  font-size: calc(2rem + 2vmin);
   color: white;
 }
 
 .ProfilePage-text {
-  background-color: #282c34;
+  background-color: white;
   display: flex;
   flex-direction: column;
   align-items: left;
   justify-content: center;
   font-size: calc(8px + 2vmin);
   color: white;
-  padding: 10px;
+  padding: 2rem;
+  border-radius: 1rem;
+  box-shadow: 0px 5px 20px rgba(0,0,0,0.1);
 }
 
 .ProfilePage-link {
-  color: #61dafb;
+  color: #1E90FF;
 }
 
 .text-input {
-  border-radius: 10px;
-  border: 1px solid black;
-  font-size: calc(10px + 2vmin);
-  padding: 5px 5px 5px 10px;
-  margin: 5px;
-  width: calc(250px + 15vmin);
+  font-size: 1rem;
+  margin: 1rem;
   color: black;
+
 }
+
 .text-input input[type="text"] {
   border: 1px solid #ccc;
-  padding: 10px;
-  font-size: 16px;
+  border-radius: 20px;
+  border-bottom: 1px solid #ccc;
+  padding: 0.5rem;
+  font-size: 1rem;
   transition: all 0.2s ease-in-out;
   text-align: left;
+  width: 100%;
+  margin-top: 0.5rem;
 }
 
 .text-input input[type="text"]:focus {
-  border: 2px solid blue;
-  padding: 12px;
-  font-size: 18px;
+  border-bottom: 2px solid #1E90FF;
+  padding: 0.5rem;
+  font-size: 1.1rem;
 }
 
+.text-input input[type="email"] {
+  border: 1px solid #ccc;
+  border-radius: 20px;
+  border-bottom: 1px solid #ccc;
+  padding: 0.5rem;
+  font-size: 1rem;
+  transition: all 0.2s ease-in-out;
+  text-align: left;
+  width: 100%;
+  margin-top: 0.5rem;
+}
+
+.text-input input[type="email"]:focus {
+  border-bottom: 2px solid #1E90FF;
+  padding: 0.5rem;
+  font-size: 1.1rem;
+}
+
+.text-input input[type="tel"] {
+  border: 1px solid #ccc;
+  border-radius: 20px;
+  border-bottom: 1px solid #ccc;
+  padding: 0.5rem;
+  font-size: 1rem;
+  transition: all 0.2s ease-in-out;
+  text-align: left;
+  width: 100%;
+  margin-top: 0.5rem;
+}
+
+.text-input input[type="tel"]:focus {
+  border-bottom: 2px solid #1E90FF;
+  padding: 0.5rem;
+  font-size: 1.1rem;
+}
+
+.box {
+  border: 1px solid #ccc;
+  border-radius: 20px;
+  border-bottom: 1px solid #ccc;
+  padding: 0.5rem;
+  font-size: 1rem;
+  transition: all 0.2s ease-in-out;
+  text-align: left;
+  width: 100%;
+  margin-top: 0.5rem;
+}
+
+.box:focus {
+  border-bottom: 2px solid #1E90FF;
+  padding: 0.5rem;
+  font-size: 1.1rem;
+}
+
+.box::before {
+content: attr(data-placeholder);
+color: #999;
+font-style: italic;
+}
+
+.box:not(:empty)::before {
+display: none;
+}
 
 .email-input {
-  border-radius: 10px;
-  font-size: calc(10px + 2vmin);
-  padding: 10px;
-  margin: 5px;
-  width: calc(250px + 15vmin);
+  font-size: 1rem;
+  margin-bottom: 1rem;
+  padding: 0.5rem;
+  border-bottom: 1px solid #ccc;
+  border: none;
+  width: 100%;
   color: black;
 }
 
 .button {
-  background-color: #61dafb;
-  border-radius: 10px;
-  font-size: calc(10px + 2vmin);
-  padding: 10px;
-  margin: 10px;
-  color: black;
+  background-color: #1E90FF;
+  border-radius: 0.5rem;
+  font-size: 1rem;
+  padding: 0.75rem 2rem;
+  margin-top: 1rem;
+  color: white;
+  border: none;
+  box-shadow: 0px 5px 20px rgba(0,0,0,0.1);
 }
-.button:hover {background-color: #50b1cc}
+.button:hover {background-color: #007FFF}
 
 .button:active {
-  background-color: #479db5;
-  /* box-shadow: 0 5px #666; */
+  background-color: #0052A5;
   transform: translateY(2px);
 }
 
 .edit-btn {
-  background-color: grey;
+  background-color: #ccc;
   position: absolute;
-  top: 10px;
-  right: 10px;
-  border-radius: 5px;
-  font-size: calc(10px + 2vmin);
-  padding: 10px;
-  margin: 10px;
+  top: 1rem;
+  right: 1rem;
+  border-radius: 0.5rem;
+  font-size: 1rem;
+  padding: 0.75rem 2rem;
+  margin: 1rem;
   color: black;
+  border: none;
+  box-shadow: 0px 5px 20px rgba(0,0,0,0.1);
 }
 .save-btn {
-  background-color: grey;
-  top: 20px;
-  right: 20px;
-  border-radius: 5px;
-  font-size: calc(10px + 2vmin);
-  padding: 10px;
-  margin: 10px;
-  color: black;
+  background-color: #1E90FF;
+  top: 1rem;
+  right: 1rem;
+  border-radius: 0.5rem;
+  font-size: 1rem;
+  padding: 0.75rem 2rem;
+  margin: 1rem;
+  color: white;
+  border: none;
+  box-shadow: 0px 5px 20px rgba(0,0,0,0.1);
 }
