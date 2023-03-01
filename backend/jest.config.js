@@ -3,5 +3,12 @@ module.exports = {
   preset: 'ts-jest',
   testEnvironment: 'node',
   moduleFileExtensions: ['ts', 'js'],
-  testRegex: '(/__tests__/.*|(\\.|/)(test|spec))\\.tsx?$',
+  preset: "ts-jest/presets/default-esm",
+  modulePathIgnorePatterns: [
+    "<rootDir>/dist/",
+    "<rootDir>/node_modules/"
+  ],
+  extensionsToTreatAsEsm: [
+    ".ts"
+  ],
 };

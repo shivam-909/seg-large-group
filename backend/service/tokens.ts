@@ -1,5 +1,6 @@
 import jwt from 'jsonwebtoken';
 import { JWT_SECRET } from '../config/config';
+import { Token } from './public';
 
 export function GenerateKeyPair(username: string) {
     const access = GenerateJWT('access', username);
@@ -11,10 +12,10 @@ export function GenerateKeyPair(username: string) {
     };
 }
 
-function GenerateJWT(type: string, username: string): string {
+function GenerateJWT(type: string, id: string): string {
     const payload = {
         type: type,
-        username: username,
+        username: id,
     };
 
     const options = {
@@ -29,9 +30,8 @@ function GenerateJWT(type: string, username: string): string {
 }
 
 
-export function VerifyJWT(token: string): { username: string, type: string, exp: number } {
+export function VerifyJWT(token: string): Token {
     const payload = jwt.verify(token, JWT_SECRET) as any;
-
     return {
         username: payload.username,
         type: payload.type,
