@@ -10,6 +10,7 @@ import {updateUserRoute, deleteUserRoute, getUserRoute} from "./service/routes/u
 import {Login, Refresh, Register} from "./service/routes/auth";
 import {AddApplication, SeedApplications, GetApplication} from "./service/routes/applications";
 import { AuthMW, ErrorMW } from './service/middleware';
+import {deseed} from "./seeder/deseeder";
 
 export const db = new DB();
 
@@ -43,10 +44,11 @@ export const run = () => {
 });
 
     app.get('/user/:id', Route(app, getUserRoute));
-    app.put('/users/:id', upload.none(), Route(app, updateUserRoute));
+    app.patch('/users/:id', upload.none(), Route(app, updateUserRoute));
     app.delete('/user/:id', upload.none(), Route(app, deleteUserRoute));
 
     app.post('/seed_all', Route(app, seedAllRoute));
+    app.delete('/deseed', Route(app, deseed));
 
     app.get('/', HealthCheck);
 
