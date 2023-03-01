@@ -7,6 +7,8 @@ ul {
     position: fixed;
     top: 0;
     width: 100%;
+    border-bottom-width: 2px;
+    border-bottom-color: gray;
   }
   
   li {
@@ -37,7 +39,7 @@ ul {
     position: absolute;
     right: 0px;
     background-color: white;
-    border-radius: 10px;
+    border-radius: 5px;
   }
   .topnav #expandProfile a:hover {
     left: 0px;
@@ -50,6 +52,7 @@ ul {
 .topnav #expandProfile a {
     left: 0px;
     border-right-width: 4px;
+    border-right-color: white;
 }
 .topnav a {
     color: black;

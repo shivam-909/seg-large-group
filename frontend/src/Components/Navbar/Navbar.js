@@ -11,9 +11,9 @@ export default function Navbar() {
     return (
     <div className = "topnav">
         <ul>
-            <li className="text-2xl"><a href="/"><i className="fa-solid fa-house"></i></a></li>
+            <li className=""><a href="/"><i className="fa-solid fa-house text-xl"></i></a></li>
             <div>
-                <li className='float-right'><a className="text-2xl" href="##" onClick={showProfile}><i class="fa-solid fa-user"></i></a></li>
+                <li className='float-right'><a className="" href="##" onClick={showProfile}><i class="fa-solid fa-user text-xl"></i></a></li>
             </div>
         </ul>
         <div className="top-16" id="expandProfile">
