@@ -4,9 +4,6 @@ import TextInputBox from "../LoginPage/TextInputBoxWithIcon";
 import { validateField, setVisible } from "../Validation/validate";
 import MultiLineTextBox from "./MultiLineTextBox";
 
-
-
-
 function UploadCV () {
     const [selectedFile, setSelectedFile]= useState();
     // const [isFilePicked, setIsFilePicked]= useState(false);
@@ -23,43 +20,24 @@ function UploadCV () {
 
     function submitApplication() {
         let email = document.getElementById("email").value;
-        let password = document.getElementById("password").value;
-      
         localStorage.removeItem("email")
-        localStorage.removeItem("password")
-        localStorage.removeItem("rememberLogin")
         }
     // render(){
         return(
             <div className='bg-lighter-grey min-h-screen items-center justify-center flex'>
-                <div className='bg-white rounded-md px-40 py-10 space-y--1'>
+                <div className='bg-white rounded-md px-40 py-10 space-y--1 fixed'>
                     <p className='mb-2 font-bold text-2xl flex justify-center'>Make an application</p>                
                     <p className="font-bold py-3">Step 1: Upload you CV!</p>
-                    
-                    {/* <input type="file" name="file" onChange={this.changeHandler}/>
-                    {selectedFile ? (
-                    <div className="fileLabels">
-                        <p>Filename: {selectedFile.name}</p>
-                        <p>Filetype: {selectedFile.type}</p>
-					    <p>Size in bytes: {selectedFile.size}</p>
-					<p>
-						lastModifiedDate:{' '}
-						{selectedFile.lastModifiedDate.toLocaleDateString()}
-					</p>
-				</div>
-                ) : (
-                    <p></p>
-                )}  */}
 
                     <div>
-                        <input type="file" name="file" onChange={changeHandler}></input>
+                        <input className="py-3"type="file" name="file" onChange={changeHandler}></input>
                         {/* <p>Filename: {selectedFile.name}</p>
                         <p>Filetype: {selectedFile.type}</p>
 					    <p>Size in bytes: {selectedFile.size}</p> */}
                     </div>
 
                     <div>
-                        <button className= "uploadButton" onClick={onFileUpload}>Upload!</button>
+                        <button className= "bg-dark-theme-grey rounded-md text-white p-2.5 flex items-center justify-center space-x-2" onClick={onFileUpload}>Upload!</button>
                     </div>
 
                     <p className="font-bold	py-3">Step 2: Your details</p>
@@ -81,7 +59,7 @@ function UploadCV () {
 
 
                         <div>
-                            <p className="px-12 py-3 space-y-10">Why did you choose to apply for this job role?</p>
+                            <p className="px-12 py-3 space-y-10">Why did you choose to apply to this company?</p>
                             <MultiLineTextBox id="WhyThisCompany" placeholder="Maximum 100 characters."/>
                         </div>
 
@@ -90,15 +68,13 @@ function UploadCV () {
                             <MultiLineTextBox id="WhyThisCompany" placeholder="Maximum 100 characters." />
                         </div>
 
-
-
-                        <p className="font-bold py-3	">Step 3: Confirm your details</p>
+                        <p className="font-bold py-3">Step 3: Confirm your details</p>
                         <div>
                             <p>Your full name is: </p>
                             <p>Your email address is: </p>
                         </div>
 
-                        <div className='flex space-x-2 items-center'>
+                        <div className='flex space-x-2 items-center py-3'>
                             <input id='confirmDetails' type='checkbox' className='w-4 h-4 py-3 inline-block accent-dark-theme-grey'/>
                             <p>I confirm I have read all my details and they are up to date.</p>
                          </div>
