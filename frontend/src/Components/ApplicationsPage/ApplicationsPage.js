@@ -19,10 +19,12 @@ function UploadCV () {
     };
 
     function submitApplication() {
+        let FirstName = document.getElementById("FirstName").value;
+        let LastName = document.getElementById("LastName");
         let email = document.getElementById("email").value;
-        localStorage.removeItem("email")
-        }
-    // render(){
+        localStorage.removeItem("email");
+        };
+
         return(
             <div className='bg-lighter-grey min-h-screen items-center justify-center flex'>
                 <div className='bg-white rounded-md px-40 py-10 space-y--1 '>
@@ -36,9 +38,9 @@ function UploadCV () {
 					    <p>Size in bytes: {selectedFile.size}</p> */}
                     </div>
 
-                    <div>
+                    {/* <div>
                         <button className= "bg-dark-theme-grey rounded-md text-white p-2.5 flex items-center justify-center space-x-2" onClick={onFileUpload}>Upload!</button>
-                    </div>
+                    </div> */}
 
                     <p className="font-bold	pt-8 pb-1">Step 2: Your details</p>
                     <div>
@@ -83,13 +85,10 @@ function UploadCV () {
                             <p>Submit Application</p>
                             </button>
                          </div>
-
                     </div>
-
                 </div>
-
-
             </div>
         );
-    }
+    };
+
 export default UploadCV;
