@@ -4,10 +4,13 @@ import showIcon from '../../icons/showIcon.png';
 import hideIcon from '../../icons/hideIcon.png';
 import TextInputBoxWithIcon from "./TextInputBoxWithIcon";
 import {validateField} from "../Validation/validate";
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import {useState} from "react";
 
 function LoginPage() {
+  const navigate = useNavigate();
+
   function loginButton() {
     let email = document.getElementById("email").value;
     let password = document.getElementById("password").value;
@@ -31,18 +34,27 @@ function LoginPage() {
         headers: {
           'Content-Type': 'multipart/form-data',
           'Access-Control-Allow-Origin': '*',
+          'Access-Control-Allow-Methods': 'GET,PUT,POST,DELETE,PATCH,OPTIONS',
+          'Access-Control-Allow-Headers': 'Origin, X-Requested-With, Content-Type, Accept, Authorization',
         }
     }
 
     axios.post('http://localhost:3001/auth/login', formData, config)
         .then(response => {
-          console.log(response.data);
+          if (response.data.access !== undefined && response.data.refresh !== undefined) {
+            localStorage.setItem("access", response.data.access);
+            localStorage.setItem("refresh", response.data.refresh);
+            navigate('/search');
+          }
+          else {
+            // TODO: Display error message.
+            console.log(response.data);
+          }
         })
         .catch(error => {
+          // TODO: Display error message.
           console.error(error);
         });
-
-    // TODO: Redirect to home page.
   }
 
   function togglePasswordVisibility() {

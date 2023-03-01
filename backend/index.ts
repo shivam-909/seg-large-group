@@ -31,12 +31,7 @@ export const run = () => {
         res.status(code).json({ message: err || 'internal server error' });
     });
 
-    const options: cors.CorsOptions = {
-        origin: '*',
-        credentials: true,
-    };
-
-    app.use(cors(options));
+    app.use(cors());
 
     app.listen(port, () => {
         console.log(`server running on port ${port}`);
