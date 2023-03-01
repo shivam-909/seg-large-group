@@ -57,7 +57,7 @@ function RegisterPage() {
             <p className='mb-6 font-bold text-2xl flex justify-center'>Register an account</p>
 
             <BinaryOption option1={"Job Seeker"} function1={() => {toggleRole("Seeker-Fields")}} function2={() => {toggleRole("Company-Fields")}} option2={"Company"}/>
-            <div id="Seeker-Fields" className="space-x-2 inline">
+            <div id="Seeker-Fields" className="space-x-2 inline transition">
               <div className={"inline float-left"}>
               <TextInputBox id='FirstName' onBlur={()=>{validateField("FirstName",/^[A-Za-z]+$/)}} placeholder='First Name'/>
                 <span id="FirstNameError" className={"invisible absolute top-0"}>Invalid First Name</span>
@@ -67,7 +67,7 @@ function RegisterPage() {
                 <span id="LastNameError" className={"invisible absolute top-0"}>Invalid Last Name</span>
               </div>
             </div>
-            <div id="Company-Fields" className="invisible absolute top-0 w-full">
+            <div id="Company-Fields" className="invisible absolute top-0 w-full transition">
               <TextInputBox id='CompanyName' className={"w-full"} placeholder='Company Name'/>
             </div>
 
