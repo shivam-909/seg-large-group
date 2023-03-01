@@ -1,8 +1,8 @@
 import { NextFunction, Request, Response } from "express";
 import DB from "../../db/db";
 import JobListing from "../../models/job";
-import {createJobListing, retrieveJobListing, deleteJobListing} from "../../db/jobs";
-import { Error, getErrorMessage, Handler } from "../public";
+import {createJobListing, retrieveJobListing, deleteJobListing, updateJobListing} from "../../db/jobs";
+import { getErrorMessage, Handler } from "../public";
 import { randomUUID } from "crypto";
 
 export function addListingRoute(db: DB): Handler {
@@ -43,6 +43,33 @@ export function getListingRoute(db: DB): Handler {
             });
         }
     };
+}
+
+export function updateListingRoute(db: DB): Handler {
+    return async (req: Request, res: Response, next: NextFunction) => {
+        const id = req.params.id;
+        const listingData = req.body;
+
+        try {
+            const listing = await retrieveJobListing(db, id);
+            if (!listing) {
+                return res.status(404).json({
+                    msg: `Job listing ${id} not found`
+                });
+            }
+
+            const updatedJobListing = { ...listing, ...listingData };
+            await updateJobListing(db, updatedJobListing);
+
+            res.status(200).json({
+                msg: "Job listing updated"
+            });
+        } catch (err) {
+            next({
+                message: getErrorMessage(err),
+            });
+        }
+    }
 }
 
 export function deleteListingRoute(db: DB): Handler {

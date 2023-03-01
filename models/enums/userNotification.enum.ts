@@ -1,10 +1,10 @@
 export enum companyNotification {
-    NewApplicant,
-    Withdrawal
+    NewApplicant = "NewApplicant",
+    Withdrawal = "Withdrawal"
 }
 
 export enum searcherNotification {
-    Interview,
-    Rejection,
-    Accepted
+    Interview = "Interview",
+    Rejection = "Rejection",
+    Accepted = "Accepted"
 }

@@ -1,7 +1,6 @@
 import Notification from "../models/notification";
 import DB from "./db";
 import {GetUserID, retrieveUserById, updateUser} from "./users";
-import {ErrorInvalidEmail} from "../service/public";
 
 export async function createNotification(db: DB, notification: Notification): Promise<Notification> {
     const docRef = db.NotificationCollection().doc(notification.id);
@@ -12,21 +11,17 @@ export async function createNotification(db: DB, notification: Notification): Pr
         await docRef.set({
             ...notification,
             id: notification.id,
-        });
+        }, );
     } catch (err) {
         throw err;
     }
 
     if(notification.searcherID) {
         userID = await GetUserID(db, notification.searcherID, "searcher")
-    }
-
-    else if(notification.companyID) {
+    } else if(notification.companyID) {
         userID = await GetUserID(db, notification.companyID, "company")
 
-    }
-
-    else{
+    } else{
         throw Error("User type could not be determined")
     }
 
@@ -47,36 +42,27 @@ export async function createNotification(db: DB, notification: Notification): Pr
     return notification;
 }
 
+export async function retrieveNotification(db: DB, id: string): Promise<Notification | null> {
+    const docRef = db.NotificationCollection().doc(id);
+    const doc = await docRef.get();
 
-// export async function createNotification(db: DB, notification: Notification): Promise<Notification> {
-//     const docRef = db.NotificationCollection().doc(notification.id);
-//
-//     try {
-//         await docRef.set({
-//             ...notification,
-//             id: notification.id,
-//         });
-//
-//         // Update the user document with the new notification
-//         if (notification.type === NotificationType.Company) {
-//             const company = await retrieveUserById(db, notification.recipientId);
-//             if (company) {
-//                 company.notifications.push(notification.id);
-//                 await updateUser(db, company);
-//             }
-//
-//
-//
-//         } else if (notification.type === NotificationType.Searcher) {
-//             const searcher = await retrieveUserById(db, notification.recipientId);
-//             if (searcher) {
-//                 searcher.notifications.push(notification.id);
-//                 await updateUser(db, searcher);
-//             }
-//         }
-//     } catch (err) {
-//         throw err;
-//     }
-//
-//     return notification;
-// }
+    return doc.data() as Notification;
+}
+
+
+export async function updateNotification(db: DB, notification: Notification): Promise<void> {
+    const docRef = db.NotificationCollection().doc(notification.id);
+
+    const { id, ...notificationData } = notification;
+
+    try {
+        await docRef.update(notificationData);
+    } catch (err) {
+        throw err;
+    }
+}
+
+export async function deleteNotification(db: DB, id: string) {
+    const docRef = db.NotificationCollection().doc(id);
+    await docRef.delete();
+}

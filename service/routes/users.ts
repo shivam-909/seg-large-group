@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import DB from "../../db/db";
 import {deleteUser, retrieveUserById, updateUser} from "../../db/users";
-import { Error, getErrorMessage, Handler } from "../public";
+import { getErrorMessage, Handler } from "../public";
 
 export function getUserRoute(db: DB): Handler {
     return async (req: Request, res: Response, next: NextFunction) => {
@@ -26,7 +26,7 @@ export function getUserRoute(db: DB): Handler {
 
 export function updateUserRoute(db: DB): Handler {
     return async (req: Request, res: Response, next: NextFunction) => {
-        const { id } = req.params;
+        const id  = req.params.id;
         const userData = req.body;
 
         try {
