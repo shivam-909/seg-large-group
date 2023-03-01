@@ -53,7 +53,7 @@ function RegisterPage() {
 
   return (
       <div className='bg-lighter-grey min-h-screen items-center justify-center flex'>
-          <div className='bg-white rounded-md sm:min-w-1/6 inline-grid px-12 py-7 space-y-3'>
+          <div className='bg-white rounded-md sm:min-w-1/6 inline-grid px-12 py-7 space-y-3 min-w-[35%]'>
             <p className='mb-6 font-bold text-2xl flex justify-center'>Register an account</p>
 
             <BinaryOption option1={"Job Seeker"} function1={() => {toggleRole("Seeker-Fields")}} function2={() => {toggleRole("Company-Fields")}} option2={"Company"}/>
