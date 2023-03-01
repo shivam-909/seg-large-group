@@ -12,11 +12,15 @@ import {companyNotification, searcherNotification} from "../models/enums/userNot
 import {createNotification} from "../db/notifications";
 import Notification from "../models/notification";
 
-
+//CONTROL
+const numCompanies = 20
+const numSearchers = 100
+const numJobListings = 50
+const numApplications = 50
 
 //=====================================================USERS=====================================================
 
-async function generateCompany(db: DB): Promise<Company> {
+async function generateCompany(): Promise<Company> {
     const id = randomUUID()
     const companyName = faker.company.name();
     const email = `support@${companyName.toLowerCase().replace(/[^a-zA-Z0-9]/g, '')}.${faker.internet.domainSuffix()}`;
@@ -36,11 +40,9 @@ async function generateCompany(db: DB): Promise<Company> {
 }
 
 export async function seedCompanies(db: DB): Promise<void> {
-    const numCompanies = 2;
-
     const companyPromises: Promise<Company>[] = [];
     for (let i = 0; i < numCompanies; i++) {
-        companyPromises.push(generateCompany(db));
+        companyPromises.push(generateCompany());
     }
 
     const companies = await Promise.all(companyPromises);
@@ -77,8 +79,6 @@ async function generateSearcher(db: DB): Promise<Searcher> {
 }
 
 export async function seedSearchers(db: DB): Promise<void> {
-    const numSearchers = 2;
-
     const searcherPromises: Promise<Searcher>[] = [];
     for (let i = 0; i < numSearchers; i++) {
         searcherPromises.push(generateSearcher(db));
@@ -133,9 +133,7 @@ async function generateJobListing(db: DB): Promise<JobListing> {
 }
 
 export async function seedJobListings(db: DB): Promise<void> {
-    const numListings = 5;
-
-    for (let i = 0; i < numListings; i++) {
+    for (let i = 0; i < numJobListings; i++) {
         const jobListing = await generateJobListing(db);
         await createJobListing(db, jobListing);
     }
@@ -171,7 +169,7 @@ async function generateApplicationListing(db: DB): Promise<Application> {
 }
 
 export async function seedApplicationListings(db: DB): Promise<void> {
-    for (let i = 0; i < 5; i++) {
+    for (let i = 0; i < numApplications; i++) {
         const applicationListing = await generateApplicationListing(db);
         await CreateApplication(db, applicationListing);
     }

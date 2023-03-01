@@ -127,6 +127,7 @@ export async function deleteUser(db: DB, userID: string): Promise<void> {
     }
 
     const userDocRef = db.UserCollection().doc(to_delete.userID);
+
     if ('companyID' in to_delete) {
         const companyDocRef = db.CompanyCollection().doc(to_delete?.companyID!);
         await deleteJobsByCompanyID(db, to_delete?.companyID!);
@@ -134,9 +135,8 @@ export async function deleteUser(db: DB, userID: string): Promise<void> {
     } else if ('searcherID' in to_delete) {
         const searcherDocRef = db.SearcherCollection().doc(to_delete?.searcherID!);
         await searcherDocRef.delete();
-
-        await userDocRef.delete();
     }
+    await userDocRef.delete();
 }
 
 export async function GetUserID(db: DB, id: string, type: 'company' | 'searcher'): Promise<string | null> {

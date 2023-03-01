@@ -4,7 +4,7 @@ import 'express-async-errors';
 import DB from "../../db/db";
 import {createUser, retrieveUserByEmail } from "../../db/users";
 import { Company, Searcher, User } from "../../models/user";
-import { Error, ErrorUserExists, getErrorMessage, Handler } from "../public";
+import { Error, ErrorFailedToHashPassword, ErrorInvalidEmail, ErrorInvalidPassword, ErrorMissingCompanyName, ErrorMissingFirstName, ErrorMissingLastName, ErrorUserExists, getErrorMessage, Handler } from "../public";
 import { GenerateKeyPair, VerifyJWT } from "../tokens";
 import { randomUUID } from "crypto";
 
@@ -102,7 +102,6 @@ export function Register(db: DB): Handler {
 }
 
 
-
 // Refresh accepts a request containing a refresh token, and return a new JWT access key and
 // refresh token.
 export function Refresh(): Handler {
@@ -136,8 +135,61 @@ export function Refresh(): Handler {
   }
 }
 
+function ValidateRegistrationForm(
+    firstName: string,
+    lastName: string,
+    email: string,
+    password: string,
+    isCompany: boolean,
+    companyName: string,
+): string {
+
+  if (email === undefined || email === "") {
+    return ErrorInvalidEmail;
+  }
+
+  if (password === undefined || password === "") {
+    return ErrorInvalidPassword;
+  }
+
+  if (firstName === undefined || firstName === "") {
+    return ErrorMissingFirstName;
+  }
+
+  if (lastName === undefined || lastName === "") {
+    return ErrorMissingLastName;
+  }
+
+  if (isCompany && companyName === undefined || companyName === "") {
+    return ErrorMissingCompanyName;
+  }
+
+  if (!ValidEmail(email)) {
+    return ErrorInvalidEmail;
+  }
+
+  if (!ValidPassword(password)) {
+    return ErrorInvalidPassword;
+  }
+
+  return "";
+}
+
+function ValidEmail(email: string): boolean {
+
+  console.log(email);
+
+  const parts = email.split("@");
+  if (parts.length !== 2) {
+    return false;
+  }
+
+  return parts[1].length <= 64;
+
+
+}
+
 export function ValidPassword(password: string): boolean {
   const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{8,20})/;
   return regex.test(password);
 }
-
