@@ -32,9 +32,8 @@ function GenerateJWT(type: string, id: string): string {
 
 export function VerifyJWT(token: string): Token {
     const payload = jwt.verify(token, JWT_SECRET) as any;
-
     return {
-        id: payload.id,
+        username: payload.username,
         type: payload.type,
         exp: payload.exp,
     }
