@@ -10,3 +10,8 @@ export function Route(app: Application, handler: HandlerWrapper) {
 export function HealthCheck(req: Request, res: Response) {
     res.send('Binary Bandits API');
 }
+
+export function Echo(req: Request, res: Response) {
+    console.log(req.headers["auth_username"]);
+    res.json(req.headers["auth_username"]);
+}
