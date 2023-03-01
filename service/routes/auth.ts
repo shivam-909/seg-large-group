@@ -31,6 +31,8 @@ export function Login(db: DB): Handler {
 
     let { access, refresh } = GenerateKeyPair(user.idField);
 
+    res.set('Access-Control-Allow-Origin', 'http://localhost:3000');
+
     res.status(200).json({
       access: access,
       refresh: refresh,
