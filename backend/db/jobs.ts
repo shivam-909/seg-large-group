@@ -1,5 +1,6 @@
 import JobListing from "../models/job";
 import DB from "./db";
+import {Searcher} from "../models/user";
 
 export async function createJobListing(db: DB, jobListing: JobListing): Promise<JobListing> {
   const docRef = db.JobListingCollection().doc(jobListing.id);
@@ -74,6 +75,38 @@ export async function deleteJobFromSaved(db: DB, jobId: string): Promise<void> {
   });
   await Promise.all(updates);
 }
+
+export async function GetSavedJobsForSearcher(db: DB, searcherID: string): Promise<JobListing[]> {
+  const searcherDoc = await db.SearcherCollection().doc(searcherID).get();
+  if (!searcherDoc.exists) {
+    throw new Error(`Searcher with ID ${searcherID} not found`);
+  }
+
+  const searcher = searcherDoc.data() as Searcher;
+  const savedJobs: JobListing[] = [];
+
+  for (const savedJobID of searcher.savedJobs) {
+    const savedJobDoc = await db.JobListingCollection().doc(savedJobID).get();
+    if (savedJobDoc.exists) {
+      savedJobs.push(savedJobDoc.data() as JobListing);
+    }
+  }
+
+  return savedJobs;
+}
+
+export async function GetAllJobIDs(db: DB): Promise<string[]> {
+  const snapshot = await db.JobListingCollection().get();
+  const jobIds: string[] = [];
+
+  snapshot.forEach(doc => {
+    const jobId = doc.id;
+    jobIds.push(jobId);
+  });
+
+  return jobIds;
+}
+
 
 
 

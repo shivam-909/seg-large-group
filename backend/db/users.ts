@@ -138,3 +138,50 @@ export async function deleteUser(db: DB, userID: string): Promise<void> {
         await userDocRef.delete();
     }
 }
+
+export async function GetUserID(db: DB, id: string, type: 'company' | 'searcher'): Promise<string | null> {
+    if (id==null)
+    {
+        return null
+    }
+    let collectionRef: FirebaseFirestore.CollectionReference;
+    if (type === 'company') {
+        collectionRef = db.CompanyCollection();
+    } else {
+        collectionRef = db.SearcherCollection();
+    }
+
+    const doc = await collectionRef.doc(id).get();
+    if (doc.exists) {
+        const userID = doc.data()?.userID;
+        return userID ?? null;
+    }
+
+    return null;
+}
+
+export async function GetAllSearcherIds(db: DB): Promise<string[]> {
+    const snapshot = await db.SearcherCollection().get();
+    const searcherIds: string[] = [];
+
+    snapshot.forEach(doc => {
+        const userId = doc.id;
+        searcherIds.push(userId);
+    });
+
+    return searcherIds;
+}
+
+export async function GetAllCompanyIds(db: DB): Promise<string[]> {
+    const snapshot = await db.CompanyCollection().get();
+    const companyIds: string[] = [];
+
+    snapshot.forEach(doc => {
+        const companyId = doc.id;
+        companyIds.push(companyId);
+    });
+
+    return companyIds;
+}
+
+
