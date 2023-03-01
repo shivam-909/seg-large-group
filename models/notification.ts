@@ -1,16 +1,19 @@
 import { QueryDocumentSnapshot } from "firebase-admin/firestore";
-import {companyNotification, searcherNotification} from "./enums/userNotification.enum";
 class Notification {
     id: string;
-    content: searcherNotification | companyNotification;
-    joblisting: string;
+    content: string;
+    application: string;
     created: Date;
+    companyID?: string;
+    searcherID?: string;
 
-    constructor(id: string, content: searcherNotification | companyNotification, jobListing: string, created: Date) {
+    constructor(id: string, content: string, application: string, created: Date, companyID?: string, searcherID?: string) {
         this.id = id;
         this.content = content;
-        this.joblisting = jobListing;
+        this.application = application;
         this.created = created;
+        this.companyID = companyID;
+        this.searcherID = searcherID;
     }
 }
 

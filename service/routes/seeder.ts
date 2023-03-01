@@ -1,7 +1,13 @@
 import DB from "../../db/db";
 import {getErrorMessage, Handler} from "../public";
 import {NextFunction, Request, Response} from "express";
-import {seedApplicationListings, seedCompanies, seedJobListings, seedSearchers} from "../../seeder/seed";
+import {
+    seedApplicationListings,
+    seedCompanies,
+    seedJobListings,
+    seedNotifications,
+    seedSearchers
+} from "../../seeder/seed";
 
 
 export function seedAllRoute(db: DB): Handler {
@@ -10,7 +16,8 @@ export function seedAllRoute(db: DB): Handler {
             await seedCompanies(db);
             await seedJobListings(db);
             await seedSearchers(db);
-            await seedApplicationListings(db)
+            await seedApplicationListings(db);
+            await seedNotifications(db);
             res.status(200).json({
                 message: 'All data seeded successfully'
             });
