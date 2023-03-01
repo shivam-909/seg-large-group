@@ -1,7 +1,7 @@
 import './Navbar.css';
 export default function Navbar() {
     function showProfile() {
-        var x = document.getElementById("expandProfile");
+        const x = document.getElementById("expandProfile");
         if (x.style.display === "block") {
           x.style.display = "none";
         } else {

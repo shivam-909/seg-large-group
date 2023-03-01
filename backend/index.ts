@@ -5,6 +5,7 @@ import { Login, Register, Refresh } from './service/routes/auth';
 import multer from 'multer';
 import { HealthCheck, Route } from './service/routes/routes';
 import { ErrorToCode } from './service/public';
+import cors from 'cors';
 
 export const db = new DB();
 
@@ -12,7 +13,7 @@ export const run = () => {
     dotenv.config();
 
     const app: Express = express();
-    const port = process.env.PORT || 3000;
+    const port = process.env.PORT || 3001;
 
     // Routes with upload.none() provided will accept a form.
     const upload = multer();
@@ -20,7 +21,6 @@ export const run = () => {
     app.set('db', db);
 
     app.get('/', HealthCheck);
-
     app.post('/auth/login', upload.none(), Route(app, Login));
     app.post('/auth/register', upload.none(), Route(app, Register));
     app.post('/auth/refresh', upload.none(), Route(app, Refresh));
@@ -30,6 +30,13 @@ export const run = () => {
         const code = ErrorToCode.get(err) || 500;
         res.status(code).json({ message: err || 'internal server error' });
     });
+
+    const options: cors.CorsOptions = {
+        origin: '*',
+        credentials: true,
+    };
+
+    app.use(cors(options));
 
     app.listen(port, () => {
         console.log(`server running on port ${port}`);

@@ -34,7 +34,7 @@ function SearchPage() {
     return (
         <div className='mt-24 space-y-5 flex-col'>
             <SearchBar onclick={showResults} onJobTitleInputChange={() => setShowJobTitleInputErrorMessage(false)} onLocationInputChange={() => setShowLocationInputErrorMessage(false)} displayJobTitleInputErrorMessage={showJobTitleInputErrorMessage} displayLocationInputErrorMessage={showLocationInputErrorMessage}/>
-            {loadResults &&
+            {loadResults ?
                 <div className='space-y-12'>
                     <Filters/>
                     <div className='flex items-start justify-center space-x-5 mx-8'>
@@ -47,6 +47,16 @@ function SearchPage() {
                             <TempCard/>
                         </div>
                         <TempDetail/>
+                    </div>
+                </div>
+                :
+                <div className='pt-12 space-y-24'>
+                    <div className='flex flex-col items-center justify-center space-y-5'>
+                        <p>Looking for a job? <a className='font-bold' href='/'>Upload your CV.</a></p>
+                        <p>Looking for your next hire? <a className='font-bold' href='/'>Post a job.</a></p>
+                    </div>
+                    <div className='bg-darker-grey min-w-screen flex items-center justify-center'>
+                        <p>ADVERTISE THE APP HERE</p>
                     </div>
                 </div>
             }

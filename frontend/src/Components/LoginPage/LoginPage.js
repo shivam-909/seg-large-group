@@ -4,6 +4,8 @@ import showIcon from '../../icons/showIcon.png';
 import hideIcon from '../../icons/hideIcon.png';
 import TextInputBoxWithIcon from "./TextInputBoxWithIcon";
 import {validateField} from "../Validation/validate";
+import axios from 'axios';
+import {useState} from "react";
 
 function LoginPage() {
   function loginButton() {
@@ -20,7 +22,26 @@ function LoginPage() {
       localStorage.removeItem("password")
       localStorage.removeItem("rememberLogin")
     }
-    // TODO: Make API call to retrieve JWTs.
+
+    const formData = new FormData();
+    formData.append('email', email);
+    formData.append('password', password);
+
+    const config = {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          'Access-Control-Allow-Origin': '*',
+        }
+    }
+
+    axios.post('http://localhost:3001/auth/login', formData, config)
+        .then(response => {
+          console.log(response.data);
+        })
+        .catch(error => {
+          console.error(error);
+        });
+
     // TODO: Redirect to home page.
   }
 
@@ -42,7 +63,6 @@ function LoginPage() {
             <p className='mb-6 font-bold text-2xl flex justify-center'>Sign in to your account</p>
 
             <div className={"w-full"}>
-              {/*eslint-disable-next-line*/}
               <TextInputBox id='email' cache={localStorage.getItem("email")} className="w-full" onChange={()=>{validateField("email",/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/)}} placeholder='Email address'/>
               <span id="emailError" className={"invisible absolute top-0"}>Invalid Email</span>
             </div>
