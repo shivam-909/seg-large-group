@@ -41,7 +41,7 @@ export function Login(db: DB): Handler {
 
 export function Register(db: DB): Handler {
   return async (req: Request, res: Response, next: NextFunction) => {
-    const { userType, companyName, firstName, lastName, email, password, pfpUrl, location, notifications, savedJobs } = req.body;
+    const { userType, companyName, firstName, lastName, email, password, pfpUrl, location} = req.body;
 
     let user: User | null = await retrieveUserByEmail(db, email);
 
@@ -78,10 +78,10 @@ export function Register(db: DB): Handler {
     let newUser: User;
 
     if (userType === 'company') {
-      newUser = new Company(newId, companyName, email, hash as string, pfpUrl, location, notifications, randomUUID());
+      newUser = new Company(newId, companyName, email, hash as string, pfpUrl, location, [], randomUUID());
       console.log(newUser)
     } else if (userType === 'searcher') {
-      newUser = new Searcher(newId, firstName, lastName, email, hash as string, pfpUrl, location, savedJobs, notifications, randomUUID());
+      newUser = new Searcher(newId, firstName, lastName, email, hash as string, pfpUrl, location, [], [], randomUUID());
     } else {
       return res.status(400).json({
         msg: "invalid user type"
