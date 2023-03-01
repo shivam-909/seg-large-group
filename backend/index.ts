@@ -2,14 +2,14 @@ import express, { Express, NextFunction, Request, Response } from 'express';
 import dotenv from 'dotenv';
 import DB from './db/db';
 import multer from 'multer';
-import { HealthCheck, Route } from './service/routes/routes';
+import { Echo, HealthCheck, Route } from './service/routes/routes';
 import { ErrorToCode } from './service/public';
 import {addListingRoute, deleteListingRoute, getListingRoute} from "./service/routes/jobs";
 import {seedAllRoute} from "./service/routes/seeder";
 import {updateUserRoute, deleteUserRoute, getUserRoute} from "./service/routes/users";
 import {Login, Refresh, Register} from "./service/routes/auth";
 import {AddApplication, SeedApplications, GetApplication} from "./service/routes/applications";
-
+import { AuthMW, ErrorMW } from './service/middleware';
 
 export const db = new DB();
 
@@ -50,12 +50,13 @@ export const run = () => {
 
     app.get('/', HealthCheck);
 
+    // Error handling middleware
+    app.use(ErrorMW);
 
-    app.use((err: any, req: Request, res: Response, next: NextFunction) => {
-        console.error(err.stack);
-        const code = ErrorToCode.get(err) || 500;
-        res.status(code).json({ message: err || 'internal server error' });
-    });
+    // Authentication middleware
+    app.use("/api/*", AuthMW);
+
+    app.post("/api/echo", Echo);
 
     app.listen(port, () => {
         console.log(`server running on port ${port}`);

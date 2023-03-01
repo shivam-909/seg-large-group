@@ -112,7 +112,7 @@ export function Refresh(): Handler {
 
     const claims = VerifyJWT(refresh_token);
 
-    if (!claims.id) {
+    if (!claims.username) {
       res.status(401).send("invalid refresh token");
       return
     }
@@ -127,7 +127,7 @@ export function Refresh(): Handler {
       return
     }
 
-    let { access, refresh } = GenerateKeyPair(claims.id);
+    let { access, refresh } = GenerateKeyPair(claims.username);
 
     res.status(200).json({
       access: access,
