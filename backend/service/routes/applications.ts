@@ -1,8 +1,8 @@
 import { NextFunction, Request, Response } from "express";
 import DB from "../../db/db";
 import Application from "../../models/application";
-import { CreateApplication, RetrieveApplication } from "../../db/applications";
-import { Error, getErrorMessage, Handler } from "../public";
+import {CreateApplication, DeleteApplication, RetrieveApplication, UpdateApplication} from "../../db/applications";
+import { getErrorMessage, Handler } from "../public";
 import {seedApplicationListings} from "../../seeder/seed";
 import { randomUUID } from "crypto";
 
@@ -17,6 +17,7 @@ export function AddApplication(db: DB): Handler {
             res.status(200).json({
                 msg: "application created"
             });
+            return;
         } catch (err) {
             next({
                 message: getErrorMessage(err),
@@ -59,16 +60,46 @@ export function SeedApplications(db: DB): Handler {
     };
 }
 
-export function DeleteApplications(db:DB): Handler{
+export function updateApplicationRoute(db: DB): Handler {
     return async (req: Request, res: Response, next: NextFunction) => {
+        const id = req.params.id;
+        const applicationData = req.body;
+
         try {
-            await seedApplicationListings(db);
+            const application = await RetrieveApplication(db, id);
+            if (!application) {
+                return res.status(404).json({
+                    msg: `Application ${id} not found`
+                });
+            }
+
+            const updatedApplication = { ...application, ...applicationData };
+            await UpdateApplication(db, updatedApplication);
+
             res.status(200).json({
-                message: 'Applications seeded successfully'
+                msg: "Application updated"
             });
         } catch (err) {
-            next(err);
+            next({
+                message: getErrorMessage(err),
+            });
+        }
+    }
+}
+
+export function deleteApplicationRoute(db: DB): Handler {
+    return async (req: Request, res: Response, next: NextFunction) => {
+        const id = req.params.id;
+
+        try {
+            await DeleteApplication(db, id);
+            res.status(200).json({
+                msg: `Application ${id} has been deleted`,
+            });
+        } catch (err) {
+            next({
+                message: getErrorMessage(err),
+            });
         }
     };
-
 }
