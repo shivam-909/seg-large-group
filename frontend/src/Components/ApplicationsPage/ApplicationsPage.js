@@ -19,10 +19,10 @@ function UploadCV () {
     };
 
     function submitApplication() {
-        let FirstName = document.getElementById("FirstName").value;
-        let LastName = document.getElementById("LastName");
-        let email = document.getElementById("email").value;
-        localStorage.removeItem("email");
+        // let FirstName = document.getElementById("FirstName").value;
+        // let LastName = document.getElementById("LastName");
+        // let email = document.getElementById("email").value;
+        // localStorage.removeItem("email");
         };
 
         return(
