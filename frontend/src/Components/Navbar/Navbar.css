@@ -15,7 +15,8 @@ ul {
   
   li a {
     border-bottom-width: 4px;
-    display: block;
+      border-bottom-color: white;
+      display: block;
     color: black;
     text-align: center;
     padding: 14px 16px;
@@ -42,11 +43,9 @@ ul {
     left: 0px;
     background-color: rgba(79, 138, 247, 20%);
     border-right-color: rgba(79, 138, 247, 70%);
-    /*border-radius: 10px;*/
   }
 .topnav #expandProfile a:hover #icon {
     color: blue;
-    /*border-radius: 10px;*/
 }
 .topnav #expandProfile a {
     left: 0px;
