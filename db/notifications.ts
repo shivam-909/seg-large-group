@@ -1,11 +1,10 @@
 import Notification from "../models/notification";
 import DB from "./db";
-import {GetUserID, retrieveUserById, updateUser} from "./users";
+import {retrieveUserById, updateUser} from "./users";
 
 export async function createNotification(db: DB, notification: Notification): Promise<Notification> {
     const docRef = db.NotificationCollection().doc(notification.id);
     let user;
-    let userID;
 
     try {
         await docRef.set({
@@ -16,25 +15,11 @@ export async function createNotification(db: DB, notification: Notification): Pr
         throw err;
     }
 
-    if(notification.searcherID) {
-        userID = await GetUserID(db, notification.searcherID, "searcher")
-    } else if(notification.companyID) {
-        userID = await GetUserID(db, notification.companyID, "company")
-
-    } else{
-        throw Error("User type could not be determined")
-    }
-
-    if (userID == null) {
-        throw new Error ("Couldn't translate companyID to userID")
-    }
-
-    user = await retrieveUserById(db, userID)
+    user = await retrieveUserById(db, notification.userID)
 
     if (user == null) {
-        throw new Error("User is null")
+        throw new Error("user is null")
     }
-
 
     user.notifications.push(notification.id)
     await updateUser(db, user)
