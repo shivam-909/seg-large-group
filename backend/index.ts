@@ -16,7 +16,12 @@ import {
 } from "./service/routes/applications";
 import { AuthMW, ErrorMW } from './service/middleware';
 import {deseed} from "./seeder/deseeder";
-import {deleteNotificationRoute, getNotificationRoute, updateNotificationRoute} from "./service/routes/notifications";
+import {
+    addNotificationRoute,
+    deleteNotificationRoute,
+    getNotificationRoute,
+    updateNotificationRoute
+} from "./service/routes/notifications";
 
 export const db = new DB();
 
@@ -36,7 +41,7 @@ export const run = () => {
     app.post('/auth/register', upload.none(), Route(app, Register));
     app.post('/auth/refresh', upload.none(), Route(app, Refresh));
 
-    // app.post('/notifications/add', upload.none(), Route(app, addNotificationRoute));
+    app.post('/notifications/add', upload.none(), Route(app, addNotificationRoute));
     app.get('/notifications/:id', Route(app, getNotificationRoute));
     app.patch('/notifications/:id', upload.none(), Route(app, updateNotificationRoute));
     app.delete('/notifications/:id', upload.none(), Route(app, deleteNotificationRoute));

@@ -139,26 +139,26 @@ export async function deleteUser(db: DB, userID: string): Promise<void> {
     await userDocRef.delete();
 }
 
-export async function GetUserID(db: DB, id: string, type: 'company' | 'searcher'): Promise<string | null> {
-    if (id==null)
-    {
-        return null
-    }
-    let collectionRef: FirebaseFirestore.CollectionReference;
-    if (type === 'company') {
-        collectionRef = db.CompanyCollection();
-    } else {
-        collectionRef = db.SearcherCollection();
+export async function GetUserID(db: DB, id: string): Promise<string | null> {
+    if (!id) {
+        return null;
     }
 
-    const doc = await collectionRef.doc(id).get();
-    if (doc.exists) {
-        const userID = doc.data()?.userID;
+    const companyDoc = await db.CompanyCollection().doc(id).get();
+    if (companyDoc.exists) {
+        const userID = companyDoc.data()?.userID;
+        return userID ?? null;
+    }
+
+    const searcherDoc = await db.SearcherCollection().doc(id).get();
+    if (searcherDoc.exists) {
+        const userID = searcherDoc.data()?.userID;
         return userID ?? null;
     }
 
     return null;
 }
+
 
 export async function GetAllSearcherIds(db: DB): Promise<string[]> {
     const snapshot = await db.SearcherCollection().get();

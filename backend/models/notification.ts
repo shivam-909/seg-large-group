@@ -4,16 +4,14 @@ class Notification {
     content: string;
     application: string;
     created: Date;
-    companyID?: string;
-    searcherID?: string;
+    userID: string;
 
-    constructor(id: string, content: string, application: string, created: Date, companyID?: string, searcherID?: string) {
+    constructor(id: string, content: string, application: string, created: Date, userID: string) {
         this.id = id;
         this.content = content;
         this.application = application;
         this.created = created;
-        this.companyID = companyID;
-        this.searcherID = searcherID;
+        this.userID = userID;
     }
 }
 
