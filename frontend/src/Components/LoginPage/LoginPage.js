@@ -3,6 +3,7 @@ import TextInputBox from './TextInputBox.js';
 import showIcon from '../../icons/showIcon.png';
 import hideIcon from '../../icons/hideIcon.png';
 import TextInputBoxWithIcon from "./TextInputBoxWithIcon";
+import {validateField} from "../Validation/validate";
 
 function LoginPage() {
   function loginButton() {
@@ -36,11 +37,15 @@ function LoginPage() {
   }
 
   return (
-      <div className='bg-dark-theme-grey min-h-screen items-center justify-center flex'>
-          <div className='bg-lighter-grey rounded-md sm:min-w-1/6 inline-grid px-12 py-7 space-y-3'>
+      <div className='bg-lighter-grey min-h-screen items-center justify-center flex'>
+          <div className='bg-white rounded-md sm:min-w-1/6 inline-grid px-12 py-7 space-y-3'>
             <p className='mb-6 font-bold text-2xl flex justify-center'>Sign in to your account</p>
 
-            <TextInputBox id='email' cache={localStorage.getItem("email")} placeholder='Email address'/>
+            <div className={"w-full"}>
+              {/*eslint-disable-next-line*/}
+              <TextInputBox id='email' cache={localStorage.getItem("email")} className="w-full" onChange={()=>{validateField("email",/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/)}} placeholder='Email address'/>
+              <span id="emailError" className={"invisible absolute top-0"}>Invalid Email</span>
+            </div>
 
             <TextInputBoxWithIcon id='password' type='password' cache={localStorage.getItem("password")} placeholder='Password' icon={<img id='toggleEye' src={showIcon} alt='' onClick={togglePasswordVisibility} className='cursor-pointer'/>}/>
 
@@ -51,12 +56,12 @@ function LoginPage() {
 
             <div className='p-0.5'></div>
 
-            <button className='bg-dark-theme-grey rounded-md text-lighter-grey p-2.5 flex items-center justify-center space-x-2' onClick={loginButton}>
+            <button className='bg-dark-theme-grey rounded-md text-white p-2.5 flex items-center justify-center space-x-2' onClick={loginButton}>
               <p>Sign In</p>
               <i className="fa-solid fa-right-to-bracket"></i>
             </button>
 
-            <p className='text-center pt-4'>New user? <a className='LoginPage-link' href='/#'>Sign up.</a></p>
+            <p className='text-center pt-4'>New user? <a className='LoginPage-link' href='/signup'>Sign up.</a></p>
 
             <a className='text-center' href='/#'>Forgot your password?</a>
           </div>

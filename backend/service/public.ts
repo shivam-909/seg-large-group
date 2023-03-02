@@ -14,7 +14,7 @@ export type Handler = (req: Request, res: Response, next: NextFunction) => void;
 export type HandlerWrapper = (db: DB) => Handler;
 
 export interface Token {
-    id: string,
+    username: string,
     type: string,
     exp: number
 }
@@ -22,13 +22,20 @@ export interface Token {
 export const ErrorInvalidEmail = "invalid email";
 export const ErrorInvalidPassword = "invalid password";
 export const ErrorUserExists = "user already exists";
-export const FailedToHashPassword = "failed to hash password";
+export const ErrorFailedToHashPassword = "failed to hash password";
+export const ErrorInvalidCredentials = "invalid credentials";
+export const ErrorMissingCompanyName = "company name is required";
+export const ErrorMissingFirstName = "first name is required";
+export const ErrorMissingLastName = "last name is required";
+
 
 export var ErrorToCode: Map<string, number> = new Map<string, number>(
     [
         [ErrorInvalidEmail, 400],
         [ErrorInvalidPassword, 400],
         [ErrorUserExists, 400],
-        [FailedToHashPassword, 500],
+        [ErrorFailedToHashPassword, 500],
+        [ErrorInvalidCredentials, 403],
+        [ErrorMissingCompanyName, 400],
     ]
 );
