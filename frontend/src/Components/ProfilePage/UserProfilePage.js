@@ -5,7 +5,6 @@ import Skills from "./Skills";
 import {setVisible} from "../Validation/validate";
 import ErrorBox from "../ErrorBox/ErrorBox";
 function UserProfilePage() {
-    const [skills, setSkills] = useState([])
     const[profile, setMyProfile] = useState({
       firstName:"",
       lastName:"",
@@ -30,6 +29,8 @@ function UserProfilePage() {
             setVisible("errorBox", true)
         }
       else {
+          profile.firstName = firstName;
+          profile.lastName = lastName;
         setIsEditing(false);
         saveSkills();
         setVisible("errorBox", false)
@@ -50,9 +51,9 @@ function UserProfilePage() {
         toggleSkills(true);
         var skillsInputs = document.getElementsByClassName("skill");
         var durationsInputs = document.getElementsByClassName("duration");
-        setSkills([])
+        profile.skills = []
         for(var i = 0; i < skillsInputs.length; i++) {
-            skills.push([skillsInputs[i].value,durationsInputs[i].value]);
+            profile.skills.push([skillsInputs[i].value,durationsInputs[i].value]);
         }
     }
     function toggleSkills(flag){
@@ -79,7 +80,7 @@ function UserProfilePage() {
           <Navbar/>
         <div className='bg-lighter-grey min-h-screen items-center justify-center flex'>
             <div className='bg-white rounded-md sm:min-w-1/6 inline-grid px-12 py-7 space-y-3 mt-24 max-w-lg min-w-[40%]'>
-              <h1 className='mb-6 font-bold text-2xl flex justify-center'>Your Profile Page</h1>
+              <h1 className='mb-6 font-bold text-2xl flex justify-center'>Your Profile </h1>
             <div className='text-input' id="profile">
                 <>
                 <p><strong><u>Contact Information</u></strong></p>
