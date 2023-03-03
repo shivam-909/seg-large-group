@@ -20,15 +20,20 @@ function EmployerNotificationPage(){
       noNotifications.style.display = "block";
     }
   }, [interviews]);
+
+  function confirmInterview(){
+    alert("Interview confirmed");
+  }
   return (
-    <div class='dropdown'>
-       <button class= 'dropbtn'> Notification </button>
-       <div className = 'dropdown-content'>
+     <div class='dropdown'>
+        <button class= 'dropbtn'> Notification </button>
+        <div className = 'dropdown-content'>
           <p class= "no-notifications"> No notifications </p>
-      </div>
-    </div>
+        </div>
+     </div>
 
   );
+
   }
 
 
