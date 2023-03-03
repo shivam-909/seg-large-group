@@ -1,10 +1,9 @@
 import './Skills.css'
 import React from "react";
 import {useState} from "react";
-import {validateField} from "../Validation/validate";
 
 export default function Skills(props) {
-    const [skills, setSkills] = useState(0);
+    const [count, setCount] = useState(0);
 
     function deleteSkill(id){
         document.getElementById(id).remove();
@@ -16,15 +15,15 @@ export default function Skills(props) {
         const duration = document.createElement("input");
         const del = document.createElement("button");
 
-        div.setAttribute("id", skills);
+        div.setAttribute("id", count);
         skill.setAttribute("class","skill");
         skill.setAttribute("placeholder","Skill");
         duration.setAttribute("class","duration");
+        duration.setAttribute("type","number");
         duration.setAttribute("placeholder","Duration");
         del.setAttribute("class","delete");
 
-        skill.addEventListener("onBlur", () => {validateField(duration, /^[0-9]+$/)})
-        del.addEventListener("click", () => {deleteSkill(skills)});
+        del.addEventListener("click", () => {deleteSkill(count)});
 
         del.innerHTML = '<i class="fa-solid fa-trash"></i>';
         const container = document.getElementById("fillSkills");
@@ -33,7 +32,7 @@ export default function Skills(props) {
         div.appendChild(del);
         div.appendChild(skill);
         div.appendChild(duration);
-        setSkills(skills + 1);
+        setCount(count + 1);
     }
     return (
         <div className={"p-2"}>

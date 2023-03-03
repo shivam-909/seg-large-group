@@ -87,12 +87,6 @@ function RegisterPage() {
             <span id="confirmPassError" className={"invisible absolute top-0"}>Password does not match</span>
             </div>
 
-            <div id="errorBox" className="invisible absolute top-96">
-              <div className="border-2 border-red bg-light-red rounded-md p-2 flex items-center justify-center">
-                {errorMsg}
-              </div>
-            </div>
-
             <div className='p-0.5'></div>
             <button className='bg-dark-theme-grey rounded-md text-white p-2.5 flex items-center justify-center space-x-2' onClick={signUpButton}>
               <p>Sign Up</p>
