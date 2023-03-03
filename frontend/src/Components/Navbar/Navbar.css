@@ -36,10 +36,11 @@ ul {
   }
   .topnav #expandProfile {
     display: none;
-    position: absolute;
+    position: fixed;
     right: 0px;
     background-color: white;
     border-radius: 5px;
+
   }
   .topnav #expandProfile a:hover {
     left: 0px;

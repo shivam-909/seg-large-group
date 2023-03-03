@@ -7,7 +7,7 @@ export default function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={ <UserProfilePage/> }/>
+        <Route path="/profile" element={ <UserProfilePage/> }/>
         <Route path="/search" element={ <SearchPage/> }/>
       </Routes>
     </BrowserRouter>
