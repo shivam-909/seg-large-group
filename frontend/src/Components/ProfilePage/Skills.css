@@ -1,0 +1,34 @@
+.skill {
+  border-width: 2px;
+  border-radius: 5px;
+  border-color: black;
+  width: 42%;
+  margin: 2px;
+  padding-left: 10px;
+  padding-right: 10px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  float: left;
+}
+.duration {
+  border-width: 2px;
+  border-radius: 5px;
+  border-color: black;
+  width: 42%;
+  margin: 2px;
+  padding-left: 10px;
+  padding-right: 10px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  float: right;
+}
+.delete {
+  border-width: 2px;
+  border-radius: 5px;
+  border-color: black;
+  width: 12%;
+  margin: 2px;
+  padding: 5px;
+  float: right;
+  color: red;
+}
