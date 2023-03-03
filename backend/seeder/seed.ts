@@ -5,7 +5,7 @@ import {createJobListing, GetAllJobIDs} from "../db/jobs";
 import {createUser, GetAllCompanyIds, GetAllSearcherIds, GetUserID, retrieveUserById} from "../db/users";
 import {Company, Searcher} from "../models/user";
 import {randomUUID} from "crypto";
-import {CreateApplication, GetApplicationsBySearcher} from "../db/applications";
+import {CreateApplication, GetApplicationsByFilter} from "../db/applications";
 import Application from "../models/application";
 import {Status} from "../models/enums/status.enum";
 import {companyNotification, searcherNotification} from "../models/enums/userNotification.enum";
@@ -186,7 +186,7 @@ function GetRandomStatus(): string {
 //=====================================================NOTIFICATIONS=====================================================
 
 async function generateSearcherNotification(db: DB, searcherID: string): Promise<Notification | undefined> {
-    const applications = await GetApplicationsBySearcher(db, searcherID);
+    const applications = await GetApplicationsByFilter(db, "searcherID", searcherID);
     const userID = await GetUserID(db, searcherID)
 
     if (!userID){
