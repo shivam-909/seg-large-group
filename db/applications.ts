@@ -52,8 +52,20 @@ export async function DeleteApplication(db: DB, id: string) {
     await docRef.delete();
 }
 
-export async function GetApplicationsBySearcher(db: DB, searcherID: string): Promise<Application[]> {
-    const applicationsSnapshot = await db.ApplicationCollection().where("searcher", "==", searcherID).get();
+// export async function GetApplicationsBySearcher(db: DB, searcherID: string): Promise<Application[]> {
+//     const applicationsSnapshot = await db.ApplicationCollection().where("searcher", "==", searcherID).get();
+//     const applications: Application[] = [];
+//
+//     applicationsSnapshot.forEach((doc) => {
+//         const application = doc.data() as Application;
+//         applications.push(application);
+//     });
+//
+//     return applications;
+// }
+
+export async function GetApplicationsByFilter(db: DB, filter: string, value:string): Promise<Application[]> {
+    const applicationsSnapshot = await db.ApplicationCollection().where(filter, "==", value).get();
     const applications: Application[] = [];
 
     applicationsSnapshot.forEach((doc) => {
@@ -63,6 +75,8 @@ export async function GetApplicationsBySearcher(db: DB, searcherID: string): Pro
 
     return applications;
 }
+
+
 
 
 
