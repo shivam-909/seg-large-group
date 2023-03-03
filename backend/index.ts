@@ -56,6 +56,8 @@ export const run = () => {
     app.get('/applications/:id', Route(app, GetApplication));
     app.patch('/applications/:id', upload.none(), Route(app, updateApplicationRoute));
     app.delete('/applications/:id', upload.none(), Route(app, deleteApplicationRoute));
+    //app.get('/applications/filter', upload.none(), Route(app, ));
+
 
     app.use((err: any, req: Request, res: Response, next: NextFunction) => {
     console.error(err.stack);
