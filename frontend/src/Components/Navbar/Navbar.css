@@ -1,48 +1,57 @@
-ul {
+.navbar {
     list-style-type: none;
     margin: 0;
     padding: 0;
     overflow: hidden;
-    background-color: #333;
+    background-color: white;
     position: fixed;
     top: 0;
     width: 100%;
+    border-bottom-width: 2px;
+    border-bottom-color: gray;
   }
   
-  li {
-    float: left;
-  }
-  
-  li a {
-    display: block;
-    color: white;
+  .navbar li a {
+    border-bottom-width: 4px;
+      border-bottom-color: white;
+      display: block;
+    color: black;
     text-align: center;
     padding: 14px 16px;
     text-decoration: none;
   }
-  
+
   /* Change the link color to #111 (black) on hover */
-  li a:hover {
-    background-color: #111;
+  .navbar li a:hover {
+    background-color: rgba(79, 138, 247, 20%);
+    border-bottom-color: rgba(79, 138, 247, 70%);
   }
   .topnav {
-    background-color: #333;
+    background: white;
     position: relative;
   }
   .topnav #expandProfile {
     display: none;
-    float: right;
     position: absolute;
     right: 0px;
-    background-color: #333;
-    border-radius: 10px;
-}
-  .topnav #expandProfile a:hover {
-    background-color: #111;
-    border-radius: 10px;
+    background-color: white;
+    border-radius: 5px;
   }
-  .topnav a {
-    color: white;
+  .topnav #expandProfile a:hover {
+    left: 0px;
+    background-color: rgba(79, 138, 247, 20%);
+    border-right-color: rgba(79, 138, 247, 70%);
+  }
+.topnav #expandProfile a:hover #icon {
+    color: blue;
+}
+.topnav #expandProfile a {
+    left: 0px;
+    border-right-width: 4px;
+    border-right-color: white;
+}
+.topnav a {
+    color: black;
     padding: 14px 16px;
     text-decoration: none;
     font-size: 17px;

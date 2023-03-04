@@ -10,17 +10,17 @@ export default function Navbar() {
       }
     return (
     <div className = "topnav">
-        <ul>
-            <li className="text-2xl"><a href="/"><i className="fa-solid fa-house"></i></a></li>
+        <ul className={"navbar"}>
+            <li className="float-left"><a href="/"><i className="fa-solid fa-house text-xl"></i></a></li>
             <div>
-                <li className='float-right'><a className="text-2xl" href="##" onClick={showProfile}><i className="fa-solid fa-user"></i></a></li>
+                <li className='float-right'><a className="" href="##" onClick={showProfile}><i className="fa-solid fa-user text-xl"></i></a></li>
+                <li className='float-right'><a className="" href="##"><i className="fa-solid fa-bell text-xl"></i></a></li>
             </div>
         </ul>
         <div className="top-16" id="expandProfile">
-            <a href="#Profile">Profile</a>
-            <a href="#Saved">Saved Jobs</a>
-            <a href="#Applications">Applications</a>
-            <a href="#Settings">Settings</a>
+            <a href="#Profile"><i id="icon" className="fa-solid fa-id-card pr-2"></i> Profile</a>
+            <a href="#Saved"><i id="icon" className="fa-solid fa-folder-open pr-2"></i>My Jobs</a>
+            <a href="#Settings"><i id="icon" className="fa-solid fa-gear pr-2"></i>Settings</a>
         </div> 
     </div>
     );
