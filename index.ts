@@ -22,6 +22,7 @@ import {
     getNotificationRoute,
     updateNotificationRoute
 } from "./service/routes/notifications";
+import cors from 'cors';
 
 export const db = new DB();
 
@@ -34,8 +35,8 @@ export const run = () => {
     // Routes with upload.none() provided will accept a form.
     const upload = multer();
 
+    app.use(cors());
     app.set('db', db);
-
 
     app.post('/auth/login', upload.none(), Route(app, Login));
     app.post('/auth/register', upload.none(), Route(app, Register));
