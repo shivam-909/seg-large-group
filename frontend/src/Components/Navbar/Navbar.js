@@ -19,7 +19,7 @@ export default function Navbar() {
         </ul>
         <div className="top-16" id="expandProfile">
             <a href="#Profile"><i id="icon" className="fa-solid fa-id-card pr-2"></i> Profile</a>
-            <a href="#Saved"><i id="icon" className="fa-solid fa-folder-open pr-2"></i>My Jobs</a>
+            <a href="saved"><i id="icon" className="fa-solid fa-folder-open pr-2"></i>My Jobs</a>
             <a href="#Settings"><i id="icon" className="fa-solid fa-gear pr-2"></i>Settings</a>
         </div> 
     </div>

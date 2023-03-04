@@ -11,9 +11,9 @@ export default function Category(props) {
         addCard("Software Engineer", "Expedia", "London")
     }
     return (
-        <div className='items-center justify-center flex relative'>
+        <div className='items-center justify-center flex relative w-full'>
             <button onClick={initializeCards}>Add Card</button>
-            <div className={"display-block"}>
+            <div className={"display-block w-full"}>
                 {jobsList}
             </div>
         </div>
