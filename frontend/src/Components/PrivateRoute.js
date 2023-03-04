@@ -1,9 +1,22 @@
 import { Outlet, Navigate } from 'react-router-dom';
+import {useEffect, useState} from "react";
+import axios from "axios";
 
 export default function PrivateRoutes() {
-    let auth = {'access': localStorage.getItem("access")};
+    const [isLoggedIn, setIsLoggedIn] = useState(true);
 
-    return (
-        auth.access ? <Outlet/> : <Navigate to="/login"/>
-    );
+    useEffect(() => {
+        const token = localStorage.getItem("access");
+        if (token) {
+            axios.post('http://localhost:8000/api/echo', {}, {headers: {Authorization: `Bearer ${token}`}})
+                .then(() => {
+                    setIsLoggedIn(true);
+                })
+                .catch(() => {
+                    setIsLoggedIn(false);
+                })
+        }
+    }, []);
+
+    return (isLoggedIn ? <Outlet/> : <Navigate to="/login"/>);
 }
