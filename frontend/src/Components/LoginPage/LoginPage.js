@@ -12,6 +12,9 @@ function LoginPage() {
   const navigate = useNavigate();
 
   function loginButton() {
+    localStorage.setItem("access","test")
+    navigate('/search');
+
     let email = document.getElementById("email").value;
     let password = document.getElementById("password").value;
     let rememberLogin = document.getElementById("rememberLogin").checked;
@@ -39,22 +42,22 @@ function LoginPage() {
         }
     }
 
-    axios.post('http://localhost:3001/auth/login', formData, config)
-        .then(response => {
-          if (response.data.access !== undefined && response.data.refresh !== undefined) {
-            localStorage.setItem("access", response.data.access);
-            localStorage.setItem("refresh", response.data.refresh);
-            navigate('/search');
-          }
-          else {
-            // TODO: Display error message.
-            console.log(response.data);
-          }
-        })
-        .catch(error => {
-          // TODO: Display error message.
-          console.error(error);
-        });
+    // axios.post('http://localhost:3001/auth/login', formData, config)
+    //     .then(response => {
+    //       if (response.data.access !== undefined && response.data.refresh !== undefined) {
+    //         localStorage.setItem("access", response.data.access);
+    //         localStorage.setItem("refresh", response.data.refresh);
+    //         navigate('/search');
+    //       }
+    //       else {
+    //         // TODO: Display error message.
+    //         console.log(response.data);
+    //       }
+    //     })
+    //     .catch(error => {
+    //       // TODO: Display error message.
+    //       console.error(error);
+    //     });
   }
 
   function togglePasswordVisibility() {
