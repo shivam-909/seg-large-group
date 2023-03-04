@@ -1,4 +1,4 @@
-ul {
+.navbar {
     list-style-type: none;
     margin: 0;
     padding: 0;
@@ -11,11 +11,7 @@ ul {
     border-bottom-color: gray;
   }
   
-  li {
-    float: left;
-  }
-  
-  li a {
+  .navbar li a {
     border-bottom-width: 4px;
       border-bottom-color: white;
       display: block;
@@ -24,9 +20,9 @@ ul {
     padding: 14px 16px;
     text-decoration: none;
   }
-  
+
   /* Change the link color to #111 (black) on hover */
-  li a:hover {
+  .navbar li a:hover {
     background-color: rgba(79, 138, 247, 20%);
     border-bottom-color: rgba(79, 138, 247, 70%);
   }

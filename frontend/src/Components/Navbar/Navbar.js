@@ -10,8 +10,8 @@ export default function Navbar() {
       }
     return (
     <div className = "topnav">
-        <ul>
-            <li className=""><a href="/"><i className="fa-solid fa-house text-xl"></i></a></li>
+        <ul className={"navbar"}>
+            <li className="float-left"><a href="/"><i className="fa-solid fa-house text-xl"></i></a></li>
             <div>
                 <li className='float-right'><a className="" href="##" onClick={showProfile}><i className="fa-solid fa-user text-xl"></i></a></li>
                 <li className='float-right'><a className="" href="##"><i className="fa-solid fa-bell text-xl"></i></a></li>
