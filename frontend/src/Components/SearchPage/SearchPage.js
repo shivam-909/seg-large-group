@@ -6,13 +6,14 @@ import Filters from "./Filters";
 import NewNavbar from "../Navbar/NewNavbar";
 
 function SearchPage() {
-    const [loadResults, setLoadResults] = useState(false);
+    const [jobs, setJobs] = useState([]);
     const [showJobTitleInputErrorMessage, setShowJobTitleInputErrorMessage] = useState(false);
     const [showLocationInputErrorMessage, setShowLocationInputErrorMessage] = useState(false);
 
     function showResults() {
         if (isJobTitleInputValid() & isLocationInputValid()) {
-            setLoadResults(true);
+            // TODO: Search algo endpoint.
+            setJobs([1]); // temp
         }
     }
 
@@ -37,7 +38,7 @@ function SearchPage() {
             <NewNavbar/>
             <div className='mt-24 space-y-5 flex-col'>
                 <SearchBar onclick={showResults} onJobTitleInputChange={() => setShowJobTitleInputErrorMessage(false)} onLocationInputChange={() => setShowLocationInputErrorMessage(false)} displayJobTitleInputErrorMessage={showJobTitleInputErrorMessage} displayLocationInputErrorMessage={showLocationInputErrorMessage}/>
-                {loadResults ?
+                {jobs.length > 0 ?
                     <div className='space-y-12'>
                         <Filters/>
                         <div className='flex items-start justify-center space-x-5 mx-8'>

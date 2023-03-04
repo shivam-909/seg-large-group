@@ -34,7 +34,7 @@ function LoginPage() {
           if (response.data.access !== undefined && response.data.refresh !== undefined) {
             localStorage.setItem("access", response.data.access);
             localStorage.setItem("refresh", response.data.refresh);
-            navigate('/search');
+            navigate('/');
           }
           else {
             // TODO: Display error message.

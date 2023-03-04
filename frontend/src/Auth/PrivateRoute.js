@@ -9,14 +9,10 @@ export default function PrivateRoutes() {
         const token = localStorage.getItem("access");
         if (token) {
             axios.post('http://localhost:8000/api/echo', {}, {headers: {Authorization: `Bearer ${token}`}})
-                .then(() => {
-                    setIsLoggedIn(true);
-                })
-                .catch(() => {
-                    setIsLoggedIn(false);
-                })
+                .then(() => setIsLoggedIn(true))
+                .catch(() => setIsLoggedIn(false));
         }
-    }, []);
+    }, [isLoggedIn]);
 
     return (isLoggedIn ? <Outlet/> : <Navigate to="/login"/>);
 }
