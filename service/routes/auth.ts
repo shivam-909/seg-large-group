@@ -2,8 +2,8 @@ import { NextFunction, Request, Response } from "express";
 import bcrypt from 'bcrypt';
 import 'express-async-errors';
 import DB from "../../db/db";
-import { CreateUser, RetrieveUserByEmail } from "../../db/users";
-import User from "../../models/user";
+import {createUser, retrieveUserByEmail } from "../../db/users";
+import { Company, Searcher, User } from "../../models/user";
 import { Error, ErrorFailedToHashPassword, ErrorInvalidEmail, ErrorInvalidPassword, ErrorMissingCompanyName, ErrorMissingFirstName, ErrorMissingLastName, ErrorUserExists, getErrorMessage, Handler } from "../public";
 import { GenerateKeyPair, VerifyJWT } from "../tokens";
 import { randomUUID } from "crypto";
@@ -12,83 +12,49 @@ import { randomUUID } from "crypto";
 // Login accepts a request containing an id and password, and return a JWT
 // access key and refresh token.
 export function Login(db: DB): Handler {
-  return async (req: Request, res: Response) => {
+  return (req: Request, res: Response) => {
     const { email, password } = req.body;
 
-    let user: User | null = await RetrieveUserByEmail(db, email)
+    retrieveUserByEmail(db, email).then(user => {
+      if (user === null) {
+        return res.status(401).send("user does not exist");
+      }
+      const match = bcrypt.compareSync(password, user.hashedPassword);
+      if (match) {
+        let { access, refresh } = GenerateKeyPair(user.userID);
 
-    if (user === null) {
-      res.status(403).send("invalid credentials");
-      return
-    }
-
-    const match = bcrypt.compareSync(password, user.hashedPassword);
-
-    if (!match) {
-      res.status(403).send("invalid credentials");
-      return
-    }
-
-    let { access, refresh } = GenerateKeyPair(user.idField);
-
-    res.set('Access-Control-Allow-Origin', 'http://localhost:3000');
-
-    res.status(200).json({
-      access: access,
-      refresh: refresh,
+        return res.status(200).json({
+          access: access,
+          refresh: refresh,
+        });
+      }
+      else {
+        return res.status(401).send("invalid password");
+      }
+    }).catch(err => {
+        return res.status(500).json({
+            msg: err.message,
+        });
     });
   }
 }
 
-// Expects multi-part form.
-// Register accepts a request containing an email and password, and return a JWT
-// access key and refresh token.
 export function Register(db: DB): Handler {
   return async (req: Request, res: Response, next: NextFunction) => {
-    var {
-      first_name,
-      last_name,
-      email,
-      password,
-      is_company,
-      company_name,
-      pfp_url,
-      location
-    } = req.body;
+    const { userType, companyName, firstName, lastName, email, password, pfpUrl, location} = req.body;
 
-    const isCompany = is_company === "true";
-
-    const valid = ValidateRegistrationForm(
-      first_name,
-      last_name,
-      email,
-      password,
-      isCompany,
-      company_name,
-    );
-
-    if (valid != "") {
-      next(valid);
-    }
-
-    if (company_name === undefined) {
-      company_name = "";
-    }
-
-    if (pfp_url === undefined) {
-      pfp_url = "";
-    }
-
-    if (location === undefined) {
-      location = "";
-    }
-
-    let user: User | null = await RetrieveUserByEmail(db, email);
+    let user: User | null = await retrieveUserByEmail(db, email);
 
     // Sanity check for user.
     if (user !== null) {
       next(ErrorUserExists)
       return
+    }
+
+    if (!ValidPassword(password)) {
+      return res.status(400).json({
+        msg: "invalid password"
+      })
     }
 
     const hash = ((): string | Error => {
@@ -102,28 +68,31 @@ export function Register(db: DB): Handler {
     })();
 
     if (hash instanceof Error) {
-      next(ErrorFailedToHashPassword)
-      return
+      return res.status(500).json({
+        msg: "failed to hash password",
+      })
     }
 
     const newId = randomUUID();
-    const newUser = new User(
-      newId,
-      first_name,
-      last_name,
-      email,
-      hash as string,
-      isCompany,
-      company_name,
-      pfp_url,
-      location,
-      [], [])
 
-    await CreateUser(db, newUser).then(() => {
+    let newUser: User;
+
+    if (userType === 'company') {
+      newUser = new Company(newId, companyName, email, hash as string, pfpUrl, location, [], randomUUID());
+      console.log(newUser)
+    } else if (userType === 'searcher') {
+      newUser = new Searcher(newId, firstName, lastName, email, hash as string, pfpUrl, location, [], [], randomUUID());
+    } else {
+      return res.status(400).json({
+        msg: "invalid user type"
+      });
+    }
+
+    await createUser(db, newUser).then(() => {
       return
     })
 
-    let { access, refresh } = GenerateKeyPair(newUser.idField);
+    let { access, refresh } = GenerateKeyPair(newUser.userID);
 
     return res.status(200).json({
       access: access,
@@ -131,6 +100,7 @@ export function Register(db: DB): Handler {
     });
   }
 }
+
 
 // Refresh accepts a request containing a refresh token, and return a new JWT access key and
 // refresh token.
@@ -141,7 +111,7 @@ export function Refresh(): Handler {
 
     const claims = VerifyJWT(refresh_token);
 
-    if (!claims.id) {
+    if (!claims.username) {
       res.status(401).send("invalid refresh token");
       return
     }
@@ -156,7 +126,7 @@ export function Refresh(): Handler {
       return
     }
 
-    let { access, refresh } = GenerateKeyPair(claims.id);
+    let { access, refresh } = GenerateKeyPair(claims.username);
 
     res.status(200).json({
       access: access,
@@ -166,12 +136,12 @@ export function Refresh(): Handler {
 }
 
 function ValidateRegistrationForm(
-  firstName: string,
-  lastName: string,
-  email: string,
-  password: string,
-  isCompany: boolean,
-  companyName: string,
+    firstName: string,
+    lastName: string,
+    email: string,
+    password: string,
+    isCompany: boolean,
+    companyName: string,
 ): string {
 
   if (email === undefined || email === "") {
@@ -214,11 +184,9 @@ function ValidEmail(email: string): boolean {
     return false;
   }
 
-  if (parts[1].length > 64) {
-    return false;
-  }
+  return parts[1].length <= 64;
 
-  return true;
+
 }
 
 export function ValidPassword(password: string): boolean {

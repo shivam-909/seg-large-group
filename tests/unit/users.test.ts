@@ -2,35 +2,34 @@
 
 import { randomUUID } from "crypto";
 import DB from "../../db/db";
-import { CreateUser, RetrieveUserByEmail } from "../../db/users";
-import User from "../../models/user";
+import { createUser, retrieveUserByEmail } from "../../db/users";
+import {Searcher, User} from "../../models/user";
 
 test('create user, retrieve user by email, delete user', async () => {
-    // Create a user in the db.
+    // Create a searcher in the db.
     const db = new DB();
     const id = randomUUID();
     const email = 'test_crd_user@example.com';
     const password = 'password';
-    const user = new User(
+    const searcher = new Searcher(
         id,
         "John",
         "Doe",
         email,
         password,
-        false,
-        "",
-        "",
-        "",
+        "picture_url",
+        "London",
         [],
         [],
+        "0123456789"
     );
 
-    await CreateUser(db, user);
+    await createUser(db, searcher);
 
-    // Retrieve the user by email.
-    const retrievedUser = await RetrieveUserByEmail(db, email);
+    // Retrieve the searcher by email.
+    const retrievedUser = await retrieveUserByEmail(db, email);
     expect(retrievedUser).not.toBeNull();
-    expect(retrievedUser?.idField).toEqual(id);
+    expect(retrievedUser?.userID).toEqual(id);
     expect(retrievedUser?.email).toEqual(email);
 
     // Delete the user.
