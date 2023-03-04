@@ -1,5 +1,5 @@
 import DB from "../../db/db";
-import { RetrieveUserByEmail, DeleteUser } from "../../db/users";
+import { retrieveUserByEmail, deleteUser } from "../../db/users";
 
 test('login user', async () => {
 
@@ -12,13 +12,15 @@ test('login user', async () => {
 
     let formData = new FormData();
 
+    formData.append('userType', 'searcher');
+    formData.append('firstName', 'John');
+    formData.append('lastName', 'Doe');
     formData.append('email', email);
     formData.append('password', 'Password123!');
-    formData.append('first_name', 'John');
-    formData.append('last_name', 'Doe');
-    formData.append('is_company', 'false');
+    formData.append('pfpUrl', 'TestpfpUrl');
+    formData.append('location', 'London');
 
-    const _ = await fetch('http://localhost:3000/auth/register', {
+    const _ = await fetch('http://localhost:8000/auth/register', {
         method: 'POST',
         body: formData,
     });
@@ -29,7 +31,7 @@ test('login user', async () => {
     loginFormData.append('email', email);
     loginFormData.append('password', 'Password123!');
 
-    const loginResponse = await fetch('http://localhost:3000/auth/login', {
+    const loginResponse = await fetch('http://localhost:8000/auth/login', {
         method: 'POST',
         body: loginFormData,
     });
@@ -53,9 +55,9 @@ test('login user', async () => {
 
     const db = new DB();
 
-    const user = await RetrieveUserByEmail(db, email);
+    const user = await retrieveUserByEmail(db, email);
 
     expect(user).not.toBeNull();
 
-    await DeleteUser(db, user!.idField);
+    await deleteUser(db, user!.userID);
 });
