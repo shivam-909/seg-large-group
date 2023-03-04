@@ -5,10 +5,10 @@ import hideIcon from '../../icons/hideIcon.png';
 import TextInputBoxWithIcon from "./TextInputBoxWithIcon";
 import {validateField} from "../Validation/validate";
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
 
 function LoginPage() {
   const navigate = useNavigate();
+  const axios = require('axios');
 
   function loginButton() {
     let email = document.getElementById("email").value;
