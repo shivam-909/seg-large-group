@@ -3,37 +3,37 @@ import { ErrorToCode, Token } from './public';
 import { VerifyJWT } from './tokens';
 
 export const ErrorMW = (err: any, req: Request, res: Response, next: NextFunction) => {
-    console.error(err.stack);
-    const code = ErrorToCode.get(err) || 500;
-    res.status(code).json({ message: err || 'internal server error' });
+  console.error(err.stack);
+  const code = ErrorToCode.get(err) || 500;
+  res.status(code).json({ message: err || 'internal server error' });
 };
 
 export const AuthMW = (req: Request, res: Response, next: NextFunction) => {
-    const token = req.headers.authorization;
+  const token = req.headers.authorization;
 
-    if (!token) return res.status(401).json({ message: 'unauthorized' });
+  if (!token) return res.status(401).json({ message: 'unauthorized' });
 
-    const split = token.split(' ');
+  const split = token.split(' ');
 
-    if (split.length !== 2) return res.status(401).json({ message: 'unauthorized' });
+  if (split.length !== 2) return res.status(401).json({ message: 'unauthorized' });
 
-    const token_value = split[1];
+  const token_value = split[1];
 
-    const verify = (): Token | null => {
-        try {
-            return VerifyJWT(token_value);
-        } catch (e) {
-            console.log(e);
-            return null;
-        }
-    };
+  const verify = (): Token | null => {
+    try {
+      return VerifyJWT(token_value);
+    } catch (e) {
+      console.log(e);
+      return null;
+    }
+  };
 
-    const payload = verify();
+  const payload = verify();
 
-    if (!payload) return res.status(403).json({ message: 'unauthorized' });
+  if (!payload) return res.status(403).json({ message: 'unauthorized' });
 
-    req.headers["auth_username"] = payload.username;
-    req.headers["auth_type"] = payload.type;
+  req.headers["auth_username"] = payload.username;
+  req.headers["auth_type"] = payload.type;
 
-    next();
+  next();
 }

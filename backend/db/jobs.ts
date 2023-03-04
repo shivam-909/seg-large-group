@@ -1,8 +1,8 @@
 import JobListing from "../models/job";
 import DB from "./db";
-import {Searcher} from "../models/user";
+import { Searcher } from "../models/user";
 
-export async function createJobListing(db: DB, jobListing: JobListing): Promise<JobListing> {
+export async function CreateJobsListing(db: DB, jobListing: JobListing): Promise<JobListing> {
   const docRef = db.JobListingCollection().doc(jobListing.id);
 
   try {
@@ -19,14 +19,14 @@ export async function createJobListing(db: DB, jobListing: JobListing): Promise<
 
 
 
-export async function retrieveJobListing(db: DB, id: string): Promise<JobListing | null> {
+export async function RetrieveJobListing(db: DB, id: string): Promise<JobListing | null> {
   const docRef = db.JobListingCollection().doc(id);
   const doc = await docRef.get();
 
   return doc.data() as JobListing;
 }
 
-export async function updateJobListing(db: DB, jobListing: JobListing): Promise<void> {
+export async function UpdateJobListing(db: DB, jobListing: JobListing): Promise<void> {
   const docRef = db.JobListingCollection().doc(jobListing.id);
 
   const { id, ...listingData } = jobListing;
@@ -39,7 +39,7 @@ export async function updateJobListing(db: DB, jobListing: JobListing): Promise<
 }
 
 
-export async function deleteJobListing(db: DB, id: string) {
+export async function DeleteJobListing(db: DB, id: string) {
   const docRef = db.JobListingCollection().doc(id);
 
   await docRef.delete();
@@ -48,7 +48,7 @@ export async function deleteJobListing(db: DB, id: string) {
 
 
 
-export async function deleteJobsByCompanyID(db: DB, companyId: string) {
+export async function DeleteJobsByCompanyID(db: DB, companyId: string) {
   if (!companyId) {
     throw new Error('Company ID is not defined');
   }
