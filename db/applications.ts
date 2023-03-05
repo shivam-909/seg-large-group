@@ -52,36 +52,19 @@ export async function DeleteApplication(db: DB, id: string) {
     await docRef.delete();
 }
 
-// export async function GetApplicationsBySearcher(db: DB, searcherID: string): Promise<Application[]> {
-//     const applicationsSnapshot = await db.ApplicationCollection().where("searcher", "==", searcherID).get();
-//     const applications: Application[] = [];
-//
-//     applicationsSnapshot.forEach((doc) => {
-//         const application = doc.data() as Application;
-//         applications.push(application);
-//     });
-//
-//     return applications;
-// }
 
-export async function GetApplicationsByFilter(db: DB, filters: {}): Promise<Application[]> {
-
-
+export async function GetApplicationsByFilter(db: DB, filters: {[key: string]: string}): Promise<Application[]> {
+    let query: FirebaseFirestore.Query<FirebaseFirestore.DocumentData> = db.ApplicationCollection();
 
     for (const [key, value] of Object.entries(filters)) {
-        if (value == null) {
-            (filters as any)[key] = true;
+        if (value !== '') {
+            query = query.where(key, '==', value);
         }
     }
 
-
-    const applicationsSnapshot = await db.ApplicationCollection().where(Object.keys(filters)[0], "==", Object.values(filters)[0]).where(Object.keys(filters)[1], "==", Object.values(filters)[1]).where(Object.keys(filters)[2], "==", Object.values(filters)[2]).where(Object.keys(filters)[3], "==", Object.values(filters)[3]).get();
-
-
-    console.log(applicationsSnapshot.docs)
+    const applicationsSnapshot = await query.get();
 
     const applications: Application[] = [];
-
 
     applicationsSnapshot.forEach((doc) => {
         const application = doc.data() as Application;
