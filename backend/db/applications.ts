@@ -65,8 +65,23 @@ export async function DeleteApplication(db: DB, id: string) {
 // }
 
 export async function GetApplicationsByFilter(db: DB, filters: {}): Promise<Application[]> {
-    const applicationsSnapshot = await db.ApplicationCollection().where(filter, "==", value).get();
+
+
+
+    for (const [key, value] of Object.entries(filters)) {
+        if (value == null) {
+            (filters as any)[key] = true;
+        }
+    }
+
+
+    const applicationsSnapshot = await db.ApplicationCollection().where(Object.keys(filters)[0], "==", Object.values(filters)[0]).where(Object.keys(filters)[1], "==", Object.values(filters)[1]).where(Object.keys(filters)[2], "==", Object.values(filters)[2]).where(Object.keys(filters)[3], "==", Object.values(filters)[3]).get();
+
+
+    console.log(applicationsSnapshot.docs)
+
     const applications: Application[] = [];
+
 
     applicationsSnapshot.forEach((doc) => {
         const application = doc.data() as Application;
