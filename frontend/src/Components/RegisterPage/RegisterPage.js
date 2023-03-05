@@ -117,8 +117,7 @@ function RegisterPage() {
             </div>
 
             <div className={"w-full"}>
-              {/*eslint-disable-next-line*/}
-            <TextInputBox id='email' className="w-full" onBlur={()=>{validateField("email",/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/)}} placeholder='Email address'/>
+            <TextInputBox id='email' className="w-full" onBlur={()=>{validateField("email",/^\w+(-?\w+)*@\w+(-?\w+)*(\.\w{2,3})+$/)}} placeholder='Email address'/>
             <span id="emailError" className={"invisible absolute top-0"}>Invalid Email</span>
             </div>
 

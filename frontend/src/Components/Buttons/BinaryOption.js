@@ -20,9 +20,7 @@ function BinaryOption(props) {
     }
     return (
         <div className='items-center justify-center flex relative'>
-            {/*eslint-disable-next-line*/}
             <button id={props.option1} disabled={selected===props.option1} className="bg-grey-contrast text-white border-2 w-full rounded-md rounded-r-none border-dark-theme-grey p-1 font-bold transition" onClick={() => {alternate(); {props.function1()}}}>{props.option1}</button>
-            {/*eslint-disable-next-line*/}
             <button id={props.option2} disabled={selected===props.option2} className="bg-lighter-grey border-2 w-full rounded-md rounded-l-none border-dark-theme-grey p-1 font-bold transition" onClick={() => {alternate(); {props.function2()}}}>{props.option2}</button>
         </div>
     );
