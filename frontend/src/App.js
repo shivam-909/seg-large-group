@@ -7,7 +7,6 @@ import PrivateRoutes from "./Auth/PrivateRoute";
 import MyJobs from "./Components/MyJobs/MyJobs";
 export default function App() {
   return (
-    return (
       <BrowserRouter>
           <Routes>
               <Route element={<PrivateRoutes/>}>
