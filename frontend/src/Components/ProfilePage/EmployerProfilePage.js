@@ -1,77 +1,86 @@
 import './ProfilePage.css';
 import React, {useState} from 'react';
-
+import Navbar from "../Navbar/Navbar";
+import Skills from "./Skills";
+import {setVisible} from "../Validation/validate";
+import ErrorBox from "../ErrorBox/ErrorBox";
 function EmployerProfilePage() {
     const[profile, setMyProfile] = useState({
-      companyName:"",
-      email:"",
-      phoneNum:"",
-      address:"",
-      companyDescrip:"",
-      webAddress:""
+        companyName:"",
+        email:"",
+        location:"",
     });
-
     const[isEditing, setIsEditing]= useState(false);
 
     function EditOnClick(){
-      setIsEditing(true);
+        toggleSkills(false);
+        setIsEditing(true);
     }
     function SaveOnClick(){
-      const checkNum =  /^\d{10}$/;
-      const checkEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      if (profile.companyName == "" || profile.email == "" ||profile.phoneNum == ""){
-        alert("Please fill out all necessary filled");
-      }
-      else if (!checkNum.test(profile.phoneNum) || !checkEmail.test(profile.email)){
-        alert("Please ensure you have entered a valid phone number and email address");
-      }
-      else {
-        setIsEditing(false);
-      }
+        let firstName = document.getElementById("firstName").value;
+        let lastName = document.getElementById("lastName").value;
+
+        if (firstName === "" || lastName === "" || !validateSkills()){
+            setVisible("errorBox", true)
+        }
+        else {
+            profile.firstName = firstName;
+            profile.lastName = lastName;
+            setIsEditing(false);
+            saveSkills();
+            setVisible("errorBox", false)
+            // TODO: Add Backend Update
+        }
     }
-    function EditProfile(event){
-      const{id, value} = event.target;
-      setMyProfile(prevProfile =>({
-        ...prevProfile,
-        [id]: value
-      }));
+    function validateSkills(){
+        var skillsInputs = document.getElementsByClassName("skill");
+        var durationsInputs = document.getElementsByClassName("duration");
+        for(var i = 0; i < skillsInputs.length; i++) {
+            if (skillsInputs[i].value === "" || durationsInputs[i].value === ""){
+                return false;
+            }
+        }
+        return true;
+    }
+    function saveSkills(){
+        toggleSkills(true);
+        var skillsInputs = document.getElementsByClassName("skill");
+        var durationsInputs = document.getElementsByClassName("duration");
+        profile.skills = []
+        for(var i = 0; i < skillsInputs.length; i++) {
+            profile.skills.push([skillsInputs[i].value,durationsInputs[i].value]);
+        }
+    }
+    function toggleSkills(flag){
+        var skillsInputs = document.getElementsByClassName("skill");
+        var durationsInputs = document.getElementsByClassName("duration");
+        for(var i = 0; i < skillsInputs.length; i++) {
+            skillsInputs[i].disabled = flag;
+            durationsInputs[i].disabled = flag;
+        }
     }
 
     return (
-    <div className='bg-lighter-grey min-h-screen items-center justify-center flex'>
-     <div className='bg-white rounded-md sm:min-w-1/6 inline-grid px-12 py-7 space-y-3'>
-        <header className='mb-6 font-bold text-2xl flex justify-center'>Your Profile Page</header>
-        {!isEditing && <button className='edit-btn' onClick={EditOnClick} >Edit Profile</button>}
-        <div className='text-input' id="profile">
-          {!isEditing && (
-            <>
-            <p><strong><u>Contact Info</u></strong></p>
-            <p><strong><span>&#42;</span>Company Name: </strong> <input type="text" id="companyName" placeholder = "Please enter your Company Name" value= {profile.firstName} disabled/></p>
-            <p><strong>Phone Number: </strong> <input type="tel" id="phoneNum" placeholder = "Please enter your Phone Number" value= {profile.phoneNum} disabled/></p>
-            <p><strong><span>&#42;</span>Email: </strong> <input type="email" id="email" placeholder = "Please enter your Email" value= {profile.email} disabled/></p>
-            <p><strong>Address: </strong> <input type="text" id="address" placeholder = "Please enter your Address" value= {profile.address} disabled/></p>
-
-            <p><strong><br /><u>Description</u></strong></p>
-            <p><strong>Company Description: </strong> <input type="text" id="companyDescrip" placeholder = "Please enter your Company Description" value= {profile.companyDescrip} disabled/></p>
-            <p><strong>Visit our Website: </strong>{" "} {!isEditing && profile.webAddress ? (<a href={profile.webAddress} id= 'webAddress' download><u>Click here to visit Our Website</u></a> ):( "You have not added your website link yet!!")}</p>
-            </>  )}
-
-      {isEditing && <button className="save-btn" onClick={SaveOnClick} >Save Profile</button>}
-        {isEditing && (
-          <>
-          <p><strong><u>Contact Info</u></strong></p>
-           <p><strong><span>&#42;</span>Company Name:</strong> <input type="text" id="companyName" placeholder = "Please enter your Company Name" value= {profile.companyName} onChange={EditProfile}/></p>
-           <p><strong>Phone Number: </strong> <input type="tel" id="phoneNum" placeholder = "Please enter your Phone Number" value= {profile.phoneNum} onChange={EditProfile}/></p>
-           <p><strong><span>&#42;</span>Email: </strong> <input type="email" id="email" placeholder = "Please enter your Email" value= {profile.email} onChange={EditProfile}/></p>
-           <p><strong>Address: </strong> <input type="text" id="address"  placeholder = "Please enter your Address" value= {profile.address} onChange={EditProfile}/></p>
-
-           <p><strong><br /><u>Description</u></strong></p>
-           <p><strong>Company Description:</strong>  <input type="text" id="companyDescrip" placeholder = "Please enter your Company Description" value= {profile.companyDescrip} onChange={EditProfile}/></p>
-           <p><strong>Visit our Website: </strong> <input type="text" id="webAddress" placeholder = "Add you Website link" value= {profile.webAddress} onChange={EditProfile}/></p>
-          </>)}
+        <div>
+            <Navbar/>
+            <div className='bg-lighter-grey min-h-screen items-center justify-center flex'>
+                <div className='bg-white rounded-md sm:min-w-1/6 inline-grid px-12 py-7 space-y-3 mt-24 max-w-lg min-w-[40%]'>
+                    <h1 className='mb-6 font-bold text-2xl flex justify-center'>Your Profile </h1>
+                    <div className='text-input' id="profile">
+                        <>
+                            <p><strong><u>Contact Information</u></strong></p>
+                            <p><strong>Company Name: <span className={"text-red"}>&#42;</span> </strong> <input type="text" id="companyName" placeholder = "Please enter your Company Name" defaultValue= {profile.companyName} disabled={!isEditing}/></p>
+                            <p><strong>Email: </strong> <input type="email" id="email" placeholder = "Email" defaultValue= {profile.email} disabled/></p>
+                            <p><strong>Location: </strong> <input type="text" id="companyName" placeholder = "Please enter your Location" defaultValue= {profile.companyName} disabled={!isEditing}/></p>
+                        </>
+                        <ErrorBox message={"Please complete all required fields."}/>
+                    </div>
+                    {!isEditing && <button className="border-2 border-dark-theme-grey bg-[#ccc] rounded-md m-2 p-2 text-black" onClick={EditOnClick} ><i className="fa-solid fa-pen-to-square pr-2"></i>Edit</button>}
+                    {isEditing && <button className="save-btn" onClick={SaveOnClick}><i className="fa-solid fa-floppy-disk pr-1"></i> Save</button>}
+                </div>
+            </div>
         </div>
-   </div>
- </div>
-  );
+    );
 }
+
 export default EmployerProfilePage;
