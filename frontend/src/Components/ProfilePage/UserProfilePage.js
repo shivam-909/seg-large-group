@@ -4,6 +4,7 @@ import Navbar from "../Navbar/Navbar";
 import Skills from "./Skills";
 import {setVisible} from "../Validation/validate";
 import ErrorBox from "../ErrorBox/ErrorBox";
+import Education from "./Education";
 function UserProfilePage() {
     const[profile, setMyProfile] = useState({
       firstName:"",
@@ -11,14 +12,13 @@ function UserProfilePage() {
       email:"",
       skills: [],
       education:"",
-      previousEmployment:"",
       Cv:null
     });
     const[isEditing, setIsEditing]= useState(false);
     const[fileName, setFile]= useState('');
 
     function EditOnClick(){
-        toggleSkills(false);
+        toggleKeys(false);
       setIsEditing(true);
     }
     function SaveOnClick(){
@@ -33,35 +33,45 @@ function UserProfilePage() {
           profile.lastName = lastName;
         setIsEditing(false);
         saveSkills();
+        saveEducation();
         setVisible("errorBox", false)
             // TODO: Add Backend Update
         }
     }
     function validateSkills(){
-        var skillsInputs = document.getElementsByClassName("key");
-        var durationsInputs = document.getElementsByClassName("duration");
-        for(var i = 0; i < skillsInputs.length; i++) {
-            if (skillsInputs[i].value === "" || durationsInputs[i].value === ""){
+        let keyInputs = document.getElementsByClassName("key");
+        let durationsInputs = document.getElementsByClassName("duration");
+        for(var i = 0; i < keyInputs.length; i++) {
+            if (keyInputs[i].value === "" || durationsInputs[i].value === ""){
                 return false;
             }
         }
         return true;
     }
     function saveSkills(){
-        toggleSkills(true);
-        var skillsInputs = document.getElementsByClassName("key");
-        var durationsInputs = document.getElementsByClassName("duration");
+        toggleKeys(true);
+        let keyInputs = document.querySelectorAll("[id=Skillkey]");
+        let durationsInputs = document.querySelectorAll("[id=Skillduration]");
         profile.skills = []
-        for(var i = 0; i < skillsInputs.length; i++) {
-            profile.skills.push([skillsInputs[i].value,durationsInputs[i].value]);
+        for(let i = 0; i < keyInputs.length; i++) {
+            profile.skills.push([keyInputs[i].value,durationsInputs[i].value]);
         }
     }
-    function toggleSkills(flag){
-        var skillsInputs = document.getElementsByClassName("key");
-        var durationsInputs = document.getElementsByClassName("duration");
+    function saveEducation(){
+        toggleKeys(true);
+        let keyInputs = document.querySelectorAll("[id=Educationkey]");
+        let durationsInputs = document.querySelectorAll("[id=Educationduration]");
+        profile.education = []
+        for(let i = 0; i < keyInputs.length; i++) {
+            profile.education.push([keyInputs[i].value,durationsInputs[i].value]);
+        }
+    }
+    function toggleKeys(flag){
+        let keyInputs = document.getElementsByClassName("key");
+        let durationsInputs = document.getElementsByClassName("duration");
         // var names = '';
-        for(var i = 0; i < skillsInputs.length; i++) {
-            skillsInputs[i].disabled = flag;
+        for(var i = 0; i < keyInputs.length; i++) {
+            keyInputs[i].disabled = flag;
             durationsInputs[i].disabled = flag;
         }
     }
@@ -89,7 +99,7 @@ function UserProfilePage() {
                 <p><strong>Email: </strong> <input type="email" id="email" placeholder = "Email" defaultValue= {profile.email} disabled/></p>
                 <p><strong><br /><u>Qualifications</u></strong></p>
                 <Skills isEditing={isEditing}/>
-                <p><strong>Education: </strong> <input type="text" id="education" placeholder = "Please enter your Academic Qualifications" defaultValue= {profile.education} disabled={!isEditing}/></p>
+                    <Education isEditing={isEditing}/>
                     {!isEditing ?
                         <p className={"mt-4 mb-2"}><strong>CV: </strong>{" "} {profile.Cv ? (<a href={profile.Cv} id= 'Cv' download><u>{fileName}</u></a> ):( "You have not uploaded a CV.")}</p>
                         :<div><p className={"mt-4 mb-2"}><strong>CV:</strong>  <input type="file" id="Cv" accept= ".pdf"  onChange={updateCV}/></p></div>
