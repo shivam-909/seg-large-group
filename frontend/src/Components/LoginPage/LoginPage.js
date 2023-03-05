@@ -4,8 +4,12 @@ import showIcon from '../../icons/showIcon.png';
 import hideIcon from '../../icons/hideIcon.png';
 import TextInputBoxWithIcon from "./TextInputBoxWithIcon";
 import {validateField} from "../Validation/validate";
+import { useNavigate } from 'react-router-dom';
 
 function LoginPage() {
+  const navigate = useNavigate();
+  const axios = require('axios');
+
   function loginButton() {
     let email = document.getElementById("email").value;
     let password = document.getElementById("password").value;
@@ -20,8 +24,27 @@ function LoginPage() {
       localStorage.removeItem("password")
       localStorage.removeItem("rememberLogin")
     }
-    // TODO: Make API call to retrieve JWTs.
-    // TODO: Redirect to home page.
+
+    const formData = new FormData();
+    formData.append('email', email);
+    formData.append('password', password);
+
+    axios.post('http://localhost:8000/auth/login', formData)
+        .then(response => {
+          if (response.data.access !== undefined && response.data.refresh !== undefined) {
+            localStorage.setItem("access", response.data.access);
+            localStorage.setItem("refresh", response.data.refresh);
+            navigate('/');
+          }
+          else {
+            // TODO: Display error message.
+            console.log(response.data);
+          }
+        })
+        .catch(error => {
+          // TODO: Display error message.
+          console.error(error);
+        });
   }
 
   function togglePasswordVisibility() {
@@ -42,8 +65,7 @@ function LoginPage() {
             <p className='mb-6 font-bold text-2xl flex justify-center'>Sign in to your account</p>
 
             <div className={"w-full"}>
-              {/*eslint-disable-next-line*/}
-              <TextInputBox id='email' cache={localStorage.getItem("email")} className="w-full" onChange={()=>{validateField("email",/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/)}} placeholder='Email address'/>
+              <TextInputBox id='email' cache={localStorage.getItem("email")} className="w-full" onChange={()=>{validateField("email",/^\w+(-?\w+)*@\w+(-?\w+)*(\.\w{2,3})+$/)}} placeholder='Email address'/>
               <span id="emailError" className={"invisible absolute top-0"}>Invalid Email</span>
             </div>
 
