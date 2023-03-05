@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import DB from "../../db/db";
 import Application from "../../models/application";
-import {CreateApplication, DeleteApplication, RetrieveApplication, UpdateApplication} from "../../db/applications";
+import {CreateApplication, DeleteApplication, RetrieveApplication, UpdateApplication, GetApplicationsByFilter} from "../../db/applications";
 import { getErrorMessage, Handler } from "../public";
 import {seedApplicationListings} from "../../seeder/seed";
 import { randomUUID } from "crypto";
@@ -45,6 +45,27 @@ export function GetApplication(db: DB): Handler {
             });
         }
     };
+}
+
+export function getApplicationByFilter(db: DB): Handler {
+    return async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            const application = await GetApplicationsByFilter(db, req.body);
+            console.log(application)
+            if (application) {
+                res.status(200).json(application);
+            } else {
+                res.status(404).json({
+                    message: 'application not found'
+                });
+            }
+        } catch (err) {
+            next({
+                message: getErrorMessage(err),
+            });
+        }
+
+    }
 }
 
 export function SeedApplications(db: DB): Handler {
