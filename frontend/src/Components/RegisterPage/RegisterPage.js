@@ -53,37 +53,37 @@ function RegisterPage() {
 
   return (
       <div className='bg-lighter-grey min-h-screen items-center justify-center flex'>
-          <div className='bg-white rounded-md sm:min-w-1/6 inline-grid px-12 py-7 space-y-3'>
+          <div className='bg-white rounded-md sm:min-w-1/6 inline-grid px-12 py-7 space-y-3 min-w-[35%]'>
             <p className='mb-6 font-bold text-2xl flex justify-center'>Register an account</p>
 
             <BinaryOption option1={"Job Seeker"} function1={() => {toggleRole("Seeker-Fields")}} function2={() => {toggleRole("Company-Fields")}} option2={"Company"}/>
-            <div id="Seeker-Fields" className="space-x-2 inline">
+            <div id="Seeker-Fields" className="space-x-2 inline transition">
               <div className={"inline float-left"}>
-              <TextInputBox id='FirstName' onChange={()=>{validateField("FirstName",/^[A-Za-z]+$/)}} placeholder='First Name'/>
+              <TextInputBox id='FirstName' onBlur={()=>{validateField("FirstName",/^[A-Za-z]+$/)}} placeholder='First Name'/>
                 <span id="FirstNameError" className={"invisible absolute top-0"}>Invalid First Name</span>
               </div>
               <div className={"inline float-right"}>
-                <TextInputBox id='LastName' onChange={()=>{validateField("LastName",/^[A-Za-z]+$/)}} placeholder='Last Name'/>
+                <TextInputBox id='LastName' onBlur={()=>{validateField("LastName",/^[A-Za-z]+$/)}} placeholder='Last Name'/>
                 <span id="LastNameError" className={"invisible absolute top-0"}>Invalid Last Name</span>
               </div>
             </div>
-            <div id="Company-Fields" className="invisible absolute top-0 w-full">
+            <div id="Company-Fields" className="invisible absolute top-0 w-full transition">
               <TextInputBox id='CompanyName' className={"w-full"} placeholder='Company Name'/>
             </div>
 
             <div className={"w-full"}>
               {/*eslint-disable-next-line*/}
-            <TextInputBox id='email' className="w-full" onChange={()=>{validateField("email",/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/)}} placeholder='Email address'/>
+            <TextInputBox id='email' className="w-full" onBlur={()=>{validateField("email",/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/)}} placeholder='Email address'/>
             <span id="emailError" className={"invisible absolute top-0"}>Invalid Email</span>
             </div>
 
             <div>
-            <TextInputBoxWithIcon id='password' type='password' onChange={()=>{validateField("password",/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{8,20})/); checkPasswordMatch()}} placeholder='Password' icon={<img id='togglePassword' src={showIcon} alt='' onClick={() => {togglePasswordVisibility("password","togglePassword")}} className='cursor-pointer'/>}/>
+            <TextInputBoxWithIcon id='password' type='password' onBlur={()=>{validateField("password",/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{8,20})/); checkPasswordMatch()}} placeholder='Password' icon={<img id='togglePassword' src={showIcon} alt='' onClick={() => {togglePasswordVisibility("password","togglePassword")}} className='cursor-pointer'/>}/>
             <span id="passwordError" className={"invisible absolute top-0"}>Invalid Password</span>
             </div>
 
             <div>
-            <TextInputBox id='confirmPass' className="w-full" onChange={checkPasswordMatch} type='password' placeholder='Confirm Password'/>
+            <TextInputBox id='confirmPass' className="w-full" onBlur={checkPasswordMatch} type='password' placeholder='Confirm Password'/>
             <span id="confirmPassError" className={"invisible absolute top-0"}>Password does not match</span>
             </div>
 
