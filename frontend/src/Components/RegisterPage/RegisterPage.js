@@ -6,9 +6,14 @@ import TextInputBoxWithIcon from "../LoginPage/TextInputBoxWithIcon";
 import BinaryOption from "../Buttons/BinaryOption";
 import {useState} from "react";
 import { validateField, setVisible } from "../Validation/validate";
+import axios from "axios";
+import { useNavigate } from 'react-router-dom';
 
 function RegisterPage() {
   const [errorMsg] = useState("")
+  const [role, setRole] = useState("Seeker-Fields");
+  const navigate = useNavigate();
+
   const checkPasswordMatch = function(){
     let pass = document.getElementById("password").value;
     let confirmPass = document.getElementById("confirmPass").value;
@@ -22,18 +27,58 @@ function RegisterPage() {
     }
   }
   function signUpButton() {
-    // let email = document.getElementById("email").value;
-    // let password = document.getElementById("password").value;
-    // let rememberLogin = document.getElementById("rememberLogin").checked;
-    // TODO: Make API call to retrieve JWTs.
-    // TODO: Redirect to home page.
+      const formData = new FormData();
+
+      const email = document.getElementById("email").value;
+      formData.append('email', email);
+
+      const password = document.getElementById("password").value;
+      formData.append('password', password);
+
+      let type;
+      if (role === "Seeker-Fields") {
+        type = "searcher";
+        const firstName = document.getElementById("FirstName").value;
+        formData.append('firstName', firstName);
+        const lastName = document.getElementById("LastName").value;
+        formData.append('lastName', lastName);
+      }
+
+      if (role === "Company-Fields") {
+          type = "company";
+          const companyName = document.getElementById("CompanyName").value;
+          formData.append('companyName', companyName);
+      }
+
+      formData.append('userType', type);
+      formData.append('pfpUrl', '');
+      formData.append('location', '');
+
+      axios.post('http://localhost:8000/auth/register', formData)
+          .then(response => {
+              if (response.data.access !== undefined && response.data.refresh !== undefined) {
+                  localStorage.setItem("access", response.data.access);
+                  localStorage.setItem("refresh", response.data.refresh);
+                  navigate('/');
+              }
+              else {
+                  // TODO: Display error message.
+                  console.log(response.data);
+              }
+          })
+          .catch(error => {
+              // TODO: Display error message.
+              console.error(error);
+          });
   }
-  function toggleRole(role){
+  function toggleRole(role) {
     let curRole = role === "Seeker-Fields" ? "Company-Fields" : "Seeker-Fields";
     let newRole = document.getElementById(role);
-    setVisible(curRole,false)
+    setRole(role, newRole.id);
+    setVisible(curRole,false);
     newRole.className = "space-x-2"
   }
+
   function togglePasswordVisibility(field, icon) {
     if (document.readyState === "complete") {
       let passwordField = document.getElementById(field);
@@ -72,8 +117,7 @@ function RegisterPage() {
             </div>
 
             <div className={"w-full"}>
-              {/*eslint-disable-next-line*/}
-            <TextInputBox id='email' className="w-full" onBlur={()=>{validateField("email",/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/)}} placeholder='Email address'/>
+            <TextInputBox id='email' className="w-full" onBlur={()=>{validateField("email",/^\w+(-?\w+)*@\w+(-?\w+)*(\.\w{2,3})+$/)}} placeholder='Email address'/>
             <span id="emailError" className={"invisible absolute top-0"}>Invalid Email</span>
             </div>
 
