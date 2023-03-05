@@ -14,7 +14,7 @@ export type Handler = (req: Request, res: Response, next: NextFunction) => void;
 export type HandlerWrapper = (db: DB) => Handler;
 
 export interface Token {
-    id: string,
+    username: string,
     type: string,
     exp: number
 }

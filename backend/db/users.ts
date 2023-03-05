@@ -1,70 +1,187 @@
-import User from "../models/user";
+import {Company, Searcher, User} from "../models/user";
 import DB from "./db";
+import {deleteJobsByCompanyID} from "./jobs";
 
-export async function CreateUser(db: DB, user: User) {
-    const docRef = db.UserCollection().doc(user.idField);
 
-    await docRef.set({
-        idField: user.idField,
-        firstName: user.firstName,
-        lastName: user.lastName,
+export async function createUser(db: DB, user: User) {
+    const baseUser: Omit<User, 'companyID' | 'searcherID'> = {
+        userID: user.userID,
         email: user.email,
         hashedPassword: user.hashedPassword,
-        isCompany: user.isCompany,
-        companyName: user.companyName,
         pfpUrl: user.pfpUrl,
         location: user.location,
-        savedJobs: user.savedJobs,
         notifications: user.notifications,
-    });
-}
+    };
 
-export async function RetrieveUserById(db: DB, id: string): Promise<User | null> {
-    const docRef = db.UserCollection().doc(id);
-    const doc = await docRef.get();
+    let type: 'company' | 'searcher' | null = null;
+    let typeID: string | null = null;
 
-    if (doc.exists) {
-        return doc.data() as User;
-    } else {
-        return null;
+    if (user.companyID) {
+        const companyUser: Company = {
+            ...baseUser,
+            companyID: user.companyID,
+            companyName: (user as Company).companyName,
+        };
+        await db.CompanyCollection().doc(user.companyID).set(companyUser);
+        type = 'company';
+        typeID = user.companyID;
+    } else if (user.searcherID) {
+        const searcherUser: Searcher = {
+            ...baseUser,
+            searcherID: user.searcherID,
+            firstName: (user as Searcher).firstName,
+            lastName: (user as Searcher).lastName,
+            savedJobs: (user as Searcher).savedJobs,
+        };
+        await db.SearcherCollection().doc(user.searcherID).set(searcherUser);
+        type = 'searcher';
+        typeID = user.searcherID;
+    }
+
+    if (type && typeID && baseUser) {
+        await db.UserCollection().doc(user.userID).set({
+            ...baseUser,
+            [`${type}ID`]: typeID,
+        } as User);
     }
 }
 
-export async function RetrieveUserByEmail(db: DB, email: string): Promise<User | null> {
-    const snapshot = await db.UserCollection().where('email', '==', email).get();
+export async function retrieveUserById(db: DB, id: string): Promise<Company | Searcher | null> {
+    let docRef = db.UserCollection().doc(id)
+    let doc = await docRef.get();
 
-    if (snapshot.size === 0) {
-        return null;
+    if (doc.exists) {
+        const data = doc.data() as Company | Searcher;
+        if (data.companyID) {
+            docRef = db.CompanyCollection().doc(data.companyID);
+            doc = await docRef.get();
+            return doc.data() as Company;
+        } else if (data.searcherID) {
+            docRef = db.SearcherCollection().doc(data.searcherID);
+            doc = await docRef.get();
+            return doc.data() as Searcher;
+        } else {
+            throw new Error('Not a User type');
+        }
+    } else {
+        return null
+    }
+}
+
+export async function retrieveUserByEmail(db: DB, email:string): Promise<Company | Searcher | null> {
+    const companySnapshot = await db.CompanyCollection().where('email', '==', email).get();
+    const searcherSnapshot = await db.SearcherCollection().where('email', '==', email).get();
+
+    let snapshot: FirebaseFirestore.QuerySnapshot<User>;
+    if (!companySnapshot.empty) {
+        snapshot = companySnapshot as FirebaseFirestore.QuerySnapshot<User>;
+    } else if (!searcherSnapshot.empty) {
+        snapshot = searcherSnapshot as FirebaseFirestore.QuerySnapshot<User>;
+    } else {
+        return null
     }
 
     const doc = snapshot.docs[0];
-    return doc.data() as User;
+    return doc.data() as Company | Searcher;
 }
 
-export async function UpdateUser(db: DB, user: User): Promise<void> {
-    const docRef = db.UserCollection().doc(user.idField);
+export async function updateUser(db: DB, user: Company | Searcher): Promise<void> {
+    const { userID, ...userData } = user;
+
+    let companyDocRef: FirebaseFirestore.DocumentReference;
+    let userDocRef: FirebaseFirestore.DocumentReference;
+    userDocRef = db.UserCollection().doc(userID);
+
+    if ('companyID' in user) {
+        companyDocRef = db.CompanyCollection().doc((user as unknown as Company).companyID);
+    } else if ('searcherID' in user) {
+        companyDocRef = db.SearcherCollection().doc((user as unknown as Searcher).searcherID);
+    } else {
+        throw new Error('Invalid user type');
+    }
+
+    const companyUpdate = companyDocRef.update(userData);
+
+    const baseData: { [key: string]: any } = {};
+    const updateKeys = ['email', 'hashedPassword', 'pfpUrl', 'location', 'notifications', 'companyID', 'searcherID'];
+    for (const key in user) {
+        if (updateKeys.includes(key)) {
+            baseData[key] = (user as any)[key];
+        }
+    }
+
+    const userUpdate = userDocRef.update(baseData);
 
     try {
-        await docRef.update({
-            idField: user.idField,
-            firstName: user.firstName,
-            lastName: user.lastName,
-            email: user.email,
-            hashedPassword: user.hashedPassword,
-            isCompany: user.isCompany,
-            companyName: user.companyName,
-            pfpUrl: user.pfpUrl,
-            location: user.location,
-            savedJobs: user.savedJobs,
-            notifications: user.notifications,
-        })
+        await Promise.all([companyUpdate, userUpdate]);
     } catch (err) {
-        throw err
+        throw err;
     }
 }
 
-export async function DeleteUser(db: DB, id: string) {
-    const docRef = db.UserCollection().doc(id);
 
-    await docRef.delete();
+export async function deleteUser(db: DB, userID: string): Promise<void> {
+    const to_delete = await retrieveUserById(db, userID);
+    if (!to_delete) {
+        throw new Error(`User with ID ${userID} not found`);
+    }
+
+    const userDocRef = db.UserCollection().doc(to_delete.userID);
+
+    if ('companyID' in to_delete) {
+        const companyDocRef = db.CompanyCollection().doc(to_delete?.companyID!);
+        await deleteJobsByCompanyID(db, to_delete?.companyID!);
+        await companyDocRef.delete();
+    } else if ('searcherID' in to_delete) {
+        const searcherDocRef = db.SearcherCollection().doc(to_delete?.searcherID!);
+        await searcherDocRef.delete();
+    }
+    await userDocRef.delete();
 }
+
+export async function GetUserID(db: DB, id: string): Promise<string | null> {
+    if (!id) {
+        return null;
+    }
+
+    const companyDoc = await db.CompanyCollection().doc(id).get();
+    if (companyDoc.exists) {
+        const userID = companyDoc.data()?.userID;
+        return userID ?? null;
+    }
+
+    const searcherDoc = await db.SearcherCollection().doc(id).get();
+    if (searcherDoc.exists) {
+        const userID = searcherDoc.data()?.userID;
+        return userID ?? null;
+    }
+
+    return null;
+}
+
+
+export async function GetAllSearcherIds(db: DB): Promise<string[]> {
+    const snapshot = await db.SearcherCollection().get();
+    const searcherIds: string[] = [];
+
+    snapshot.forEach(doc => {
+        const userId = doc.id;
+        searcherIds.push(userId);
+    });
+
+    return searcherIds;
+}
+
+export async function GetAllCompanyIds(db: DB): Promise<string[]> {
+    const snapshot = await db.CompanyCollection().get();
+    const companyIds: string[] = [];
+
+    snapshot.forEach(doc => {
+        const companyId = doc.id;
+        companyIds.push(companyId);
+    });
+
+    return companyIds;
+}
+
+
