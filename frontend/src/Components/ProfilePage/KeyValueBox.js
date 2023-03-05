@@ -7,9 +7,16 @@ export default function KeyValueBox(props) {
     }
     return (
         <div id={props.name + props.id}>
-            <input className={"key"} placeholder={props.name}/>
             <button className={"delete"} onClick={deleteSkill}><i className="fa-solid fa-trash"></i></button>
-            <input className={"duration"} placeholder={"Duration"} type={"number"}/>
+            <input className={"key"} placeholder={props.name}/>
+            <div className={"duration"}>
+                <input className={"w-[50%]"} placeholder={"Duration"} type={"number"} min={"0"}/>
+                <select className={"w-[50%]"}>
+                    <option value={"weeks"}>Week/s</option>
+                    <option value={"months"}>Month/s</option>
+                    <option value={"years"}>Year/s</option>
+                </select>
+            </div>
         </div>
     );
 }
