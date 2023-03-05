@@ -186,7 +186,7 @@ function GetRandomStatus(): string {
 //=====================================================NOTIFICATIONS=====================================================
 
 async function generateSearcherNotification(db: DB, searcherID: string): Promise<Notification | undefined> {
-    const applications = await GetApplicationsByFilter(db, "searcherID", searcherID);
+    const applications = await GetApplicationsByFilter(db, {"searcherID":searcherID});
     const userID = await GetUserID(db, searcherID)
 
     if (!userID){
