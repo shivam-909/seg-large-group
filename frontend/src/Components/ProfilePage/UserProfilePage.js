@@ -38,7 +38,7 @@ function UserProfilePage() {
         }
     }
     function validateSkills(){
-        var skillsInputs = document.getElementsByClassName("skill");
+        var skillsInputs = document.getElementsByClassName("key");
         var durationsInputs = document.getElementsByClassName("duration");
         for(var i = 0; i < skillsInputs.length; i++) {
             if (skillsInputs[i].value === "" || durationsInputs[i].value === ""){
@@ -49,7 +49,7 @@ function UserProfilePage() {
     }
     function saveSkills(){
         toggleSkills(true);
-        var skillsInputs = document.getElementsByClassName("skill");
+        var skillsInputs = document.getElementsByClassName("key");
         var durationsInputs = document.getElementsByClassName("duration");
         profile.skills = []
         for(var i = 0; i < skillsInputs.length; i++) {
@@ -57,7 +57,7 @@ function UserProfilePage() {
         }
     }
     function toggleSkills(flag){
-        var skillsInputs = document.getElementsByClassName("skill");
+        var skillsInputs = document.getElementsByClassName("key");
         var durationsInputs = document.getElementsByClassName("duration");
         // var names = '';
         for(var i = 0; i < skillsInputs.length; i++) {
