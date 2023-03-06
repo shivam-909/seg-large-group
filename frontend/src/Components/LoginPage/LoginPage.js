@@ -5,10 +5,10 @@ import hideIcon from '../../icons/hideIcon.png';
 import TextInputBoxWithIcon from "./TextInputBoxWithIcon";
 import {validateField} from "../Validation/validate";
 import { useNavigate } from 'react-router-dom';
+import axios from "axios";
 
 function LoginPage() {
   const navigate = useNavigate();
-  const axios = require('axios');
 
   function loginButton() {
     let email = document.getElementById("email").value;
@@ -64,8 +64,8 @@ function LoginPage() {
           <div className='bg-white rounded-md sm:min-w-1/6 inline-grid px-12 py-7 space-y-3'>
             <p className='mb-6 font-bold text-2xl flex justify-center'>Sign in to your account</p>
 
-            <div className={"w-full"}>
-              <TextInputBox id='email' cache={localStorage.getItem("email")} className="w-full" onChange={()=>{validateField("email",/^\w+(-?\w+)*@\w+(-?\w+)*(\.\w{2,3})+$/)}} placeholder='Email address'/>
+            <div>
+              <TextInputBox id='email' cache={localStorage.getItem("email")} className="w-full" onBlur={()=>{validateField("email",/^\w+(-?\w+)*@\w+(-?\w+)*(\.\w{2,10})+$/)}} placeholder='Email address'/>
               <span id="emailError" className={"invisible absolute top-0"}>Invalid Email</span>
             </div>
 
