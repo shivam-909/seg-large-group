@@ -3,7 +3,7 @@ import {useState} from "react";
 import TempCard from "./TempCard";
 import TempDetail from "./TempDetail";
 import Filters from "./Filters";
-import NewNavbar from "../Navbar/NewNavbar";
+import Navbar from "../Navbar/Navbar";
 
 function SearchPage() {
     const [jobs, setJobs] = useState([]);
@@ -35,7 +35,7 @@ function SearchPage() {
 
     return (
         <div>
-            <NewNavbar/>
+            <Navbar/>
             <div className='mt-24 space-y-5 flex-col'>
                 <SearchBar onclick={showResults} onJobTitleInputChange={() => setShowJobTitleInputErrorMessage(false)} onLocationInputChange={() => setShowLocationInputErrorMessage(false)} displayJobTitleInputErrorMessage={showJobTitleInputErrorMessage} displayLocationInputErrorMessage={showLocationInputErrorMessage}/>
                 {jobs.length > 0 ?

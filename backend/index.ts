@@ -24,7 +24,8 @@ import {
     AddApplication,
     GetApplication,
     updateApplicationRoute,
-    deleteApplicationRoute
+    deleteApplicationRoute,
+    getApplicationByFilterRoute
 } from "./service/routes/applications";
 import { AuthMW, ErrorMW } from './service/middleware';
 import {deseed} from "./seeder/deseeder";
@@ -68,10 +69,12 @@ export const run = () => {
     app.delete('/jobs/:id', upload.none(), Route(app, deleteListingRoute));
 
 
+    app.get('/applications/filter', upload.none(), Route(app, getApplicationByFilterRoute));
     app.post('/applications/add', upload.none(), Route(app, AddApplication));
-    app.get('/applications/:id', Route(app, GetApplication));
-    app.patch('/applications/:id', upload.none(), Route(app, updateApplicationRoute));
-    app.delete('/applications/:id', upload.none(), Route(app, deleteApplicationRoute));
+    app.get('/applications/get/:id', Route(app, GetApplication));
+    app.patch('/applications/update/:id', upload.none(), Route(app, updateApplicationRoute));
+    app.delete('/applications/delete/:id', upload.none(), Route(app, deleteApplicationRoute));
+
 
     app.use((err: any, req: Request, res: Response, next: NextFunction) => {
     console.error(err.stack);
