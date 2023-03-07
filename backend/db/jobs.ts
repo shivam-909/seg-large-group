@@ -95,7 +95,7 @@ export async function GetSavedJobsForSearcher(db: DB, searcherID: string): Promi
   return savedJobs;
 }
 
-export async function GetAllJobIDs(db: DB): Promise<string[]> {
+export async function getAllJobIDs(db: DB): Promise<string[]> {
   const snapshot = await db.JobListingCollection().get();
   const jobIds: string[] = [];
 
@@ -106,6 +106,58 @@ export async function GetAllJobIDs(db: DB): Promise<string[]> {
 
   return jobIds;
 }
+
+export async function getJobListingsByFilter(db: DB, filters: any): Promise<JobListing[]> {
+  let query: FirebaseFirestore.Query<FirebaseFirestore.DocumentData> = db.JobListingCollection();
+
+  for (const [key, value] of Object.entries(filters)) {
+    if (value !== null && value !== undefined && value !== '') {
+      switch (key) {
+        case 'id':
+        case 'title':
+        case 'description':
+        case 'location':
+        case 'schedule':
+        case 'companyID':
+        case 'type':
+          query = query.where(key, '==', value);
+          break;
+        case 'compensation':
+          query = query.where(key, '>=', value);
+          break;
+        case 'datePosted':
+          if (typeof value === 'string' && Date.parse(value)) {
+            const startOfDay = new Date(value);
+            startOfDay.setUTCHours(0, 0, 0, 0);
+            const endOfDay = new Date(value);
+            endOfDay.setUTCHours(23, 59, 59, 999);
+            query = query.where(key, '>=', startOfDay).where(key, '<=', endOfDay);
+          }
+          break;
+        case 'benefits':
+        case 'requirements':
+          query = query.where(key, 'array-contains-any', value);
+          break;
+      }
+    }
+  }
+
+  const jobListingsSnapshot = await query.get();
+
+  const jobListings: JobListing[] = [];
+
+  jobListingsSnapshot.forEach((doc) => {
+    const jobListing = doc.data() as JobListing;
+    jobListings.push(jobListing);
+  });
+
+  return jobListings;
+}
+
+
+
+
+
 
 
 

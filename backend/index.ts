@@ -4,9 +4,21 @@ import DB from './db/db';
 import multer from 'multer';
 import { Echo, HealthCheck, Route } from './service/routes/routes';
 import { ErrorToCode } from './service/public';
-import {addListingRoute, deleteListingRoute, getListingRoute, updateListingRoute} from "./service/routes/jobs";
+import {
+    addListingRoute,
+    deleteListingRoute,
+    getJobListingsByFilterRoute,
+    getListingRoute,
+    updateListingRoute
+} from "./service/routes/jobs";
 import {seedAllRoute} from "./service/routes/seeder";
-import {updateUserRoute, deleteUserRoute, getUserRoute} from "./service/routes/users";
+import {
+    updateUserRoute,
+    deleteUserRoute,
+    getUserRoute,
+    getCompanyRoute,
+    getSearcherRoute
+} from "./service/routes/users";
 import {Login, Refresh, Register} from "./service/routes/auth";
 import {
     AddApplication,
@@ -29,6 +41,7 @@ export const db = new DB();
 export const run = () => {
     dotenv.config();
 
+
     const app: Express = express();
     const port = process.env.PORT || 8000;
 
@@ -47,6 +60,8 @@ export const run = () => {
     app.patch('/notifications/:id', upload.none(), Route(app, updateNotificationRoute));
     app.delete('/notifications/:id', upload.none(), Route(app, deleteNotificationRoute));
 
+
+    app.post('/jobs/filter', upload.none(), Route(app, getJobListingsByFilterRoute));
     app.post('/jobs/add', upload.none(), Route(app, addListingRoute));
     app.get('/jobs/:id', Route(app, getListingRoute));
     app.patch('/jobs/:id', upload.none(), Route(app, updateListingRoute));
@@ -67,6 +82,9 @@ export const run = () => {
     app.get('/user/:id', Route(app, getUserRoute));
     app.patch('/users/:id', upload.none(), Route(app, updateUserRoute));
     app.delete('/user/:id', upload.none(), Route(app, deleteUserRoute));
+
+    app.get('/company/:id', Route(app, getCompanyRoute));
+    app.get('/searcher/:id', Route(app, getSearcherRoute));
 
     app.post('/seed_all', Route(app, seedAllRoute));
     app.delete('/deseed', Route(app, deseed));
