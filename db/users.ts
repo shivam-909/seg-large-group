@@ -46,7 +46,7 @@ export async function createUser(db: DB, user: User) {
     }
 }
 
-export async function retrieveUserById(db: DB, id: string): Promise<Company | Searcher | null> {
+export async function retrieveUserByID(db: DB, id: string): Promise<Company | Searcher | null> {
     let docRef = db.UserCollection().doc(id)
     let doc = await docRef.get();
 
@@ -121,7 +121,7 @@ export async function updateUser(db: DB, user: Company | Searcher): Promise<void
 
 
 export async function deleteUser(db: DB, userID: string): Promise<void> {
-    const to_delete = await retrieveUserById(db, userID);
+    const to_delete = await retrieveUserByID(db, userID);
     if (!to_delete) {
         throw new Error(`User with ID ${userID} not found`);
     }
@@ -139,7 +139,7 @@ export async function deleteUser(db: DB, userID: string): Promise<void> {
     await userDocRef.delete();
 }
 
-export async function GetUserID(db: DB, id: string): Promise<string | null> {
+export async function getUserID(db: DB, id: string): Promise<string | null> {
     if (!id) {
         return null;
     }
@@ -160,7 +160,7 @@ export async function GetUserID(db: DB, id: string): Promise<string | null> {
 }
 
 
-export async function GetAllSearcherIds(db: DB): Promise<string[]> {
+export async function getAllSearcherIDs(db: DB): Promise<string[]> {
     const snapshot = await db.SearcherCollection().get();
     const searcherIds: string[] = [];
 
@@ -172,7 +172,7 @@ export async function GetAllSearcherIds(db: DB): Promise<string[]> {
     return searcherIds;
 }
 
-export async function GetAllCompanyIds(db: DB): Promise<string[]> {
+export async function getAllCompanyIDs(db: DB): Promise<string[]> {
     const snapshot = await db.CompanyCollection().get();
     const companyIds: string[] = [];
 
@@ -183,5 +183,21 @@ export async function GetAllCompanyIds(db: DB): Promise<string[]> {
 
     return companyIds;
 }
+export async function getCompanyfromCompanyID(db: DB, companyID: string): Promise<Company | null> {
+    const companyDoc = await db.CompanyCollection().doc(companyID).get();
+    if (!companyDoc.exists) {
+        return null;
+    }
 
+    return companyDoc.data() as Company;
+}
+
+export async function getSearcherfromSearcherID(db: DB, searcherID: string): Promise<Searcher | null> {
+    const searcherDoc = await db.SearcherCollection().doc(searcherID).get();
+    if (!searcherDoc.exists) {
+        return null;
+    }
+
+    return searcherDoc.data() as Searcher;
+}
 

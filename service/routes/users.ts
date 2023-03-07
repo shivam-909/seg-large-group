@@ -1,6 +1,12 @@
 import { NextFunction, Request, Response } from "express";
 import DB from "../../db/db";
-import {deleteUser, retrieveUserById, updateUser} from "../../db/users";
+import {
+    deleteUser,
+    getCompanyfromCompanyID,
+    getSearcherfromSearcherID,
+    retrieveUserByID,
+    updateUser
+} from "../../db/users";
 import { getErrorMessage, Handler } from "../public";
 
 export function getUserRoute(db: DB): Handler {
@@ -8,7 +14,7 @@ export function getUserRoute(db: DB): Handler {
         const id = req.params.id;
 
         try {
-            const user = await retrieveUserById(db, id);
+            const user = await retrieveUserByID(db, id);
             if (user) {
                 res.status(200).json(user);
             } else {
@@ -30,7 +36,7 @@ export function updateUserRoute(db: DB): Handler {
         const userData = req.body;
 
         try {
-            const user = await retrieveUserById(db, id);
+            const user = await retrieveUserByID(db, id);
             if (!user) {
                 return res.status(404).json({
                     msg: `User ${id} not found`
@@ -69,5 +75,46 @@ export function deleteUserRoute(db: DB): Handler {
 }
 
 
+export function getCompanyRoute(db: DB): Handler {
+    return async (req: Request, res: Response, next: NextFunction) => {
+        const id = req.params.id;
+
+        try {
+            const user = await getCompanyfromCompanyID(db, id);
+            if (user) {
+                res.status(200).json(user);
+            } else {
+                res.status(404).json({
+                    message: `Company ${id} not found`
+                });
+            }
+        } catch (err) {
+            next({
+                message: getErrorMessage(err),
+            });
+        }
+    };
+}
+
+export function getSearcherRoute(db: DB): Handler {
+    return async (req: Request, res: Response, next: NextFunction) => {
+        const id = req.params.id;
+
+        try {
+            const user = await getSearcherfromSearcherID(db, id);
+            if (user) {
+                res.status(200).json(user);
+            } else {
+                res.status(404).json({
+                    message: `Searcher ${id} not found`
+                });
+            }
+        } catch (err) {
+            next({
+                message: getErrorMessage(err),
+            });
+        }
+    };
+}
 
 
