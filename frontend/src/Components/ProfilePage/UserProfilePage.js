@@ -1,11 +1,28 @@
 import './ProfilePage.css';
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import Navbar from "../Navbar/Navbar";
 import Skills from "./Skills";
 import {setVisible} from "../Validation/validate";
 import ErrorBox from "../ErrorBox/ErrorBox";
 import Education from "./Education";
+import axios from "axios";
+import KeyValueBox from "./KeyValueBox";
 function UserProfilePage() {
+    useEffect(() => {
+        getProfileData();
+    },[])
+    async function getProfileData(){
+        const token = localStorage.getItem("access");
+        const userID = await axios.post('http://localhost:8000/api/echo', {}, {headers: {Authorization: `Bearer ${token}`}}).then(response => { return response.data});
+        axios.get("http://localhost:8000/user/"+userID).then(response => {
+            setMyProfile(prevProfile => ({
+                ...prevProfile,
+                firstName: response.data.firstName,
+                lastName: response.data.lastName,
+                email: response.data.email,
+            }));
+        })
+    }
     const[profile, setMyProfile] = useState({
       firstName:"",
       lastName:"",
@@ -29,8 +46,11 @@ function UserProfilePage() {
             setVisible("errorBox", true)
         }
       else {
-          profile.firstName = firstName;
-          profile.lastName = lastName;
+            setMyProfile(prevProfile => ({
+                ...prevProfile,
+                firstName: firstName,
+                lastName: lastName,
+            }));
         setIsEditing(false);
         saveSkills();
         saveEducation();

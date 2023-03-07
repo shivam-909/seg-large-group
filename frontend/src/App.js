@@ -3,6 +3,7 @@ import LoginPage from './Components/LoginPage/LoginPage';
 import SearchPage from './Components/SearchPage/SearchPage';
 import RegisterPage from "./Components/RegisterPage/RegisterPage";
 import PrivateRoutes from "./Auth/PrivateRoute";
+import UserProfilePage from "./Components/ProfilePage/UserProfilePage";
 
 export default function App() {
     return (
@@ -13,6 +14,7 @@ export default function App() {
               <Route path="/" element={ <SearchPage/> }/>
               <Route path="/login" element={ <LoginPage/> }/>
               <Route path="/signup" element={ <RegisterPage/> }/>
+              <Route path="/profile" element={ <UserProfilePage/> }/>
           </Routes>
       </BrowserRouter>
   );

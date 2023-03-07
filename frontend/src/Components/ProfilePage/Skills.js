@@ -3,8 +3,8 @@ import {useState} from "react";
 import KeyValueBox from "./KeyValueBox";
 
 export default function Skills(props) {
-    const [count, setCount] = useState(0);
     const [skills, setSkills] = useState([]);
+    const [count, setCount] = useState(skills.length);
 
     function createSkill(){
         setSkills( [...skills, <KeyValueBox name={"Skill"} id={count}/>]);
