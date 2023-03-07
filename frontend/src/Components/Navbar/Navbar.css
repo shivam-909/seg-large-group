@@ -1,7 +1,6 @@
 .navbar {
     z-index: 1;
     list-style-type: none;
-    margin: 0;
     padding: 0;
     overflow: hidden;
     background-color: white;
@@ -9,7 +8,7 @@
     top: 0;
     width: 100%;
     border-bottom-width: 2px;
-    border-bottom-color: gray;
+    border-bottom-color: #ccc;
   }
   
   .navbar li a {
@@ -33,8 +32,8 @@
   }
   .topnav #expandProfile {
     display: none;
-    position: absolute;
-    right: 0px;
+    position: fixed;
+    right: 0;
     background-color: white;
     border-radius: 5px;
   }
