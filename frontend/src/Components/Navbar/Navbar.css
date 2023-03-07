@@ -1,6 +1,5 @@
-ul {
+.navbar {
     list-style-type: none;
-    margin: 0;
     padding: 0;
     overflow: hidden;
     background-color: white;
@@ -8,14 +7,10 @@ ul {
     top: 0;
     width: 100%;
     border-bottom-width: 2px;
-    border-bottom-color: gray;
+    border-bottom-color: #ccc;
   }
   
-  li {
-    float: left;
-  }
-  
-  li a {
+  .navbar li a {
     border-bottom-width: 4px;
       border-bottom-color: white;
       display: block;
@@ -24,9 +19,9 @@ ul {
     padding: 14px 16px;
     text-decoration: none;
   }
-  
+
   /* Change the link color to #111 (black) on hover */
-  li a:hover {
+  .navbar li a:hover {
     background-color: rgba(79, 138, 247, 20%);
     border-bottom-color: rgba(79, 138, 247, 70%);
   }
@@ -37,10 +32,9 @@ ul {
   .topnav #expandProfile {
     display: none;
     position: fixed;
-    right: 0px;
+    right: 0;
     background-color: white;
     border-radius: 5px;
-
   }
   .topnav #expandProfile a:hover {
     left: 0px;

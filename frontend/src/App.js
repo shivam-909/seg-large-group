@@ -1,16 +1,19 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-
-import UserProfilePage from './Components/ProfilePage/UserProfilePage';
+import LoginPage from './Components/LoginPage/LoginPage';
 import SearchPage from './Components/SearchPage/SearchPage';
-import EmployerProfilePage from "./Components/ProfilePage/EmployerProfilePage";
+import RegisterPage from "./Components/RegisterPage/RegisterPage";
+import PrivateRoutes from "./Auth/PrivateRoute";
 
 export default function App() {
-  return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/profile" element={ <UserProfilePage/> }/>
-        <Route path="/search" element={ <SearchPage/> }/>
-      </Routes>
-    </BrowserRouter>
+    return (
+      <BrowserRouter>
+          <Routes>
+              <Route element={<PrivateRoutes/>}>
+              </Route>
+              <Route path="/" element={ <SearchPage/> }/>
+              <Route path="/login" element={ <LoginPage/> }/>
+              <Route path="/signup" element={ <RegisterPage/> }/>
+          </Routes>
+      </BrowserRouter>
   );
 }
