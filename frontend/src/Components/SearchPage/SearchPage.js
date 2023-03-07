@@ -3,7 +3,6 @@ import {useState} from "react";
 import TempCard from "./TempCard";
 import TempDetail from "./TempDetail";
 import Filters from "./Filters";
-import NewNavbar from "../Navbar/NewNavbar";
 import Navbar from "../Navbar/Navbar";
 
 function SearchPage() {
