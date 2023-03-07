@@ -69,7 +69,7 @@ export const run = () => {
     app.delete('/jobs/:id', upload.none(), Route(app, deleteListingRoute));
 
 
-    app.get('/applications/filter', upload.none(), Route(app, getApplicationByFilterRoute));
+    app.post('/applications/filter', upload.none(), Route(app, getApplicationByFilterRoute));
     app.post('/applications/add', upload.none(), Route(app, AddApplication));
     app.get('/applications/get/:id', Route(app, GetApplication));
     app.patch('/applications/update/:id', upload.none(), Route(app, updateApplicationRoute));
