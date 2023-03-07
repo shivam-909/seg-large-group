@@ -1,7 +1,13 @@
 import { NextFunction, Request, Response } from "express";
 import DB from "../../db/db";
 import JobListing from "../../models/job";
-import {createJobListing, retrieveJobListing, deleteJobListing, updateJobListing} from "../../db/jobs";
+import {
+    createJobListing,
+    retrieveJobListing,
+    deleteJobListing,
+    updateJobListing,
+    getJobListingsByFilter
+} from "../../db/jobs";
 import { getErrorMessage, Handler } from "../public";
 import { randomUUID } from "crypto";
 
@@ -88,4 +94,20 @@ export function deleteListingRoute(db: DB): Handler {
         }
 
     };
+}
+
+
+export function getJobListingsByFilterRoute(db: DB): Handler {
+    return async (req: Request, res: Response, next: NextFunction) => {
+        const filters = req.body;
+        console.log(req.body)
+        try {
+            const jobListings = await getJobListingsByFilter(db, filters);
+            res.status(200).json(jobListings);
+        } catch (err) {
+            next({
+                message: getErrorMessage(err),
+            });
+        }
+    }
 }
