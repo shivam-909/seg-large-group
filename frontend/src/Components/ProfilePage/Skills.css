@@ -22,13 +22,13 @@
   /*width: 42%;*/
   margin: 2px;
   padding: 5px 10px;
-  float: right;
+  /*float: right;*/
 }
 .delete {
   border-width: 2px;
   border-radius: 5px;
   border-color: black;
-  width: 12%;
+  width: 24%;
   margin: 2px;
   padding: 5px;
   float: right;
