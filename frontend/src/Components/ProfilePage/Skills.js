@@ -1,13 +1,13 @@
 import React from "react";
 import {useState} from "react";
-import KeyValueBox from "./KeyValueBox";
+import SkillCard from "./SkillCard";
 
 export default function Skills(props) {
     const [skills, setSkills] = useState([]);
     const [count, setCount] = useState(skills.length);
 
     function createSkill(){
-        setSkills( [...skills, <KeyValueBox name={"Skill"} id={count}/>]);
+        setSkills( [...skills, <SkillCard id={count}/>]);
         setCount(count + 1);
     }
     return (

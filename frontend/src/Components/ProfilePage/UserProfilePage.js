@@ -44,7 +44,7 @@ function UserProfilePage() {
         let firstName = document.getElementById("firstName").value;
         let lastName = document.getElementById("lastName").value;
 
-        if (firstName === "" || lastName === "" || !validateSkills()){
+        if (firstName === "" || lastName === "" || !validateSkills() || !validateEducation()){
             setVisible("errorBox", true)
         }
       else {
@@ -59,10 +59,21 @@ function UserProfilePage() {
             // TODO: Add Backend Update
         }
     }
+    function validateEducation(){
+        let subjects = document.querySelectorAll("[id=subject]");
+        let grades = document.querySelectorAll("[id=grade]");
+        let durations = document.querySelectorAll("[id=educationDuration]");
+        for(let i = 0; i < subjects.length; i++) {
+            if (subjects[i].value === "" || grades[i].value === "" || durations[i].value === ""){
+                return false;
+            }
+        }
+        return true;
+    }
     function validateSkills(){
-        let keyInputs = document.getElementsByClassName("key");
-        let durationsInputs = document.getElementsByClassName("duration");
-        for(var i = 0; i < keyInputs.length; i++) {
+        let keyInputs = document.querySelectorAll("[id=skill]");
+        let durationsInputs = document.querySelectorAll("[id=skillDuration]");
+        for(let i = 0; i < keyInputs.length; i++) {
             if (keyInputs[i].value === "" || durationsInputs[i].value === ""){
                 return false;
             }
