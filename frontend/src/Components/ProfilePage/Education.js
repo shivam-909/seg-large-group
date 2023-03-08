@@ -1,13 +1,16 @@
-import React from "react";
+import React, {useEffect} from "react";
 import {useState} from "react";
-import KeyValueBox from "./KeyValueBox";
+import EducationDropdown from "./EducationDropdown";
 
 export default function Education(props) {
     const [education, setEducation] = useState([]);
     const [count, setCount] = useState(education.length);
-
+    const [editing, setEdit] = useState(props.isEditing)
+    useEffect(() => {
+        setEdit(props.isEditing);
+    },[props.isEditing])
     function createSkill(){
-        setEducation( [...education, <KeyValueBox name={"Education"} id={count}/>]);
+        setEducation( [...education, <EducationDropdown name={"Education"} id={count} editing={editing}/>]);
         setCount(count + 1);
     }
     return (

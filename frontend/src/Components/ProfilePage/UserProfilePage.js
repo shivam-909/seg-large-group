@@ -6,7 +6,7 @@ import {setVisible} from "../Validation/validate";
 import ErrorBox from "../ErrorBox/ErrorBox";
 import Education from "./Education";
 import axios from "axios";
-import KeyValueBox from "./KeyValueBox";
+
 function UserProfilePage() {
     useEffect(() => {
         getProfileData();
@@ -35,7 +35,7 @@ function UserProfilePage() {
     const[fileName, setFile]= useState('');
 
     function EditOnClick(){
-        toggleKeys(false);
+        // toggleKeys(false);
       setIsEditing(true);
     }
     function SaveOnClick(){
@@ -52,8 +52,6 @@ function UserProfilePage() {
                 lastName: lastName,
             }));
         setIsEditing(false);
-        saveSkills();
-        saveEducation();
         setVisible("errorBox", false)
             // TODO: Add Backend Update
         }
@@ -68,33 +66,15 @@ function UserProfilePage() {
         }
         return true;
     }
-    function saveSkills(){
-        toggleKeys(true);
-        let keyInputs = document.querySelectorAll("[id=Skillkey]");
-        let durationsInputs = document.querySelectorAll("[id=Skillduration]");
-        profile.skills = []
-        for(let i = 0; i < keyInputs.length; i++) {
-            profile.skills.push([keyInputs[i].value,durationsInputs[i].value]);
-        }
-    }
-    function saveEducation(){
-        toggleKeys(true);
-        let keyInputs = document.querySelectorAll("[id=Educationkey]");
-        let durationsInputs = document.querySelectorAll("[id=Educationduration]");
-        profile.education = []
-        for(let i = 0; i < keyInputs.length; i++) {
-            profile.education.push([keyInputs[i].value,durationsInputs[i].value]);
-        }
-    }
-    function toggleKeys(flag){
-        let keyInputs = document.getElementsByClassName("key");
-        let durationsInputs = document.getElementsByClassName("duration");
-        // var names = '';
-        for(var i = 0; i < keyInputs.length; i++) {
-            keyInputs[i].disabled = flag;
-            durationsInputs[i].disabled = flag;
-        }
-    }
+    // function toggleKeys(flag){
+    //     let keyInputs = document.getElementsByClassName("key");
+    //     let durationsInputs = document.getElementsByClassName("duration");
+    //     // var names = '';
+    //     for(var i = 0; i < keyInputs.length; i++) {
+    //         keyInputs[i].disabled = flag;
+    //         durationsInputs[i].disabled = flag;
+    //     }
+    // }
     function updateCV(event){
       const{files} = event.target;
         const file = event.target.files[0];

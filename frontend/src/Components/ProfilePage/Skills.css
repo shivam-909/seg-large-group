@@ -10,11 +10,19 @@
   padding-bottom: 5px;
   float: left;
 }
+.grade {
+  border-width: 2px;
+  border-radius: 5px;
+  border-color: black;
+  width: 45%;
+  margin: 2px 4px;
+  padding: 5px 10px;
+}
 .value {
   border-width: 2px;
   border-radius: 5px;
   border-color: black;
-  width: 42%;
+  /*width: 42%;*/
   margin: 2px;
   padding-left: 10px;
   padding-right: 10px;
