@@ -1,6 +1,6 @@
 import Notification from "../models/notification";
 import DB from "./db";
-import {retrieveUserById, updateUser} from "./users";
+import {retrieveUserByID, updateUser} from "./users";
 
 export async function createNotification(db: DB, notification: Notification): Promise<Notification> {
     const docRef = db.NotificationCollection().doc(notification.id);
@@ -15,7 +15,7 @@ export async function createNotification(db: DB, notification: Notification): Pr
         throw err;
     }
 
-    user = await retrieveUserById(db, notification.userID)
+    user = await retrieveUserByID(db, notification.userID)
 
     if (user == null) {
         throw new Error("user is null")

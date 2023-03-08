@@ -8,10 +8,10 @@ import Notification from "../../models/notification";
 
 export function addNotificationRoute(db: DB): Handler {
     return async (req: Request, res: Response, next: NextFunction) => {
-        const { content, application, userID } = req.body;
+        const { content, applicationID, userID } = req.body;
         const newID = randomUUID();
         const created = new Date();
-        const newNotification = new Notification(newID, content, application, created, userID);
+        const newNotification = new Notification(newID, content, applicationID, created, userID);
 
         try {
             let notification = await createNotification(db, newNotification);
