@@ -38,6 +38,7 @@ function UserProfilePage() {
     function EditOnClick(){
         // toggleKeys(false);
       setIsEditing(true);
+        toggleKeys(true);
     }
     function SaveOnClick(){
         let firstName = document.getElementById("firstName").value;
@@ -53,6 +54,7 @@ function UserProfilePage() {
                 lastName: lastName,
             }));
         setIsEditing(false);
+        toggleKeys(false);
         setVisible("errorBox", false)
             // TODO: Add Backend Update
         }
@@ -67,15 +69,12 @@ function UserProfilePage() {
         }
         return true;
     }
-    // function toggleKeys(flag){
-    //     let keyInputs = document.getElementsByClassName("key");
-    //     let durationsInputs = document.getElementsByClassName("duration");
-    //     // var names = '';
-    //     for(var i = 0; i < keyInputs.length; i++) {
-    //         keyInputs[i].disabled = flag;
-    //         durationsInputs[i].disabled = flag;
-    //     }
-    // }
+    function toggleKeys(flag){
+        let inputs = document.querySelectorAll('[editable="true"]')
+        for(let i = 0; i < inputs.length; i++) {
+            inputs[i].disabled = !flag;
+        }
+    }
     function updateCV(event){
       const{files} = event.target;
         const file = event.target.files[0];
