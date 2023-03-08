@@ -4,18 +4,15 @@
   border-color: black;
   width: 42%;
   margin: 2px;
-  padding-left: 10px;
-  padding-right: 10px;
-  padding-top: 5px;
-  padding-bottom: 5px;
+  padding: 5px 10px;
   float: left;
 }
 .grade {
   border-width: 2px;
   border-radius: 5px;
   border-color: black;
-  width: 45%;
-  margin: 2px 4px;
+  /*width: 45%;*/
+  margin: 2px;
   padding: 5px 10px;
 }
 .value {
@@ -24,10 +21,7 @@
   border-color: black;
   /*width: 42%;*/
   margin: 2px;
-  padding-left: 10px;
-  padding-right: 10px;
-  padding-top: 5px;
-  padding-bottom: 5px;
+  padding: 5px 10px;
   float: right;
 }
 .delete {

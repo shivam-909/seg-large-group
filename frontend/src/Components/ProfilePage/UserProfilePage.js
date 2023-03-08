@@ -6,6 +6,7 @@ import {setVisible} from "../Validation/validate";
 import ErrorBox from "../ErrorBox/ErrorBox";
 import Education from "./Education";
 import axios from "axios";
+import PrivateRoutes from "../../Auth/PrivateRoute";
 
 function UserProfilePage() {
     useEffect(() => {
@@ -87,6 +88,7 @@ function UserProfilePage() {
 
   return (
       <div>
+          <PrivateRoutes/>
           <Navbar/>
         <div className='bg-lighter-grey min-h-screen items-center justify-center flex'>
             <div className='bg-white rounded-md sm:min-w-1/6 inline-grid px-12 py-7 space-y-3 mt-24 max-w-lg min-w-[40%]'>
