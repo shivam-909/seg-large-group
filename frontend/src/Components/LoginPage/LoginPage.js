@@ -6,6 +6,8 @@ import TextInputBoxWithIcon from "./TextInputBoxWithIcon";
 import {validateField} from "../Validation/validate";
 import { useNavigate } from 'react-router-dom';
 import axios from "axios";
+import ErrorBox from "../ErrorBox/ErrorBox";
+import {setVisible} from "../Validation/validate";
 
 function LoginPage() {
   const navigate = useNavigate();
@@ -38,12 +40,12 @@ function LoginPage() {
           }
           else {
             // TODO: Display error message.
-            console.log(response.data);
+            setVisible("errorBox", true);
           }
         })
         .catch(error => {
           // TODO: Display error message.
-          console.error(error);
+          setVisible("errorBox", true);
         });
   }
 
@@ -75,7 +77,7 @@ function LoginPage() {
               <input id='rememberLogin' type='checkbox' className='w-4 h-4 inline-block accent-dark-theme-grey' defaultChecked={localStorage.getItem("rememberLogin")}/>
               <p>Keep me signed in</p>
             </div>
-
+            <ErrorBox message={"Invalid Login Details"}/>
             <div className='p-0.5'></div>
 
             <button className='bg-dark-theme-grey rounded-md text-white p-2.5 flex items-center justify-center space-x-2' onClick={loginButton}>
