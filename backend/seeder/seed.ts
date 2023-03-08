@@ -11,6 +11,8 @@ import {Status} from "../models/enums/status.enum";
 import {companyNotification, searcherNotification} from "../models/enums/userNotification.enum";
 import {createNotification} from "../db/notifications";
 import Notification from "../models/notification";
+import {Error, getErrorMessage} from "../service/public";
+import bcrypt from "bcrypt";
 
 //CONTROL
 const numCompanies = 2
@@ -31,7 +33,7 @@ async function generateCompany(): Promise<Company> {
         id,
         companyName,
         email,
-        faker.internet.password(),
+        hashPassword("Password123!"),
         faker.image.avatar(),
         faker.address.city(),
         notifications,
@@ -69,7 +71,7 @@ async function generateSearcher(db: DB): Promise<Searcher> {
         firstName,
         lastName,
         email,
-        faker.internet.password(),
+        hashPassword("Password123!"),
         faker.image.avatar(),
         faker.address.city(),
         savedJobs,
@@ -98,6 +100,20 @@ export async function seedSearchers(db: DB): Promise<void> {
 export async function retrieveRandomSearcherId(db: DB): Promise<string> {
     const searcherIds = await getAllSearcherIDs(db);
     return searcherIds[Math.floor(Math.random() * searcherIds.length)];
+}
+
+export function hashPassword(password: string): string {
+    const hash = ((): string | Error => {
+        try {
+            return bcrypt.hashSync(password, 10)
+        } catch (e) {
+            return {
+                message: getErrorMessage(e),
+            }
+        }
+    })();
+
+    return hash as string;
 }
 
 
