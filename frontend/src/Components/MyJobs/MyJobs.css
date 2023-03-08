@@ -1,0 +1,11 @@
+.filterJobs {
+  display: inline-block;
+  padding: 2px;
+  margin-right: 10px;
+  margin-left: 10px;
+  font-size: 20px;
+}
+.filters:disabled{
+  border-bottom-color: blue;
+  border-bottom-width: 2px;
+}
