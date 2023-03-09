@@ -55,7 +55,7 @@ export async function DeleteJobsByCompanyID(db: DB, companyId: string) {
   const jobCollectionRef = db.JobListingCollection();
   const jobsSnapshot = await jobCollectionRef.where('companyID', '==', companyId).get();
   jobsSnapshot.forEach(jobDoc => {
-    deleteJobListing(db, jobDoc.id);
+    DeleteJobListing(db, jobDoc.id);
   });
 }
 

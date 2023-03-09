@@ -1,6 +1,6 @@
 import DB from "./db";
 import Application from "../models/application";
-import {firestore} from "firebase-admin";
+import { firestore } from "firebase-admin";
 import QuerySnapshot = firestore.QuerySnapshot;
 
 export async function CreateApplication(db: DB, application: Application) {
@@ -10,7 +10,7 @@ export async function CreateApplication(db: DB, application: Application) {
         'id': application.id,
         'status': application.status,
         'searcher': application.searcher,
-        'jobListing' : application.jobListing
+        'jobListing': application.jobListing
     });
 }
 
@@ -38,7 +38,7 @@ export async function UpdateApplication(db: DB, application: Application): Promi
             'id': application.id,
             'status': application.status,
             'searcher': application.searcher,
-            'jobListing' : application.jobListing
+            'jobListing': application.jobListing
 
 
         })
@@ -50,6 +50,14 @@ export async function UpdateApplication(db: DB, application: Application): Promi
 export async function DeleteApplication(db: DB, id: string) {
     const docRef = db.ApplicationCollection().doc(id);
     await docRef.delete();
+}
+
+export async function DeleteApplicationsForSearcher(db: DB, searcherID: string) {
+    const applications = await GetApplicationsBySearcher(db, searcherID);
+
+    for (const application of applications) {
+        await DeleteApplication(db, application.id);
+    }
 }
 
 export async function GetApplicationsBySearcher(db: DB, searcherID: string): Promise<Application[]> {
