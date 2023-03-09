@@ -119,3 +119,29 @@ export async function GetUserID(db: DB, id: string): Promise<string | null> {
   return null;
 }
 
+
+export async function GetAllSearcherIDs(db: DB): Promise<string[]> {
+  const snapshot = await db.SearcherCollection().get();
+  const searcherIds: string[] = [];
+
+  snapshot.forEach(doc => {
+    const userId = doc.id;
+    searcherIds.push(userId);
+  });
+
+  return searcherIds;
+}
+
+export async function GetAllCompanyIDs(db: DB): Promise<string[]> {
+  const snapshot = await db.CompanyCollection().get();
+  const companyIds: string[] = [];
+
+  snapshot.forEach(doc => {
+    const companyId = doc.id;
+    companyIds.push(companyId);
+  });
+
+  return companyIds;
+}
+
+

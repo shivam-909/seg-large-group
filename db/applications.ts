@@ -72,5 +72,29 @@ export async function GetApplicationsBySearcher(db: DB, searcherID: string): Pro
     return applications;
 }
 
+export async function GetApplicationsByFilter(db: DB, filters: { [key: string]: string }): Promise<Application[]> {
+    let query: FirebaseFirestore.Query<FirebaseFirestore.DocumentData> = db.ApplicationCollection();
+
+    for (const [key, value] of Object.entries(filters)) {
+        if (value !== '') {
+            query = query.where(key, '==', value);
+        }
+    }
+
+    const applicationsSnapshot = await query.get();
+
+    const applications: Application[] = [];
+
+    applicationsSnapshot.forEach((doc) => {
+        const application = doc.data() as Application;
+        applications.push(application);
+    });
+
+    return applications;
+}
+
+
+
+
 
 

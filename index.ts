@@ -2,7 +2,6 @@ import express, { Express, NextFunction, Request, Response } from 'express';
 import dotenv from 'dotenv';
 import DB from './db/db';
 import multer from 'multer';
-import { ErrorToCode } from './service/public';
 import { deseed } from "./seeder/deseeder";
 
 import * as utils from './service/routes/routes';
@@ -14,6 +13,7 @@ import * as applicationroutes from "./service/routes/applications";
 import * as middleware from './service/middleware';
 import * as notificationroutes from "./service/routes/notifications";
 import * as util from './service/routes/routes';
+import cors from 'cors';
 
 export const db = new DB();
 
@@ -27,11 +27,12 @@ export const run = () => {
   const upload = multer();
 
   app.set('db', db);
-
+  app.use(cors());
 
   app.post('/auth/login', upload.none(), utils.Route(app, authroutes.Login));
   app.post('/auth/register', upload.none(), utils.Route(app, authroutes.Register));
   app.post('/auth/refresh', upload.none(), utils.Route(app, authroutes.Refresh));
+
 
   app.post('/api/notifications/add', upload.none(), utils.Route(app, notificationroutes.AddNotification));
   app.get('/api/notifications/:id', utils.Route(app, notificationroutes.GetNotification));
@@ -54,6 +55,12 @@ export const run = () => {
   app.get('/api/user/:id', utils.Route(app, userroutes.GetUser));
   app.patch('/api/users/:id', upload.none(), utils.Route(app, userroutes.UpdateUser));
   app.delete('/api/user/:id', upload.none(), utils.Route(app, userroutes.DeleteUser));
+
+  app.get('/company/:id', utils.Route(app, getCompanyRoute));
+  app.get('/searcher/:id', utils.Route(app, getSearcherRoute));
+
+  app.post('/seed_all', utils.Route(app, seedAllRoute));
+  app.delete('/deseed', utils.Route(app, deseed));
 
   app.post('/api/seed_all', utils.Route(app, seedroutes.SeedAll));
   app.delete('/api/deseed', utils.Route(app, deseed));

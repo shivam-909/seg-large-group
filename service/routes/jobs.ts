@@ -53,3 +53,19 @@ export function DeleteListing(db: DB): Handler {
     await jobsdb.DeleteJobListing(db, id);
   };
 }
+
+
+export function getJobListingsByFilterRoute(db: DB): Handler {
+  return async (req: Request, res: Response, next: NextFunction) => {
+    const filters = req.body;
+    console.log(req.body)
+    try {
+      const jobListings = await getJobListingsByFilter(db, filters);
+      res.status(200).json(jobListings);
+    } catch (err) {
+      next({
+        message: getErrorMessage(err),
+      });
+    }
+  }
+}
