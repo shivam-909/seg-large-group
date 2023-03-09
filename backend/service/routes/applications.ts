@@ -49,6 +49,28 @@ export function GetApplication(db: DB): Handler {
   };
 }
 
+export function getApplicationByFilterRoute(db: DB): Handler {
+  return async (req: Request, res: Response, next: NextFunction) => {
+    const filters = {
+      id: req.body.id || '',
+      status: req.body.status || '',
+      searcher: req.body.searcher || '',
+      jobListing: req.body.jobListing || '',
+    };
+
+    try {
+      const applications = await GetApplicationsByFilter(db, filters);
+      res.status(200).json({
+        applications,
+      });
+    } catch (err) {
+      next({
+        message: getErrorMessage(err),
+      });
+    }
+  };
+}
+
 export function SeedApplications(db: DB): Handler {
   return async (req: Request, res: Response, next: NextFunction) => {
     try {

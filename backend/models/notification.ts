@@ -2,14 +2,14 @@ import { QueryDocumentSnapshot } from "firebase-admin/firestore";
 class Notification {
     id: string;
     content: string;
-    application: string;
+    applicationID: string;
     created: Date;
     userID: string;
 
     constructor(id: string, content: string, application: string, created: Date, userID: string) {
         this.id = id;
         this.content = content;
-        this.application = application;
+        this.applicationID = application;
         this.created = created;
         this.userID = userID;
     }

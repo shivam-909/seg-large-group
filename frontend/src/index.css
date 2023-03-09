@@ -16,31 +16,36 @@ code {
 }
 .default-input {
   border-radius: 10px;
-  font-size: calc(10px + 1.2vmax);
+  font-size: calc(5px + 1.2vmax);
   padding: 10px;
   margin: 5px;
   width: calc(130px + 15vmax);
   color: black;
+  border-width: 2px;
+  border-color: black;
 }
 .default-button {
-  background-color: #61dafb;
+  background-color: #2f4df7;
+  color: white;
   border-radius: 10px;
-  font-size: calc(10px + 1.2vmax);
+  font-size: calc(5px + 1.2vmax);
   padding: 10px;
   margin: 10px;
-  color: black;
+  font-weight: bold;
 }
-.default-button:hover {background-color: #50b1cc}
+.default-button:hover {background-color: #14268c}
 
 .default-button:active {
-  background-color: #479db5;
+  background-color: #14268c;
   /* box-shadow: 0 5px #666; */
   transform: translateY(2px);
 }
 .default-dropdown {
   border-radius: 10px;
-  font-size: calc(6px + 1.2vmax);
+  font-size: calc(5px + 1.2vmax);
   padding: 10px;
   margin: 5px;
   color: black;
+  border-width: 2px;
+  border-color: black;
 }
