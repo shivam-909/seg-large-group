@@ -12,6 +12,9 @@ export default function PrivateRoutes() {
                 .then(() => setIsLoggedIn(true))
                 .catch(() => setIsLoggedIn(false));
         }
+        else{
+            setIsLoggedIn(false);
+        }
     }, [isLoggedIn]);
 
     return (isLoggedIn ? <Outlet/> : <Navigate to="/login"/>);

@@ -2,6 +2,7 @@ import './MyJobs.css'
 import {useState} from "react";
 import Category from "./Category";
 import Navbar from "../Navbar/Navbar";
+import PrivateRoutes from "../../Auth/PrivateRoute";
 
 export default function MyJobs() {
     const [filter, setFilter] = useState("Saved") // eslint-disable-line
@@ -11,6 +12,7 @@ export default function MyJobs() {
 
   return (
       <div>
+          <PrivateRoutes/>
           <Navbar/>
       <div className='bg-lighter-grey min-h-screen justify-center flex'>
           <div className='bg-white mt-36 rounded-md px-12 py-7 space-y-3 min-w-[45%]'>
