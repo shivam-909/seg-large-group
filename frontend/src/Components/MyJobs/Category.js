@@ -1,21 +1,56 @@
 import React, {useEffect, useState} from "react";
 import JobCard from "./JobCard";
 import axios from "axios";
+import CompanyJobCard from "./CompanyJobCard";
 
 export default function Category(props) {
     const [jobsList, setJobsList] = useState([]);
+    const token = localStorage.getItem("access");
+
     async function addCard(title, company, location){
         await setJobsList( current => [...current, <JobCard title={title} company={company} location={location}/>]);
     }
+
+    async function addCompanyCard(title, schedule, location, date){
+        await setJobsList( current => [...current, <CompanyJobCard title={title} schedule={schedule} location={location} date={date}/>]);
+    }
     useEffect(() => {
-        if (props.filter === "Saved") {
+        if (props.filter === "Postings") {
+            getPostings(); // eslint-disable-line
+        }
+        else if (props.filter === "Saved") {
             getSavedJobs(); // eslint-disable-line
         } else {
             getApplication(props.filter); // eslint-disable-line
         }
     }, [props.filter]); // eslint-disable-line
+
+    async function getPostings(){
+        const userID = await axios.post('http://localhost:8000/api/echo', {}, {headers: {Authorization: `Bearer ${token}`}}).then(response => { return response.data})
+        const company = await axios.get("http://localhost:8000/user/"+userID).then(response => {return response.data});
+        const companyID = company.companyID;
+        const formData = new FormData();
+        formData.append('companyID', companyID); // eslint-disable-line
+        axios.post('http://localhost:8000/jobs/filter', formData)
+            .then(async response => {
+                if (response.data !== undefined) {
+                    let filterJobs = response.data;
+                    console.log(filterJobs);
+                    setJobsList([]);
+                    for (let i = 0; i < filterJobs.length; i++) {
+                        await addCompanyCard(filterJobs[i].title, filterJobs[i].schedule, filterJobs[i].location, filterJobs[i].datePosted);
+                    }
+                } else {
+                    console.log("no applications found")
+                }
+            })
+            .catch(error => {
+                // TODO: Display error message.
+                console.error(error);
+            });
+    }
+
     async function getApplication(filter){
-        const token = localStorage.getItem("access");
         const userID = await axios.post('http://localhost:8000/api/echo', {}, {headers: {Authorization: `Bearer ${token}`}}).then(response => { return response.data})
         const formData = new FormData();
         formData.append('status', filter);
@@ -42,7 +77,6 @@ export default function Category(props) {
             });
     }
     async function getSavedJobs(){
-        const token = localStorage.getItem("access");
         const userID = await axios.post('http://localhost:8000/api/echo', {}, {headers: {Authorization: `Bearer ${token}`}}).then(response => { return response.data})
         axios.get('http://localhost:8000/user/' + userID)
             .then(response => {
