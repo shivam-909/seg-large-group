@@ -1,14 +1,17 @@
 import TextInputBox from "../LoginPage/TextInputBox";
-import {validateField} from "../Validation/validate";
+import {setVisible, validateField} from "../Validation/validate";
 import TextInputBoxWithIcon from "../LoginPage/TextInputBoxWithIcon";
 import showIcon from "../../icons/showIcon.png";
 import hideIcon from "../../icons/hideIcon.png";
 import {useState} from "react";
 import { useNavigate } from 'react-router-dom';
 import axios from "axios";
+import Loading from "../Loading/Loading";
+import ErrorBox from "../ErrorBox/ErrorBox";
 
 export default function RegisterPage() {
     const [role, setRole] = useState("searcher");
+    const [loading,setLoading] = useState(false);
     const navigate = useNavigate();
 
     function togglePasswordVisibility() {
@@ -38,8 +41,8 @@ export default function RegisterPage() {
     }
 
     function signUpButton() {
+        setLoading(true);
         const formData = new FormData();
-
         const email = document.getElementById("email").value;
         formData.append('email', email);
 
@@ -72,11 +75,14 @@ export default function RegisterPage() {
                 else {
                     // TODO: Display error message.
                     console.log(response.data);
+                    setVisible("errorBox", true);
+                    setLoading(false);
                 }
             })
             .catch(error => {
                 // TODO: Display error message.
-                console.error(error);
+                setVisible("errorBox", true);
+                setLoading(false);
             });
     }
 
@@ -121,15 +127,14 @@ export default function RegisterPage() {
                     <TextInputBox className='w-full' id='confirmPassword' type='password' onBlur={checkPasswordMatch} placeholder='Confirm password'/>
                     <span id="passwordMismatchError" className='invisible absolute top-0'>Passwords don't match</span>
                 </div>
-
+                <ErrorBox message={"Invalid value for one or more fields."}/>
                 <div className='p-0.5'></div>
 
                 <button className='bg-dark-theme-grey rounded-md text-white p-2.5 flex items-center justify-center space-x-2' onClick={signUpButton}>
-                    <p>Sign Up</p>
-                    <i className="fa-solid fa-right-to-bracket"></i>
+                    {loading ? <Loading/> : <p>Sign Up<i className="fa-solid fa-right-to-bracket pl-2"></i></p>}
                 </button>
 
-                <p className='text-center pt-4'>Already a user? <a className='LoginPage-link' href='/signup'>Sign in.</a></p>
+                <p className='text-center pt-4'>Already a user? <a className='LoginPage-link' href='/login'>Sign in.</a></p>
             </div>
         </div>
     );
