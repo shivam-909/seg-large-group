@@ -6,7 +6,7 @@ export default function SkillCard(props) {
         document.getElementById("Skill" + props.id).remove();
     }
     return (
-        <div id={"Skill" + props.id} className={"grid grid-cols-2 gap-2 my-2 w-[107%]"}>
+        <div id={"Skill" + props.id} className={"grid grid-cols-2 gap-2 my-2"}>
             <input id={"skill"} className={"key"} placeholder={"Skill"} editable={"true"}/>
             <div>
             <div className={"value w-[70%] float-left"}>

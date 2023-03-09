@@ -6,7 +6,7 @@ export default function EducationDropdown(props) {
         document.getElementById("Education" + props.id).remove();
     }
     return (
-        <div id={"Education" + props.id} className={"my-2 w-[109%] border-2 border-[#c3c3c3] rounded-md p-2 grid grid-cols-2 gap-2"}>
+        <div id={"Education" + props.id} className={"my-2 border-2 border-[#c3c3c3] rounded-md p-2 grid grid-cols-2 gap-2"}>
             <input id={"subject"} className={"grade w-full"} placeholder={"Subject"} editable={"true"}/>
             <div>
             <button className={"delete"} onClick={deleteEducation} editable={"true"}><i className="fa-solid fa-trash"></i></button>

@@ -8,11 +8,16 @@ import { useNavigate } from 'react-router-dom';
 import axios from "axios";
 import ErrorBox from "../ErrorBox/ErrorBox";
 import {setVisible} from "../Validation/validate";
+import Loading from "../Loading/Loading";
+import {useState} from "react";
 
 function LoginPage() {
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
 
   function loginButton() {
+    setLoading(true);
+
     let email = document.getElementById("email").value;
     let password = document.getElementById("password").value;
     let rememberLogin = document.getElementById("rememberLogin").checked;
@@ -41,11 +46,13 @@ function LoginPage() {
           else {
             // TODO: Display error message.
             setVisible("errorBox", true);
+            setLoading(false);
           }
         })
         .catch(error => {
           // TODO: Display error message.
           setVisible("errorBox", true);
+          setLoading(false);
         });
   }
 
@@ -80,9 +87,8 @@ function LoginPage() {
             <ErrorBox message={"Invalid Login Details"}/>
             <div className='p-0.5'></div>
 
-            <button className='bg-dark-theme-grey rounded-md text-white p-2.5 flex items-center justify-center space-x-2' onClick={loginButton}>
-              <p>Sign In</p>
-              <i className="fa-solid fa-right-to-bracket"></i>
+            <button className='bg-dark-theme-grey rounded-md text-white p-2.5 flex items-center justify-center space-x-2' onClick={loginButton} id={"loginButton"}>
+              {loading ? <Loading/> : <p id={"loadText"}>Sign In <i className="fa-solid fa-right-to-bracket"></i></p>}
             </button>
 
             <p className='text-center pt-4'>New user? <a className='LoginPage-link' href='/signup'>Sign up.</a></p>
