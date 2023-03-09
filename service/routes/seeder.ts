@@ -1,6 +1,7 @@
+import 'express-async-errors';
 import DB from "../../db/db";
-import {getErrorMessage, Handler} from "../public";
-import {NextFunction, Request, Response} from "express";
+import { getErrorMessage, Handler } from "../public";
+import { NextFunction, Request, Response } from "express";
 import {
     seedApplicationListings,
     seedCompanies,
@@ -10,7 +11,7 @@ import {
 } from "../../seeder/seed";
 
 
-export function seedAllRoute(db: DB): Handler {
+export function SeedAll(db: DB): Handler {
     return async (req: Request, res: Response, next: NextFunction) => {
         try {
             await seedCompanies(db);

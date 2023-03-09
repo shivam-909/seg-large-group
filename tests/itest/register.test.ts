@@ -1,5 +1,5 @@
 import DB from "../../db/db";
-import { deleteUser, retrieveUserByEmail } from "../../db/users";
+import { DeleteUser, RetrieveFullUserByEmail } from "../../db/users";
 
 test('register user', async () => {
 
@@ -43,9 +43,9 @@ test('register user', async () => {
 
     const db = new DB();
 
-    const user = await retrieveUserByEmail(db, email);
+    const user = await RetrieveFullUserByEmail(db, email);
 
     expect(user).not.toBeNull();
 
-    await deleteUser(db, user!.userID);
+    await DeleteUser(db, user!.userID);
 });

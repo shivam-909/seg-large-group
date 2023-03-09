@@ -2,26 +2,18 @@ import express, { Express, NextFunction, Request, Response } from 'express';
 import dotenv from 'dotenv';
 import DB from './db/db';
 import multer from 'multer';
-import { Echo, HealthCheck, Route } from './service/routes/routes';
 import { ErrorToCode } from './service/public';
-import { AddListing, GetListing, UpdateListing, DeleteListing } from './service/routes/jobs';
-import { seedAllRoute } from "./service/routes/seeder";
-import { updateUserRoute, deleteUserRoute, getUserRoute } from "./service/routes/users";
-import { Login, Refresh, Register } from "./service/routes/auth";
-import {
-  AddApplication,
-  GetApplication,
-  updateApplicationRoute,
-  deleteApplicationRoute
-} from "./service/routes/applications";
-import { AuthMW, ErrorMW } from './service/middleware';
 import { deseed } from "./seeder/deseeder";
-import {
-  addNotificationRoute,
-  deleteNotificationRoute,
-  getNotificationRoute,
-  updateNotificationRoute
-} from "./service/routes/notifications";
+
+import * as utils from './service/routes/routes';
+import * as listingroutes from './service/routes/jobs';
+import * as seedroutes from "./service/routes/seeder";
+import * as userroutes from "./service/routes/users";
+import * as authroutes from "./service/routes/auth";
+import * as applicationroutes from "./service/routes/applications";
+import * as middleware from './service/middleware';
+import * as notificationroutes from "./service/routes/notifications";
+import * as util from './service/routes/routes';
 
 export const db = new DB();
 
@@ -37,48 +29,45 @@ export const run = () => {
   app.set('db', db);
 
 
-  app.post('/auth/login', upload.none(), Route(app, Login));
-  app.post('/auth/register', upload.none(), Route(app, Register));
-  app.post('/auth/refresh', upload.none(), Route(app, Refresh));
+  app.post('/auth/login', upload.none(), utils.Route(app, authroutes.Login));
+  app.post('/auth/register', upload.none(), utils.Route(app, authroutes.Register));
+  app.post('/auth/refresh', upload.none(), utils.Route(app, authroutes.Refresh));
 
-  app.post('/notifications/add', upload.none(), Route(app, addNotificationRoute));
-  app.get('/notifications/:id', Route(app, getNotificationRoute));
-  app.patch('/notifications/:id', upload.none(), Route(app, updateNotificationRoute));
-  app.delete('/notifications/:id', upload.none(), Route(app, deleteNotificationRoute));
+  app.post('/api/notifications/add', upload.none(), utils.Route(app, notificationroutes.AddNotification));
+  app.get('/api/notifications/:id', utils.Route(app, notificationroutes.GetNotification));
+  app.patch('/api/notifications/:id', upload.none(), utils.Route(app, notificationroutes.UpdateNotification));
+  app.delete('/api/notifications/:id', upload.none(), utils.Route(app, notificationroutes.DeleteNotification));
 
-  app.post('/jobs/add', upload.none(), Route(app, AddListing));
-  app.get('/jobs/:id', Route(app, AddListing));
-  app.patch('/jobs/:id', upload.none(), Route(app, UpdateListing));
-  app.delete('/jobs/:id', upload.none(), Route(app, DeleteListing));
+  app.post('/api/jobs/add', upload.none(), utils.Route(app, listingroutes.AddListing));
+  app.get('/api/jobs/:id', utils.Route(app, listingroutes.GetListing));
+  app.patch('/api/jobs/:id', upload.none(), utils.Route(app, listingroutes.UpdateListing));
+  app.delete('/api/jobs/:id', upload.none(), utils.Route(app, listingroutes.DeleteListing));
 
 
-  app.post('/applications/add', upload.none(), Route(app, AddApplication));
-  app.get('/applications/:id', Route(app, GetApplication));
-  app.patch('/applications/:id', upload.none(), Route(app, updateApplicationRoute));
-  app.delete('/applications/:id', upload.none(), Route(app, deleteApplicationRoute));
+  app.post('/api/applications/add', upload.none(), utils.Route(app, applicationroutes.AddApplication));
+  app.get('/api/applications/:id', utils.Route(app, applicationroutes.GetApplication));
+  app.patch('/api/applications/:id', upload.none(), utils.Route(app, applicationroutes.UpdateApplication));
+  app.delete('/api/applications/:id', upload.none(), utils.Route(app, applicationroutes.DeleteApplication));
 
-  app.use((err: any, req: Request, res: Response, next: NextFunction) => {
-    console.error(err.stack);
-    const code = ErrorToCode.get(err) || 500;
-    res.status(code).json({ message: err || 'internal server error' });
-  });
 
-  app.get('/user/:id', Route(app, getUserRoute));
-  app.patch('/users/:id', upload.none(), Route(app, updateUserRoute));
-  app.delete('/user/:id', upload.none(), Route(app, deleteUserRoute));
 
-  app.post('/seed_all', Route(app, seedAllRoute));
-  app.delete('/deseed', Route(app, deseed));
+  app.get('/api/user/:id', utils.Route(app, userroutes.GetUser));
+  app.patch('/api/users/:id', upload.none(), utils.Route(app, userroutes.UpdateUser));
+  app.delete('/api/user/:id', upload.none(), utils.Route(app, userroutes.DeleteUser));
 
-  app.get('/', HealthCheck);
+  app.post('/api/seed_all', utils.Route(app, seedroutes.SeedAll));
+  app.delete('/api/deseed', utils.Route(app, deseed));
+
+  app.get('/', util.HealthCheck);
+
 
   // Error handling middleware
-  app.use(ErrorMW);
+  app.use(middleware.ErrorMW);
 
   // Authentication middleware
-  app.use("/api/*", AuthMW);
+  app.use("/api/*", middleware.AuthMW);
 
-  app.post("/api/echo", Echo);
+  app.post("/api/echo", util.Echo);
 
   app.listen(port, () => {
     console.log(`server running on port ${port}`);

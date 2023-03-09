@@ -27,7 +27,9 @@ export const ErrorInvalidCredentials = "invalid credentials";
 export const ErrorMissingCompanyName = "company name is required";
 export const ErrorMissingFirstName = "first name is required";
 export const ErrorMissingLastName = "last name is required";
-
+export const ErrorInvalidRefreshToken = "invalid refresh token";
+export const ErrorUserNotFound = "user not found";
+export const ErrorJobListingNotFound = "job listing not found";
 
 export var ErrorToCode: Map<string, number> = new Map<string, number>(
     [
@@ -37,5 +39,9 @@ export var ErrorToCode: Map<string, number> = new Map<string, number>(
         [ErrorFailedToHashPassword, 500],
         [ErrorInvalidCredentials, 403],
         [ErrorMissingCompanyName, 400],
+        [ErrorMissingFirstName, 400],
+        [ErrorMissingLastName, 400],
+        [ErrorInvalidRefreshToken, 403],
+        [ErrorUserNotFound, 404]
     ]
 );

@@ -1,3 +1,5 @@
+import 'express-async-errors';
+
 import { NextFunction, Request, Response } from "express";
 import DB from "../../db/db";
 import Application from "../../models/application";
