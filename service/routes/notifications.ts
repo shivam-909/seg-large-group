@@ -14,7 +14,6 @@ export function AddNotification(db: DB): Handler {
     const created = new Date();
     const newNotification = new Notification(newID, content, application, created, userID);
     await notificationsdb.CreateNotification(db, newNotification);
-
   }
 }
 
@@ -43,8 +42,6 @@ export function UpdateNotification(db: DB): Handler {
 
     const updatedNotification = { ...notification, ...notificationData };
     await notificationsdb.UpdateNotification(db, updatedNotification);
-
-
   }
 }
 
@@ -53,8 +50,5 @@ export function DeleteNotification(db: DB): Handler {
     const id = req.params.id;
 
     await notificationsdb.DeleteNotification(db, id);
-    res.status(200).send;
-
-
   };
 }

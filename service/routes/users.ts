@@ -31,7 +31,6 @@ export function UpdateUser(db: DB): Handler {
 
         const updatedUser = { ...user, ...userData };
         await usersdb.UpdateUser(db, updatedUser);
-
     }
 }
 

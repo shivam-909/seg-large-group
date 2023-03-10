@@ -15,11 +15,6 @@ export function AddApplication(db: DB): Handler {
     const newApplication = new Application(newID, status, searcher, jobListing);
 
     await applicationdb.CreateApplication(db, newApplication);
-    res.status(200).json({
-      msg: "application created"
-    });
-    return;
-
   }
 }
 
@@ -28,14 +23,11 @@ export function GetApplication(db: DB): Handler {
     const { id } = req.params;
 
     const application = await applicationdb.RetrieveApplication(db, id);
-    if (application) {
-      res.status(200).json(application);
-    } else {
-      res.status(404).json({
-        message: 'application not found'
-      });
+    if (!application) {
+      next(ErrorApplicationNotFound);
+      return
     }
-
+    res.status(200).json(application);
   };
 }
 
@@ -58,10 +50,6 @@ export function RetrieveApplicationByFilter(db: DB): Handler {
 export function SeedApplications(db: DB): Handler {
   return async (req: Request, res: Response, next: NextFunction) => {
     await SeedApplicationListings(db);
-    res.status(200).json({
-      message: 'Applications seeded successfully'
-    });
-
   };
 }
 
@@ -73,12 +61,11 @@ export function UpdateApplication(db: DB): Handler {
     const application = await applicationdb.RetrieveApplication(db, id);
     if (!application) {
       next(ErrorApplicationNotFound);
+      return
     }
 
     const updatedApplication = { ...application, ...applicationData };
     await applicationdb.UpdateApplication(db, updatedApplication);
-
-    res.status(200).send();
   }
 }
 
