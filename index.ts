@@ -36,6 +36,7 @@ import {
     updateNotificationRoute
 } from "./service/routes/notifications";
 import cors from 'cors';
+import {searchListingsRoute} from "./service/routes/search";
 
 export const db = new DB();
 
@@ -62,11 +63,13 @@ export const run = () => {
     app.delete('/notifications/:id', upload.none(), Route(app, deleteNotificationRoute));
 
 
+    app.post('/jobs/search', upload.none(), Route(app, searchListingsRoute));
     app.post('/jobs/filter', upload.none(), Route(app, getJobListingsByFilterRoute));
     app.post('/jobs/add', upload.none(), Route(app, addListingRoute));
     app.get('/jobs/:id', Route(app, getListingRoute));
     app.patch('/jobs/:id', upload.none(), Route(app, updateListingRoute));
     app.delete('/jobs/:id', upload.none(), Route(app, deleteListingRoute));
+
 
 
     app.get('/applications/filter', upload.none(), Route(app, getApplicationByFilterRoute));
