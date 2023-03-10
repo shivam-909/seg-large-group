@@ -1,5 +1,5 @@
 import DB from "../../db/db";
-import { retrieveUserByEmail, deleteUser } from "../../db/users";
+import { RetrieveFullUserByEmail, DeleteUser } from "../../db/users";
 
 test('login user', async () => {
 
@@ -12,20 +12,20 @@ test('login user', async () => {
 
     let formData = new FormData();
 
-    formData.append('userType', 'searcher');
-    formData.append('firstName', 'John');
-    formData.append('lastName', 'Doe');
+    formData.append('first_name', 'John');
+    formData.append('last_name', 'Doe');
     formData.append('email', email);
     formData.append('password', 'Password123!');
-    formData.append('pfpUrl', 'TestpfpUrl');
+    formData.append('pfp_url', 'TestpfpUrl');
     formData.append('location', 'London');
+    formData.append('user_type', 'searcher');
 
-    const _ = await fetch('http://localhost:8000/auth/register', {
+    const regres = await fetch('http://localhost:8000/auth/register', {
         method: 'POST',
         body: formData,
     });
 
-    // Ignore registration response
+    expect(regres.status).toEqual(200);
 
     const loginFormData = new FormData();
     loginFormData.append('email', email);
@@ -55,9 +55,9 @@ test('login user', async () => {
 
     const db = new DB();
 
-    const user = await retrieveUserByEmail(db, email);
+    const user = await RetrieveFullUserByEmail(db, email);
 
     expect(user).not.toBeNull();
 
-    await deleteUser(db, user!.userID);
+    await DeleteUser(db, user!.userID);
 });

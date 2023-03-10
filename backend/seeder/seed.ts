@@ -1,18 +1,23 @@
 import DB from "../db/db";
-import {faker} from '@faker-js/faker';
+
+import { randomUUID } from "crypto";
+import { faker } from '@faker-js/faker';
+
 import JobListing from "../models/job";
-import {createJobListing, getAllJobIDs} from "../db/jobs";
-import {createUser, getAllCompanyIDs, getAllSearcherIDs, getUserID, retrieveUserByID} from "../db/users";
-import {Company, Searcher} from "../models/user";
-import {randomUUID} from "crypto";
-import {CreateApplication, GetApplicationsByFilter} from "../db/applications";
-import Application from "../models/application";
-import {Status} from "../models/enums/status.enum";
-import {companyNotification, searcherNotification} from "../models/enums/userNotification.enum";
-import {createNotification} from "../db/notifications";
+import { User } from "../models/user";
 import Notification from "../models/notification";
-import {Error, getErrorMessage} from "../service/public";
+import { Status } from "../models/enums/status.enum";
+import { Company, Searcher } from "../models/user";
+import Application from "../models/application";
+import { companyNotification, searcherNotification } from "../models/enums/userNotification.enum";
 import bcrypt from "bcrypt";
+import * as jobsdb from "../db/jobs";
+import * as usersdb from "../db/users";
+import * as companiesdb from "../db/companies";
+import * as applicationsdb from "../db/applications";
+import * as notificationsdb from "../db/notifications";
+import * as searcherdb from "../db/searchers";
+import { ErrorCompanyNotFound, ErrorNoCompaniesExist, ErrorUserNotFound } from "../service/public";
 
 //CONTROL
 const numCompanies = 2
@@ -22,94 +27,94 @@ const numApplications = 5
 
 //=====================================================USERS=====================================================
 
-async function generateCompany(): Promise<Company> {
+async function GenerateUser(): Promise<User> {
+    const id = randomUUID();
+    const email = faker.internet.email();
+    const password = "Password123!"
+
+    return new User(
+        id,
+        email,
+        password,
+        "",
+        "",
+        [],
+        undefined,
+        undefined,
+    )
+}
+
+async function GenerateCompany(): Promise<Company> {
     const id = randomUUID()
     const companyName = faker.company.name();
-    const email = `support@${companyName.toLowerCase().replace(/[^a-zA-Z0-9]/g, '')}.${faker.internet.domainSuffix()}`;
-    const notifications:string[] = []
-
-
     return new Company(
-        id,
         companyName,
-        email,
-        hashPassword("Password123!"),
-        faker.image.avatar(),
-        faker.address.city(),
-        notifications,
-        randomUUID()
+        id,
     );
 }
 
-export async function seedCompanies(db: DB): Promise<void> {
+export async function SeedCompanies(db: DB): Promise<void> {
     const companyPromises: Promise<Company>[] = [];
     for (let i = 0; i < numCompanies; i++) {
-        companyPromises.push(generateCompany());
+        companyPromises.push(GenerateCompany());
     }
 
     const companies = await Promise.all(companyPromises);
 
     const createPromises: Promise<void>[] = [];
     for (const company of companies) {
-        createPromises.push(createUser(db, company));
+        const user = await GenerateUser();
+        user.companyID = company.companyID;
+        createPromises.push(companiesdb.CreateCompany(db, user, company));
     }
 
     await Promise.all(createPromises);
-    console.log(`Seeded companies`);
+    console.log(`seeded companies`);
 }
 
-async function generateSearcher(db: DB): Promise<Searcher> {
+async function GenerateSearcher(db: DB): Promise<Searcher> {
     const id = randomUUID()
-    const savedJobs = await retrieveRandomJobIDArr(db);
+    const savedJobs = await RetrieveRandomJobIDArr(db);
     const firstName = faker.name.firstName();
     const lastName = faker.name.lastName();
-    const email = faker.internet.email(firstName, lastName);
-    const notifications:string[] = []
 
     return new Searcher(
-        id,
         firstName,
         lastName,
-        email,
-        hashPassword("Password123!"),
-        faker.image.avatar(),
-        faker.address.city(),
         savedJobs,
-        notifications,
-        randomUUID()
+        id
     );
 }
 
-export async function seedSearchers(db: DB): Promise<void> {
+export async function SeedSearchers(db: DB): Promise<void> {
     const searcherPromises: Promise<Searcher>[] = [];
     for (let i = 0; i < numSearchers; i++) {
-        searcherPromises.push(generateSearcher(db));
+        searcherPromises.push(GenerateSearcher(db));
     }
 
     const searchers = await Promise.all(searcherPromises);
 
     const createPromises: Promise<void>[] = [];
     for (const searcher of searchers) {
-        createPromises.push(createUser(db, searcher));
+        const user = await GenerateUser();
+        createPromises.push(searcherdb.CreateSearcher(db, user, searcher));
     }
 
     await Promise.all(createPromises);
-    console.log(`Seeded searchers`);
+    console.log(`seeded searchers`);
 }
 
-export async function retrieveRandomSearcherId(db: DB): Promise<string> {
-    const searcherIds = await getAllSearcherIDs(db);
+export async function RetrieveRandomSearcherId(db: DB): Promise<string> {
+    const searcherIds = await searcherdb.GetAllSearcherIDs(db);
     return searcherIds[Math.floor(Math.random() * searcherIds.length)];
 }
 
 export function hashPassword(password: string): string {
-    const hash = ((): string | Error => {
+    const hash = ((): string => {
         try {
             return bcrypt.hashSync(password, 10)
         } catch (e) {
-            return {
-                message: getErrorMessage(e),
-            }
+            return ""
         }
     })();
 
@@ -119,26 +124,44 @@ export function hashPassword(password: string): string {
 
 //=====================================================JOB-LISTINGS=====================================================
 
-async function generateJobListing(db: DB): Promise<JobListing> {
-    const companyIds = await getAllCompanyIDs(db);
-    let companyId: string | null = companyIds[Math.floor(Math.random() * companyIds.length)];
-    companyId = await getUserID(db, companyId)
-    const company = companyId ? await retrieveUserByID(db, companyId) : null;
-    const jobListingID = randomUUID();
+async function GetRandomCompany(db: DB): Promise<Company> {
+    const companyIds = await companiesdb.GetAllCompanyIds(db);
 
-    if (!company || company instanceof Searcher) {
-        throw new Error('Company not found');
+    if (companyIds.length === 0) {
+        console.log("no companies exist");
+        throw new Error(ErrorNoCompaniesExist);
     }
 
+    let companyId: string = companyIds[Math.floor(Math.random() * companyIds.length)];
+
+    const company = await companiesdb.RetrieveCompanyByID(db, companyId);
+
+    if (!company) {
+        console.log("company not found for id: " + companyId);
+        throw new Error(ErrorCompanyNotFound);
+    }
+
+    return company;
+}
+
+async function GenerateJobListing(db: DB): Promise<JobListing> {
+    const company = await GetRandomCompany(db);
+    const user = await usersdb.RetrieveUserByCompanyID(db, company.companyID);
+    if (!user) {
+        console.log("user not found for company id: " + company.companyID);
+        throw new Error(ErrorUserNotFound);
+    }
+
+    const id = randomUUID();
     return new JobListing(
-        jobListingID,
+        id,
         faker.name.jobTitle(),
         faker.datatype.number({
             'min': 30000,
             'max': 100000
         }),
         faker.lorem.paragraph(),
-        company.location,
+        user.location,
         faker.helpers.arrayElement(["Full-time", "Part-time", "Contract"]),
         company.companyID,
         faker.helpers.arrayElement(["Engineering", "Sales", "Marketing", "Finance"]),
@@ -148,21 +171,21 @@ async function generateJobListing(db: DB): Promise<JobListing> {
     );
 }
 
-export async function seedJobListings(db: DB): Promise<void> {
+export async function SeedJobListings(db: DB): Promise<void> {
     for (let i = 0; i < numJobListings; i++) {
-        const jobListing = await generateJobListing(db);
-        await createJobListing(db, jobListing);
+        const jobListing = await GenerateJobListing(db);
+        await jobsdb.CreateJobListing(db, jobListing);
     }
     console.log(`Seeded job listings`);
 }
 
-export async function retrieveRandomJobListingID(db: DB): Promise<string> {
-    const jobListingIds = await getAllJobIDs(db);
+export async function RetrieveRandomJobListingID(db: DB): Promise<string> {
+    const jobListingIds = await jobsdb.GetAllJobIDs(db);
     return jobListingIds[Math.floor(Math.random() * jobListingIds.length)];
 }
 
-export async function retrieveRandomJobIDArr(db: DB): Promise<string[]> {
-    const jobIds = await getAllJobIDs(db);
+export async function RetrieveRandomJobIDArr(db: DB): Promise<string[]> {
+    const jobIds = await jobsdb.GetAllJobIDs(db);
 
     const shuffledJobIds = jobIds.sort(() => 0.5 - Math.random());
 
@@ -172,27 +195,27 @@ export async function retrieveRandomJobIDArr(db: DB): Promise<string[]> {
 
 //=====================================================APPLICATIONS=====================================================
 
-async function generateApplicationListing(db: DB): Promise<Application> {
-    const randomSearcher = await retrieveRandomSearcherId(db);
-    const randomJobListing = await retrieveRandomJobListingID(db);
+async function GenerateApplicationListing(db: DB): Promise<Application> {
+    const randomSearcher = await RetrieveRandomSearcherId(db);
+    const randomJobListing = await RetrieveRandomJobListingID(db);
 
     return new Application(
         randomUUID(),
-        getRandomStatus(),
+        GetRandomStatus(),
         randomSearcher,
         randomJobListing
     );
 }
 
-export async function seedApplicationListings(db: DB): Promise<void> {
+export async function SeedApplicationListings(db: DB): Promise<void> {
     for (let i = 0; i < numApplications; i++) {
-        const applicationListing = await generateApplicationListing(db);
-        await CreateApplication(db, applicationListing);
+        const applicationListing = await GenerateApplicationListing(db);
+        await applicationsdb.CreateApplication(db, applicationListing);
     }
-    console.log(`Seeded application listings`);
+    console.log(`seeded application listings`);
 }
 
-function getRandomStatus(): string {
+function GetRandomStatus(): string {
     const statusValues = Object.values(Status).filter((value) => typeof value === 'string');
     const randomIndex = Math.floor(Math.random() * statusValues.length);
     return statusValues[randomIndex] as string;
@@ -201,19 +224,20 @@ function getRandomStatus(): string {
 
 //=====================================================NOTIFICATIONS=====================================================
 
-async function generateSearcherNotification(db: DB, searcherID: string): Promise<Notification | undefined> {
-    const applications = await GetApplicationsByFilter(db, {"searcherID":searcherID});
-    const userID = await getUserID(db, searcherID)
+async function GenerateSearcherNotification(db: DB, searcherID: string): Promise<Notification | undefined> {
+    const applications = await applicationsdb.GetApplicationsByFilter(db, { "searcherID": searcherID });
+    const user = await usersdb.RetrieveUserBySearcherID(db, searcherID);
 
-    if (!userID){
-        throw new Error((`userID not found for ${searcherID}`))
+    if (!user) {
+        console.log("user not found for " + searcherID)
+        throw new Error(ErrorUserNotFound)
     }
 
     if (applications.length === 0) {
         return undefined;
     }
 
-    const content = getRandomNotificationEnum("searcher");
+    const content = GetRandomNotificationEnum("searcher");
     const randomJobListing = applications[Math.floor(Math.random() * applications.length)];
 
     return {
@@ -221,24 +245,25 @@ async function generateSearcherNotification(db: DB, searcherID: string): Promise
         content,
         applicationID: randomJobListing.id,
         created: faker.date.past(),
-        userID: userID
+        userID: user.userID,
     };
 }
 
-async function generateCompanyNotification(db: DB, companyID: string): Promise<Notification | undefined> {
+async function GenerateCompanyNotification(db: DB, companyID: string): Promise<Notification | undefined> {
     const jobListingsSnapshot = await db.JobListingCollection().where("companyID", "==", companyID).get();
     const jobListingIds: string[] = jobListingsSnapshot.docs.map((doc) => doc.id);
-    const userID = await getUserID(db, companyID)
+    const user = await usersdb.RetrieveUserByCompanyID(db, companyID);
 
-    if (!userID){
-        throw new Error((`userID not found for ${companyID}`))
+    if (!user) {
+        console.log("user not found for " + companyID)
+        throw new Error(ErrorUserNotFound)
     }
 
     if (jobListingIds.length === 0) {
         return undefined;
     }
 
-    const content = getRandomNotificationEnum("company");
+    const content = GetRandomNotificationEnum("company");
     const jobListingID = jobListingIds[Math.floor(Math.random() * jobListingIds.length)];
 
 
@@ -247,36 +272,36 @@ async function generateCompanyNotification(db: DB, companyID: string): Promise<N
         content,
         applicationID: jobListingID,
         created: faker.date.past(),
-        userID: userID
+        userID: user.userID,
     };
 }
 
-export async function seedNotifications(db: DB): Promise<void> {
-    const searchers = await getAllSearcherIDs(db);
-    const companies = await getAllCompanyIDs(db);
+export async function SeedNotifications(db: DB): Promise<void> {
+    const searchers = await searcherdb.GetAllSearcherIDs(db);
+    const companies = await companiesdb.GetAllCompanyIds(db);
 
     for (const searcher of searchers) {
-        const searcherNotification = await generateSearcherNotification(db, searcher);
+        const searcherNotification = await GenerateSearcherNotification(db, searcher);
         if (searcherNotification) {
-            await createNotification(db, searcherNotification);
+            await notificationsdb.CreateNotification(db, searcherNotification);
         }
     }
 
     for (const company of companies) {
-        const companyNotification = await generateCompanyNotification(db, company);
+        const companyNotification = await GenerateCompanyNotification(db, company);
         if (companyNotification) {
-            await createNotification(db, companyNotification);
+            await notificationsdb.CreateNotification(db, companyNotification);
         }
     }
 
-    console.log(`Seeded notifications`);
+    console.log(`seeded notifications`);
 }
 
-function getRandomNotificationEnum(type: "company" | "searcher"): string {
+function GetRandomNotificationEnum(type: "company" | "searcher"): string {
     let enums: Record<string, string>;
     if (type == "searcher")
         enums = searcherNotification as unknown as Record<string, string>;
-    else{
+    else {
         enums = companyNotification as unknown as Record<string, string>;
     }
 
