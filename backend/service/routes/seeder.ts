@@ -18,6 +18,5 @@ export function SeedAll(db: DB): Handler {
         await SeedSearchers(db);
         await SeedApplicationListings(db);
         await SeedNotifications(db);
-        res.status(200)
     };
 }
