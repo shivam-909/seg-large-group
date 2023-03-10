@@ -1,30 +1,22 @@
+import 'express-async-errors';
 import DB from "../../db/db";
-import {getErrorMessage, Handler} from "../public";
-import {NextFunction, Request, Response} from "express";
+import { getErrorMessage, Handler } from "../public";
+import { NextFunction, Request, Response } from "express";
 import {
-    seedApplicationListings,
-    seedCompanies,
-    seedJobListings,
-    seedNotifications,
-    seedSearchers
+    SeedApplicationListings,
+    SeedCompanies,
+    SeedJobListings,
+    SeedNotifications,
+    SeedSearchers
 } from "../../seeder/seed";
 
 
-export function seedAllRoute(db: DB): Handler {
+export function SeedAll(db: DB): Handler {
     return async (req: Request, res: Response, next: NextFunction) => {
-        try {
-            await seedCompanies(db);
-            await seedJobListings(db);
-            await seedSearchers(db);
-            await seedApplicationListings(db);
-            await seedNotifications(db);
-            res.status(200).json({
-                message: 'All data seeded successfully'
-            });
-        } catch (err) {
-            next({
-                message: getErrorMessage(err),
-            });
-        }
+        await SeedCompanies(db);
+        await SeedJobListings(db);
+        await SeedSearchers(db);
+        await SeedApplicationListings(db);
+        await SeedNotifications(db);
     };
 }

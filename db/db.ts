@@ -1,9 +1,9 @@
 import { CollectionReference, DocumentData, Firestore } from 'firebase-admin/firestore';
 import { FirebaseServiceAccount } from '../config/config';
-import {UserConverter, SearcherConverter, CompanyConverter} from '../models/user';
+import { UserConverter, SearcherConverter, CompanyConverter } from '../models/user';
 import { JobListingConverter } from '../models/job';
-import Notification, {NotificationConverter} from "../models/notification";
-import {ApplicationConverter} from "../models/application";
+import Notification, { NotificationConverter } from "../models/notification";
+import { ApplicationConverter } from "../models/application";
 
 
 const { initializeApp, cert } = require('firebase-admin/app');
@@ -21,9 +21,14 @@ class DB {
     constructor() {
         initializeApp({
             credential: cert(FirebaseServiceAccount),
+
         });
 
         this.db = getFirestore();
+
+        this.db.settings({
+            ignoreUndefinedProperties: true,
+        })
     }
 
     UserCollection() {

@@ -1,6 +1,6 @@
 import DB from "./db";
 import Application from "../models/application";
-import {firestore} from "firebase-admin";
+import { firestore } from "firebase-admin";
 import QuerySnapshot = firestore.QuerySnapshot;
 
 export async function CreateApplication(db: DB, application: Application) {
@@ -10,7 +10,7 @@ export async function CreateApplication(db: DB, application: Application) {
         'id': application.id,
         'status': application.status,
         'searcher': application.searcher,
-        'jobListing' : application.jobListing
+        'jobListing': application.jobListing
     });
 }
 
@@ -38,9 +38,7 @@ export async function UpdateApplication(db: DB, application: Application): Promi
             'id': application.id,
             'status': application.status,
             'searcher': application.searcher,
-            'jobListing' : application.jobListing
-
-
+            'jobListing': application.jobListing
         })
     } catch (err) {
         throw err
@@ -52,8 +50,27 @@ export async function DeleteApplication(db: DB, id: string) {
     await docRef.delete();
 }
 
+export async function DeleteApplicationsForSearcher(db: DB, searcherID: string) {
+    const applications = await GetApplicationsBySearcher(db, searcherID);
 
-export async function GetApplicationsByFilter(db: DB, filters: {[key: string]: string}): Promise<Application[]> {
+    for (const application of applications) {
+        await DeleteApplication(db, application.id);
+    }
+}
+
+export async function GetApplicationsBySearcher(db: DB, searcherID: string): Promise<Application[]> {
+    const applicationsSnapshot = await db.ApplicationCollection().where("searcher", "==", searcherID).get();
+    const applications: Application[] = [];
+
+    applicationsSnapshot.forEach((doc) => {
+        const application = doc.data() as Application;
+        applications.push(application);
+    });
+
+    return applications;
+}
+
+export async function GetApplicationsByFilter(db: DB, filters: { [key: string]: string }): Promise<Application[]> {
     let query: FirebaseFirestore.Query<FirebaseFirestore.DocumentData> = db.ApplicationCollection();
 
     for (const [key, value] of Object.entries(filters)) {
