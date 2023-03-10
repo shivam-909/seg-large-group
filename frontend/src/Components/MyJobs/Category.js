@@ -11,8 +11,8 @@ export default function Category(props) {
         await setJobsList( current => [...current, <JobCard title={title} company={company} location={location}/>]);
     }
 
-    async function addCompanyCard(title, schedule, location, date){
-        await setJobsList( current => [...current, <CompanyJobCard title={title} schedule={schedule} location={location} date={date}/>]);
+    async function addCompanyCard(id, title, schedule, location, date){
+        await setJobsList( current => [...current, <CompanyJobCard id={id} title={title} schedule={schedule} location={location} date={date}/>]);
     }
     useEffect(() => {
         if (props.filter === "Postings") {
@@ -35,10 +35,9 @@ export default function Category(props) {
             .then(async response => {
                 if (response.data !== undefined) {
                     let filterJobs = response.data;
-                    console.log(filterJobs);
                     setJobsList([]);
                     for (let i = 0; i < filterJobs.length; i++) {
-                        await addCompanyCard(filterJobs[i].title, filterJobs[i].schedule, filterJobs[i].location, filterJobs[i].datePosted);
+                        await addCompanyCard(filterJobs[i].id, filterJobs[i].title, filterJobs[i].schedule, filterJobs[i].location, filterJobs[i].datePosted);
                     }
                 } else {
                     console.log("no applications found")

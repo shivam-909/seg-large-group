@@ -5,6 +5,7 @@ import RegisterPage from "./Components/RegisterPage/RegisterPage";
 import PrivateRoutes from "./Auth/PrivateRoute";
 import MyJobs from "./Components/MyJobs/MyJobs";
 import UserProfilePage from "./Components/ProfilePage/UserProfilePage";
+import EditJob from "./Components/MyJobs/EditJob";
 
 export default function App() {
     return (
@@ -15,7 +16,11 @@ export default function App() {
               <Route path="/" element={ <SearchPage/> }/>
               <Route path="/login" element={ <LoginPage/> }/>
               <Route path="/signup" element={ <RegisterPage/> }/>
-              <Route path="/saved" element={ <MyJobs/> }/>
+              <Route path="/saved">
+                  <Route path="" element={<MyJobs/>}/>
+                  <Route path="edit/:id" element={ <EditJob/> }/>
+                  <Route path="add/" element={ <EditJob/> }/>
+              </Route>
               <Route path="/profile" element={ <UserProfilePage/> }/>
           </Routes>
       </BrowserRouter>

@@ -4,10 +4,12 @@ import Category from "./Category";
 import Navbar from "../Navbar/Navbar";
 import PrivateRoutes from "../../Auth/PrivateRoute";
 import axios from "axios";
+import {useNavigate} from "react-router-dom";
 
 export default function MyJobs() {
     const [isCompany, setCompany] = useState(false);
     const [filter, setFilter] = useState("Saved")
+    const navigate = useNavigate();
 
     useEffect(() => {
         setFilter(isCompany ? "Postings" : "Saved");
@@ -43,9 +45,13 @@ export default function MyJobs() {
                 <li className={"filterJobs"}><button id={"Archived"} className={"filters"} onClick={() => changeFilter("Archived")} disabled={filter==="Archived"}>Archived</button></li>
             </ul>
                   :
+                  <div>
                   <ul className={"border-b-2 border-grey flex relative"}>
                       <li className={"filterJobs"}><button id={"Postings"} className={"filters"} onClick={() => changeFilter("Postings")} disabled={filter==="Postings"}>Job Listings</button></li>
-                  </ul>}
+                  </ul>
+                      <button className={"justify-center flex mt-2 text-lg border-2 rounded-md p-2 w-full border-[#808080]"} onClick={() => {navigate("add")}}>Create Job</button>
+                  </div>
+              }
               <Category filter={filter}/>
           </div>
       </div>
