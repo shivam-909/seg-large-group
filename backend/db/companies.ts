@@ -11,7 +11,10 @@ export async function CreateCompany(db: DB, user: User, company: Company) {
         throw err;
     }
 
-    await db.CompanyCollection().doc(company.companyID).set(company);
+    await db.CompanyCollection().doc(company.companyID).set({
+        companyName: company.companyName,
+        companyID: company.companyID,
+    });
 }
 
 export async function RetrieveCompanyByID(db: DB, id: string): Promise<Company | null> {

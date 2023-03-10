@@ -12,6 +12,8 @@ import * as authroutes from "./service/routes/auth";
 import * as applicationroutes from "./service/routes/applications";
 import * as middleware from './service/middleware';
 import * as notificationroutes from "./service/routes/notifications";
+import * as companiesroutes from "./service/routes/companies";
+import * as searcherroutes from "./service/routes/searchers";
 import * as util from './service/routes/routes';
 import cors from 'cors';
 
@@ -41,6 +43,7 @@ export const run = () => {
 
   app.post('/api/jobs/add', upload.none(), utils.Route(app, listingroutes.AddListing));
   app.get('/api/jobs/:id', utils.Route(app, listingroutes.GetListing));
+  app.post('/api/jobs/filter', utils.Route(app, listingroutes.RetrieveJobListingsByFilter));
   app.patch('/api/jobs/:id', upload.none(), utils.Route(app, listingroutes.UpdateListing));
   app.delete('/api/jobs/:id', upload.none(), utils.Route(app, listingroutes.DeleteListing));
 
@@ -56,10 +59,10 @@ export const run = () => {
   app.patch('/api/users/:id', upload.none(), utils.Route(app, userroutes.UpdateUser));
   app.delete('/api/user/:id', upload.none(), utils.Route(app, userroutes.DeleteUser));
 
-  app.get('/company/:id', utils.Route(app, getCompanyRoute));
-  app.get('/searcher/:id', utils.Route(app, getSearcherRoute));
+  app.get('/company/:id', utils.Route(app, companiesroutes.GetCompany));
+  app.get('/searcher/:id', utils.Route(app, searcherroutes.GetSearcher));
 
-  app.post('/seed_all', utils.Route(app, seedAllRoute));
+  app.post('/seed_all', utils.Route(app, seedroutes.SeedAll));
   app.delete('/deseed', utils.Route(app, deseed));
 
   app.post('/api/seed_all', utils.Route(app, seedroutes.SeedAll));

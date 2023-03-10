@@ -4,7 +4,7 @@ import bcrypt from 'bcrypt';
 import DB from "../../db/db";
 import { CreateUser, RetrieveFullUserByEmail } from "../../db/users";
 import { Company, Searcher, User } from "../../models/user";
-import { Error, ErrorFailedToHashPassword, ErrorInvalidCredentials, ErrorInvalidEmail, ErrorInvalidPassword, ErrorInvalidRefreshToken, ErrorMissingCompanyName, ErrorMissingFirstName, ErrorMissingLastName, ErrorUserExists, getErrorMessage, Handler } from "../public";
+import { Error, ErrorFailedToHashPassword, ErrorInvalidCredentials, ErrorInvalidEmail, ErrorInvalidPassword, ErrorInvalidRefreshToken, ErrorMissingCompanyName, ErrorMissingFirstName, ErrorMissingLastName, ErrorUserExists, getErrorMessage, Handler, Token } from "../public";
 import { GenerateKeyPair, VerifyJWT } from "../tokens";
 import { randomUUID } from "crypto";
 import { CreateCompany } from "../../db/companies";
@@ -21,12 +21,14 @@ export function Login(db: DB): Handler {
 
     if (user === null || user === undefined) {
       next(ErrorInvalidCredentials)
+      return
     }
 
     const valid = bcrypt.compareSync(password, user!.hashedPassword);
 
     if (!valid) {
       next(ErrorInvalidCredentials)
+      return
     }
 
     const { access, refresh } = await GenerateKeyPair(user!.email);
@@ -49,7 +51,6 @@ export function Register(db: DB): Handler {
       next(ErrorUserExists)
       return
     }
-
 
     const s = ValidateRegistrationForm(
       first_name,
@@ -80,17 +81,19 @@ export function Register(db: DB): Handler {
     }
 
     const newUserID = randomUUID();
-    const newUser = new User(newUserID, email, hash as string, user_type, first_name, last_name, pfp_url, location);
+    const newUser = new User(newUserID, email, hash as string, pfp_url, location, []);
 
     switch (user_type) {
       case "company":
         const newCompanyID = randomUUID();
+        newUser.companyID = newCompanyID;
         const newCompany = new Company(company_name, newCompanyID);
 
         await CreateCompany(db, newUser, newCompany);
 
       case "searcher":
         const newSearcherID = randomUUID();
+        newUser.searcherID = newSearcherID;
         const newSearcher = new Searcher(first_name, last_name, [], newSearcherID);
 
         await CreateSearcher(db, newUser, newSearcher);
@@ -111,18 +114,24 @@ export function Refresh(): Handler {
 
     const { refresh_token } = req.body;
 
-    const claims = VerifyJWT(refresh_token);
+    const claims: Token = VerifyJWT(refresh_token);
 
     if (!claims.username) {
+      console.log("does not have username")
       next(ErrorInvalidRefreshToken)
+      return
     }
 
     if (claims.type !== 'refresh') {
+      console.log("not refresh")
       next(ErrorInvalidRefreshToken)
+      return
     }
 
-    if (claims.exp < Date.now()) {
+    if (claims.exp * 1000 < Date.now()) {
+      console.log("expired ", claims.exp, Date.now())
       next(ErrorInvalidRefreshToken)
+      return
     }
 
     let { access, refresh } = GenerateKeyPair(claims.username);

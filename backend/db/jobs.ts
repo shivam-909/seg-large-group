@@ -2,7 +2,7 @@ import JobListing from "../models/job";
 import DB from "./db";
 import { Searcher } from "../models/user";
 
-export async function CreateJobsListing(db: DB, jobListing: JobListing): Promise<JobListing> {
+export async function CreateJobListing(db: DB, jobListing: JobListing): Promise<JobListing> {
   const docRef = db.JobListingCollection().doc(jobListing.id);
 
   try {
@@ -43,7 +43,7 @@ export async function DeleteJobListing(db: DB, id: string) {
   const docRef = db.JobListingCollection().doc(id);
 
   await docRef.delete();
-  await deleteJobFromSaved(db, id)
+  await DeleteJobFromSaved(db, id)
 }
 
 
@@ -62,7 +62,7 @@ export async function DeleteJobsByCompanyID(db: DB, companyId: string) {
 
 
 
-export async function deleteJobFromSaved(db: DB, jobId: string): Promise<void> {
+export async function DeleteJobFromSaved(db: DB, jobId: string): Promise<void> {
   const searcherCollection = db.SearcherCollection();
   const snapshot = await searcherCollection.get();
   const updates = snapshot.docs.map(async (doc) => {
@@ -95,7 +95,7 @@ export async function GetSavedJobsForSearcher(db: DB, searcherID: string): Promi
   return savedJobs;
 }
 
-export async function getAllJobIDs(db: DB): Promise<string[]> {
+export async function GetAllJobIDs(db: DB): Promise<string[]> {
   const snapshot = await db.JobListingCollection().get();
   const jobIds: string[] = [];
 
@@ -107,7 +107,7 @@ export async function getAllJobIDs(db: DB): Promise<string[]> {
   return jobIds;
 }
 
-export async function getJobListingsByFilter(db: DB, filters: any): Promise<JobListing[]> {
+export async function RetrieveJobListingsByFilter(db: DB, filters: any): Promise<JobListing[]> {
   let query: FirebaseFirestore.Query<FirebaseFirestore.DocumentData> = db.JobListingCollection();
 
   for (const [key, value] of Object.entries(filters)) {
