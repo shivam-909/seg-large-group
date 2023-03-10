@@ -4,8 +4,8 @@ import { NextFunction, Request, Response } from "express";
 import DB from "../../db/db";
 import Application from "../../models/application";
 import * as applicationdb from "../../db/applications";
-import { getErrorMessage, Handler } from "../public";
-import { seedApplicationListings } from "../../seeder/seed";
+import { ErrorApplicationNotFound, getErrorMessage, Handler } from "../public";
+import { SeedApplicationListings } from "../../seeder/seed";
 import { randomUUID } from "crypto";
 
 export function AddApplication(db: DB): Handler {
@@ -14,17 +14,12 @@ export function AddApplication(db: DB): Handler {
     const newID = randomUUID();
     const newApplication = new Application(newID, status, searcher, jobListing);
 
-    try {
-      await applicationdb.CreateApplication(db, newApplication);
-      res.status(200).json({
-        msg: "application created"
-      });
-      return;
-    } catch (err) {
-      next({
-        message: getErrorMessage(err),
-      });
-    }
+    await applicationdb.CreateApplication(db, newApplication);
+    res.status(200).json({
+      msg: "application created"
+    });
+    return;
+
   }
 }
 
@@ -32,24 +27,19 @@ export function GetApplication(db: DB): Handler {
   return async (req: Request, res: Response, next: NextFunction) => {
     const { id } = req.params;
 
-    try {
-      const application = await applicationdb.RetrieveApplication(db, id);
-      if (application) {
-        res.status(200).json(application);
-      } else {
-        res.status(404).json({
-          message: 'application not found'
-        });
-      }
-    } catch (err) {
-      next({
-        message: getErrorMessage(err),
+    const application = await applicationdb.RetrieveApplication(db, id);
+    if (application) {
+      res.status(200).json(application);
+    } else {
+      res.status(404).json({
+        message: 'application not found'
       });
     }
+
   };
 }
 
-export function getApplicationByFilterRoute(db: DB): Handler {
+export function RetrieveApplicationByFilter(db: DB): Handler {
   return async (req: Request, res: Response, next: NextFunction) => {
     const filters = {
       id: req.body.id || '',
@@ -58,29 +48,20 @@ export function getApplicationByFilterRoute(db: DB): Handler {
       jobListing: req.body.jobListing || '',
     };
 
-    try {
-      const applications = await GetApplicationsByFilter(db, filters);
-      res.status(200).json({
-        applications,
-      });
-    } catch (err) {
-      next({
-        message: getErrorMessage(err),
-      });
-    }
+    const applications = await applicationdb.GetApplicationsByFilter(db, filters);
+    res.status(200).json({
+      applications,
+    });
   };
 }
 
 export function SeedApplications(db: DB): Handler {
   return async (req: Request, res: Response, next: NextFunction) => {
-    try {
-      await seedApplicationListings(db);
-      res.status(200).json({
-        message: 'Applications seeded successfully'
-      });
-    } catch (err) {
-      next(err);
-    }
+    await SeedApplicationListings(db);
+    res.status(200).json({
+      message: 'Applications seeded successfully'
+    });
+
   };
 }
 
@@ -89,41 +70,22 @@ export function UpdateApplication(db: DB): Handler {
     const id = req.params.id;
     const applicationData = req.body;
 
-    try {
-      const application = await applicationdb.RetrieveApplication(db, id);
-      if (!application) {
-        return res.status(404).json({
-          msg: `Application ${id} not found`
-        });
-      }
-
-      const updatedApplication = { ...application, ...applicationData };
-      await applicationdb.UpdateApplication(db, updatedApplication);
-
-      res.status(200).json({
-        msg: "Application updated"
-      });
-    } catch (err) {
-      next({
-        message: getErrorMessage(err),
-      });
+    const application = await applicationdb.RetrieveApplication(db, id);
+    if (!application) {
+      next(ErrorApplicationNotFound);
     }
+
+    const updatedApplication = { ...application, ...applicationData };
+    await applicationdb.UpdateApplication(db, updatedApplication);
+
+    res.status(200).send();
   }
 }
 
 export function DeleteApplication(db: DB): Handler {
   return async (req: Request, res: Response, next: NextFunction) => {
     const id = req.params.id;
+    await applicationdb.DeleteApplication(db, id);
+  }
+};
 
-    try {
-      await applicationdb.DeleteApplication(db, id);
-      res.status(200).json({
-        msg: `Application ${id} has been deleted`,
-      });
-    } catch (err) {
-      next({
-        message: getErrorMessage(err),
-      });
-    }
-  };
-}

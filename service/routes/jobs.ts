@@ -11,7 +11,7 @@ export function AddListing(db: DB): Handler {
     const { title, compensation, description, location, schedule, companyID, type, datePosted, benefits, requirements } = req.body;
     const newID = randomUUID();
     const newJobListing = new JobListing(newID, title, compensation, description, location, schedule, companyID, type, datePosted, benefits, requirements);
-    await jobsdb.CreateJobsListing(db, newJobListing);
+    await jobsdb.CreateJobListing(db, newJobListing);
   }
 }
 
@@ -55,17 +55,11 @@ export function DeleteListing(db: DB): Handler {
 }
 
 
-export function getJobListingsByFilterRoute(db: DB): Handler {
+export function RetrieveJobListingsByFilter(db: DB): Handler {
   return async (req: Request, res: Response, next: NextFunction) => {
     const filters = req.body;
-    console.log(req.body)
-    try {
-      const jobListings = await getJobListingsByFilter(db, filters);
-      res.status(200).json(jobListings);
-    } catch (err) {
-      next({
-        message: getErrorMessage(err),
-      });
-    }
+
+    const jobListings = await jobsdb.RetrieveJobListingsByFilter(db, filters);
+    res.status(200).json(jobListings);
   }
 }

@@ -10,12 +10,12 @@ test('register user', async () => {
 
     let formData = new FormData();
 
-    formData.append('userType', 'searcher');
-    formData.append('firstName', 'John');
-    formData.append('lastName', 'Doe');
+    formData.append('user_type', 'searcher');
+    formData.append('first_name', 'John');
+    formData.append('last_name', 'Doe');
     formData.append('email', email);
     formData.append('password', 'Password123!');
-    formData.append('pfpUrl', 'TestpfpUrl');
+    formData.append('pfp_url', 'TestpfpUrl');
     formData.append('location', 'London');
 
     const response = await fetch('http://localhost:8000/auth/register', {

@@ -43,46 +43,5 @@ export function DeleteUser(db: DB): Handler {
 }
 
 
-export function getCompanyRoute(db: DB): Handler {
-    return async (req: Request, res: Response, next: NextFunction) => {
-        const id = req.params.id;
-
-        try {
-            const user = await getCompanyfromCompanyID(db, id);
-            if (user) {
-                res.status(200).json(user);
-            } else {
-                res.status(404).json({
-                    message: `Company ${id} not found`
-                });
-            }
-        } catch (err) {
-            next({
-                message: getErrorMessage(err),
-            });
-        }
-    };
-}
-
-export function getSearcherRoute(db: DB): Handler {
-    return async (req: Request, res: Response, next: NextFunction) => {
-        const id = req.params.id;
-
-        try {
-            const user = await getSearcherfromSearcherID(db, id);
-            if (user) {
-                res.status(200).json(user);
-            } else {
-                res.status(404).json({
-                    message: `Searcher ${id} not found`
-                });
-            }
-        } catch (err) {
-            next({
-                message: getErrorMessage(err),
-            });
-        }
-    };
-}
 
 

@@ -39,8 +39,6 @@ export async function UpdateApplication(db: DB, application: Application): Promi
             'status': application.status,
             'searcher': application.searcher,
             'jobListing': application.jobListing
-
-
         })
     } catch (err) {
         throw err

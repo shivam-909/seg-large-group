@@ -11,7 +11,12 @@ export async function CreateSearcher(db: DB, user: User, searcher: Searcher) {
         throw err;
     }
 
-    await db.SearcherCollection().doc(searcher.searcherID).set(searcher);
+    await db.SearcherCollection().doc(searcher.searcherID).set({
+        firstName: searcher.firstName,
+        lastName: searcher.lastName,
+        savedJobs: searcher.savedJobs,
+        searcherID: searcher.searcherID,
+    });
 }
 
 export async function RetrieveSearcherByID(db: DB, id: string): Promise<Searcher | null> {
