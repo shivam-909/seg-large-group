@@ -16,6 +16,7 @@ import * as companiesroutes from "./service/routes/companies";
 import * as searcherroutes from "./service/routes/searchers";
 import * as util from './service/routes/routes';
 import cors from 'cors';
+import {Route} from "./service/routes/routes";
 
 export const db = new DB();
 
@@ -38,8 +39,10 @@ export const run = () => {
 
   app.post('/api/notifications/add', upload.none(), utils.Route(app, notificationroutes.AddNotification));
   app.get('/api/notifications/:id', utils.Route(app, notificationroutes.GetNotification));
+  app.get('/notifications/user/:id', Route(app, notificationroutes.getUserNotificationsRoute));
   app.patch('/api/notifications/:id', upload.none(), utils.Route(app, notificationroutes.UpdateNotification));
   app.delete('/api/notifications/:id', upload.none(), utils.Route(app, notificationroutes.DeleteNotification));
+
 
   app.post('/api/jobs/add', upload.none(), utils.Route(app, listingroutes.AddListing));
   app.get('/api/jobs/:id', utils.Route(app, listingroutes.GetListing));
