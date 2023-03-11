@@ -266,11 +266,17 @@ async function GenerateCompanyNotification(db: DB, companyID: string): Promise<N
     const content = GetRandomNotificationEnum("company");
     const jobListingID = jobListingIds[Math.floor(Math.random() * jobListingIds.length)];
 
+    const applicationsSnapshot = await db.ApplicationCollection().where("jobListing", "==", jobListingID).get();
+    const applicationIds: string[] = applicationsSnapshot.docs.map((doc) => doc.id);
+    const applicationID = applicationIds[Math.floor(Math.random() * jobListingIds.length)];
+
+
+
 
     return {
         id: randomUUID(),
         content,
-        applicationID: jobListingID,
+        applicationID: applicationID,
         created: faker.date.past(),
         userID: user.userID,
     };
