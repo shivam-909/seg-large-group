@@ -8,8 +8,7 @@ import Notification from "../../models/notification";
 import {RetrieveApplication} from "../../db/applications";
 import {RetrieveJobListing} from "../../db/jobs";
 import {RetrieveCompanyByID} from "../../db/companies";
-import Application from "../../models/application";
-import job from "../../models/job";
+
 
 
 export function AddNotification(db: DB): Handler {
@@ -33,7 +32,6 @@ export function GetNotification(db: DB): Handler {
     }
 
     const application = await RetrieveApplication(db, notification.applicationID);
-
     let jobListing = null;
     if(application) jobListing = await RetrieveJobListing(db, application.jobListing);
     let title = null;
