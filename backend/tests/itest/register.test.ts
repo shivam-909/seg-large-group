@@ -1,5 +1,5 @@
 import DB from "../../db/db";
-import { deleteUser, retrieveUserByEmail } from "../../db/users";
+import { DeleteUser, RetrieveFullUserByEmail } from "../../db/users";
 
 test('register user', async () => {
 
@@ -10,12 +10,12 @@ test('register user', async () => {
 
     let formData = new FormData();
 
-    formData.append('userType', 'searcher');
-    formData.append('firstName', 'John');
-    formData.append('lastName', 'Doe');
+    formData.append('user_type', 'searcher');
+    formData.append('first_name', 'John');
+    formData.append('last_name', 'Doe');
     formData.append('email', email);
     formData.append('password', 'Password123!');
-    formData.append('pfpUrl', 'TestpfpUrl');
+    formData.append('pfp_url', 'TestpfpUrl');
     formData.append('location', 'London');
 
     const response = await fetch('http://localhost:8000/auth/register', {
@@ -43,9 +43,9 @@ test('register user', async () => {
 
     const db = new DB();
 
-    const user = await retrieveUserByEmail(db, email);
+    const user = await RetrieveFullUserByEmail(db, email);
 
     expect(user).not.toBeNull();
 
-    await deleteUser(db, user!.userID);
+    await DeleteUser(db, user!.userID);
 });

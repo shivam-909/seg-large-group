@@ -1,8 +1,8 @@
 import JobListing from "../models/job";
 import DB from "./db";
-import {Searcher} from "../models/user";
+import { Searcher } from "../models/user";
 
-export async function createJobListing(db: DB, jobListing: JobListing): Promise<JobListing> {
+export async function CreateJobListing(db: DB, jobListing: JobListing): Promise<JobListing> {
   const docRef = db.JobListingCollection().doc(jobListing.id);
 
   try {
@@ -19,14 +19,14 @@ export async function createJobListing(db: DB, jobListing: JobListing): Promise<
 
 
 
-export async function retrieveJobListing(db: DB, id: string): Promise<JobListing | null> {
+export async function RetrieveJobListing(db: DB, id: string): Promise<JobListing | null> {
   const docRef = db.JobListingCollection().doc(id);
   const doc = await docRef.get();
 
   return doc.data() as JobListing;
 }
 
-export async function updateJobListing(db: DB, jobListing: JobListing): Promise<void> {
+export async function UpdateJobListing(db: DB, jobListing: JobListing): Promise<void> {
   const docRef = db.JobListingCollection().doc(jobListing.id);
 
   const { id, ...listingData } = jobListing;
@@ -39,30 +39,30 @@ export async function updateJobListing(db: DB, jobListing: JobListing): Promise<
 }
 
 
-export async function deleteJobListing(db: DB, id: string) {
+export async function DeleteJobListing(db: DB, id: string) {
   const docRef = db.JobListingCollection().doc(id);
 
   await docRef.delete();
-  await deleteJobFromSaved(db, id)
+  await DeleteJobFromSaved(db, id)
 }
 
 
 
-export async function deleteJobsByCompanyID(db: DB, companyId: string) {
+export async function DeleteJobsByCompanyID(db: DB, companyId: string) {
   if (!companyId) {
     throw new Error('Company ID is not defined');
   }
   const jobCollectionRef = db.JobListingCollection();
   const jobsSnapshot = await jobCollectionRef.where('companyID', '==', companyId).get();
   jobsSnapshot.forEach(jobDoc => {
-    deleteJobListing(db, jobDoc.id);
+    DeleteJobListing(db, jobDoc.id);
   });
 }
 
 
 
 
-export async function deleteJobFromSaved(db: DB, jobId: string): Promise<void> {
+export async function DeleteJobFromSaved(db: DB, jobId: string): Promise<void> {
   const searcherCollection = db.SearcherCollection();
   const snapshot = await searcherCollection.get();
   const updates = snapshot.docs.map(async (doc) => {
@@ -95,7 +95,7 @@ export async function GetSavedJobsForSearcher(db: DB, searcherID: string): Promi
   return savedJobs;
 }
 
-export async function getAllJobIDs(db: DB): Promise<string[]> {
+export async function GetAllJobIDs(db: DB): Promise<string[]> {
   const snapshot = await db.JobListingCollection().get();
   const jobIds: string[] = [];
 
@@ -107,7 +107,7 @@ export async function getAllJobIDs(db: DB): Promise<string[]> {
   return jobIds;
 }
 
-export async function getJobListingsByFilter(db: DB, filters: any): Promise<JobListing[]> {
+export async function RetrieveJobListingsByFilter(db: DB, filters: any): Promise<JobListing[]> {
   let query: FirebaseFirestore.Query<FirebaseFirestore.DocumentData> = db.JobListingCollection();
 
   for (const [key, value] of Object.entries(filters)) {
