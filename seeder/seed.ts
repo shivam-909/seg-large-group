@@ -238,12 +238,16 @@ async function GenerateSearcherNotification(db: DB, searcherID: string): Promise
     }
 
     const content = GetRandomNotificationEnum("searcher");
-    const randomJobListing = applications[Math.floor(Math.random() * applications.length)];
+    const randomJobListingID = applications[Math.floor(Math.random() * applications.length)].id;
+
+    const applicationsSnapshot = await db.ApplicationCollection().where("jobListing", "==", randomJobListingID).get();
+    const applicationIds: string[] = applicationsSnapshot.docs.map((doc) => doc.id);
+    const applicationID = applicationIds[Math.floor(Math.random() * applicationIds.length)];
 
     return {
         id: randomUUID(),
         content,
-        applicationID: randomJobListing.id,
+        applicationID: applicationID,
         created: faker.date.past(),
         userID: user.userID,
     };
@@ -268,7 +272,7 @@ async function GenerateCompanyNotification(db: DB, companyID: string): Promise<N
 
     const applicationsSnapshot = await db.ApplicationCollection().where("jobListing", "==", jobListingID).get();
     const applicationIds: string[] = applicationsSnapshot.docs.map((doc) => doc.id);
-    const applicationID = applicationIds[Math.floor(Math.random() * jobListingIds.length)];
+    const applicationID = applicationIds[Math.floor(Math.random() * applicationIds.length)];
 
 
 
