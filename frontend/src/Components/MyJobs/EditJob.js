@@ -57,21 +57,29 @@ export default function EditJob() {
         validate();
     },[])
 
-    function handleSubmit() {
+    async function handleSubmit() {
         let title = document.getElementById("title").value;
         let schedule = document.getElementById("schedule").value;
         let location = document.getElementById("location").value;
         let type = document.getElementById("type").value;
         let description = document.getElementById("description").value;
 
+        const token = localStorage.getItem("access");
+        const userID = await axios.post('http://localhost:8000/api/echo', {}, {headers: {Authorization: `Bearer ${token}`}}).then(response => {return response.data})
+        const companyID = await axios.get("http://localhost:8000/user/"+userID).then(response => {return response.data.companyID});
+
         const formData = new FormData();
         formData.append('title', title);
         formData.append('location', location);
         formData.append('type', type);
+        formData.append('companyID', companyID);
         formData.append('schedule', schedule);
+        formData.append('benefits', ["test"]);
+        formData.append('requirements', ["test"]);
+        formData.append('compensation', 0);
         formData.append('description', description);
 
-        axios.patch("http://localhost:8000/jobs/"+id, formData);
+        isEdit ? await axios.patch("http://localhost:8000/jobs/"+id, formData).then(navigate(-1)) : await axios.post("http://localhost:8000/jobs/add/", formData)
     }
     return (
         <div>

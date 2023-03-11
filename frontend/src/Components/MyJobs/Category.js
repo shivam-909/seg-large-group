@@ -90,7 +90,7 @@ export default function Category(props) {
                             })
                     }
                 } else {
-                    console.log("no jobs")
+                    // TODO: Display for 0 Jobs
                 }
             })
             .catch(error => {
