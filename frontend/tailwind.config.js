@@ -15,6 +15,7 @@ module.exports = {
       'grey-contrast': '#5A5A5A',
       'red': '#f54242',
       'light-red': '#ffb8b8',
+      'orange': '#fca311',
     },
     extend: {},
   },

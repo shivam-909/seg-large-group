@@ -4,6 +4,7 @@ import {NextFunction, Request, Response} from "express";
 import {createNotification, deleteNotification, retrieveNotification, updateNotification} from "../../db/notifications";
 import {randomUUID} from "crypto";
 import Notification from "../../models/notification";
+import {retrieveUserByID} from "../../db/users";
 
 
 export function addNotificationRoute(db: DB): Handler {

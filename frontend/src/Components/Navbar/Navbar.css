@@ -35,7 +35,7 @@
     position: fixed;
     right: 0;
     background-color: white;
-    border-radius: 5px;
+    border-bottom-left-radius: 5px;
   }
   .topnav #expandProfile a:hover {
     left: 0px;

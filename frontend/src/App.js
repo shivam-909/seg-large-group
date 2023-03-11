@@ -5,6 +5,7 @@ import RegisterPage from "./Components/RegisterPage/RegisterPage";
 import PrivateRoutes from "./Auth/PrivateRoute";
 import MyJobs from "./Components/MyJobs/MyJobs";
 import UserProfilePage from "./Components/ProfilePage/UserProfilePage";
+import NotificationsPage from "./Components/NotificationsPage/NotificationsPage";
 
 export default function App() {
     return (
@@ -12,11 +13,12 @@ export default function App() {
           <Routes>
               <Route element={<PrivateRoutes/>}>
               </Route>
+              <Route path="/profile" element={ <UserProfilePage/> }/>
+              <Route path="/myjobs" element={ <MyJobs/> }/>
               <Route path="/" element={ <SearchPage/> }/>
               <Route path="/login" element={ <LoginPage/> }/>
               <Route path="/signup" element={ <RegisterPage/> }/>
-              <Route path="/saved" element={ <MyJobs/> }/>
-              <Route path="/profile" element={ <UserProfilePage/> }/>
+              <Route path="/notifications" element={ <NotificationsPage/> }/>
           </Routes>
       </BrowserRouter>
   );
