@@ -35,7 +35,7 @@ async function GenerateUser(): Promise<User> {
     return new User(
         id,
         email,
-        hashPassword(password),
+        password,
         "",
         "",
         [],
