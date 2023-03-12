@@ -227,7 +227,8 @@ function GetRandomStatus(): string {
 //=====================================================NOTIFICATIONS=====================================================
 
 async function GenerateSearcherNotification(db: DB, searcherID: string): Promise<Notification | undefined> {
-    const applications = await applicationsdb.GetApplicationsByFilter(db, { "searcher": searcherID });
+    const applicationsSnapshot = await db.ApplicationCollection().where("searcher", "==", searcherID).get();
+    const applicationIds: string[] = applicationsSnapshot.docs.map((doc) => doc.id);
     const user = await usersdb.RetrieveUserBySearcherID(db, searcherID);
 
     if (!user) {
@@ -235,13 +236,11 @@ async function GenerateSearcherNotification(db: DB, searcherID: string): Promise
         throw new Error(ErrorUserNotFound)
     }
 
-    if (applications.length === 0) {
+    if (applicationIds.length === 0) {
         return undefined;
     }
 
     const content = GetRandomNotificationEnum("searcher");
-    const applicationsSnapshot = await db.ApplicationCollection().where("searcher", "==", searcherID).get();
-    const applicationIds: string[] = applicationsSnapshot.docs.map((doc) => doc.id);
     const applicationID = applicationIds[Math.floor(Math.random() * applicationIds.length)];
 
     return {
@@ -254,6 +253,7 @@ async function GenerateSearcherNotification(db: DB, searcherID: string): Promise
 }
 
 async function GenerateCompanyNotification(db: DB, companyID: string): Promise<Notification | undefined> {
+
     const jobListingsSnapshot = await db.JobListingCollection().where("companyID", "==", companyID).get();
     const jobListingIds: string[] = jobListingsSnapshot.docs.map((doc) => doc.id);
     const user = await usersdb.RetrieveUserByCompanyID(db, companyID);
@@ -269,10 +269,11 @@ async function GenerateCompanyNotification(db: DB, companyID: string): Promise<N
 
     const content = GetRandomNotificationEnum("company");
     const jobListingID = jobListingIds[Math.floor(Math.random() * jobListingIds.length)];
-
+    console.log(jobListingID);
     const applicationsSnapshot = await db.ApplicationCollection().where("jobListing", "==", jobListingID).get();
     const applicationIds: string[] = applicationsSnapshot.docs.map((doc) => doc.id);
     const applicationID = applicationIds[Math.floor(Math.random() * applicationIds.length)];
+    console.log(jobListingID);
 
 
 
