@@ -2,6 +2,8 @@ import DB from "./db";
 import Application from "../models/application";
 import { firestore } from "firebase-admin";
 import QuerySnapshot = firestore.QuerySnapshot;
+import {RetrieveJobListing} from "./jobs";
+import {RetrieveCompanyByID} from "./companies";
 
 export async function CreateApplication(db: DB, application: Application) {
     const docRef = db.ApplicationCollection().doc(application.id);
@@ -24,6 +26,7 @@ export async function RetrieveApplication(db: DB, id: string): Promise<Applicati
         return null
     }
 }
+
 
 export async function RetrieveAllApplications(db: DB): Promise<QuerySnapshot> {
     const docRef = db.ApplicationCollection();
