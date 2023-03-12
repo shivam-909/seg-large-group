@@ -87,6 +87,7 @@ async function GenerateSearcher(db: DB): Promise<Searcher> {
 }
 
 export async function SeedSearchers(db: DB): Promise<void> {
+
     const searcherPromises: Promise<Searcher>[] = [];
     for (let i = 0; i < numSearchers; i++) {
         searcherPromises.push(GenerateSearcher(db));
@@ -97,6 +98,7 @@ export async function SeedSearchers(db: DB): Promise<void> {
     const createPromises: Promise<void>[] = [];
     for (const searcher of searchers) {
         const user = await GenerateUser();
+        user.searcherID = searcher.searcherID;
         createPromises.push(searcherdb.CreateSearcher(db, user, searcher));
     }
 
