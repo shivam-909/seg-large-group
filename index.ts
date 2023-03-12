@@ -62,8 +62,7 @@ export const run = () => {
   app.get('/company/:id', utils.Route(app, companiesroutes.GetCompany));
   app.get('/searcher/:id', utils.Route(app, searcherroutes.GetSearcher));
 
-  app.post('/seed_all', utils.Route(app, seedroutes.SeedAll));
-  app.delete('/deseed', utils.Route(app, deseed));
+
 
   app.post('/api/seed_all', utils.Route(app, seedroutes.SeedAll));
   app.delete('/api/deseed', utils.Route(app, deseed));
