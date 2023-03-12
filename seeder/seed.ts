@@ -240,9 +240,7 @@ async function GenerateSearcherNotification(db: DB, searcherID: string): Promise
     }
 
     const content = GetRandomNotificationEnum("searcher");
-    const randomJobListingID = applications[Math.floor(Math.random() * applications.length)].id;
-
-    const applicationsSnapshot = await db.ApplicationCollection().where("jobListing", "==", randomJobListingID).get();
+    const applicationsSnapshot = await db.ApplicationCollection().where("searcher", "==", searcherID).get();
     const applicationIds: string[] = applicationsSnapshot.docs.map((doc) => doc.id);
     const applicationID = applicationIds[Math.floor(Math.random() * applicationIds.length)];
 
