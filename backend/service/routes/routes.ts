@@ -12,5 +12,6 @@ export function HealthCheck(req: Request, res: Response) {
 }
 
 export function Echo(req: Request, res: Response) {
+    console.log(req.headers)
     return res.status(200).json(req.headers["auth_username"]);
 }
