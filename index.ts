@@ -15,7 +15,6 @@ import * as notificationroutes from "./service/routes/notifications";
 import * as companiesroutes from "./service/routes/companies";
 import * as searcherroutes from "./service/routes/searchers";
 import * as util from './service/routes/routes';
-import * as searchroute from "./service/routes/search";
 import cors from 'cors';
 
 export const db = new DB();
@@ -47,12 +46,14 @@ export const run = () => {
   app.post('/api/jobs/filter', utils.Route(app, listingroutes.RetrieveJobListingsByFilter));
   app.patch('/api/jobs/:id', upload.none(), utils.Route(app, listingroutes.UpdateListing));
   app.delete('/api/jobs/:id', upload.none(), utils.Route(app, listingroutes.DeleteListing));
-  app.get('/api/jobs/search', utils.Route(app, searchroute.SearchListings));
+
 
   app.post('/api/applications/add', upload.none(), utils.Route(app, applicationroutes.AddApplication));
   app.get('/api/applications/:id', utils.Route(app, applicationroutes.GetApplication));
   app.patch('/api/applications/:id', upload.none(), utils.Route(app, applicationroutes.UpdateApplication));
   app.delete('/api/applications/:id', upload.none(), utils.Route(app, applicationroutes.DeleteApplication));
+
+
 
   app.get('/api/user/:id', utils.Route(app, userroutes.GetUser));
   app.patch('/api/users/:id', upload.none(), utils.Route(app, userroutes.UpdateUser));
