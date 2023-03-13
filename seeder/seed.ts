@@ -132,6 +132,7 @@ export function hashPassword(password: string): string {
 //=====================================================JOB-LISTINGS=====================================================
 
 async function GetRandomCompany(db: DB): Promise<Company> {
+
     const companyIds = await companiesdb.GetAllCompanyIds(db);
 
     if (companyIds.length === 0) {
@@ -174,11 +175,15 @@ async function GenerateJobListing(db: DB): Promise<JobListing> {
         faker.helpers.arrayElement(["Engineering", "Sales", "Marketing", "Finance"]),
         faker.date.past(),
         [faker.lorem.words(), faker.lorem.words(), faker.lorem.words()],
-        [faker.lorem.words(), faker.lorem.words(), faker.lorem.words()]
-    );
+        [faker.lorem.words(), faker.lorem.words(), faker.lorem.words()],
+        faker.helpers.arrayElements([[["Years of Experience", true], ["Are you able to commute?", false]], [["Will you be able to work remotely?", false]]])
+
+);
 }
 
 export async function SeedJobListings(db: DB): Promise<void> {
+
+
     for (let i = 0; i < numJobListings; i++) {
         const jobListing = await GenerateJobListing(db);
         await jobsdb.CreateJobListing(db, jobListing);
