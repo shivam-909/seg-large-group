@@ -8,7 +8,7 @@ class JobListing {
   location: string;
   schedule: string;
   companyID: string;
-  type: string;
+  industry: string;
   datePosted: Date;
   benefits: string[];
   requirements: string[];
@@ -21,7 +21,7 @@ class JobListing {
     location: string,
     schedule: string,
     companyID: string,
-    type: string,
+    industry: string,
     datePosted: Date,
     benefits: string[],
     requirements: string[]
@@ -33,7 +33,7 @@ class JobListing {
     this.location = location;
     this.schedule = schedule;
     this.companyID = companyID;
-    this.type = type;
+    this.industry = industry;
     this.datePosted = datePosted;
     this.benefits = benefits;
     this.requirements = requirements;
