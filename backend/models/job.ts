@@ -10,8 +10,8 @@ class JobListing {
   companyID: string;
   industry: string;
   datePosted: Date;
-  benefits: string[];
-  requirements: string[];
+  benefits?: string[];
+  requirements?: string[];
 
   constructor(
     id: string,
@@ -23,8 +23,8 @@ class JobListing {
     companyID: string,
     industry: string,
     datePosted: Date,
-    benefits: string[],
-    requirements: string[]
+    benefits?: string[],
+    requirements?: string[]
   ) {
     this.id = id;
     this.title = title;
