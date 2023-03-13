@@ -93,7 +93,7 @@ function LoginPage() {
 
             <p className='text-center pt-4'>New user? <a className='LoginPage-link' href='/signup'>Sign up.</a></p>
 
-            <a className='text-center' href='/#'>Forgot your password?</a>
+            <p  className='text-center'> Forgot your password? <a className= "ForgotPasswordPage-link" href="/forgotPassword" >Reset password.</a></p>
           </div>
       </div>
   );
