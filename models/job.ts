@@ -12,6 +12,7 @@ class JobListing {
   datePosted: Date;
   benefits?: string[];
   requirements?: string[];
+  screeningQuestions?: [string, boolean][][];
 
   constructor(
     id: string,
@@ -24,8 +25,9 @@ class JobListing {
     industry: string,
     datePosted: Date,
     benefits?: string[],
-    requirements?: string[]
-  ) {
+    requirements?: string[],
+    screeningQuestions?: [string, boolean][][]
+) {
     this.id = id;
     this.title = title;
     this.compensation = compensation;
@@ -37,6 +39,7 @@ class JobListing {
     this.datePosted = datePosted;
     this.benefits = benefits;
     this.requirements = requirements;
+    this.screeningQuestions = screeningQuestions;
   }
 }
 
