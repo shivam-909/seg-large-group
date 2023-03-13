@@ -6,8 +6,8 @@ import {
     SeedApplicationListings,
     SeedCompanies,
     SeedJobListings,
-    SeedNotifications,
-    SeedSearchers
+    SeedAllNotifications,
+    SeedSearchers,
 } from "../../seeder/seed";
 
 
@@ -17,7 +17,7 @@ export function SeedAll(db: DB): Handler {
         await SeedJobListings(db);
         await SeedSearchers(db);
         await SeedApplicationListings(db);
-        await SeedNotifications(db);
+        await SeedAllNotifications(db);
         res.status(200).json({
             message: 'All data seeded successfully'
         });
