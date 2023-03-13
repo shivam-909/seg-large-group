@@ -1,7 +1,7 @@
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import RegisterPage from '../Components/RegisterPage/RegisterPage';
 import userEvent from "@testing-library/user-event";
-import { BrowserRouter as Router } from 'react-router-dom';
+import { BrowserRouter as Router, Route } from 'react-router-dom';
 
 describe("RegisterPage", () => {
   test("renders RegisterPage component", async () => {
