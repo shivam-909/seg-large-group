@@ -59,11 +59,8 @@ export const run = () => {
   app.patch('/api/users/:id', upload.none(), utils.Route(app, userroutes.UpdateUser));
   app.delete('/api/user/:id', upload.none(), utils.Route(app, userroutes.DeleteUser));
 
-  app.get('/company/:id', utils.Route(app, companiesroutes.GetCompany));
-  app.get('/searcher/:id', utils.Route(app, searcherroutes.GetSearcher));
-
-  app.post('/seed_all', utils.Route(app, seedroutes.SeedAll));
-  app.delete('/deseed', utils.Route(app, deseed));
+  app.get('api/company/:id', utils.Route(app, companiesroutes.GetCompany));
+  app.get('api/searcher/:id', utils.Route(app, searcherroutes.GetSearcher));
 
   app.post('/api/seed_all', utils.Route(app, seedroutes.SeedAll));
   app.delete('/api/deseed', utils.Route(app, deseed));
