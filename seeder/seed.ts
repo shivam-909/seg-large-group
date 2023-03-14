@@ -41,8 +41,8 @@ async function GenerateUser(): Promise<User> {
         id,
         email,
         hashPassword(password),
-        "",
-        "",
+        faker.image.avatar(),
+        faker.address.city(),
         [],
         undefined,
         undefined,
@@ -176,7 +176,7 @@ async function GenerateJobListing(db: DB): Promise<JobListing> {
         faker.date.past(),
         [faker.lorem.words(), faker.lorem.words(), faker.lorem.words()],
         [faker.lorem.words(), faker.lorem.words(), faker.lorem.words()],
-        faker.helpers.arrayElements([[["Years of Experience", true], ["Are you able to commute?", false]], [["Will you be able to work remotely?", false]]])
+        //faker.helpers.arrayElements([[["Years of Experience", true], ["Are you able to commute?", false]], [["Will you be able to work remotely?", false]]])
 
 );
 }
