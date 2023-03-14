@@ -3,12 +3,12 @@ import {useEffect, useState} from "react";
 import Category from "./Category";
 import Navbar from "../Navbar/Navbar";
 import PrivateRoutes from "../../Auth/PrivateRoute";
-import axios from "axios";
 import {useNavigate} from "react-router-dom";
 
 export default function MyJobs() {
     const [isCompany, setCompany] = useState(false);
     const [filter, setFilter] = useState("Saved")
+    const [user, setUser] = useState([])
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -20,10 +20,7 @@ export default function MyJobs() {
     }, []);
 
     async function checkIsCompany(){
-        const token = localStorage.getItem("access");
-        const userID = await axios.post('http://localhost:8000/api/echo', {}, {headers: {Authorization: `Bearer ${token}`}}).then(response => {return response.data})
-        const searcherID = await axios.get("http://localhost:8000/user/"+userID).then(response => {return response.data.searcherID});
-        setCompany(searcherID === undefined)
+        setCompany(user.searcherID === undefined)
     }
 
     function changeFilter(type){

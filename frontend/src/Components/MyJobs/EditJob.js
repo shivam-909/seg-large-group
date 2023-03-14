@@ -2,9 +2,9 @@ import './MyJobs.css'
 import '../ProfilePage/ProfilePage.css'
 import React, {useEffect, useState} from "react";
 import Navbar from "../Navbar/Navbar";
-import PrivateRoutes from "../../Auth/PrivateRoute";
 import axios from "axios";
 import {useNavigate, useParams} from "react-router-dom";
+import Card from "./Card";
 
 export default function EditJob() {
     const navigate = useNavigate();
@@ -12,16 +12,14 @@ export default function EditJob() {
     const { id } = useParams();
     const [isEdit] = useState(id !== undefined);
     const [job, setJob] = useState([])
-    const [user, setUser] = useState();
+    const [user, setUser] = useState([]);
+    const [requirements, setRequirements] = useState([]);
+    const [benefits, setBenefits] = useState([]);
+    const [reqID, setReqID] = useState(requirements.length);
+    const [benefitID, setBenefitID] = useState(benefits.length);
 
-    async function getUserData() {
-        const token = localStorage.getItem("access");
-        const userID = await axios.post('http://localhost:8000/api/echo', {}, {headers: {Authorization: `Bearer ${token}`}}).then(response => {return response.data})
-        setUser(await axios.get("http://localhost:8000/user/"+userID).then(response => {return response.data}));
-    }
-
-    function checkIsCompany(){
-         return user.searcherID === undefined
+    async function checkIsCompany(){
+         return await user.searcherID === undefined
     }
 
     async function verifyCompany(){
@@ -37,7 +35,7 @@ export default function EditJob() {
                 setJob(prevJob => ({
                     ...prevJob,
                     title: response.data.title,
-                    type: response.data.type,
+                    industry: response.data.industry,
                     compensation: response.data.compensation,
                     location: response.data.location,
                     schedule: response.data.schedule,
@@ -56,7 +54,6 @@ export default function EditJob() {
     }
 
     useEffect(() => {
-        getUserData();
         validate();
     },[])
 
@@ -78,18 +75,30 @@ export default function EditJob() {
         formData.append('compensation', 0);
         formData.append('description', description);
 
-        isEdit ? await axios.patch("http://localhost:8000/jobs/"+id, formData).then(navigate(-1)) : await axios.post("http://localhost:8000/jobs/add/", formData)
+        isEdit ? await axios.patch("http://localhost:8000/api/jobs/"+id, formData).then(navigate(-1)) : await axios.post("http://localhost:8000/jobs/add/", formData)
     }
+
+    function addRequirement(){
+        setRequirements( [...requirements, <Card id={reqID} name={"Requirement"}/>]);
+        setReqID(reqID + 1);
+    }
+
+    function addBenefit(){
+        setBenefits( [...benefits, <Card id={benefitID} name={"Benefit"}/>]);
+        setBenefitID(benefitID + 1);
+    }
+
     return (
         <div>
             <Navbar/>
             <div className='bg-lighter-grey min-h-screen justify-center flex'>
                 <div className='bg-white mt-36 rounded-md px-12 py-7 space-y-3 min-w-[45%]'>
+                    <button onClick={() => {navigate(-1)}} className={"float-left mb-5 text-3xl text-red"}><i className="fa-solid fa-circle-chevron-left"></i></button>
                     <p className='font-bold text-3xl flex justify-center'>{isEdit ? "Edit" : "Add"} Job</p>
                     <div className={"border-b-[#ccc] border-b-2 m-4"}/>
                     <div className='text-input space-y-4' id="profile">
                         <p><strong>Title: <span className={"text-red"}>&#42;</span> </strong> <input type="text" id="title" placeholder = "Please enter the Job Title" defaultValue={job.title}/></p>
-                        <p><strong>Type: <span className={"text-red"}>&#42;</span> </strong> <input type="text" id="type" placeholder = "Please enter the Job Type" defaultValue={job.type}/></p>
+                        <p><strong>Industry: <span className={"text-red"}>&#42;</span> </strong> <input type="text" id="industry" placeholder = "Please enter the Job Industry" defaultValue={job.industry}/></p>
                         <p><strong>Compensation: <span className={"text-red"}>&#42;</span> </strong> <input type="number" id="compensation" placeholder = "Please enter the Compensation" defaultValue={job.compensation}/></p>
                         <p><strong>Schedule: <span className={"text-red"}>&#42;</span></strong>
                             <select id={"schedule"} className={"border-2 border-[#ccc] p-1 rounded-md m-2"}>
@@ -100,10 +109,13 @@ export default function EditJob() {
                         </p>
                         <p><strong>Location: <span className={"text-red"}>&#42;</span> </strong> <input type="text" id="location" placeholder = "Please enter the Job Location" defaultValue={job.location}/></p>
                         <p><strong className={"float-left"}>Description: <span className={"text-red"}>&#42;</span></strong><textarea id={"description"} defaultValue={job.description} className={"border-2 border-[#ccc] rounded-md p-2 w-full h-36"}/></p>
-                        <div className={"justify-center flex space-x-4"}>
-                        <button onClick={() => {navigate(-1)}} className={"cancel-btn"}>Cancel</button>
-                        <button onClick={handleSubmit} className={"save-btn"}>Submit</button>
-                        </div>
+                        <p><strong>Requirements: </strong><button className={"float-right bg-[#4b6df2] rounded-md border-2 border-dark-theme-grey text-l text-white w-8 h-8"} onClick={addRequirement}><i className="fa-solid fa-plus"></i></button>
+                            {requirements}
+                        </p>
+                        <p><strong>Benefits: </strong><button className={"float-right bg-[#4b6df2] rounded-md border-2 border-dark-theme-grey text-l text-white w-8 h-8"} onClick={addBenefit}><i className="fa-solid fa-plus"></i></button>
+                            {benefits}
+                        </p>
+                        <button onClick={handleSubmit} className={"w-full border-2 border-dark-theme-grey rounded-md p-2 bg-blue text-white"}>Submit</button>
                     </div>
                 </div>
             </div>

@@ -5,39 +5,63 @@ import Skills from "./Skills";
 import {setVisible} from "../Validation/validate";
 import ErrorBox from "../ErrorBox/ErrorBox";
 import Education from "./Education";
-import axios from "axios";
 import PrivateRoutes from "../../Auth/PrivateRoute";
+import {GetData} from "../../Auth/GetUser";
+import axios from "axios";
 
 function UserProfilePage() {
-    useEffect(() => {
-        getProfileData();
-    },[])
-    async function getProfileData(){
-        const token = localStorage.getItem("access");
-        const userID = await axios.post('http://localhost:8000/api/echo', {}, {headers: {Authorization: `Bearer ${token}`}}).then(response => { return response.data});
-        axios.get("http://localhost:8000/user/"+userID).then(response => {
-            setMyProfile(prevProfile => ({
-                ...prevProfile,
-                firstName: response.data.firstName,
-                lastName: response.data.lastName,
-                email: response.data.email,
-                pfp: response.data.pfpUrl,
-                location: response.data.location,
-            }));
-        })
-    }
-    const[profile, setMyProfile] = useState({
-      firstName:"",
-      lastName:"",
-      email:"",
-      skills: [],
-      education:"",
+    const [user, setUser] = useState({})
+    const [profile, setMyProfile] = useState({
+        firstName:"",
+        lastName:"",
+        email:"",
+        skills: [],
+        education:"",
         pfp: "",
         location: "",
         Cv:null
     });
-    const[isEditing, setIsEditing]= useState(false);
-    const[fileName, setFile]= useState('');
+    const [isEditing, setIsEditing]= useState(false);
+    const [fileName, setFile]= useState('');
+
+    useEffect(() => {
+            const getUser = async () => {
+                try {
+                    const res = await GetData();
+                    setUser(res);
+                    console.log(res)
+                } catch (e) {
+                    console.log(e);
+                }
+            };
+            getUser();
+        console.log(user);
+        if (user.companyID){
+            getCompanyData()
+        }
+        else{
+            getSearcherData()
+        }
+    },[])
+    async function getSearcherData(){
+            setMyProfile(prevProfile => ({
+                ...prevProfile,
+                firstName: user.firstName,
+                lastName: user.lastName,
+                email: user.email,
+                pfp: user.pfpUrl,
+                location: user.location,
+            }));
+        }
+    async function getCompanyData(){
+        setMyProfile(prevProfile => ({
+            ...prevProfile,
+            companyName: user.companyName,
+            email: user.email,
+            pfp: user.pfpUrl,
+            location: user.location,
+        }));
+    }
 
     function EditOnClick(){
         // toggleKeys(false);

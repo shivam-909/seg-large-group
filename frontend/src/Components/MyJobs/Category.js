@@ -5,7 +5,10 @@ import CompanyJobCard from "./CompanyJobCard";
 
 export default function Category(props) {
     const [jobsList, setJobsList] = useState([]);
-    const token = localStorage.getItem("access");
+    const [user, setUser] = useState([])
+
+    useEffect(() => {
+    },[])
 
     async function addCard(title, company, location){
         await setJobsList( current => [...current, <JobCard title={title} company={company} location={location}/>]);
@@ -26,9 +29,7 @@ export default function Category(props) {
     }, [props.filter]); // eslint-disable-line
 
     async function getPostings(){
-        const userID = await axios.post('http://localhost:8000/api/echo', {}, {headers: {Authorization: `Bearer ${token}`}}).then(response => { return response.data})
-        const company = await axios.get("http://localhost:8000/user/"+userID).then(response => {return response.data});
-        const companyID = company.companyID;
+        const companyID = user.companyID;
         const formData = new FormData();
         formData.append('companyID', companyID); // eslint-disable-line
         axios.post('http://localhost:8000/jobs/filter', formData)
@@ -50,10 +51,9 @@ export default function Category(props) {
     }
 
     async function getApplication(filter){
-        const userID = await axios.post('http://localhost:8000/api/echo', {}, {headers: {Authorization: `Bearer ${token}`}}).then(response => { return response.data})
         const formData = new FormData();
         formData.append('status', filter);
-        formData.append('searcher', userID); // eslint-disable-line
+        formData.append('searcher', user.userID); // eslint-disable-line
         axios.post('http://localhost:8000/applications/filter', formData)
             .then(response => {
                 if (response.data !== undefined) {
@@ -76,8 +76,7 @@ export default function Category(props) {
             });
     }
     async function getSavedJobs(){
-        const userID = await axios.post('http://localhost:8000/api/echo', {}, {headers: {Authorization: `Bearer ${token}`}}).then(response => { return response.data})
-        axios.get('http://localhost:8000/user/' + userID)
+        axios.get('http://localhost:8000/user/' + user.userID)
             .then(response => {
                 if (response.data.savedJobs !== undefined) {
                     let savedJobs = response.data.savedJobs
