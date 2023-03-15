@@ -10,16 +10,6 @@ import {GetData} from "../../Auth/GetUser";
 
 function UserProfilePage() {
     const [user, setUser] = useState([])
-    const [profile, setMyProfile] = useState({
-        firstName:"",
-        lastName:"",
-        email:"",
-        skills: [],
-        education:"",
-        pfp: "",
-        location: "",
-        Cv:null
-    });
     const [isEditing, setIsEditing]= useState(false);
     const [isCompany, setCompany] = useState(false)
     const [fileName, setFile]= useState('');

@@ -16,7 +16,7 @@ export default function App() {
               <Route path="/" element={ <SearchPage/> }/>
               <Route path="/login" element={ <LoginPage/> }/>
               <Route path="/signup" element={ <RegisterPage/> }/>
-              <Route path="/saved">
+              <Route path="/jobs">
                   <Route path="" element={<MyJobs/>}/>
                   <Route path="edit/:id" element={ <EditJob/> }/>
                   <Route path="add/" element={ <EditJob/> }/>

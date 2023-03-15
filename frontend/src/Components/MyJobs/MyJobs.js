@@ -21,19 +21,12 @@ export default function MyJobs() {
             }
         };
         getUser()
+        setCompany(user.searcherID === undefined)
     },[user])
 
     useEffect(() => {
         setFilter(isCompany ? "Postings" : "Saved");
     },[isCompany])
-
-    useEffect(() => {
-        checkIsCompany();
-    }, []);
-
-    async function checkIsCompany(){
-        setCompany(user.searcherID === undefined)
-    }
 
     function changeFilter(type){
         setFilter(type);
