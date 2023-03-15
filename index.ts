@@ -43,7 +43,7 @@ export const run = () => {
 
   app.post('/api/jobs/add', upload.none(), utils.Route(app, listingroutes.AddListing));
   app.get('/api/jobs/:id', utils.Route(app, listingroutes.GetListing));
-  app.post('/api/jobs/filter', utils.Route(app, listingroutes.RetrieveJobListingsByFilter));
+  app.post('/api/jobs/filter', upload.none(), utils.Route(app, listingroutes.RetrieveJobListingsByFilter));
   app.patch('/api/jobs/:id', upload.none(), utils.Route(app, listingroutes.UpdateListing));
   app.delete('/api/jobs/:id', upload.none(), utils.Route(app, listingroutes.DeleteListing));
 
@@ -52,6 +52,7 @@ export const run = () => {
   app.get('/api/applications/:id', utils.Route(app, applicationroutes.GetApplication));
   app.patch('/api/applications/:id', upload.none(), utils.Route(app, applicationroutes.UpdateApplication));
   app.delete('/api/applications/:id', upload.none(), utils.Route(app, applicationroutes.DeleteApplication));
+  app.post('/api/application/filter', upload.none(), utils.Route(app, applicationroutes.RetrieveApplicationByFilter));
 
 
 
