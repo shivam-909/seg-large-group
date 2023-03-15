@@ -7,10 +7,9 @@ import ErrorBox from "../ErrorBox/ErrorBox";
 import Education from "./Education";
 import PrivateRoutes from "../../Auth/PrivateRoute";
 import {GetData} from "../../Auth/GetUser";
-import axios from "axios";
 
 function UserProfilePage() {
-    const [user, setUser] = useState({})
+    const [user, setUser] = useState([])
     const [profile, setMyProfile] = useState({
         firstName:"",
         lastName:"",
@@ -22,52 +21,26 @@ function UserProfilePage() {
         Cv:null
     });
     const [isEditing, setIsEditing]= useState(false);
+    const [isCompany, setCompany] = useState(false)
     const [fileName, setFile]= useState('');
 
     useEffect(() => {
-            const getUser = async () => {
-                try {
-                    const res = await GetData();
-                    setUser(res);
-                    console.log(res)
-                } catch (e) {
-                    console.log(e);
-                }
-            };
-            getUser();
-        console.log(user);
-        if (user.companyID){
-            getCompanyData()
-        }
-        else{
-            getSearcherData()
-        }
-    },[])
-    async function getSearcherData(){
-            setMyProfile(prevProfile => ({
-                ...prevProfile,
-                firstName: user.firstName,
-                lastName: user.lastName,
-                email: user.email,
-                pfp: user.pfpUrl,
-                location: user.location,
-            }));
-        }
-    async function getCompanyData(){
-        setMyProfile(prevProfile => ({
-            ...prevProfile,
-            companyName: user.companyName,
-            email: user.email,
-            pfp: user.pfpUrl,
-            location: user.location,
-        }));
-    }
+        const getUser = async () => {
+            if (user.length === 0){
+                const item = await GetData().then(r => {
+                    setUser(r)
+                });
+            }
+        };
+        getUser()
+        setCompany(user.searcherID === undefined)
+    },[user])
 
     function EditOnClick(){
-        // toggleKeys(false);
       setIsEditing(true);
         toggleKeys(true);
     }
+
     function SaveOnClick(){
         let firstName = document.getElementById("firstName").value;
         let lastName = document.getElementById("lastName").value;
@@ -77,8 +50,8 @@ function UserProfilePage() {
             setVisible("errorBox", true)
         }
       else {
-            setMyProfile(prevProfile => ({
-                ...prevProfile,
+            setUser(prevUser => ({
+                ...prevUser,
                 firstName: firstName,
                 lastName: lastName,
                 location: location,
@@ -126,8 +99,8 @@ function UserProfilePage() {
         }
         else {
             setFile(file.name);
-            setMyProfile(prevProfile => ({
-                ...prevProfile,
+            setUser(prevUser => ({
+                ...prevUser,
                 Cv: URL.createObjectURL(files[0])
             }));
             // TODO: Add Backend Update
@@ -141,8 +114,8 @@ function UserProfilePage() {
             // TODO: Display error if not an image
         }
         else{
-            setMyProfile(prevProfile => ({
-                ...prevProfile,
+            setUser(prevUser => ({
+                ...prevUser,
                 pfp:URL.createObjectURL(files[0])}));
             // TODO: Add Backend Update
         }
@@ -157,31 +130,39 @@ function UserProfilePage() {
               <h1 className='font-bold text-2xl flex justify-center'>My Profile </h1>
                 <div className={"grid grid-cols-2 gap-10"}>
                     <div>
-                        <p className={"ml-6 mt-2 text-2xl font-bold"}>{profile.firstName + " " + profile.lastName}</p>
-                        <p className={"ml-6 text-l"}>{profile.email + " "}</p>
-                        <p className={"ml-6 text-l"}>{profile.location + " "}</p>
+                        {isCompany ?
+                            <p className={"ml-6 mt-2 text-2xl font-bold"}>{user.company?.companyName}</p>
+                        : <p className={"ml-6 mt-2 text-2xl font-bold"}>{user.searcher?.firstName + " " + user.searcher?.lastName}</p> }
+                        <p className={"ml-6 text-l"}>{user.email + " "}</p>
+                        <p className={"ml-6 text-l"}>{user.location + " "}</p>
                     </div>
                     <div className={"justify-items-end"}>
-                    <img className={"rounded-full float-right"} src={profile.pfp} alt="Avatar" height={"100"} width={"100"}/>
+                    <img className={"rounded-full float-right"} src={user.pfpUrl} alt="Avatar" height={"100"} width={"100"}/>
                         <input id={"pfpUpload"} type="file" name="myImage" accept="image/png, image/jpeg" hidden onChange={updatePfp}/>
                         <label for={"pfpUpload"} className={"float-right"}><i className="fa-solid fa-pen-to-square pr-2"></i></label>
                     </div>
                 </div>
             <div className='text-input' id="profile">
-                <>
                 <p><strong><u>Contact Information</u></strong></p>
-                <p><strong>First Name: <span className={"text-red"}>&#42;</span> </strong> <input type="text" id="firstName" placeholder = "Please enter your First Name" defaultValue= {profile.firstName} disabled={!isEditing}/></p>
-                <p><strong>Last Name: <span className={"text-red"}>&#42;</span></strong> <input type="text" id="lastName" placeholder = "Please enter your Last Name" defaultValue= {profile.lastName} disabled={!isEditing}/></p>
-                <p><strong>Email: </strong> <input type="email" id="email" placeholder = "Email" defaultValue= {profile.email} disabled/></p>
-                    <p><strong>Location: </strong> <input type="text" id="location" placeholder = "Please enter your Location" defaultValue= {profile.location} disabled={!isEditing}/></p>
-                    <p><strong><br /><u>Qualifications</u></strong></p>
-                <Skills isEditing={isEditing}/>
-                    <Education isEditing={isEditing}/>
-                    {!isEditing ?
-                        <p className={"mt-4 mb-2"}><strong>CV: </strong>{" "} {profile.Cv ? (<a href={profile.Cv} id= 'Cv' download><u>{fileName}</u></a> ):( "You have not uploaded a CV.")}</p>
-                        :<div><p className={"mt-4 mb-2"}><strong>CV:</strong>  <input type="file" id="Cv" accept= ".pdf"  onChange={updateCV}/></p></div>
+                    {isCompany ?
+                        <p><strong>Company Name: <span className={"text-red"}>&#42;</span> </strong> <input type="text" id="firstName" placeholder = "Please enter your First Name" defaultValue= {user.company?.companyName} disabled={!isEditing}/></p>
+                        :
+                        <div>
+                            <p><strong>First Name: <span className={"text-red"}>&#42;</span> </strong> <input type="text" id="firstName" placeholder = "Please enter your First Name" defaultValue= {user.searcher?.firstName} disabled={!isEditing}/></p>
+                            <p><strong>Last Name: <span className={"text-red"}>&#42;</span></strong> <input type="text" id="lastName" placeholder = "Please enter your Last Name" defaultValue= {user.searcher?.lastName} disabled={!isEditing}/></p> </div>
                     }
-                </>
+                    <p><strong>Email: </strong> <input type="email" id="email" placeholder = "Email" defaultValue= {user.email} disabled/></p>
+                    <p><strong>Location: </strong> <input type="text" id="location" placeholder = "Please enter your Location" defaultValue= {user.location} disabled={!isEditing}/></p>
+                    {isCompany ? <div/>
+                        : <div>
+                            <p><strong><br/><u>Qualifications</u></strong></p>
+                            <Skills isEditing={isEditing}/>
+                            <Education isEditing={isEditing}/>
+                            {!isEditing ?
+                                <p className={"mt-4 mb-2"}><strong>CV: </strong>{" "} {user.Cv ? (<a href={user.Cv} id= 'Cv' download><u>{fileName}</u></a> ):( "You have not uploaded a CV.")}</p>
+                                :<div><p className={"mt-4 mb-2"}><strong>CV:</strong>  <input type="file" id="Cv" accept= ".pdf"  onChange={updateCV}/></p></div>}
+                        </div>
+                    }
                 <ErrorBox message={"Please complete all required fields."}/>
             </div>
                 {!isEditing && <button className="border-2 border-dark-theme-grey bg-[#ccc] rounded-md m-2 p-2 text-black" onClick={EditOnClick} ><i className="fa-solid fa-pen-to-square pr-2"></i>Edit</button>}

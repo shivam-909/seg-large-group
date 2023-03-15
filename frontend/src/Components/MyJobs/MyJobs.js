@@ -4,12 +4,24 @@ import Category from "./Category";
 import Navbar from "../Navbar/Navbar";
 import PrivateRoutes from "../../Auth/PrivateRoute";
 import {useNavigate} from "react-router-dom";
+import {GetData} from "../../Auth/GetUser";
 
 export default function MyJobs() {
     const [isCompany, setCompany] = useState(false);
     const [filter, setFilter] = useState("Saved")
     const [user, setUser] = useState([])
     const navigate = useNavigate();
+
+    useEffect(() => {
+        const getUser = async () => {
+            if (user.length === 0){
+                const item = await GetData().then(r => {
+                    setUser(r)
+                });
+            }
+        };
+        getUser()
+    },[user])
 
     useEffect(() => {
         setFilter(isCompany ? "Postings" : "Saved");

@@ -5,6 +5,7 @@ import Navbar from "../Navbar/Navbar";
 import axios from "axios";
 import {useNavigate, useParams} from "react-router-dom";
 import Card from "./Card";
+import {GetData} from "../../Auth/GetUser";
 
 export default function EditJob() {
     const navigate = useNavigate();
@@ -18,20 +19,35 @@ export default function EditJob() {
     const [reqID, setReqID] = useState(requirements.length);
     const [benefitID, setBenefitID] = useState(benefits.length);
 
+    useEffect(() => {
+        const getUser = async () => {
+            if (user.length === 0){
+                const item = await GetData().then(r => {
+                    setUser(r)
+                });
+            }
+        };
+        getUser()
+    },[user])
+
+    useEffect(() => {
+        validate();
+    },[])
+
     async function checkIsCompany(){
          return await user.searcherID === undefined
     }
 
     async function verifyCompany(){
         if (isEdit){
-            return await axios.get("http://localhost:8000/jobs/"+id).then(response => {return response.data.companyID === user.companyID});
+            return await axios.get("http://localhost:8000/api/jobs/"+id).then(response => { return response.data.companyID === user.company?.companyID || !user.company?.companyID});
         }
         return true;
     }
 
     async function getDefaultValues() {
         if (isEdit) {
-            await axios.get("http://localhost:8000/jobs/" + id).then(response => {
+            await axios.get("http://localhost:8000/api/jobs/" + id).then(response => {
                 setJob(prevJob => ({
                     ...prevJob,
                     title: response.data.title,
@@ -53,29 +69,26 @@ export default function EditJob() {
         }
     }
 
-    useEffect(() => {
-        validate();
-    },[])
-
     async function handleSubmit() {
         let title = document.getElementById("title").value;
         let schedule = document.getElementById("schedule").value;
         let location = document.getElementById("location").value;
-        let type = document.getElementById("type").value;
+        let industry = document.getElementById("industry").value;
         let description = document.getElementById("description").value;
+        let compensation = document.getElementById("compensation").value;
 
         const formData = new FormData();
         formData.append('title', title);
         formData.append('location', location);
-        formData.append('type', type);
+        formData.append('industry', industry);
         formData.append('companyID', user.companyID);
         formData.append('schedule', schedule);
         formData.append('benefits', ["test"]);
         formData.append('requirements', ["test"]);
-        formData.append('compensation', 0);
+        formData.append('compensation', compensation);
         formData.append('description', description);
 
-        isEdit ? await axios.patch("http://localhost:8000/api/jobs/"+id, formData).then(navigate(-1)) : await axios.post("http://localhost:8000/jobs/add/", formData)
+        isEdit ? await axios.patch("http://localhost:8000/api/jobs/"+id, formData).then(navigate(-1)) : await axios.post("http://localhost:8000/api/jobs/add/", formData).then(navigate(-1));
     }
 
     function addRequirement(){
@@ -99,7 +112,7 @@ export default function EditJob() {
                     <div className='text-input space-y-4' id="profile">
                         <p><strong>Title: <span className={"text-red"}>&#42;</span> </strong> <input type="text" id="title" placeholder = "Please enter the Job Title" defaultValue={job.title}/></p>
                         <p><strong>Industry: <span className={"text-red"}>&#42;</span> </strong> <input type="text" id="industry" placeholder = "Please enter the Job Industry" defaultValue={job.industry}/></p>
-                        <p><strong>Compensation: <span className={"text-red"}>&#42;</span> </strong> <input type="number" id="compensation" placeholder = "Please enter the Compensation" defaultValue={job.compensation}/></p>
+                        <p><strong>Compensation: <span className={"text-red"}>&#42;</span> </strong> <input type="number" min={0} id="compensation" placeholder = "Please enter the Compensation" defaultValue={job.compensation}/></p>
                         <p><strong>Schedule: <span className={"text-red"}>&#42;</span></strong>
                             <select id={"schedule"} className={"border-2 border-[#ccc] p-1 rounded-md m-2"}>
                             <option selected={job.schedule==="Full-time"} value={"Full-time"}>Full-time</option>

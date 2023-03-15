@@ -2,13 +2,11 @@ import React, {useEffect, useState} from "react";
 import JobCard from "./JobCard";
 import axios from "axios";
 import CompanyJobCard from "./CompanyJobCard";
+import {GetData} from "../../Auth/GetUser";
 
 export default function Category(props) {
     const [jobsList, setJobsList] = useState([]);
     const [user, setUser] = useState([])
-
-    useEffect(() => {
-    },[])
 
     async function addCard(title, company, location){
         await setJobsList( current => [...current, <JobCard title={title} company={company} location={location}/>]);
@@ -17,7 +15,17 @@ export default function Category(props) {
     async function addCompanyCard(id, title, schedule, location, date){
         await setJobsList( current => [...current, <CompanyJobCard id={id} title={title} schedule={schedule} location={location} date={date}/>]);
     }
+
     useEffect(() => {
+        const getUser = async () => {
+            if (user.length === 0){
+                const item = await GetData().then(r => {
+                    setUser(r)
+                });
+            }
+        };
+        getUser()
+
         if (props.filter === "Postings") {
             getPostings(); // eslint-disable-line
         }
@@ -26,13 +34,13 @@ export default function Category(props) {
         } else {
             getApplication(props.filter); // eslint-disable-line
         }
-    }, [props.filter]); // eslint-disable-line
+    },[user, props.filter])
 
     async function getPostings(){
         const companyID = user.companyID;
         const formData = new FormData();
         formData.append('companyID', companyID); // eslint-disable-line
-        axios.post('http://localhost:8000/jobs/filter', formData)
+        axios.post('http://localhost:8000/api/jobs/filter', formData)
             .then(async response => {
                 if (response.data !== undefined) {
                     let filterJobs = response.data;
@@ -54,7 +62,7 @@ export default function Category(props) {
         const formData = new FormData();
         formData.append('status', filter);
         formData.append('searcher', user.userID); // eslint-disable-line
-        axios.post('http://localhost:8000/applications/filter', formData)
+        axios.post('http://localhost:8000/api/applications/filter', formData)
             .then(response => {
                 if (response.data !== undefined) {
                     let filterJobs = response.data.applications
@@ -75,8 +83,12 @@ export default function Category(props) {
                 console.error(error);
             });
     }
+
     async function getSavedJobs(){
-        axios.get('http://localhost:8000/user/' + user.userID)
+        if (!user.userID){
+            return;
+        }
+        axios.get('http://localhost:8000/api/user/' + user.userID)
             .then(response => {
                 if (response.data.savedJobs !== undefined) {
                     let savedJobs = response.data.savedJobs
@@ -97,6 +109,7 @@ export default function Category(props) {
                 console.error(error);
             });
     }
+
     return (
         <div className='items-center justify-center flex relative w-full'>
             <div className={"display-block w-full"}>
