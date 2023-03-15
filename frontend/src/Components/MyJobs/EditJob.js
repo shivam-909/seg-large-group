@@ -22,7 +22,7 @@ export default function EditJob() {
     useEffect(() => {
         const getUser = async () => {
             if (user.length === 0){
-                const item = await GetData().then(r => {
+                await GetData().then(r => {
                     setUser(r)
                 });
             }
@@ -32,7 +32,7 @@ export default function EditJob() {
 
     useEffect(() => {
         validate();
-    },[])
+    },[]) // eslint-disable-line
 
     async function checkIsCompany(){
          return await user.searcherID === undefined

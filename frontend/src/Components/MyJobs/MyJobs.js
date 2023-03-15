@@ -15,7 +15,7 @@ export default function MyJobs() {
     useEffect(() => {
         const getUser = async () => {
             if (user.length === 0){
-                const item = await GetData().then(r => {
+                await GetData().then(r => {
                     setUser(r)
                 });
             }

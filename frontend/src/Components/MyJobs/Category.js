@@ -19,7 +19,7 @@ export default function Category(props) {
     useEffect(() => {
         const getUser = async () => {
             if (user.length === 0){
-                const item = await GetData().then(r => {
+                await GetData().then(r => {
                     setUser(r)
                 });
             }
@@ -34,7 +34,7 @@ export default function Category(props) {
         } else {
             getApplication(props.filter); // eslint-disable-line
         }
-    },[user, props.filter])
+    },[user, props.filter]) // eslint-disable-line
 
     async function getPostings(){
         const companyID = user.companyID;
