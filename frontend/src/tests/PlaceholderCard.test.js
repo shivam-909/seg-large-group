@@ -1,5 +1,5 @@
-import { render, screen, fireEvent } from "@testing-library/react";
-import PlaceholderCard from "./Components/SearchPage/PlaceholderCard";
+import { render , screen, fireEvent } from "@testing-library/react";
+import PlaceholderCard from "../Components/SearchPage/PlaceholderCard";
 
 describe('PlaceholderCard', () => {
   const props = {

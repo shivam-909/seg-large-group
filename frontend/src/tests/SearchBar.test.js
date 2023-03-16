@@ -1,6 +1,6 @@
-import { render, screen } from "@testing-library/react";
+import { render , screen } from "@testing-library/react";
 
-import SearchBar from "./Components/SearchPage/SearchBar";
+import SearchBar from "../Components/SearchPage/SearchBar";
 
 describe('SearchBar', () => {
   it('renders the input fields and search button', () => {

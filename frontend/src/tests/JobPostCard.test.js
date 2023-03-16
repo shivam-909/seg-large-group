@@ -1,5 +1,5 @@
-import { render, screen } from "@testing-library/react";
-import JobPostCard from "./Components/SearchPage/JobPostCard";
+import { render , screen } from "@testing-library/react";
+import JobPostCard from "../Components/SearchPage/JobPostCard";
 
 describe('JobPostCard', () => {
   const jobPostProps = {

@@ -1,5 +1,5 @@
 import { render, screen, fireEvent} from "@testing-library/react";
-import JobDetailsCard from "./Components/SearchPage/JobDetailsCard";
+import JobDetailsCard from "../Components/SearchPage/JobDetailsCard";
 
 const jobDetails = {
   id:"1234",

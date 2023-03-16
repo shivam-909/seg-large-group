@@ -1,5 +1,5 @@
 import { render } from "@testing-library/react";
-import JobPostAge from "./Components/SearchPage/JobPostAge";
+import JobPostAge from "../Components/SearchPage/JobPostAge";
 
 describe('JobPostAge', () => {
   it('renders "Posted today" when age is 0', () => {

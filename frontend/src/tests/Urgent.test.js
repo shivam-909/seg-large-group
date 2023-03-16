@@ -1,6 +1,6 @@
-import React from 'react';
+//import React from 'react';
 import { render } from "@testing-library/react";
-import Urgent from "./Components/SearchPage/Urgent";
+import Urgent from "../Components/SearchPage/Urgent";
 
 describe('Urgent component', () => {
   it('should render when props.urgent is true', () => {
