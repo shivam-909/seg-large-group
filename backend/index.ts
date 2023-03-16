@@ -56,7 +56,8 @@ export const run = () => {
 
 
 
-  app.get('/api/user/:id', utils.Route(app, userroutes.GetUser));
+  app.get('/api/user/typeid', upload.none(), utils.Route(app, userroutes.GetUserByTypeID));
+  app.get('/api/user/:id', upload.none(), utils.Route(app, userroutes.GetUser));
   app.patch('/api/users/:id', upload.none(), utils.Route(app, userroutes.UpdateUser));
   app.delete('/api/user/:id', upload.none(), utils.Route(app, userroutes.DeleteUser));
 
