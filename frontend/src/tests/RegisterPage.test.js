@@ -1,12 +1,26 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import RegisterPage from '../Components/RegisterPage/RegisterPage';
+import {BrowserRouter, Route, Routes} from "react-router-dom";
+
 
 test('renders RegisterPage component without crashing', () => {
-  render(<BrowserRouter><Routes><Route element={ <RegisterPage/> }/></Routes></BrowserRouter>);
+  render(
+    <BrowserRouter>
+      <Routes>
+        <Route element={<RegisterPage />} />
+      </Routes>
+    </BrowserRouter>
+  );
 });
 
 test('toggleRole function toggles visibility of Company-Fields and Seeker-Fields sections', () => {
-  render(<BrowserRouter><Routes><Route element={ <RegisterPage/> }/></Routes></BrowserRouter>);
+  render(
+    <BrowserRouter>
+      <Routes>
+        <Route element={<RegisterPage />} />
+      </Routes>
+    </BrowserRouter>
+  );
   const seekerFields = screen.getByTestId('Seeker-Fields');
   const companyFields = screen.getByTestId('Company-Fields');
 
@@ -20,7 +34,13 @@ test('toggleRole function toggles visibility of Company-Fields and Seeker-Fields
 });
 
 test('togglePasswordVisibility function toggles password visibility', () => {
-  render(<BrowserRouter><Routes><Route element={ <RegisterPage/> }/></Routes></BrowserRouter>);
+  render(
+    <BrowserRouter>
+      <Routes>
+        <Route element={<RegisterPage />} />
+      </Routes>
+    </BrowserRouter>
+  );
   const passwordField = screen.getByTestId('password');
   const confirmPassField = screen.getByTestId('confirmPass');
   const eyeIcon = screen.getByAltText('toggle password');
@@ -40,7 +60,13 @@ test('togglePasswordVisibility function toggles password visibility', () => {
 });
 
 test('checkPasswordMatch function validates passwords correctly', () => {
-  render(<BrowserRouter><Routes><Route element={ <RegisterPage/> }/></Routes></BrowserRouter>);
+  render(
+    <BrowserRouter>
+      <Routes>
+        <Route element={<RegisterPage />} />
+      </Routes>
+    </BrowserRouter>
+  );
   const passwordField = screen.getByTestId('password');
   const confirmPassField = screen.getByTestId('confirmPass');
   const errorText = screen.getByText('Password does not match');
