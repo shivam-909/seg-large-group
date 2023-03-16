@@ -41,9 +41,9 @@ export const run = () => {
   app.patch('/api/notifications/:id', upload.none(), utils.Route(app, notificationroutes.UpdateNotification));
   app.delete('/api/notifications/:id', upload.none(), utils.Route(app, notificationroutes.DeleteNotification));
 
+  app.post('/api/jobs/filter', upload.none(), utils.Route(app, listingroutes.RetrieveJobListingsByFilter));
   app.post('/api/jobs/add', upload.none(), utils.Route(app, listingroutes.AddListing));
   app.get('/api/jobs/:id', utils.Route(app, listingroutes.GetListing));
-  app.post('/api/jobs/filter', utils.Route(app, listingroutes.RetrieveJobListingsByFilter));
   app.patch('/api/jobs/:id', upload.none(), utils.Route(app, listingroutes.UpdateListing));
   app.delete('/api/jobs/:id', upload.none(), utils.Route(app, listingroutes.DeleteListing));
 
