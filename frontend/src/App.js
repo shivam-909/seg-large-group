@@ -6,6 +6,7 @@ import PrivateRoutes from "./Auth/PrivateRoute";
 import MyJobs from "./Components/MyJobs/MyJobs";
 import UserProfilePage from "./Components/ProfilePage/UserProfilePage";
 import EditJob from "./Components/MyJobs/EditJob";
+import Applicants from "./Components/Applicants/Applicants";
 
 export default function App() {
     return (
@@ -20,6 +21,7 @@ export default function App() {
                   <Route path="" element={<MyJobs/>}/>
                   <Route path="edit/:id" element={ <EditJob/> }/>
                   <Route path="add/" element={ <EditJob/> }/>
+                  <Route path="applicants/:id" element={ <Applicants/> }/>
               </Route>
               <Route path="/profile" element={ <UserProfilePage/> }/>
           </Routes>

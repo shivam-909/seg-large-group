@@ -35,7 +35,8 @@ export default function EditJob() {
     },[]) // eslint-disable-line
 
     async function checkIsCompany(){
-         return await user.searcherID === undefined
+        const userData = await GetData()
+         return userData.searcherID === undefined;
     }
 
     async function verifyCompany(){

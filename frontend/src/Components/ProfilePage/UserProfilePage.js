@@ -7,6 +7,7 @@ import ErrorBox from "../ErrorBox/ErrorBox";
 import Education from "./Education";
 import PrivateRoutes from "../../Auth/PrivateRoute";
 import {GetData} from "../../Auth/GetUser";
+import axios from "axios";
 
 function UserProfilePage() {
     const [user, setUser] = useState([])
@@ -31,24 +32,32 @@ function UserProfilePage() {
         toggleKeys(true);
     }
 
-    function SaveOnClick(){
-        let firstName = document.getElementById("firstName").value;
-        let lastName = document.getElementById("lastName").value;
+    async function SaveOnClick() {
+        let companyName = document.getElementById("companyName")?.value;
+        let firstName = document.getElementById("firstName")?.value;
+        let lastName = document.getElementById("lastName")?.value;
         let location = document.getElementById("location").value;
 
-        if (firstName === "" || lastName === "" || !validateSkills() || !validateEducation()){
+        if (firstName === "" || lastName === "" || !validateSkills() || !validateEducation()) {
             setVisible("errorBox", true)
-        }
-      else {
+        } else {
             setUser(prevUser => ({
                 ...prevUser,
                 firstName: firstName,
                 lastName: lastName,
                 location: location,
             }));
-        setIsEditing(false);
-        toggleKeys(false);
-        setVisible("errorBox", false)
+            setIsEditing(false);
+            toggleKeys(false);
+            setVisible("errorBox", false);
+
+            const formData = new FormData();
+            formData.append('firstName', firstName);
+            formData.append('lastName', lastName);
+            formData.append('location', location);
+
+            console.log(user.userID)
+            await axios.patch("http://localhost:8080/api/users/" + user.userID, formData)
             // TODO: Add Backend Update
         }
     }
@@ -80,7 +89,7 @@ function UserProfilePage() {
         }
     }
     function updateCV(event){
-      const{files} = event.target;
+        const {files} = event.target;
         const file = event.target.files[0];
         const  fileType = file['type'];
         const validImageTypes = ['application/pdf'];
