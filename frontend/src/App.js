@@ -23,7 +23,7 @@ export default function App() {
                   <Route path="add/" element={ <EditJob/> }/>
                   <Route path="applicants/:id" element={ <Applicants/> }/>
               </Route>
-              <Route path="/profile" element={ <UserProfilePage/> }/>
+              <Route path="/profile/:id" element={ <UserProfilePage/> }/>
           </Routes>
       </BrowserRouter>
   );
