@@ -31,7 +31,7 @@ export function Login(db: DB): Handler {
       return
     }
 
-    const { access, refresh } = await GenerateKeyPair(user!.userID);
+    const { access, refresh } = GenerateKeyPair(user!.userID);
 
     return res.status(200).json({
       access,
@@ -99,7 +99,7 @@ export function Register(db: DB): Handler {
         await CreateSearcher(db, newUser, newSearcher);
     }
 
-    const { access, refresh } = await GenerateKeyPair(newUser.userID);
+    const { access, refresh } = GenerateKeyPair(newUser.userID);
     return res.status(200).json({
       access,
       refresh,
