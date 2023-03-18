@@ -9,7 +9,7 @@ class JobListing {
   schedule: string;
   companyID: string;
   industry: string;
-  coverListingRequired: boolean;
+  coverLetterRequired: boolean;
   qualifications: string[];
   datePosted: Date;
   benefits?: string[];
@@ -26,7 +26,7 @@ class JobListing {
     schedule: string,
     companyID: string,
     industry: string,
-    coverListingRequired: boolean,
+    coverLetterRequired: boolean,
     qualifications: string[],
     datePosted: Date,
     benefits?: string[],
@@ -41,7 +41,7 @@ class JobListing {
     this.schedule = schedule;
     this.companyID = companyID;
     this.industry = industry;
-    this.coverListingRequired = coverListingRequired;
+    this.coverLetterRequired = coverLetterRequired;
     this.datePosted = datePosted;
     this.benefits = benefits;
     this.requirements = requirements;
