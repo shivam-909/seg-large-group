@@ -8,6 +8,7 @@ import Notification from "../../models/notification";
 import {RetrieveApplication} from "../../db/applications";
 import {RetrieveJobListing} from "../../db/jobs";
 import {RetrieveCompanyByID} from "../../db/companies";
+import {RetrieveFullUserByID} from "../../db/users";
 
 
 
@@ -43,11 +44,16 @@ export function GetNotification(db: DB): Handler {
     let companyName = null;
     if(company) companyName = company.companyName;
 
+    const user = await RetrieveFullUserByID(db, notification.userID);
+    let searcherID = null;
+    if(user) searcherID = user.searcherID;
+
 
     const newNotification = {
       ...notification,
       companyName,
       title,
+      searcherID,
     }
 
     res.status(200).json(newNotification);
