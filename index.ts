@@ -1,6 +1,7 @@
 import express, { Express, NextFunction, Request, Response } from 'express';
 import dotenv from 'dotenv';
 import DB from './db/db';
+import { uploadFile } from './service/storage/storage';
 import multer from 'multer';
 import { deseed } from "./seeder/deseeder";
 
@@ -35,7 +36,6 @@ export const run = () => {
   app.post('/auth/register', upload.none(), utils.Route(app, authroutes.Register));
   app.post('/auth/refresh', upload.none(), utils.Route(app, authroutes.Refresh));
 
-
   app.post('/api/notifications/add', upload.none(), utils.Route(app, notificationroutes.AddNotification));
   app.get('/api/notifications/:id', utils.Route(app, notificationroutes.GetNotification));
   app.patch('/api/notifications/:id', upload.none(), utils.Route(app, notificationroutes.UpdateNotification));
@@ -47,14 +47,13 @@ export const run = () => {
   app.patch('/api/jobs/:id', upload.none(), utils.Route(app, listingroutes.UpdateListing));
   app.delete('/api/jobs/:id', upload.none(), utils.Route(app, listingroutes.DeleteListing));
 
-
   app.post('/api/applications/add', upload.none(), utils.Route(app, applicationroutes.AddApplication));
   app.get('/api/applications/:id', utils.Route(app, applicationroutes.GetApplication));
   app.patch('/api/applications/:id', upload.none(), utils.Route(app, applicationroutes.UpdateApplication));
   app.delete('/api/applications/:id', upload.none(), utils.Route(app, applicationroutes.DeleteApplication));
   app.post('/api/application/filter', upload.none(), utils.Route(app, applicationroutes.RetrieveApplicationByFilter));
 
-
+  app.post('/api/storage/upload', upload.single('file'), utils.Route(app, uploadFile));
 
   app.post('/api/user/typeid', upload.none(), utils.Route(app, userroutes.GetUserByTypeID));
   app.get('/api/user/:id', upload.none(), utils.Route(app, userroutes.GetUser));
