@@ -9,6 +9,7 @@ class JobListing {
   schedule: string;
   companyID: string;
   industry: string;
+  qualifications: string[];
   datePosted: Date;
   benefits?: string[];
   requirements?: string[];
@@ -23,10 +24,11 @@ class JobListing {
     schedule: string,
     companyID: string,
     industry: string,
+    qualifications: string[],
     datePosted: Date,
     benefits?: string[],
     requirements?: string[],
-    screeningQuestions?: Record<string, boolean>
+    screeningQuestions?: Record<string, boolean>,
 ) {
     this.id = id;
     this.title = title;
@@ -40,6 +42,7 @@ class JobListing {
     this.benefits = benefits;
     this.requirements = requirements;
     this.screeningQuestions = screeningQuestions;
+    this.qualifications = qualifications;
   }
 }
 
