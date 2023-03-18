@@ -3,7 +3,7 @@ import { NextFunction, Request, Response } from "express";
 import DB from "../../db/db";
 import JobListing from "../../models/job";
 import * as jobsdb from "../../db/jobs";
-import { ErrorJobListingNotFound, getErrorMessage, Handler } from "../public";
+import { ErrorJobListingNotFound, Handler } from "../public";
 import { randomUUID } from "crypto";
 
 export function AddListing(db: DB): Handler {
@@ -51,6 +51,9 @@ export function DeleteListing(db: DB): Handler {
   return async (req: Request, res: Response, next: NextFunction) => {
     const id = req.params.id;
     await jobsdb.DeleteJobListing(db, id);
+    res.status(200).json({
+      message: 'Job deleted'
+    });
   };
 }
 

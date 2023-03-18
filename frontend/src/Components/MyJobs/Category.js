@@ -1,26 +1,68 @@
 import React, {useEffect, useState} from "react";
 import JobCard from "./JobCard";
 import axios from "axios";
+import CompanyJobCard from "./CompanyJobCard";
+import {GetData} from "../../Auth/GetUser";
 
 export default function Category(props) {
     const [jobsList, setJobsList] = useState([]);
+    const [user, setUser] = useState([])
+
     async function addCard(title, company, location){
         await setJobsList( current => [...current, <JobCard title={title} company={company} location={location}/>]);
     }
+
+    async function addCompanyCard(id, title, schedule, location, date){
+        await setJobsList( current => [...current, <CompanyJobCard id={id} title={title} schedule={schedule} location={location} date={date}/>]);
+    }
+
     useEffect(() => {
-        if (props.filter === "Saved") {
+        const getUser = async () => {
+            if (user.length === 0){
+                await GetData().then(r => {
+                    setUser(r)
+                });
+            }
+        };
+        getUser()
+
+        if (props.filter === "Postings") {
+            getPostings(); // eslint-disable-line
+        }
+        else if (props.filter === "Saved") {
             getSavedJobs(); // eslint-disable-line
         } else {
             getApplication(props.filter); // eslint-disable-line
         }
-    }, [props.filter]); // eslint-disable-line
+    },[user, props.filter]) // eslint-disable-line
+
+    async function getPostings(){
+        const companyID = user.companyID;
+        const formData = new FormData();
+        formData.append('companyID', companyID); // eslint-disable-line
+        axios.post('http://localhost:8000/api/jobs/filter', formData)
+            .then(async response => {
+                if (response.data !== undefined) {
+                    let filterJobs = response.data;
+                    setJobsList([]);
+                    for (let i = 0; i < filterJobs.length; i++) {
+                        await addCompanyCard(filterJobs[i].id, filterJobs[i].title, filterJobs[i].schedule, filterJobs[i].location, filterJobs[i].datePosted);
+                    }
+                } else {
+                    console.log("no applications found")
+                }
+            })
+            .catch(error => {
+                // TODO: Display error message.
+                console.error(error);
+            });
+    }
+
     async function getApplication(filter){
-        const token = localStorage.getItem("access");
-        const userID = await axios.post('http://localhost:8000/api/echo', {}, {headers: {Authorization: `Bearer ${token}`}}).then(response => { return response.data})
         const formData = new FormData();
         formData.append('status', filter);
-        formData.append('searcher', userID); // eslint-disable-line
-        axios.post('http://localhost:8000/applications/filter', formData)
+        formData.append('searcher', user.userID); // eslint-disable-line
+        axios.post('http://localhost:8000/api/applications/filter', formData)
             .then(response => {
                 if (response.data !== undefined) {
                     let filterJobs = response.data.applications
@@ -41,10 +83,12 @@ export default function Category(props) {
                 console.error(error);
             });
     }
+
     async function getSavedJobs(){
-        const token = localStorage.getItem("access");
-        const userID = await axios.post('http://localhost:8000/api/echo', {}, {headers: {Authorization: `Bearer ${token}`}}).then(response => { return response.data})
-        axios.get('http://localhost:8000/user/' + userID)
+        if (!user.userID){
+            return;
+        }
+        axios.get('http://localhost:8000/api/user/' + user.userID)
             .then(response => {
                 if (response.data.savedJobs !== undefined) {
                     let savedJobs = response.data.savedJobs
@@ -57,7 +101,7 @@ export default function Category(props) {
                             })
                     }
                 } else {
-                    console.log("no jobs")
+                    // TODO: Display for 0 Jobs
                 }
             })
             .catch(error => {
@@ -65,6 +109,7 @@ export default function Category(props) {
                 console.error(error);
             });
     }
+
     return (
         <div className='items-center justify-center flex relative w-full'>
             <div className={"display-block w-full"}>
