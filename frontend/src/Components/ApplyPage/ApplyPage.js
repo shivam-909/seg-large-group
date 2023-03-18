@@ -16,15 +16,15 @@ export default function ApplyPage() {
         company: '',
         location: '',
         salary: '',
+        coverLetterRequired: true,
         CV: [],
-        screeningQuestions: [],
+        screeningQuestions: [
+            ['Please list 2-3 dates and time ranges when you could do an interview.', false],
+            ['How many years of Zoho development experience do you have?', true],
+            ['Are you authorised to work in the United Kingdom?', true],
+            ['Will you be able to reliably commute or relocate to Romford, Greater London for this job?', true],
+        ],
     });
-    // [
-    //     ['Please list 2-3 dates and time ranges when you could do an interview.', false],
-    //     ['How many years of Zoho development experience do you have?', true],
-    //     ['Are you authorised to work in the United Kingdom?', true],
-    //     ['Will you be able to reliably commute or relocate to Romford, Greater London for this job?', true],
-    // ]
     // const [CV, setCV] = useState(['Cem Ratip CV', 'https://seg-joblink.s3.eu-west-2.amazonaws.com/Cem+Ratip+CV.pdf']);
 
     useEffect(() => {
@@ -49,7 +49,7 @@ export default function ApplyPage() {
             .catch(error => {
                 console.log(error);
             });
-    }, [job]);
+    }, [job, id]);
 
     function validateApplication() {
         if (!job.screeningQuestions.empty) {
@@ -57,9 +57,19 @@ export default function ApplyPage() {
             const scrollElementIntoView = [];
             Array.from(answers).forEach(answer => {
                 if (answer.required) {
-                    answer.className = 'border rounded-md p-1 resize-none w-full h-[75px]';
+                    if (answer.id === 'coverLetterInput') {
+                        answer.className = 'border rounded-md p-1 resize-none w-full h-[200px]';
+                    }
+                    else {
+                        answer.className = 'border rounded-md p-1 resize-none w-full h-[75px]';
+                    }
                     if (answer.value === '') {
-                        answer.className = 'border border-red rounded-md p-1 resize-none w-full h-[75px]';
+                        if (answer.id === 'coverLetterInput') {
+                            answer.className = 'border border-red rounded-md p-1 resize-none w-full h-[200px]';
+                        }
+                        else {
+                            answer.className = 'border border-red rounded-md p-1 resize-none w-full h-[75px]';
+                        }
                         scrollElementIntoView.push(answer);
                     }
                 }
@@ -106,12 +116,15 @@ export default function ApplyPage() {
                                         </div>
                                     )
                                 })}
+                                <div className='pt-6'>
+                                    <div className='bg-darker-grey h-[0.1px]'></div>
+                                </div>
                             </div>
                         }
                     </div>
-                    <div className='pb-12'>
+                    <div>
                         <p className='font-bold text-3xl pb-10'>Select your CV</p>
-                        {job.CV ?
+                        {job.CV.length > 0?
                             <div>
                                 <div className='border rounded-md border-dark-theme-grey p-2 space-y-5 inline-block cursor-pointer'>
                                     <div className='flex justify-between items-center pt-2'>
@@ -139,9 +152,10 @@ export default function ApplyPage() {
                             </div>
                         }
                     </div>
+                    <div className='bg-darker-grey h-[0.1px] my-12'></div>
                     <div>
-                        <p className='font-bold text-3xl pb-5'>Write a cover letter <span className='text-lg'>(optional)</span></p>
-                        <textarea className='border rounded-md p-1 resize-none w-full h-[200px]'></textarea>
+                        <p className='font-bold text-3xl pb-5'>Write a cover letter {!job.coverLetterRequired && <span className='text-lg'>(optional)</span>}</p>
+                        <textarea id="coverLetterInput" className='border rounded-md p-1 resize-none min-w-[750px] h-[200px]' required={job.coverLetterRequired}></textarea>
                     </div>
                 </div>
                 <div className='py-12'>
