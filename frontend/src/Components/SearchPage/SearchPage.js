@@ -10,6 +10,9 @@ function SearchPage() {
     const [showJobTitleInputErrorMessage, setShowJobTitleInputErrorMessage] = useState(false);
     const [showLocationInputErrorMessage, setShowLocationInputErrorMessage] = useState(false);
 
+    // TODO: Fetch jobs
+    // TODO: Do filter system
+
     function showResults() {
         if (isJobTitleInputValid() & isLocationInputValid()) {
             // TODO: Search algo endpoint.
@@ -36,7 +39,7 @@ function SearchPage() {
     return (
         <div>
             <Navbar/>
-            <div className='mt-24 space-y-5 flex-col'>
+            <div className='mt-36 space-y-5 flex-col'>
                 <SearchBar onclick={showResults} onJobTitleInputChange={() => setShowJobTitleInputErrorMessage(false)} onLocationInputChange={() => setShowLocationInputErrorMessage(false)} displayJobTitleInputErrorMessage={showJobTitleInputErrorMessage} displayLocationInputErrorMessage={showLocationInputErrorMessage}/>
                 {jobs.length > 0 ?
                     <div className='space-y-12'>
@@ -60,7 +63,7 @@ function SearchPage() {
                             <p>Looking for your next hire? <a className='font-bold' href='/'>Post a job.</a></p>
                         </div>
                         <div className='bg-darker-grey min-w-screen flex items-center justify-center'>
-                            <p>ADVERTISE THE APP HERE</p>
+                            <p>For You</p>
                         </div>
                     </div>
                 }
