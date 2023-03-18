@@ -153,6 +153,7 @@ async function GetRandomCompany(db: DB): Promise<Company> {
 }
 
 async function GenerateJobListing(db: DB): Promise<JobListing> {
+
     const company = await GetRandomCompany(db);
     const user = await usersdb.RetrieveUserByCompanyID(db, company.companyID);
     if (!user) {
@@ -176,8 +177,6 @@ async function GenerateJobListing(db: DB): Promise<JobListing> {
         faker.date.past(),
         [faker.lorem.words(), faker.lorem.words(), faker.lorem.words()],
         [faker.lorem.words(), faker.lorem.words(), faker.lorem.words()],
-        //faker.helpers.arrayElements([[["Years of Experience", true], ["Are you able to commute?", false]], [["Will you be able to work remotely?", false]]])
-
 );
 }
 
