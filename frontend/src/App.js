@@ -6,6 +6,7 @@ import PrivateRoutes from "./Auth/PrivateRoute";
 import MyJobs from "./Components/MyJobs/MyJobs";
 import UserProfilePage from "./Components/ProfilePage/UserProfilePage";
 import EditJob from "./Components/MyJobs/EditJob";
+import JobPage from "./Components/JobPage/JobPage";
 
 export default function App() {
     return (
@@ -22,6 +23,7 @@ export default function App() {
                   <Route path="add/" element={ <EditJob/> }/>
               </Route>
               <Route path="/profile" element={ <UserProfilePage/> }/>
+              <Route path="/job/:id" element={ <JobPage/> }/>
           </Routes>
       </BrowserRouter>
   );
