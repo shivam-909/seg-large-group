@@ -191,8 +191,6 @@ function GetRandomQuestions(): Record<string, boolean> {
 
 
 async function GenerateJobListing(db: DB): Promise<JobListing> {
-    const test_array: [string, boolean][] = [["Q1", true], ["Q2", false]];
-    const array_two: [string, boolean][] = [["Q3", true]];
     const company = await GetRandomCompany(db);
     const user = await usersdb.RetrieveUserByCompanyID(db, company.companyID);
     if (!user) {
