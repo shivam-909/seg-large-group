@@ -6,7 +6,8 @@ class JobListing {
   compensation: string[];
   description: string;
   location: string;
-  schedule: string;
+  type: string;
+  schedule:string;
   companyID: string;
   industry: string;
   coverLetterRequired: boolean;
@@ -24,7 +25,8 @@ class JobListing {
     compensation: string[],
     description: string,
     location: string,
-    schedule: string,
+    type: string,
+    schedule:string,
     companyID: string,
     industry: string,
     coverLetterRequired: boolean,
@@ -40,6 +42,7 @@ class JobListing {
     this.compensation = compensation;
     this.description = description;
     this.location = location;
+    this.type = type;
     this.schedule = schedule;
     this.companyID = companyID;
     this.industry = industry;

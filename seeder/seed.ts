@@ -231,7 +231,7 @@ async function GenerateJobListing(db: DB): Promise<JobListing> {
         GenerateCompensation(),
         faker.lorem.paragraph(),
         user.location,
-        faker.helpers.arrayElement(["Full-time", "Part-time", "Contract"]),
+        faker.helpers.arrayElement(["Remote", "Hybrid", "In-Office"]),
         company.companyID,
         faker.helpers.arrayElement(["Engineering", "Sales", "Marketing", "Finance"]),
         faker.datatype.boolean(),

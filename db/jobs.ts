@@ -117,7 +117,7 @@ export async function RetrieveJobListingsByFilter(db: DB, filters: any): Promise
         case 'title':
         case 'description':
         case 'location':
-        case 'schedule':
+        case 'type':
         case 'companyID':
         case 'industry':
           query = query.where(key, '==', value);
