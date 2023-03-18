@@ -34,11 +34,6 @@ export default function EditJob() {
         validate();
     },[]) // eslint-disable-line
 
-    async function checkIsCompany(){
-        const userData = await GetData()
-         return userData.searcherID === undefined;
-    }
-
     async function verifyCompany(){
         if (isEdit){
             return await axios.get("http://localhost:8000/api/jobs/"+id).then(response => { return response.data.companyID === user.company?.companyID || !user.company?.companyID});
@@ -63,7 +58,7 @@ export default function EditJob() {
     }
 
     async function validate(){
-        if (await checkIsCompany() && await verifyCompany()) {
+        if (await verifyCompany()) {
             await getDefaultValues(); // eslint-disable-line
         } else {
             navigate(-1);

@@ -141,7 +141,6 @@ function UserProfilePage() {
 
   return (
       <div>
-          <PrivateRoutes/>
           <Navbar/>
         <div className='bg-lighter-grey min-h-screen items-center justify-center flex'>
             <div className='bg-white rounded-md sm:min-w-1/6 inline-grid px-12 py-7 space-y-3 mt-24 max-w-lg min-w-[40%]'>
@@ -157,7 +156,7 @@ function UserProfilePage() {
                     <div className={"justify-items-end"}>
                     <img className={"rounded-full float-right"} src={profile.pfpUrl} alt="Avatar" height={"100"} width={"100"}/>
                         <input id={"pfpUpload"} type="file" name="myImage" accept="image/png, image/jpeg" hidden onChange={updatePfp}/>
-                        <label for={"pfpUpload"} className={"float-right"}><i className="fa-solid fa-pen-to-square pr-2"></i></label>
+                        {isEditing && <label for={"pfpUpload"} className={"float-right"}><i className="fa-solid fa-pen-to-square pr-2"></i></label>}
                     </div>
                 </div>
             <div className='text-input' id="profile">
