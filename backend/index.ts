@@ -49,6 +49,7 @@ export const run = () => {
 
   app.post('/api/applications/add', upload.none(), utils.Route(app, applicationroutes.AddApplication));
   app.get('/api/applications/:id', utils.Route(app, applicationroutes.GetApplication));
+  app.post('/api/applications/filter', upload.none() ,utils.Route(app, applicationroutes.RetrieveApplicationByFilter));
   app.patch('/api/applications/:id', upload.none(), utils.Route(app, applicationroutes.UpdateApplication));
   app.delete('/api/applications/:id', upload.none(), utils.Route(app, applicationroutes.DeleteApplication));
   app.post('/api/application/filter', upload.none(), utils.Route(app, applicationroutes.RetrieveApplicationByFilter));
