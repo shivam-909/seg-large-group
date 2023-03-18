@@ -8,10 +8,14 @@ class JobListing {
   location: string;
   schedule: string;
   companyID: string;
-  type: string;
+  industry: string;
+  coverLetterRequired: boolean;
+  qualifications: string[];
   datePosted: Date;
-  benefits: string[];
-  requirements: string[];
+  benefits?: string[];
+  requirements?: string[];
+  screeningQuestions?: Record<string,boolean>;
+
 
   constructor(
     id: string,
@@ -21,11 +25,14 @@ class JobListing {
     location: string,
     schedule: string,
     companyID: string,
-    type: string,
+    industry: string,
+    coverLetterRequired: boolean,
+    qualifications: string[],
     datePosted: Date,
-    benefits: string[],
-    requirements: string[]
-  ) {
+    benefits?: string[],
+    requirements?: string[],
+    screeningQuestions?: Record<string, boolean>,
+) {
     this.id = id;
     this.title = title;
     this.compensation = compensation;
@@ -33,10 +40,13 @@ class JobListing {
     this.location = location;
     this.schedule = schedule;
     this.companyID = companyID;
-    this.type = type;
+    this.industry = industry;
+    this.coverLetterRequired = coverLetterRequired;
     this.datePosted = datePosted;
     this.benefits = benefits;
     this.requirements = requirements;
+    this.screeningQuestions = screeningQuestions;
+    this.qualifications = qualifications;
   }
 }
 

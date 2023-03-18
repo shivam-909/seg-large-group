@@ -3,14 +3,14 @@ import { NextFunction, Request, Response } from "express";
 import DB from "../../db/db";
 import JobListing from "../../models/job";
 import * as jobsdb from "../../db/jobs";
-import { ErrorJobListingNotFound, getErrorMessage, Handler } from "../public";
+import { ErrorJobListingNotFound, Handler } from "../public";
 import { randomUUID } from "crypto";
 
 export function AddListing(db: DB): Handler {
   return async (req: Request, res: Response, next: NextFunction) => {
-    const { title, compensation, description, location, schedule, companyID, type, datePosted, benefits, requirements } = req.body;
+    const { title, compensation, description, location, schedule, companyID, industry, coverLetterRequired, qualifications, datePosted, benefits, requirements, screeningQuestions } = req.body;
     const newID = randomUUID();
-    const newJobListing = new JobListing(newID, title, compensation, description, location, schedule, companyID, type, datePosted, benefits, requirements);
+    const newJobListing = new JobListing(newID, title, compensation, description, location, schedule, companyID, industry, coverLetterRequired, qualifications, datePosted, benefits, requirements, screeningQuestions);
     await jobsdb.CreateJobListing(db, newJobListing);
   }
 }
@@ -51,6 +51,9 @@ export function DeleteListing(db: DB): Handler {
   return async (req: Request, res: Response, next: NextFunction) => {
     const id = req.params.id;
     await jobsdb.DeleteJobListing(db, id);
+    res.status(200).json({
+      message: 'Job deleted'
+    });
   };
 }
 
