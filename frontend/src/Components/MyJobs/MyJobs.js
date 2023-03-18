@@ -2,7 +2,6 @@ import './MyJobs.css'
 import {useEffect, useState} from "react";
 import Category from "./Category";
 import Navbar from "../Navbar/Navbar";
-import PrivateRoutes from "../../Auth/PrivateRoute";
 import {useNavigate} from "react-router-dom";
 import {GetData} from "../../Auth/GetUser";
 
@@ -34,10 +33,10 @@ export default function MyJobs() {
 
   return (
       <div>
-          <PrivateRoutes/>
           <Navbar/>
+          {user.userID &&
       <div className='bg-lighter-grey min-h-screen justify-center flex'>
-          <div className='bg-white mt-36 rounded-md px-12 py-7 space-y-3 min-w-[45%]'>
+          <div className='bg-white mt-24 rounded-md px-12 py-7 space-y-3 min-w-[45%]'>
             <p className='font-bold text-3xl flex justify-center'>My Jobs</p>
               {!isCompany ?
             <ul className={"border-b-2 border-grey flex relative"}>
@@ -45,6 +44,7 @@ export default function MyJobs() {
                 <li className={"filterJobs"}><button id={"Applied"} className={"filters"} onClick={() => changeFilter("Applied")} disabled={filter==="Applied"}>Applied</button></li>
                 <li className={"filterJobs"}><button id={"Interview"} className={"filters"} onClick={() => changeFilter("Interview")} disabled={filter==="Interview"}>Interviews</button></li>
                 <li className={"filterJobs"}><button id={"Archived"} className={"filters"} onClick={() => changeFilter("Archived")} disabled={filter==="Archived"}>Archived</button></li>
+                <li className={"filterJobs"}><button id={"Rejected"} className={"filters"} onClick={() => changeFilter("Rejected")} disabled={filter==="Rejected"}>Rejected</button></li>
             </ul>
                   :
                   <div>
@@ -56,7 +56,7 @@ export default function MyJobs() {
               }
               <Category filter={filter}/>
           </div>
-      </div>
+      </div>}
       </div>
   );
 }
