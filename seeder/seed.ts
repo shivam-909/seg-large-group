@@ -152,8 +152,47 @@ async function GetRandomCompany(db: DB): Promise<Company> {
     return company;
 }
 
-async function GenerateJobListing(db: DB): Promise<JobListing> {
+function GetRandomQuestions(): Record<string, boolean> {
+    const MAX_QUESTIONS = Math.floor(Math.random() * 5) + 1;
+    const randomQuestions: Record<string, boolean> = {};
 
+    const interviewQuestions: [string, boolean][] = [
+        ["Why haven’t you gotten your Bachelor’s Degree/Master’s Degree/Ph.D.?", true],
+        ["Why have you switched jobs so many times?", true],
+        ["Why did you change your career path?", false],
+        ["Why did you decide to leave your previous/current job?", false],
+        ["Why is there a gap in your work experience?", true],
+        ["Why were you fired?", true],
+        ["How do you feel about working weekends or late hours?", true],
+        ["How would your boss describe you?", false],
+        ["Do you have any serious medical conditions?", false],
+        ["What would your first 30, 60, or 90 days look like in this role?", true],
+        ["Are you a team player?", true],
+        ["Are you a risk-taker?", false],
+        ["How do you deal with pressure or stressful situation?", false],
+        ["Do you think there is a difference between hard work and smart work?", true],
+        ["How quickly do you adapt to new technology?", true],
+        ["Do you have any interests outside of work?", true],
+        ["What do you think our company/organization could do better?", false],
+        ["Give an example of how you have handled a challenge in the workplace before.", false],
+        ["Give an example of when you performed well under pressure.", true],
+        ["Give an example of when you showed leadership qualities.", true]
+    ];
+
+    const shuffledQuestions = interviewQuestions.sort(() => Math.random() - 0.5);
+
+    for (let i = 0; i < MAX_QUESTIONS && i < shuffledQuestions.length; i++) {
+        randomQuestions[shuffledQuestions[i][0]] = shuffledQuestions[i][1];
+    }
+
+    return randomQuestions;
+}
+
+
+
+async function GenerateJobListing(db: DB): Promise<JobListing> {
+    const test_array: [string, boolean][] = [["Q1", true], ["Q2", false]];
+    const array_two: [string, boolean][] = [["Q3", true]];
     const company = await GetRandomCompany(db);
     const user = await usersdb.RetrieveUserByCompanyID(db, company.companyID);
     if (!user) {
@@ -177,6 +216,7 @@ async function GenerateJobListing(db: DB): Promise<JobListing> {
         faker.date.past(),
         [faker.lorem.words(), faker.lorem.words(), faker.lorem.words()],
         [faker.lorem.words(), faker.lorem.words(), faker.lorem.words()],
+        GetRandomQuestions()
 );
 }
 
