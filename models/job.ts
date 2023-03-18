@@ -3,7 +3,7 @@ import {QueryDocumentSnapshot} from "firebase-admin/firestore";
 class JobListing {
   id: string;
   title: string;
-  compensation: number;
+  compensation: string[];
   description: string;
   location: string;
   schedule: string;
@@ -21,7 +21,7 @@ class JobListing {
   constructor(
     id: string,
     title: string,
-    compensation: number,
+    compensation: string[],
     description: string,
     location: string,
     schedule: string,
