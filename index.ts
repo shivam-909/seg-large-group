@@ -41,9 +41,9 @@ export const run = () => {
   app.patch('/api/notifications/:id', upload.none(), utils.Route(app, notificationroutes.UpdateNotification));
   app.delete('/api/notifications/:id', upload.none(), utils.Route(app, notificationroutes.DeleteNotification));
 
+  app.post('/api/jobs/filter', upload.none(), utils.Route(app, listingroutes.RetrieveJobListingsByFilter));
   app.post('/api/jobs/add', upload.none(), utils.Route(app, listingroutes.AddListing));
   app.get('/api/jobs/:id', utils.Route(app, listingroutes.GetListing));
-  app.post('/api/jobs/filter', upload.none(), utils.Route(app, listingroutes.RetrieveJobListingsByFilter));
   app.patch('/api/jobs/:id', upload.none(), utils.Route(app, listingroutes.UpdateListing));
   app.delete('/api/jobs/:id', upload.none(), utils.Route(app, listingroutes.DeleteListing));
 
@@ -56,7 +56,8 @@ export const run = () => {
 
 
 
-  app.get('/api/user/:id', utils.Route(app, userroutes.GetUser));
+  app.get('/api/user/typeid', upload.none(), utils.Route(app, userroutes.GetUserByTypeID));
+  app.get('/api/user/:id', upload.none(), utils.Route(app, userroutes.GetUser));
   app.patch('/api/users/:id', upload.none(), utils.Route(app, userroutes.UpdateUser));
   app.delete('/api/user/:id', upload.none(), utils.Route(app, userroutes.DeleteUser));
 
