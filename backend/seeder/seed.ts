@@ -212,6 +212,7 @@ async function GenerateJobListing(db: DB): Promise<JobListing> {
         company.companyID,
         faker.helpers.arrayElement(["Engineering", "Sales", "Marketing", "Finance"]),
         faker.datatype.boolean(),
+        faker.datatype.boolean(),
         [],
         faker.date.past(),
         [faker.lorem.words(), faker.lorem.words(), faker.lorem.words()],
