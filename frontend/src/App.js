@@ -18,7 +18,7 @@ export default function App() {
               <Route path="/signup" element={ <RegisterPage/> }/>
               <Route path="/saved" element={ <MyJobs/> }/>
               <Route path="/profile" element={ <UserProfilePage/> }/>
-              <Route path="/apply" element={ <ApplyPage/> }/>
+              <Route path="/apply/:id" element={ <ApplyPage/> }/>
           </Routes>
       </BrowserRouter>
   );

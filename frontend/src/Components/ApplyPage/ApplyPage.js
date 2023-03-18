@@ -3,16 +3,21 @@ import Navbar from "../Navbar/Navbar";
 import { Document, Page } from 'react-pdf/dist/esm/entry.webpack';
 import "react-pdf/dist/esm/Page/TextLayer.css";
 import "react-pdf/dist/esm/Page/AnnotationLayer.css";
+import {useParams} from "react-router-dom";
 
 export default function ApplyPage() {
+    const {id} = useParams();
+
+    // TODO: Show 'Error 404 Not Found' page if no id is provided
+    // TODO: Fetch job details using id
+
     const screeningQuestions = [
         ['Please list 2-3 dates and time ranges when you could do an interview.', false],
         ['How many years of Zoho development experience do you have?', true],
         ['Are you authorised to work in the United Kingdom?', true],
         ['Will you be able to reliably commute or relocate to Romford, Greater London for this job?', true],
     ];
-    // const [CV, setCV] = useState(['Cem Ratip CV', 'https://seg-joblink.s3.eu-west-2.amazonaws.com/Cem+Ratip+CV.pdf']);
-    const [CV, setCV] = useState(null);
+    const [CV, setCV] = useState(['Cem Ratip CV', 'https://seg-joblink.s3.eu-west-2.amazonaws.com/Cem+Ratip+CV.pdf']);
 
     function validateApplication() {
         if (!screeningQuestions.empty) {
@@ -58,8 +63,8 @@ export default function ApplyPage() {
                     </div>
                     <div className='bg-darker-grey h-[0.1px] my-5'></div>
                     <div className='pt-6'>
-                        {!screeningQuestions.empty &&
-                            <div className='space-y-5'>
+                        {screeningQuestions.length > 0 &&
+                            <div className='space-y-5 pb-12'>
                                 <p className='font-bold text-3xl flex flex-col'>Screening questions</p>
                                 {screeningQuestions.map(question => {
                                     return (
@@ -72,7 +77,7 @@ export default function ApplyPage() {
                             </div>
                         }
                     </div>
-                    <div className='pt-12'>
+                    <div className='pb-12'>
                         <p className='font-bold text-3xl pb-10'>Select your CV</p>
                         {CV ?
                             <div>
@@ -102,7 +107,7 @@ export default function ApplyPage() {
                             </div>
                         }
                     </div>
-                    <div className='pt-12'>
+                    <div>
                         <p className='font-bold text-3xl pb-5'>Write a cover letter <span className='text-lg'>(optional)</span></p>
                         <textarea className='border rounded-md p-1 resize-none w-full h-[200px]'></textarea>
                     </div>
