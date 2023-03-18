@@ -5,7 +5,6 @@ import Skills from "./Skills";
 import {setVisible} from "../Validation/validate";
 import ErrorBox from "../ErrorBox/ErrorBox";
 import Education from "./Education";
-import PrivateRoutes from "../../Auth/PrivateRoute";
 import {GetData} from "../../Auth/GetUser";
 import axios from "axios";
 import {useParams} from "react-router-dom";
@@ -29,7 +28,7 @@ function UserProfilePage() {
         };
         getProfile()
         setCompany(profile.searcherID === undefined)
-    },[profile])
+    },[profile]) // eslint-disable-line
 
     useEffect(() => {
         const getUser = async () => {
@@ -41,7 +40,7 @@ function UserProfilePage() {
         };
         getUser()
         checkIsOwner();
-    },[user])
+    },[user]) // eslint-disable-line
 
     async function checkIsOwner(){
         setIsOwner(user.userID === id);
@@ -52,21 +51,44 @@ function UserProfilePage() {
         toggleKeys(true);
     }
 
-    async function SaveOnClick() {
-        let companyName = document.getElementById("companyName")?.value;
+    function saveProfile(){
+        if(isCompany){
+            saveCompany()
+        }
+        else{
+            saveSearcher()
+        }
+    }
+
+    async function saveCompany() {
+        let companyName = document.getElementById("firstName")?.value;
+        let location = document.getElementById("location").value;
+
+        if (companyName === "") {
+            setVisible("errorBox", true)
+        }
+        else {
+            setIsEditing(false);
+            toggleKeys(false);
+            setVisible("errorBox", false);
+
+            const formData = new FormData();
+            formData.append('companyName', companyName);
+            formData.append('location', location);
+
+            await axios.patch("http://localhost:8000/api/users/" + id, formData)
+        }
+    }
+
+    async function saveSearcher() {
         let firstName = document.getElementById("firstName")?.value;
         let lastName = document.getElementById("lastName")?.value;
         let location = document.getElementById("location").value;
 
         if (firstName === "" || lastName === "" || !validateSkills() || !validateEducation()) {
             setVisible("errorBox", true)
-        } else {
-            setProfile(prevUser => ({
-                ...prevUser,
-                firstName: firstName,
-                lastName: lastName,
-                location: location,
-            }));
+        }
+        else {
             setIsEditing(false);
             toggleKeys(false);
             setVisible("errorBox", false);
@@ -76,8 +98,7 @@ function UserProfilePage() {
             formData.append('lastName', lastName);
             formData.append('location', location);
 
-            await axios.patch("http://localhost:8080/api/users/" + id, formData)
-            // TODO: Add Backend Update
+            await axios.patch("http://localhost:8000/api/users/" + id, formData)
         }
     }
     function validateEducation(){
@@ -144,7 +165,7 @@ function UserProfilePage() {
           <Navbar/>
         <div className='bg-lighter-grey min-h-screen items-center justify-center flex'>
             <div className='bg-white rounded-md sm:min-w-1/6 inline-grid px-12 py-7 space-y-3 mt-24 max-w-lg min-w-[40%]'>
-              <h1 className='font-bold text-2xl flex justify-center'>My Profile </h1>
+              <h1 className='font-bold text-3xl flex justify-center'>My Profile </h1>
                 <div className={"grid grid-cols-2 gap-10"}>
                     <div>
                         {isCompany ?
@@ -183,7 +204,7 @@ function UserProfilePage() {
                 <ErrorBox message={"Please complete all required fields."}/>
             </div>
                 {isOwner && !isEditing && <button className="border-2 border-dark-theme-grey bg-[#ccc] rounded-md m-2 p-2 text-black" onClick={EditOnClick} ><i className="fa-solid fa-pen-to-square pr-2"></i>Edit</button>}
-                {isOwner && isEditing && <button className="save-btn" onClick={SaveOnClick}><i className="fa-solid fa-floppy-disk pr-1"></i> Save</button>}
+                {isOwner && isEditing && <button className="save-btn" onClick={saveProfile}><i className="fa-solid fa-floppy-disk pr-1"></i> Save</button>}
           </div>
         </div>
       </div>

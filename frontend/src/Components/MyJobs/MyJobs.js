@@ -2,7 +2,6 @@ import './MyJobs.css'
 import {useEffect, useState} from "react";
 import Category from "./Category";
 import Navbar from "../Navbar/Navbar";
-import PrivateRoutes from "../../Auth/PrivateRoute";
 import {useNavigate} from "react-router-dom";
 import {GetData} from "../../Auth/GetUser";
 
@@ -37,7 +36,7 @@ export default function MyJobs() {
           <Navbar/>
           {user.userID &&
       <div className='bg-lighter-grey min-h-screen justify-center flex'>
-          <div className='bg-white mt-36 rounded-md px-12 py-7 space-y-3 min-w-[45%]'>
+          <div className='bg-white mt-24 rounded-md px-12 py-7 space-y-3 min-w-[45%]'>
             <p className='font-bold text-3xl flex justify-center'>My Jobs</p>
               {!isCompany ?
             <ul className={"border-b-2 border-grey flex relative"}>

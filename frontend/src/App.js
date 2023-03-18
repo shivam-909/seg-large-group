@@ -9,7 +9,6 @@ import EditJob from "./Components/MyJobs/EditJob";
 import Applicants from "./Components/Applicants/Applicants";
 import ViewJob from "./Components/ViewJobs/ViewJob";
 import CompanyRoute from "./Auth/CompanyRoute";
-import CompanyIsUserRoute from "./Auth/CompanyIsUserRoute";
 
 export default function App() {
     return (

@@ -8,15 +8,14 @@ import ApplicantCard from "./ApplicantCard";
 import axios from "axios";
 
 export default function Applicants() {
-    const [isCompany, setCompany] = useState(false);
-    const [user, setUser] = useState([])
     const navigate = useNavigate();
+    const [user, setUser] = useState([])
     const [applicants, setApplicants] = useState([])
     const { id } = useParams();
 
     useEffect(() => {
         getApplicants();
-    },[])
+    },[]) // eslint-disable-line
     useEffect(() => {
         const getUser = async () => {
             if (user.length === 0){
@@ -26,11 +25,11 @@ export default function Applicants() {
             }
         };
         getUser()
-        setCompany(user.searcherID === undefined)
-    },[user])
+        // setCompany(user.searcherID === undefined)
+    },[user]) // eslint-disable-line
 
-    async function addCard(name, email, location){
-        await setApplicants( current => [...current, <ApplicantCard name={name} email={email} location={location}/>]);
+    async function addCard(profileID, pfp, name, email, status){
+        await setApplicants( current => [...current, <ApplicantCard id={profileID} pfpUrl={pfp} name={name} email={email} status={status}/>]);
     }
 
     async function getApplicants(){
@@ -38,9 +37,14 @@ export default function Applicants() {
         formData.append('jobListing', id);
         await axios.post("http://localhost:8000/api/application/filter", formData).then(async res => {
             let applications = res.data.applications;
-            console.log(applications)
             for (let i = 0; i < applications.length; i++) {
-                await axios.get("http://localhost:8000/api/searcher/" + applications[i].searcher).then(searcher => {addCard(searcher.data.firstName+" "+searcher.data.lastName, searcher.data.email, searcher.data.location)})
+                await axios.get("http://localhost:8000/api/searcher/" + applications[i].searcher).then(async searcher => {
+                    const searcherID = new FormData();
+                    searcherID.append("searcherID",searcher.data.searcherID)
+                    await axios.post("http://localhost:8000/api/user/typeid", searcherID).then(usr => {
+                        addCard(usr.data.userID, usr.data.pfpUrl, searcher.data.firstName + " " + searcher.data.lastName, usr.data.email, applications[i].status)
+                    })
+                })
             }
         }).catch(error => {console.log(error)})
     }
@@ -50,7 +54,8 @@ export default function Applicants() {
             <PrivateRoutes/>
             <Navbar/>
             <div className='bg-lighter-grey min-h-screen justify-center flex'>
-                <div className='bg-white mt-36 rounded-md px-12 py-7 space-y-3 min-w-[45%]'>
+                <div className='bg-white mt-24 rounded-md px-12 py-7 space-y-3 min-w-[45%]'>
+                    <button onClick={() => {navigate(-1)}} className={"float-left mb-5 text-3xl text-red"}><i className="fa-solid fa-circle-chevron-left"></i></button>
                     <p className='font-bold text-3xl flex justify-center'>Applicants</p>
                         <div>
                             <div className={"border-b-2 border-grey flex relative"}/>

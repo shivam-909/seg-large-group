@@ -38,7 +38,6 @@ export default function Category(props) {
     },[props.filter, user]) // eslint-disable-line
 
     async function getPostings(){
-        console.log("getting posts")
         const companyID = user.companyID;
         const formData = new FormData();
         formData.append('companyID', companyID); // eslint-disable-line
@@ -46,10 +45,8 @@ export default function Category(props) {
             .then(async response => {
                 if (response.data !== undefined) {
                     let filterJobs = response.data;
-                    console.log(response.data)
                     setJobsList([]);
                     for (let i = 0; i < filterJobs.length; i++) {
-                        console.log(filterJobs[i])
                         await addCompanyCard(filterJobs[i].id, filterJobs[i].title, filterJobs[i].schedule, filterJobs[i].location, filterJobs[i].datePosted);
                     }
                 } else {

@@ -1,17 +1,15 @@
 import '../MyJobs/MyJobs.css'
 import React, {useEffect, useState} from "react";
 import Navbar from "../Navbar/Navbar";
-import PrivateRoutes from "../../Auth/PrivateRoute";
 import {useNavigate, useParams} from "react-router-dom";
 import {GetData} from "../../Auth/GetUser";
 import axios from "axios";
-import SearchBar from "../SearchPage/SearchBar";
 import salaryIcon from '../../icons/salaryIcon.png';
 import suitcaseIcon from '../../icons/suitcaseIcon.png';
 import pindropIcon from '../../icons/pindrop.png';
 
 export default function ViewJob() {
-    const [isCompany, setCompany] = useState(false);
+    // const [isCompany, setCompany] = useState(false);
     const [user, setUser] = useState([])
     const [job, setJob] = useState([])
     const navigate = useNavigate();
@@ -26,7 +24,7 @@ export default function ViewJob() {
             }
         };
         getJob()
-    },[job])
+    },[job]) // eslint-disable-line
 
     useEffect(() => {
         const getUser = async () => {
@@ -37,7 +35,7 @@ export default function ViewJob() {
             }
         };
         getUser()
-        setCompany(user.searcherID === undefined)
+        // setCompany(user.searcherID === undefined)
     },[user])
 
     return (
@@ -47,7 +45,7 @@ export default function ViewJob() {
                 <div className='bg-white mt-36 rounded-md px-12 py-7 space-y-3 min-w-[45%]'>
                     <p className='font-bold text-3xl flex'>{job.title}</p>
                     <p className='font-bold text-2xl flex'>Expedia</p>
-                    <button className={"border-2 border-blue rounded-md pl-5 pr-5 text-white bg-blue"}>Apply now</button>
+                    <button className={"border-2 border-blue rounded-md pl-5 pr-5 text-white bg-blue"} onClick={() => {navigate("/apply/"+job.id)}}>Apply now</button>
                     <div>
                         <div className={"border-b-2 border-grey flex relative"}/>
                         <p className='font-bold text-xl flex'>Details</p>
