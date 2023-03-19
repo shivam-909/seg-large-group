@@ -14,18 +14,10 @@ export function AddListing(db: DB): Handler {
     const { title, compensation, description, location, type, schedule, companyID, industry, coverLetterRequired, urgent, qualifications, datePosted, benefits, requirements, screeningQuestions } = req.body;
     const newID = randomUUID();
     const newJobListing = new JobListing(newID, title, compensation, description, location, type, schedule, companyID, industry, coverLetterRequired, urgent, qualifications, datePosted, benefits, requirements, screeningQuestions);
-    // if(newJobListing.description.length < 800){
-    //   next(ErrorJobDescriptionTooShort);
-    //   return;
-    // }
-    // if(newJobListing.description.length > 2000){
-    //   next(ErrorJobDescriptionTooLong);
-    //   return;
-    // }
     try {
       await validate.AddListing(db, req.body);
     } catch (err) {
-      next(err);
+      next((err as Error).message);
       return;
     }
 
@@ -65,7 +57,7 @@ export function UpdateListing(db: DB): Handler {
     try {
       await validate.UpdateListing(db, req.body);
     } catch (err) {
-      next(err);
+      next((err as Error).message);
       return;
     }
     await jobsdb.UpdateJobListing(db, updatedJobListing);
