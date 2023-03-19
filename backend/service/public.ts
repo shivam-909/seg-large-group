@@ -45,6 +45,22 @@ export const ErrorStatusRequired = "no status provided";
 export const ErrorMissingProperty = "no property provided for update";
 export const ErrorJobDescriptionTooShort = "job description is too short";
 export const ErrorJobDescriptionTooLong = "job description is too long";
+export const ErrorTitleRequired = "no title is provided";
+export const ErrorCompensationRequired = "no compensation is provided";
+export const ErrorDescriptionRequired = "no description is provided";
+export const ErrorLocationRequired = "no location is provided";
+export const ErrorTypeRequired = "no type is provided";
+export const ErrorScheduleRequired = "no schedule is provided";
+export const ErrorCompanyIDRequired = "no company id is provided";
+export const ErrorIndustryRequired = "no industry is provided";
+export const ErrorCoverLetterRequired = "no value for coverLetterRequired is provided";
+export const ErrorUrgentRequired = "no value for urgent is provided";
+export const ErrorQualificationsRequired = "no qualifications are provided";
+export const ErrorDatePostedRequired = "no value for date posted is provided";
+
+
+
+
 
 
 
@@ -76,7 +92,19 @@ export var ErrorToCode: Map<string, number> = new Map<string, number>(
         [ErrorMissingProperty, 400],
         [ErrorJobDescriptionTooShort, 400],
         [ErrorJobDescriptionTooLong, 400],
-
+        [ErrorJobListingNotFound, 404],
+        [ErrorTitleRequired, 400],
+        [ErrorCompensationRequired, 400],
+        [ErrorDescriptionRequired, 400],
+        [ErrorLocationRequired, 400],
+        [ErrorTypeRequired, 400],
+        [ErrorScheduleRequired, 400],
+        [ErrorCompanyIDRequired, 400],
+        [ErrorIndustryRequired, 400],
+        [ErrorCoverLetterRequired, 400],
+        [ErrorUrgentRequired, 400],
+        [ErrorQualificationsRequired, 400],
+        [ErrorDatePostedRequired, 400],
 
     ]
 );
