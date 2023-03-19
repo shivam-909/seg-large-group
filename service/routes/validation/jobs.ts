@@ -1,11 +1,11 @@
 import DB from "../../../db/db";
 import * as errors from "../../public";
 import * as jobsdb from "../../../db/jobs";
+import * as companiesdb from "../../../db/companies";
 
 
 export async function AddListing(db: DB, body: any): Promise<void> {
     const { title, compensation, description, location, type, schedule, companyID, industry, coverLetterRequired, urgent, qualifications, datePosted, benefits, requirements, screeningQuestions} = body;
-
     if(!title){
         throw new Error(errors.ErrorTitleRequired);
     }
@@ -14,6 +14,12 @@ export async function AddListing(db: DB, body: any): Promise<void> {
     }
     if(!description){
         throw new Error(errors.ErrorDescriptionRequired);
+    }
+    if(description.length < 800){
+        throw new Error(errors.ErrorJobDescriptionTooShort);
+    }
+    if(description.length > 2000){
+        throw new Error(errors.ErrorJobDescriptionTooLong);
     }
     if(!location){
         throw new Error(errors.ErrorLocationRequired);
@@ -42,20 +48,12 @@ export async function AddListing(db: DB, body: any): Promise<void> {
     if(!datePosted){
         throw new Error(errors.ErrorDatePostedRequired);
     }
-
-
-
-
-
-
-
-
-    if(description.length < 800){
-        throw new Error(errors.ErrorJobDescriptionTooShort);
+    const company = await companiesdb.RetrieveCompanyByID(db, companyID);
+    if(!company){
+        throw new Error(errors.ErrorCompanyNotFound);
     }
-    if(description.length > 2000){
-        throw new Error(errors.ErrorJobDescriptionTooLong);
-    }
+
+
 }
 
 
@@ -66,6 +64,14 @@ export async function UpdateListing(db: DB, id:string, req: any): Promise<void> 
     if (!jobListing) {
         throw new Error(errors.ErrorJobListingNotFound);
     }
+
+    if(companyID){
+        const company = await companiesdb.RetrieveCompanyByID(db, companyID);
+        if(!company){
+            throw new Error(errors.ErrorCompanyNotFound);
+        }
+    }
+
     if(description.length < 800){
         throw new Error(errors.ErrorJobDescriptionTooShort);
     }
