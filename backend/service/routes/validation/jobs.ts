@@ -2,6 +2,7 @@ import DB from "../../../db/db";
 import * as errors from "../../public";
 import * as jobsdb from "../../../db/jobs";
 import * as companiesdb from "../../../db/companies";
+import * as searchersdb from "../../../db/searchers";
 
 
 export async function AddListing(db: DB, body: any): Promise<void> {
@@ -56,7 +57,6 @@ export async function AddListing(db: DB, body: any): Promise<void> {
 
 }
 
-
 export async function UpdateListing(db: DB, id:string, req: any): Promise<void> {
     const { title, compensation, description, location, type, schedule, companyID, industry, coverLetterRequired, urgent, qualifications, datePosted, benefits, requirements, screeningQuestions} = req;
 
@@ -64,14 +64,12 @@ export async function UpdateListing(db: DB, id:string, req: any): Promise<void> 
     if (!jobListing) {
         throw new Error(errors.ErrorJobListingNotFound);
     }
-
     if(companyID){
         const company = await companiesdb.RetrieveCompanyByID(db, companyID);
         if(!company){
             throw new Error(errors.ErrorCompanyNotFound);
         }
     }
-
     if(description.length < 800){
         throw new Error(errors.ErrorJobDescriptionTooShort);
     }
@@ -84,5 +82,17 @@ export async function ListingExists(db: DB, id: string): Promise<void> {
     const jobListing = await jobsdb.RetrieveJobListing(db, id);
     if (!jobListing) {
         throw new Error(errors.ErrorJobListingNotFound);
+    }
+}
+export async function RetrieveListingByFilter(db: DB, body: any): Promise<void> {
+
+    const { title, compensation, description, location, type, schedule, companyID, industry, coverLetterRequired, urgent, qualifications, datePosted, benefits, requirements, screeningQuestions} = body;
+
+    //add code to check that param for filter has been passed
+    if(companyID){
+        const company = await companiesdb.RetrieveCompanyByID(db, companyID);
+        if(!company){
+            throw new Error(errors.ErrorCompanyNotFound);
+        }
     }
 }
