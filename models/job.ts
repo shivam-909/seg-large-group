@@ -6,8 +6,8 @@ class JobListing {
   compensation: string[];
   description: string;
   location: string;
-  type: string;
-  schedule:string;
+  type: string[];
+  schedule:string[];
   companyID: string;
   industry: string;
   coverLetterRequired: boolean;
@@ -25,8 +25,8 @@ class JobListing {
     compensation: string[],
     description: string,
     location: string,
-    type: string,
-    schedule:string,
+    type: string[],
+    schedule:string[],
     companyID: string,
     industry: string,
     coverLetterRequired: boolean,

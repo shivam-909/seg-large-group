@@ -8,9 +8,9 @@ import { randomUUID } from "crypto";
 
 export function AddListing(db: DB): Handler {
   return async (req: Request, res: Response, next: NextFunction) => {
-    const { title, compensation, description, location, type, companyID, industry, coverLetterRequired, urgent, qualifications, datePosted, benefits, requirements, screeningQuestions } = req.body;
+    const { title, compensation, description, location, type, schedule, companyID, industry, coverLetterRequired, urgent, qualifications, datePosted, benefits, requirements, screeningQuestions } = req.body;
     const newID = randomUUID();
-    const newJobListing = new JobListing(newID, title, compensation, description, location, type, companyID, industry, coverLetterRequired, urgent, qualifications, datePosted, benefits, requirements, screeningQuestions);
+    const newJobListing = new JobListing(newID, title, compensation, description, location, type, schedule, companyID, industry, coverLetterRequired, urgent, qualifications, datePosted, benefits, requirements, screeningQuestions);
     await jobsdb.CreateJobListing(db, newJobListing);
   }
 }

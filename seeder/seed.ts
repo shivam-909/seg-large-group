@@ -152,6 +152,8 @@ async function GetRandomCompany(db: DB): Promise<Company> {
     return company;
 }
 
+
+
 function GenerateCompensation(): string[]{
 
     const yearlyAmount = ["£" + faker.datatype.number({
@@ -231,7 +233,8 @@ async function GenerateJobListing(db: DB): Promise<JobListing> {
         GenerateCompensation(),
         faker.lorem.paragraph(),
         user.location,
-        faker.helpers.arrayElement(["Remote", "Hybrid", "In-Office"]),
+        faker.helpers.arrayElements(["Remote", "Hybrid", "In-Office"]),
+        faker.helpers.arrayElements(["Part Time", "Full Time", "Internship", "Contract", "Apprenticeship"]),
         company.companyID,
         faker.helpers.arrayElement(["Engineering", "Sales", "Marketing", "Finance"]),
         faker.datatype.boolean(),
