@@ -59,10 +59,23 @@ export const ErrorQualificationsRequired = "no qualifications are provided";
 export const ErrorDatePostedRequired = "no value for date posted is provided";
 
 
-
-
-
-
+export const ErrorTitleMustBeString = "title must be a string";
+export const ErrorCompensationPostedMustBeArray = "compensation must be an array";
+export const ErrorCompensationSize = "compensation must have two elements exactly";
+export const ErrorCompensationMustBeStringArray = "every element in compensation must be a string";
+export const ErrorDescriptionMustBeString = "description must be a string";
+export const ErrorLocationMustBeString = "location must be a string";
+export const ErrorTypeMustBeArray = "type must be an array";
+export const ErrorTypeMustBeStringArray = "every element in type must be a string";
+export const ErrorScheduleMustBeArray = "schedule must be an array";
+export const ErrorScheduleMustBeStringArray = "every element in schedule must be a string";
+export const ErrorCompanyIDMustBeString = "companyID must be a string";
+export const ErrorIndustryMustBeString = "industry must be a string";
+export const ErrorCoverLetterRequiredMustBeBoolean = "value provided for cover letter required must be a boolean";
+export const ErrorUrgentMustBeBoolean = "value provided for urgent must be a boolean";
+export const ErrorQualificationsMustBeArray = "qualifications must be an array";
+export const ErrorQualificationsMustBeStringArray = "every element in qualifications must be a string";
+export const ErrorDatePostedMustBeDate = "date posted must be a date";
 
 
 export var ErrorToCode: Map<string, number> = new Map<string, number>(
@@ -105,6 +118,24 @@ export var ErrorToCode: Map<string, number> = new Map<string, number>(
         [ErrorUrgentRequired, 400],
         [ErrorQualificationsRequired, 400],
         [ErrorDatePostedRequired, 400],
+        [ErrorTitleMustBeString, 400],
+        [ErrorCompensationPostedMustBeArray,400],
+        [ErrorCompensationSize,400],
+        [ErrorCompensationMustBeStringArray,400],
+        [ErrorDescriptionMustBeString,400],
+        [ErrorDescriptionMustBeString,400],
+        [ErrorLocationMustBeString,400],
+        [ErrorTypeMustBeArray,400],
+        [ErrorTypeMustBeStringArray,400],
+        [ErrorScheduleMustBeArray,400],
+        [ErrorScheduleMustBeStringArray,400],
+        [ErrorCompanyIDMustBeString,400],
+        [ErrorIndustryMustBeString,400],
+        [ErrorCoverLetterRequiredMustBeBoolean,400],
+        [ErrorUrgentMustBeBoolean,400],
+        [ErrorQualificationsMustBeArray,400],
+        [ErrorQualificationsMustBeStringArray,400],
+        [ErrorDatePostedMustBeDate,400]
 
     ]
 );
