@@ -1,0 +1,25 @@
+import TextInputBox from "../LoginPage/TextInputBox";
+import {validateField} from "../Validation/validate";
+import Loading from "../Loading/Loading";
+
+function ForgotPassword(){
+   
+  function submitButton(){
+    let email = document.getElementById("email").value;
+    
+    alert("A password reset link has been sent to the email " + email)
+   }
+   
+    return(
+      <div className='bg-lighter-grey min-h-screen items-center justify-center flex'>
+          <div className='bg-white rounded-md sm:min-w-1/6 inline-grid px-12 py-7 space-y-3'>
+            <p className='mb-6 font-bold text-2xl flex justify-center'>Forgot Your Password</p>
+
+            <TextInputBox id='email' cache={localStorage.getItem("email")} className="w-full" onBlur={()=>{validateField("email",/^\w+(-?\w+)*@\w+(-?\w+)*(\.\w{2,10})+$/)}} placeholder='Email address'/>
+           
+            <button className='bg-dark-theme-grey rounded-md text-white p-2.5 flex items-center justify-center space-x-2' onClick={submitButton} id={"submitButton"}>Submit</button>
+          </div>
+      </div>
+    )
+}
+export default ForgotPassword;
