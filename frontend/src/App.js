@@ -6,11 +6,12 @@ import PrivateRoutes from "./Auth/PrivateRoute";
 import MyJobs from "./Components/MyJobs/MyJobs";
 import UserProfilePage from "./Components/ProfilePage/UserProfilePage";
 import ForgotPassword from './Components/ForgotPassword/ForgotPassword';
-import EmailVerification from './Components/EmailVerification/EmailVerification';
+import EmailVerification from './Components/ResetPassword/ResetPassword';
 import EditJob from "./Components/MyJobs/EditJob";
 import Applicants from "./Components/Applicants/Applicants";
 import ViewJob from "./Components/ViewJobs/ViewJob";
 import CompanyRoute from "./Auth/CompanyRoute";
+import ResetPassword from './Components/ResetPassword/ResetPassword';
 
 export default function App() {
     return (
@@ -33,7 +34,7 @@ export default function App() {
               <Route path="/saved" element={ <MyJobs/> }/>
               <Route path="/profile" element={ <UserProfilePage/> }/>
               <Route path="/forgot" element={ <ForgotPassword/> }/>
-              <Route path="/verify" element={ <EmailVerification/> }/>
+              <Route path="/reset" element={ <ResetPassword/> }/>
               <Route path="/viewjob/:id" element={ <ViewJob/> }/>
           </Routes>
       </BrowserRouter>

@@ -3,13 +3,16 @@ import {validateField} from "../Validation/validate";
 import showIcon from "../../icons/showIcon.png";
 import hideIcon from "../../icons/hideIcon.png";
 import TextInputBoxWithIcon from "../LoginPage/TextInputBoxWithIcon";
+import {Link, Routes, Route, useNavigate} from 'react-router-dom';
 
 
-function EmailVerification(){
+
+function ResetPassword(){
+    const navigate = useNavigate();
   
-   submitNewPassword = (e) => {
-      e.preventDefault();
-     this.props.history.push('/login')
+   const submitNewPassword = event => {
+      event.preventDefault();
+      navigate('/login')
     }
 
    function togglePasswordVisibility() {
@@ -49,14 +52,14 @@ function EmailVerification(){
               </div>
 
               <div>
-                 <TextInputBox className='w-full' id='confirmPassword' type='password' onBlur={checkPasswordMatch} placeholder='Confirm password'/>
+                 <TextInputBoxWithIcon className='w-full' id='confirmPassword' type='password' onBlur={checkPasswordMatch} placeholder='Confirm password' icon={<img id='toggleEye' src={showIcon} alt='' onClick={togglePasswordVisibility} className='cursor-pointer'/>}/>
                   <span id="passwordMismatchError" className='invisible absolute top-0'>Passwords don't match</span>
               </div>  
 
-            <button className="bg-dark-theme-grey rounded-md text-white p-2.5 flex items-center justify-center space-x-2" onClick={submitNewPassword} id={"submitButton"}>Submit</button>
+            <button className="bg-dark-theme-grey rounded-md text-white p-2.5 flex items-center justify-center space-x-2" onClick={submitNewPassword} id={"submitNewPassword"}>Submit</button>
 
           </div>
       </div>
     )
 }
-export default EmailVerification;
+export default ResetPassword;
