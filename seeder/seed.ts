@@ -239,7 +239,7 @@ async function GenerateJobListing(db: DB): Promise<JobListing> {
         faker.helpers.arrayElement(["Engineering", "Sales", "Marketing", "Finance"]),
         faker.datatype.boolean(),
         faker.datatype.boolean(),
-        [],
+        faker.helpers.arrayElements(["Pass in  Maths and English GCSEs", "Bachelors Degree", "Masters Degree", "PhD", "High School Diploma", "International Baccalaureate"]),
         faker.date.past(),
         [faker.lorem.words(), faker.lorem.words(), faker.lorem.words()],
         [faker.lorem.words(), faker.lorem.words(), faker.lorem.words()],
