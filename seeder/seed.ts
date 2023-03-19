@@ -156,17 +156,17 @@ async function GetRandomCompany(db: DB): Promise<Company> {
 
 function GenerateCompensation(): string[]{
 
-    const yearlyAmount = ["£" + faker.datatype.number({
+    const yearlyAmount = [faker.datatype.number({
         'min': 20000,
         'max': 100000
     }).toString(), "yearly"];
 
-    const hourlyAmount = ["£" + faker.datatype.number({
+    const hourlyAmount = [faker.datatype.number({
         'min': 10,
         'max': 49
     }).toString(), "hourly"];
 
-    const dailyAmount = ["£" + faker.datatype.number({
+    const dailyAmount = [faker.datatype.number({
         'min': 80,
         'max': 392
     }).toString(), "daily"];
