@@ -56,7 +56,6 @@ export async function RetrieveApplicationByFilter(db: DB, body: any): Promise<vo
 
 
 export async function UpdateApplication(db: DB, id:string, req: any): Promise<void> {
-    console.log("validation: ", req);
     const { status, searcher, jobListing } = req;
 
     const applicationDoc = await applicationsdb.RetrieveApplication(db, id);
