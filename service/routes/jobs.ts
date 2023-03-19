@@ -29,14 +29,13 @@ export function AddListing(db: DB): Handler {
 export function GetListing(db: DB): Handler {
   return async (req: Request, res: Response, next: NextFunction) => {
     const id = req.params.id;
-
-    const jobListing = await jobsdb.RetrieveJobListing(db, id);
-    if (!jobListing) {
-      next(ErrorJobListingNotFound);
+    try {
+      await validate.ListingExists(db, id);
+    } catch (err) {
+      next((err as Error).message);
       return;
-    };
-
-
+    }
+    const jobListing = await jobsdb.RetrieveJobListing(db, id);
     res.status(200).json(jobListing);
   };
 }
@@ -45,21 +44,16 @@ export function UpdateListing(db: DB): Handler {
   return async (req: Request, res: Response, next: NextFunction) => {
     const id = req.params.id;
     const listingData = req.body;
-
-    const listing = await jobsdb.RetrieveJobListing(db, id);
-    if (!listing) {
-      next(ErrorJobListingNotFound);
-      return;
-    }
-
-    const updatedJobListing = { ...listing, ...listingData };
-
     try {
-      await validate.UpdateListing(db, req.body);
+      await validate.UpdateListing(db, id,req.body);
     } catch (err) {
       next((err as Error).message);
       return;
     }
+    const listing = await jobsdb.RetrieveJobListing(db, id);
+    const updatedJobListing = { ...listing, ...listingData };
+
+
     await jobsdb.UpdateJobListing(db, updatedJobListing);
 
 
@@ -70,6 +64,12 @@ export function UpdateListing(db: DB): Handler {
 export function DeleteListing(db: DB): Handler {
   return async (req: Request, res: Response, next: NextFunction) => {
     const id = req.params.id;
+    try {
+      await validate.ListingExists(db, id);
+    } catch (err) {
+      next((err as Error).message);
+      return;
+    }
     await jobsdb.DeleteJobListing(db, id);
     res.status(200).json({
       message: 'Job deleted'
