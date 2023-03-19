@@ -155,7 +155,6 @@ async function GetRandomCompany(db: DB): Promise<Company> {
 
 
 function GenerateCompensation(): string[]{
-
     const yearlyAmount = [faker.datatype.number({
         'min': 20000,
         'max': 100000

@@ -114,7 +114,6 @@ export async function AddListing(db: DB, body: any): Promise<void> {
         throw new Error(errors.ErrorCompanyNotFound);
     }
 
-
 }
 
 export async function UpdateListing(db: DB, id:string, req: any): Promise<void> {
@@ -124,18 +123,80 @@ export async function UpdateListing(db: DB, id:string, req: any): Promise<void> 
     if (!jobListing) {
         throw new Error(errors.ErrorJobListingNotFound);
     }
+    if(title && typeof title !== 'string'){
+        throw new Error(errors.ErrorTitleMustBeString);
+    }
+    if(compensation){
+        if(!Array.isArray(compensation)){
+            throw new Error(errors.ErrorCompensationPostedMustBeArray);
+        }
+        if(compensation.length!=2){
+            throw new Error(errors.ErrorCompensationSize);
+        }
+        if(!isStringArray(compensation)){
+            throw new Error(errors.ErrorCompensationMustBeStringArray);
+        }
+    }
+    if(location && typeof location !== 'string'){
+        throw new Error(errors.ErrorLocationMustBeString)
+    }
+    if(type){
+        if(!Array.isArray(type)){
+            throw new Error(errors.ErrorTypeMustBeArray);
+        }
+        if(!isStringArray(type)){
+            throw new Error(errors.ErrorTypeMustBeStringArray);
+        }
+    }
+    if(schedule){
+        if(!Array.isArray(schedule)){
+            throw new Error(errors.ErrorTypeMustBeArray);
+        }
+        if(!isStringArray(schedule)){
+            throw new Error(errors.ErrorTypeMustBeStringArray);
+        }
+    }
     if(companyID){
+        if(typeof companyID !== 'string'){
+            throw new Error(errors.ErrorCompanyIDMustBeString);
+        }
         const company = await companiesdb.RetrieveCompanyByID(db, companyID);
         if(!company){
             throw new Error(errors.ErrorCompanyNotFound);
         }
     }
-    if(description.length < 800){
-        throw new Error(errors.ErrorJobDescriptionTooShort);
+    if(coverLetterRequired && typeof coverLetterRequired !== 'boolean'){
+        throw new Error(errors.ErrorCoverLetterRequiredMustBeBoolean);
     }
-    if(description.length > 2000){
-        throw new Error(errors.ErrorJobDescriptionTooLong);
+    if(urgent && typeof urgent !== 'boolean'){
+        throw new Error(errors.ErrorUrgentMustBeBoolean);
     }
+    if (description) {
+        if(typeof description !== 'string'){
+            throw new Error(errors.ErrorDescriptionMustBeString);
+        }
+        if (description.length < 800) {
+            throw new Error(errors.ErrorJobDescriptionTooShort);
+        }
+        if (description.length > 2000) {
+            throw new Error(errors.ErrorJobDescriptionTooLong);
+        }
+    }
+    if(qualifications){
+        if(!Array.isArray(qualifications)){
+            throw new Error(errors.ErrorQualificationsMustBeArray);
+        }
+        if(!isStringArray(qualifications)){
+            throw new Error(errors.ErrorQualificationsMustBeStringArray);
+        }
+    }
+
+    if(datePosted && !(datePosted instanceof Date)){
+            throw new Error(errors.ErrorDatePostedMustBeDate);
+    }
+
+
+
 }
 
 export async function ListingExists(db: DB, id: string): Promise<void> {
