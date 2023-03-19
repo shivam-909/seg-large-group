@@ -48,11 +48,11 @@ class JobListing {
     this.industry = industry;
     this.coverLetterRequired = coverLetterRequired;
     this.urgent = urgent;
+    this.qualifications = qualifications;
     this.datePosted = datePosted;
     this.benefits = benefits;
     this.requirements = requirements;
     this.screeningQuestions = screeningQuestions;
-    this.qualifications = qualifications;
   }
 }
 
