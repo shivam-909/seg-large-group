@@ -152,6 +152,34 @@ async function GetRandomCompany(db: DB): Promise<Company> {
     return company;
 }
 
+
+
+function GenerateCompensation(): string[]{
+
+    const yearlyAmount = [faker.datatype.number({
+        'min': 20000,
+        'max': 100000
+    }).toString(), "yearly"];
+
+    const hourlyAmount = [faker.datatype.number({
+        'min': 10,
+        'max': 49
+    }).toString(), "hourly"];
+
+    const dailyAmount = [faker.datatype.number({
+        'min': 80,
+        'max': 392
+    }).toString(), "daily"];
+
+
+    const weeklyAmount = ["£" + faker.datatype.number({
+        'min': 400,
+        'max': 1960
+    }).toString(), "weekly"];
+
+    return faker.helpers.arrayElement([yearlyAmount,hourlyAmount,dailyAmount,weeklyAmount]);
+}
+
 function GetRandomQuestions(): Record<string, boolean> {
     const MAX_QUESTIONS = Math.floor(Math.random() * 5) + 1;
     const randomQuestions: Record<string, boolean> = {};
@@ -202,17 +230,16 @@ async function GenerateJobListing(db: DB): Promise<JobListing> {
     return new JobListing(
         id,
         faker.name.jobTitle(),
-        faker.datatype.number({
-            'min': 30000,
-            'max': 100000
-        }),
+        GenerateCompensation(),
         faker.lorem.paragraph(),
         user.location,
-        faker.helpers.arrayElement(["Full-time", "Part-time", "Contract"]),
+        faker.helpers.arrayElements(["Remote", "Hybrid", "In-Office"]),
+        faker.helpers.arrayElements(["Part Time", "Full Time", "Internship", "Contract", "Apprenticeship"]),
         company.companyID,
         faker.helpers.arrayElement(["Engineering", "Sales", "Marketing", "Finance"]),
         faker.datatype.boolean(),
-        [],
+        faker.datatype.boolean(),
+        faker.helpers.arrayElements(["Pass in  Maths and English GCSEs", "Bachelors Degree", "Masters Degree", "PhD", "High School Diploma", "International Baccalaureate"]),
         faker.date.past(),
         [faker.lorem.words(), faker.lorem.words(), faker.lorem.words()],
         [faker.lorem.words(), faker.lorem.words(), faker.lorem.words()],

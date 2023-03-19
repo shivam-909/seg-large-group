@@ -3,13 +3,15 @@ import {QueryDocumentSnapshot} from "firebase-admin/firestore";
 class JobListing {
   id: string;
   title: string;
-  compensation: number;
+  compensation: string[];
   description: string;
   location: string;
-  schedule: string;
+  type: string[];
+  schedule:string[];
   companyID: string;
   industry: string;
   coverLetterRequired: boolean;
+  urgent: boolean;
   qualifications: string[];
   datePosted: Date;
   benefits?: string[];
@@ -20,13 +22,15 @@ class JobListing {
   constructor(
     id: string,
     title: string,
-    compensation: number,
+    compensation: string[],
     description: string,
     location: string,
-    schedule: string,
+    type: string[],
+    schedule:string[],
     companyID: string,
     industry: string,
     coverLetterRequired: boolean,
+    urgent:boolean,
     qualifications: string[],
     datePosted: Date,
     benefits?: string[],
@@ -38,15 +42,17 @@ class JobListing {
     this.compensation = compensation;
     this.description = description;
     this.location = location;
+    this.type = type;
     this.schedule = schedule;
     this.companyID = companyID;
     this.industry = industry;
     this.coverLetterRequired = coverLetterRequired;
+    this.urgent = urgent;
+    this.qualifications = qualifications;
     this.datePosted = datePosted;
     this.benefits = benefits;
     this.requirements = requirements;
     this.screeningQuestions = screeningQuestions;
-    this.qualifications = qualifications;
   }
 }
 
