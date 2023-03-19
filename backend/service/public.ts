@@ -57,6 +57,7 @@ export var ErrorToCode: Map<string, number> = new Map<string, number>(
         [ErrorMissingLastName, 400],
         [ErrorInvalidRefreshToken, 403],
         [ErrorUserNotFound, 404],
+        [ErrorJobListingNotFound, 404],
         [ErrorMultipleUsersFound, 500],
         [ErrorCompanyNotFound, 404],
         [ErrorSearcherNotFound, 404],

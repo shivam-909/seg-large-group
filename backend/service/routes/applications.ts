@@ -13,7 +13,7 @@ export function AddApplication(db: DB): Handler {
     try {
       await validate.AddApplication(db, req.body);
     } catch (err) {
-      next(err);
+      next((err as Error).message);
       return;
     }
     const { status, searcher, jobListing } = req.body;
@@ -44,7 +44,7 @@ export function RetrieveApplicationByFilter(db: DB): Handler {
     try {
       await validate.RetrieveApplicationByFilter(db, req.body);
     } catch (err) {
-      next(err);
+      next((err as Error).message);
       return;
     }
 
@@ -68,7 +68,7 @@ export function UpdateApplication(db: DB): Handler {
     try {
       await validate.UpdateApplication(db, req.params.id, req.body);
     } catch (err) {
-      next(err);
+      next((err as Error).message);
       return;
     }
 
@@ -94,10 +94,10 @@ export function DeleteApplication(db: DB): Handler {
     try {
       await validate.DeleteApplication(db, id);
     } catch (err) {
-      return next(err);
+      return next((err as Error).message);
     }
 
     await applicationdb.DeleteApplication(db, id);
   }
-};
+}
 
