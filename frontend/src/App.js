@@ -7,12 +7,25 @@ import MyJobs from "./Components/MyJobs/MyJobs";
 import UserProfilePage from "./Components/ProfilePage/UserProfilePage";
 import ForgotPassword from './Components/ForgotPassword/ForgotPassword';
 import EmailVerification from './Components/EmailVerification/EmailVerification';
+import EditJob from "./Components/MyJobs/EditJob";
+import Applicants from "./Components/Applicants/Applicants";
+import ViewJob from "./Components/ViewJobs/ViewJob";
+import CompanyRoute from "./Auth/CompanyRoute";
 
 export default function App() {
     return (
       <BrowserRouter>
           <Routes>
               <Route element={<PrivateRoutes/>}>
+                      <Route path="/jobs">
+                          <Route path="" element={<MyJobs/>}/>
+                          <Route element={<CompanyRoute/>}>
+                              <Route path="add/" element={ <EditJob/> }/>
+                              <Route path="edit/:id" element={ <EditJob/> }/>
+                              <Route path="applicants/:id" element={ <Applicants/> }/>
+                      </Route>
+                  </Route>
+                  <Route path="/profile/:id" element={ <UserProfilePage/> }/>
               </Route>
               <Route path="/" element={ <SearchPage/> }/>
               <Route path="/login" element={ <LoginPage/> }/>
@@ -21,6 +34,7 @@ export default function App() {
               <Route path="/profile" element={ <UserProfilePage/> }/>
               <Route path="/forgot" element={ <ForgotPassword/> }/>
               <Route path="/verify" element={ <EmailVerification/> }/>
+              <Route path="/viewjob/:id" element={ <ViewJob/> }/>
           </Routes>
       </BrowserRouter>
   );

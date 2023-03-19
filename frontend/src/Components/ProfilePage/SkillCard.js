@@ -7,10 +7,10 @@ export default function SkillCard(props) {
     }
     return (
         <div id={"Skill" + props.id} className={"grid grid-cols-2 gap-2 my-2"}>
-            <input id={"skill"} className={"key"} placeholder={"Skill"} editable={"true"}/>
+            <input id={"skill"} className={"key"} placeholder={"Skill"} editable={"true"} defaultValue={props.skill}/>
             <div>
             <div className={"value w-[70%] float-left"}>
-                <input id={"skillDuration"} className={"duration"} placeholder={"Duration"} type={"number"} min={"0"} editable={"true"}/>
+                <input id={"skillDuration"} className={"duration"} placeholder={"Duration"} type={"number"} min={"0"} editable={"true"} defaultValue={props.val}/>
                 <select className={"w-[50%]"} editable={"true"}>
                     <option value={"weeks"}>Week/s</option>
                     <option value={"months"}>Month/s</option>
