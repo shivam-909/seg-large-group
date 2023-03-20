@@ -11,7 +11,7 @@ function isStringArray(arr:string[]): boolean{
     return true
 }
 
-function ValidateRequirements(requirements:any){
+function ValidateRequirements(requirements: any){
     if(!(Array.isArray(requirements))){
         throw new Error(errors.ErrorRequirementsMustBeArray);
     }
@@ -20,7 +20,7 @@ function ValidateRequirements(requirements:any){
     }
 }
 
-function ValidateBenefits(benefits:any){
+function ValidateBenefits(benefits: any){
     if(!Array.isArray(benefits)){
         throw new Error(errors.ErrorBenefitsPostedMustBeArray);
     }
@@ -29,7 +29,7 @@ function ValidateBenefits(benefits:any){
     }
 }
 
-function ValidateCompensation(compensation:any){
+function ValidateCompensation(compensation: any){
     if(!Array.isArray(compensation)){
         throw new Error(errors.ErrorCompensationPostedMustBeArray);
     }
@@ -41,7 +41,7 @@ function ValidateCompensation(compensation:any){
     }
 }
 
-function ValidateDescription(description:any){
+function ValidateDescription(description: any){
     if(description.length < 2000){
         throw new Error(errors.ErrorJobDescriptionTooShort);
     }
@@ -53,7 +53,7 @@ function ValidateDescription(description:any){
     }
 }
 
-function ValidateType(type:any){
+function ValidateType(type: any){
     if(!Array.isArray(type)){
         throw new Error(errors.ErrorTypeMustBeArray);
     }
@@ -62,7 +62,7 @@ function ValidateType(type:any){
     }
 }
 
-function ValidateSchedule(schedule:any){
+function ValidateSchedule(schedule: any){
     if(!Array.isArray(schedule)){
         throw new Error(errors.ErrorScheduleMustBeArray);
     }
@@ -80,7 +80,7 @@ function ValidateQualifications(qualifications:any){
     }
 }
 
-async function ValidateCompanyId(db:DB, companyID:any){
+async function ValidateCompanyId(db:DB, companyID: any){
     if(typeof companyID !== 'string'){
         throw new Error(errors.ErrorCompanyIDMustBeString);
     }
@@ -90,6 +90,17 @@ async function ValidateCompanyId(db:DB, companyID:any){
     }
 }
 
+function ValidateScreeningQuestions(screeningQuestions: any){
+    if(!(screeningQuestions.constructor == Object)){
+        throw new Error(errors.ErrorScreeningQuestionsMustBeDictionary);
+    }
+    for (const [key, value] of Object.entries(screeningQuestions)) {
+        if(typeof key!== 'string' || typeof value!== 'boolean'){
+            throw new Error(errors.ErrorScreeningQuestionsIncorrectKeyValues);
+        }
+    }
+
+}
 
 export async function AddListing(db: DB, body: any): Promise<void> {
     const { title, compensation, description, location, type, schedule, companyID, industry, coverLetterRequired, urgent, qualifications, datePosted, benefits, requirements, screeningQuestions} = body;
@@ -160,13 +171,15 @@ export async function AddListing(db: DB, body: any): Promise<void> {
     if(requirements){
         ValidateRequirements(requirements);
     }
+    if(screeningQuestions){
+        ValidateScreeningQuestions(screeningQuestions);
+    }
     await ValidateCompanyId(db,companyID);
 
 }
 
 export async function UpdateListing(db: DB, id:string, req: any): Promise<void> {
     const { title, compensation, description, location, type, schedule, companyID, industry, coverLetterRequired, urgent, qualifications, datePosted, benefits, requirements, screeningQuestions} = req;
-
     const jobListing = await jobsdb.RetrieveJobListing(db, id);
     if (!jobListing) {
         throw new Error(errors.ErrorJobListingNotFound);
@@ -181,11 +194,13 @@ export async function ListingExists(db: DB, id: string): Promise<void> {
         throw new Error(errors.ErrorJobListingNotFound);
     }
 }
+
 export async function RetrieveListingByFilter(db: DB, body: any): Promise<void> {
 
     const { title, compensation, description, location, type, schedule, companyID, industry, coverLetterRequired, urgent, qualifications, datePosted, benefits, requirements, screeningQuestions} = body;
-
-    //add code to check that param for filter has been passed
+    if(!title && !compensation && !description && !location && !type && !schedule && !companyID && !industry && !coverLetterRequired && !urgent && !qualifications && !datePosted && !benefits && !requirements && !screeningQuestions){
+        throw new Error(errors.ErrorMissingProperty);
+    }
 
     if(title && typeof title !== 'string'){
         throw new Error(errors.ErrorTitleMustBeString);
@@ -220,15 +235,16 @@ export async function RetrieveListingByFilter(db: DB, body: any): Promise<void> 
     if(qualifications){
         ValidateQualifications(qualifications);
     }
-
     if(datePosted && !(datePosted instanceof Date)){
         throw new Error(errors.ErrorDatePostedMustBeDate);
     }
-
     if(benefits){
         ValidateBenefits(benefits);
     }
     if(requirements){
         ValidateRequirements(requirements);
+    }
+    if(screeningQuestions){
+        ValidateScreeningQuestions(screeningQuestions);
     }
 }
