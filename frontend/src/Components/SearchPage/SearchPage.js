@@ -3,13 +3,11 @@ import {useState} from "react";
 import Filters from "./Filters";
 import Navbar from "../Navbar/Navbar";
 import axios from "axios";
-import JobPostCard from "./JobPostCard";
 import JobDetailsCard from "./JobDetailsCard";
 import JobList from "./JobList";
 
 function SearchPage() {
     const [jobs, setJobs] = useState([]);
-    const [selectedJob, setSelectedJob] = useState(null);
     const [showJobTitleInputErrorMessage, setShowJobTitleInputErrorMessage] = useState(false);
     const [showLocationInputErrorMessage, setShowLocationInputErrorMessage] = useState(false);
 
@@ -29,7 +27,6 @@ function SearchPage() {
                         });
                     }
                     setJobs(response.data);
-                    setSelectedJob(response.data[0]);
                 });
         }
      }
@@ -50,16 +47,6 @@ function SearchPage() {
         return true;
     }
 
-    function selectJob(job) {
-        setSelectedJob(job);
-        const currentJob = document.getElementById(job.id);
-        currentJob.scrollIntoView({
-            behavior: 'smooth',
-            block: 'center',
-            inline: 'center'
-        });
-    }
-
     return (
         <div>
             <Navbar/>
@@ -68,18 +55,7 @@ function SearchPage() {
                 {jobs.length > 0 ?
                     <div className='space-y-12'>
                         <Filters/>
-                        <div className='flex items-start justify-center space-x-5 mx-8'>
-                            <div className='space-y-3'>
-                                <JobList jobs={jobs}/>
-                            </div>
-                            <JobDetailsCard
-                                id={selectedJob.id} age={selectedJob.age} urgent={selectedJob.urgent}
-                                title={selectedJob.title} location={selectedJob.location} companyName={selectedJob.companyName} salary={`${selectedJob.compensation[0]}/${selectedJob.compensation[1]}`}
-                                types={selectedJob.type} schedule={selectedJob.schedule}
-                                qualifications={selectedJob.qualifications}
-                                benefits={selectedJob.benefits}
-                                description={selectedJob.description}/>
-                        </div>
+                        <JobList jobs={jobs}/>
                     </div>
                     :
                     <div className='pt-12 space-y-24'>
