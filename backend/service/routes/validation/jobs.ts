@@ -2,7 +2,6 @@ import DB from "../../../db/db";
 import * as errors from "../../public";
 import * as jobsdb from "../../../db/jobs";
 import * as companiesdb from "../../../db/companies";
-import * as searchersdb from "../../../db/searchers";
 
 
 function isStringArray(arr:string[]): boolean{
@@ -13,7 +12,7 @@ function isStringArray(arr:string[]): boolean{
 }
 
 function ValidateRequirements(requirements:any){
-    if(!Array.isArray(requirements)){
+    if(!(Array.isArray(requirements))){
         throw new Error(errors.ErrorRequirementsMustBeArray);
     }
     if(!isStringArray(requirements)){
@@ -43,10 +42,10 @@ function ValidateCompensation(compensation:any){
 }
 
 function ValidateDescription(description:any){
-    if(description.length < 800){
+    if(description.length < 2000){
         throw new Error(errors.ErrorJobDescriptionTooShort);
     }
-    if(description.length > 2000){
+    if(description.length > 3000){
         throw new Error(errors.ErrorJobDescriptionTooLong);
     }
     if(typeof description !== 'string'){
@@ -155,7 +154,6 @@ export async function AddListing(db: DB, body: any): Promise<void> {
     if(!(datePosted instanceof Date)){
         throw new Error(errors.ErrorDatePostedMustBeDate);
     }
-
     if(benefits){
        ValidateBenefits(benefits);
     }

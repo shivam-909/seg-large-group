@@ -158,23 +158,23 @@ function GenerateCompensation(): string[]{
     const yearlyAmount = [faker.datatype.number({
         'min': 20000,
         'max': 100000
-    }).toString(), "yearly"];
+    }).toString(), "year"];
 
     const hourlyAmount = [faker.datatype.number({
         'min': 10,
         'max': 49
-    }).toString(), "hourly"];
+    }).toString(), "hour"];
 
     const dailyAmount = [faker.datatype.number({
         'min': 80,
         'max': 392
-    }).toString(), "daily"];
+    }).toString(), "day"];
 
 
-    const weeklyAmount = ["£" + faker.datatype.number({
+    const weeklyAmount = [faker.datatype.number({
         'min': 400,
         'max': 1960
-    }).toString(), "weekly"];
+    }).toString(), "week"];
 
     return faker.helpers.arrayElement([yearlyAmount,hourlyAmount,dailyAmount,weeklyAmount]);
 }
@@ -230,7 +230,7 @@ async function GenerateJobListing(db: DB): Promise<JobListing> {
         id,
         faker.name.jobTitle(),
         GenerateCompensation(),
-        faker.lorem.paragraph(),
+        faker.lorem.paragraphs(5000).substring(0, Math.floor(Math.random() * (1000 + 1)) + 2000),
         user.location,
         faker.helpers.arrayElements(["Remote", "Hybrid", "In-Office"]),
         faker.helpers.arrayElements(["Part Time", "Full Time", "Internship", "Contract", "Apprenticeship"]),
