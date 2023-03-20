@@ -38,10 +38,10 @@ function JobDetailsCard(props) {
             <p className='mb-5'>{props.location}</p>
 
             <div className='flex space-x-5'>
-                <button className='bg-dark-theme-grey rounded-md py-2.5 px-4 font-bold text-white'><a href='/' target='_blank'>Apply Now</a></button>
+                <button className='bg-dark-theme-grey rounded-md py-2.5 px-4 font-bold text-white'><a href={`/apply/${props.id}`} target='_blank'>Apply Now</a></button>
                 <button className='bg-darker-grey rounded-md w-11 flex items-center justify-center' onClick={() => setOpenShareModal(true)}><img src={shareIcon} alt=''/></button>
                 <button className='bg-darker-grey rounded-md w-11 flex items-center justify-center' onClick={saveJobPost}><img src={savedJobPost ? savedIcon : saveIcon} alt=''/></button>
-                <button className='bg-darker-grey rounded-md w-11 flex items-center justify-center'><a href='/' target='_blank'><img src={openInNewTabIcon} alt=''/></a></button>
+                <button className='bg-darker-grey rounded-md w-11 flex items-center justify-center'><a href={`/job/${props.id}`} target='_blank'><img src={openInNewTabIcon} alt=''/></a></button>
             </div>
 
             <div className='bg-darker-grey h-[0.1px] my-5'></div>

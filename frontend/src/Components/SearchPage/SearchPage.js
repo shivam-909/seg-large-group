@@ -17,19 +17,22 @@ function SearchPage() {
     function showResults() {
         if (isJobTitleInputValid() & isLocationInputValid()) {
             const formData = new FormData();
-            formData.append('location', 'North Darrickberg');
-            axios.post('http://localhost:8000/api/jobs/filter', formData).then(response => {
-                response.data.forEach(job => {
-                    axios.get(`http://localhost:8000/api/company/${job.companyID}`).then(response => {
-                        job.companyName = response.data.companyName;
-                    });
-                    job.age = Math.floor(((Date.now() / 1000) - job.datePosted._seconds) / 86400);
+            formData.append('companyID', '7f71aac4-92b1-42bd-a022-6bd5721bf808');
+            axios.post('http://localhost:8000/api/jobs/filter', formData)
+                .then(async response => {
+                    for (const job of response.data) {
+                        job.age = Math.floor(((Date.now() / 1000) - job.datePosted._seconds) / 86400);
+                        job.compensation[0] = job.compensation[0].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                        await axios.get(`http://localhost:8000/api/company/${job.companyID}`).then(company => {
+                            job.companyName = company.data.companyName;
+                        });
+                    }
+                    setJobs(response.data);
+                    setSelectedJob(response.data[0]);
                 });
-                setJobs(response.data);
-                setSelectedJob(response.data[0]);
-            });
         }
      }
+     // TODO: Add comas for salaries
 
     function isJobTitleInputValid() {
         if (document.getElementById('jobTitleInput').value === '') {
@@ -47,6 +50,16 @@ function SearchPage() {
         return true;
     }
 
+    function selectJob(job) {
+        setSelectedJob(job);
+        const currentJob = document.getElementById(job.id);
+        currentJob.scrollIntoView({
+            behavior: 'smooth',
+            block: 'center',
+            inline: 'center'
+        });
+    }
+
     return (
         <div>
             <Navbar/>
@@ -58,9 +71,9 @@ function SearchPage() {
                         <div className='flex items-start justify-center space-x-5 mx-8'>
                             <div className='space-y-3'>
                                 {jobs.map(job =>
-                                    <div onClick={() => setSelectedJob(job)}>
+                                    <div id={job.id} onClick={() => selectJob(job)}>
                                         <JobPostCard
-                                        id={job.id} title={job.title} age={job.age} location={job.location} types={job.schedule}
+                                        title={job.title} age={job.age} location={job.location} types={job.schedule}
                                         companyName={job.companyName} salary={`${job.compensation[0]}/${job.compensation[1]}`} urgent={job.urgent} requirements={job.requirements}
                                         benefits={job.benefits}/>
                                     </div>
