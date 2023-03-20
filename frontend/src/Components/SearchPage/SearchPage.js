@@ -32,7 +32,6 @@ function SearchPage() {
                 });
         }
      }
-     // TODO: Add comas for salaries
 
     function isJobTitleInputValid() {
         if (document.getElementById('jobTitleInput').value === '') {
