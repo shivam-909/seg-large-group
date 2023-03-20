@@ -1,24 +1,35 @@
 import SearchBar from "./SearchBar";
 import {useState} from "react";
-import TempCard from "./TempCard";
-import TempDetail from "./TempDetail";
 import Filters from "./Filters";
 import Navbar from "../Navbar/Navbar";
+import axios from "axios";
+import JobPostCard from "./JobPostCard";
+import JobDetailsCard from "./JobDetailsCard";
 
 function SearchPage() {
     const [jobs, setJobs] = useState([]);
+    const [selectedJob, setSelectedJob] = useState(null);
     const [showJobTitleInputErrorMessage, setShowJobTitleInputErrorMessage] = useState(false);
     const [showLocationInputErrorMessage, setShowLocationInputErrorMessage] = useState(false);
 
-    // TODO: Fetch jobs
     // TODO: Do filter system
 
     function showResults() {
         if (isJobTitleInputValid() & isLocationInputValid()) {
-            // TODO: Search algo endpoint.
-            setJobs([1]); // temp
+            const formData = new FormData();
+            formData.append('location', 'North Darrickberg');
+            axios.post('http://localhost:8000/api/jobs/filter', formData).then(response => {
+                response.data.forEach(job => {
+                    axios.get(`http://localhost:8000/api/company/${job.companyID}`).then(response => {
+                        job.companyName = response.data.companyName;
+                    });
+                    job.age = Math.floor(((Date.now() / 1000) - job.datePosted._seconds) / 86400);
+                });
+                setJobs(response.data);
+                setSelectedJob(response.data[0]);
+            });
         }
-    }
+     }
 
     function isJobTitleInputValid() {
         if (document.getElementById('jobTitleInput').value === '') {
@@ -46,14 +57,22 @@ function SearchPage() {
                         <Filters/>
                         <div className='flex items-start justify-center space-x-5 mx-8'>
                             <div className='space-y-3'>
-                                <TempCard/>
-                                <TempCard/>
-                                <TempCard/>
-                                <TempCard/>
-                                <TempCard/>
-                                <TempCard/>
+                                {jobs.map(job =>
+                                    <div onClick={() => setSelectedJob(job)}>
+                                        <JobPostCard
+                                        id={job.id} title={job.title} age={job.age} location={job.location} types={job.schedule}
+                                        companyName={job.companyName} salary={`${job.compensation[0]}/${job.compensation[1]}`} urgent={job.urgent} requirements={job.requirements}
+                                        benefits={job.benefits}/>
+                                    </div>
+                                )}
                             </div>
-                            <TempDetail/>
+                            <JobDetailsCard
+                                id={selectedJob.id} age={selectedJob.age} urgent={selectedJob.urgent}
+                                title={selectedJob.title} location={selectedJob.location} companyName={selectedJob.companyName} salary={`${selectedJob.compensation[0]}/${selectedJob.compensation[1]}`}
+                                types={selectedJob.type} schedule={selectedJob.schedule}
+                                qualifications={selectedJob.qualifications}
+                                benefits={selectedJob.benefits}
+                                description={selectedJob.description}/>
                         </div>
                     </div>
                     :
