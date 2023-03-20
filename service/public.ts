@@ -81,6 +81,9 @@ export const ErrorBenefitsPostedMustBeArray = "benefits must be an array";
 export const ErrorBenefitsMustBeStringArray = "every element in benefits must be a string";
 export const ErrorRequirementsMustBeArray = "requirements must be an array";
 export const ErrorRequirementsMustBeStringArray = "every element in requirements must be a string";
+export const ErrorScreeningQuestionsMustBeDictionary = "screening questions must be a dictionary";
+export const ErrorScreeningQuestionsIncorrectKeyValues = "incorrect key value pairs in screening questions";
+
 
 export var ErrorToCode: Map<string, number> = new Map<string, number>(
     [
@@ -143,7 +146,9 @@ export var ErrorToCode: Map<string, number> = new Map<string, number>(
         [ErrorBenefitsPostedMustBeArray, 400],
         [ErrorBenefitsMustBeStringArray, 400],
         [ErrorRequirementsMustBeStringArray, 400],
-        [ErrorRequirementsMustBeArray, 400]
+        [ErrorRequirementsMustBeArray, 400],
+        [ErrorScreeningQuestionsMustBeDictionary,400],
+        [ErrorScreeningQuestionsIncorrectKeyValues,400]
 
     ]
 );
