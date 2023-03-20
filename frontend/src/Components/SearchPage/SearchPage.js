@@ -5,6 +5,7 @@ import Navbar from "../Navbar/Navbar";
 import axios from "axios";
 import JobPostCard from "./JobPostCard";
 import JobDetailsCard from "./JobDetailsCard";
+import JobList from "./JobList";
 
 function SearchPage() {
     const [jobs, setJobs] = useState([]);
@@ -69,14 +70,7 @@ function SearchPage() {
                         <Filters/>
                         <div className='flex items-start justify-center space-x-5 mx-8'>
                             <div className='space-y-3'>
-                                {jobs.map(job =>
-                                    <div id={job.id} onClick={() => selectJob(job)}>
-                                        <JobPostCard
-                                        title={job.title} age={job.age} location={job.location} types={job.schedule}
-                                        companyName={job.companyName} salary={`${job.compensation[0]}/${job.compensation[1]}`} urgent={job.urgent} requirements={job.requirements}
-                                        benefits={job.benefits}/>
-                                    </div>
-                                )}
+                                <JobList jobs={jobs}/>
                             </div>
                             <JobDetailsCard
                                 id={selectedJob.id} age={selectedJob.age} urgent={selectedJob.urgent}
