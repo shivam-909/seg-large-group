@@ -77,6 +77,10 @@ export const ErrorQualificationsMustBeArray = "qualifications must be an array";
 export const ErrorQualificationsMustBeStringArray = "every element in qualifications must be a string";
 export const ErrorDatePostedMustBeDate = "date posted must be a date";
 
+export const ErrorBenefitsPostedMustBeArray = "benefits must be an array";
+export const ErrorBenefitsMustBeStringArray = "every element in benefits must be a string";
+export const ErrorRequirementsMustBeArray = "requirements must be an array";
+export const ErrorRequirementsMustBeStringArray = "every element in requirements must be a string";
 
 export var ErrorToCode: Map<string, number> = new Map<string, number>(
     [
@@ -122,20 +126,24 @@ export var ErrorToCode: Map<string, number> = new Map<string, number>(
         [ErrorCompensationPostedMustBeArray,400],
         [ErrorCompensationSize,400],
         [ErrorCompensationMustBeStringArray,400],
+        [ErrorDescriptionMustBeString, 400],
         [ErrorDescriptionMustBeString,400],
-        [ErrorDescriptionMustBeString,400],
-        [ErrorLocationMustBeString,400],
-        [ErrorTypeMustBeArray,400],
-        [ErrorTypeMustBeStringArray,400],
-        [ErrorScheduleMustBeArray,400],
-        [ErrorScheduleMustBeStringArray,400],
-        [ErrorCompanyIDMustBeString,400],
-        [ErrorIndustryMustBeString,400],
-        [ErrorCoverLetterRequiredMustBeBoolean,400],
-        [ErrorUrgentMustBeBoolean,400],
-        [ErrorQualificationsMustBeArray,400],
-        [ErrorQualificationsMustBeStringArray,400],
-        [ErrorDatePostedMustBeDate,400]
+        [ErrorLocationMustBeString, 400],
+        [ErrorTypeMustBeArray, 400],
+        [ErrorTypeMustBeStringArray, 400],
+        [ErrorScheduleMustBeArray, 400],
+        [ErrorScheduleMustBeStringArray, 400],
+        [ErrorCompanyIDMustBeString, 400],
+        [ErrorIndustryMustBeString, 400],
+        [ErrorCoverLetterRequiredMustBeBoolean, 400],
+        [ErrorUrgentMustBeBoolean, 400],
+        [ErrorQualificationsMustBeArray, 400],
+        [ErrorQualificationsMustBeStringArray, 400],
+        [ErrorDatePostedMustBeDate, 400],
+        [ErrorBenefitsPostedMustBeArray, 400],
+        [ErrorBenefitsMustBeStringArray, 400],
+        [ErrorRequirementsMustBeStringArray, 400],
+        [ErrorRequirementsMustBeArray, 400]
 
     ]
 );
