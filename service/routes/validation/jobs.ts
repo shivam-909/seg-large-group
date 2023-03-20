@@ -12,6 +12,7 @@ function isStringArray(arr:string[]): boolean{
     return true
 }
 
+
 export async function AddListing(db: DB, body: any): Promise<void> {
     const { title, compensation, description, location, type, schedule, companyID, industry, coverLetterRequired, urgent, qualifications, datePosted, benefits, requirements, screeningQuestions} = body;
     if(!title){
@@ -109,6 +110,24 @@ export async function AddListing(db: DB, body: any): Promise<void> {
     if(!(datePosted instanceof Date)){
         throw new Error(errors.ErrorDatePostedMustBeDate);
     }
+
+    if(benefits){
+        if(!Array.isArray(benefits)){
+            throw new Error(errors.ErrorBenefitsPostedMustBeArray);
+        }
+        if(!isStringArray(benefits)){
+            throw new Error(errors.ErrorBenefitsMustBeStringArray);
+        }
+    }
+    if(requirements){
+        if(!Array.isArray(requirements)){
+            throw new Error(errors.ErrorRequirementsMustBeArray);
+        }
+        if(!isStringArray(requirements)){
+            throw new Error(errors.ErrorRequirementsMustBeStringArray);
+        }
+    }
+
     const company = await companiesdb.RetrieveCompanyByID(db, companyID);
     if(!company){
         throw new Error(errors.ErrorCompanyNotFound);
@@ -171,6 +190,9 @@ export async function UpdateListing(db: DB, id:string, req: any): Promise<void> 
     if(urgent && typeof urgent !== 'boolean'){
         throw new Error(errors.ErrorUrgentMustBeBoolean);
     }
+    if(industry && typeof industry !== 'string'){
+        throw new Error(errors.ErrorIndustryMustBeString);
+    }
     if (description) {
         if(typeof description !== 'string'){
             throw new Error(errors.ErrorDescriptionMustBeString);
@@ -193,6 +215,23 @@ export async function UpdateListing(db: DB, id:string, req: any): Promise<void> 
 
     if(datePosted && !(datePosted instanceof Date)){
             throw new Error(errors.ErrorDatePostedMustBeDate);
+    }
+
+    if(benefits){
+        if(!Array.isArray(benefits)){
+            throw new Error(errors.ErrorBenefitsPostedMustBeArray);
+        }
+        if(!isStringArray(benefits)){
+            throw new Error(errors.ErrorBenefitsMustBeStringArray);
+        }
+    }
+    if(requirements){
+        if(!Array.isArray(requirements)){
+            throw new Error(errors.ErrorRequirementsMustBeArray);
+        }
+        if(!isStringArray(requirements)){
+            throw new Error(errors.ErrorRequirementsMustBeStringArray);
+        }
     }
 
 
