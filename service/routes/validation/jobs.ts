@@ -4,7 +4,7 @@ import * as jobsdb from "../../../db/jobs";
 import * as companiesdb from "../../../db/companies";
 
 
-function isStringArray(arr:string[]): boolean{
+export function isStringArray(arr:string[]): boolean{
     for(let i=0; i< arr.length;i++){
         if(typeof arr[i]!== 'string') return false;
     }
@@ -80,7 +80,7 @@ function ValidateQualifications(qualifications:any){
     }
 }
 
-async function ValidateCompanyId(db:DB, companyID: any){
+export async function ValidateCompanyId(db:DB, companyID: any){
     if(typeof companyID !== 'string'){
         throw new Error(errors.ErrorCompanyIDMustBeString);
     }
