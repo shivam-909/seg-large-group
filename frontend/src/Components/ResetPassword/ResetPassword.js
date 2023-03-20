@@ -1,14 +1,19 @@
-import TextInputBox from "../LoginPage/TextInputBox";
 import {validateField} from "../Validation/validate";
 import showIcon from "../../icons/showIcon.png";
 import hideIcon from "../../icons/hideIcon.png";
 import TextInputBoxWithIcon from "../LoginPage/TextInputBoxWithIcon";
 import {Link, Routes, Route, useNavigate} from 'react-router-dom';
+import {useState} from "react";
+
 
 
 
 function ResetPassword(){
-    const navigate = useNavigate();
+  const [password, setPassword] =useState(" ")
+
+  //TO DO: Disable submit button until all inputs are valid
+
+  const navigate = useNavigate();
   
    const submitNewPassword = event => {
       event.preventDefault();
@@ -47,7 +52,7 @@ function ResetPassword(){
             <p className='mb-6 font-bold text-2xl flex justify-center'>Reset Your Password</p>
 
             <div>
-                <TextInputBoxWithIcon id='password' type='password' onBlur={()=>{validateField("password",/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{8,20})/)}} placeholder='Password' icon={<img id='toggleEye' src={showIcon} alt='' onClick={togglePasswordVisibility} className='cursor-pointer'/>}/>
+                <TextInputBoxWithIcon id='password' type='password' value= {password} onChange ={event => setPassword(event.target.value)} onBlur={()=>{validateField("password",/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{8,20})/)}} placeholder='Password' icon={<img id='toggleEye' src={showIcon} alt='' onClick={togglePasswordVisibility} className='cursor-pointer'/>}/>
                 <span id="passwordError" className='invisible absolute top-0'>Invalid password</span>
               </div>
 
@@ -56,7 +61,8 @@ function ResetPassword(){
                   <span id="passwordMismatchError" className='invisible absolute top-0'>Passwords don't match</span>
               </div>  
 
-            <button className="bg-dark-theme-grey rounded-md text-white p-2.5 flex items-center justify-center space-x-2" onClick={submitNewPassword} id={"submitNewPassword"}>Submit</button>
+            <button className="bg-dark-theme-grey rounded-md text-white p-2.5 flex items-center justify-center space-x-2" disabled={!password} onClick={submitNewPassword} id={"submitNewPassword"}>Submit</button>
+
 
           </div>
       </div>
