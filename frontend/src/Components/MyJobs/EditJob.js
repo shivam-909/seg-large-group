@@ -36,7 +36,6 @@ export default function EditJob() {
 
     async function verifyCompany(){
         if (isEdit){
-            await axios.get("http://localhost:8000/api/jobs/"+id).then(response => { console.log(response.data.companyID === user.company?.companyID)})
             return await axios.get("http://localhost:8000/api/jobs/"+id).then(response => { return response.data.companyID === user.company?.companyID || !user.company?.companyID});
         }
         return true;
