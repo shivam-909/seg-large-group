@@ -43,6 +43,12 @@ export const ErrorMissingFilter = "no filters provided";
 export const ErrorStatusMustBeString = "status must be a string";
 export const ErrorStatusRequired = "no status provided";
 export const ErrorMissingProperty = "no property provided for update";
+export const ErrorApplicationCouldNotBeCreated = "application could not be created";
+export const ErrorNotifCouldNotBeCreated = "notification could not be created";
+export const ErrorNoMatchingListings = "no matching job listings found";
+export const ErrorNotifCouldNotBeUpdated = "notification could not be updated";
+export const ErrorSearchQueryRequired = "no search query provided";
+export const ErrorNoCompanyOrSearcherID = "no company or searcher id provided";
 
 
 export var ErrorToCode: Map<string, number> = new Map<string, number>(
@@ -71,5 +77,12 @@ export var ErrorToCode: Map<string, number> = new Map<string, number>(
         [ErrorStatusMustBeString, 400],
         [ErrorStatusRequired, 400],
         [ErrorMissingProperty, 400],
+        [ErrorApplicationCouldNotBeCreated, 500],
+        [ErrorNotifCouldNotBeCreated, 500],
+        [ErrorNoMatchingListings, 404],
+        [ErrorNotifCouldNotBeUpdated, 500],
+        [ErrorSearchQueryRequired, 400],
+        [ErrorNoCompanyOrSearcherID, 400],
+
     ]
 );

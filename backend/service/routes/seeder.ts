@@ -18,8 +18,6 @@ export function SeedAll(db: DB): Handler {
         await SeedSearchers(db);
         await SeedApplicationListings(db);
         await SeedAllNotifications(db);
-        res.status(200).json({
-            message: 'All data seeded successfully'
-        });
+        res.sendStatus(200);
     };
 }

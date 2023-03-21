@@ -9,7 +9,7 @@ export function GetCompany(db: DB): Handler {
         const user = await companiesdb.RetrieveCompanyByID(db, id);
         if (!user) {
             next(ErrorCompanyNotFound);
-            return
+            return;
         }
         res.status(200).json(user);
     };

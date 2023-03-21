@@ -16,6 +16,7 @@ export async function CreateSearcher(db: DB, user: User, searcher: Searcher) {
         lastName: searcher.lastName,
         savedJobs: searcher.savedJobs,
         searcherID: searcher.searcherID,
+        cvLink: searcher.cvLink,
     });
 }
 

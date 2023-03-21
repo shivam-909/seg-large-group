@@ -8,6 +8,7 @@ export async function CreateJobListing(db: DB, jobListing: JobListing): Promise<
   try {
     await docRef.set({
       ...jobListing,
+      datePosted: new Date(),
       id: jobListing.id,
     });
   } catch (err) {
