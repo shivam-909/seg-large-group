@@ -1,6 +1,10 @@
 import 'express-async-errors';
 import DB from "../../db/db";
-import { ErrorNotifNotFound, getErrorMessage, Handler } from "../public";
+import {
+  getErrorMessage,
+  Handler
+} from "../public";
+import * as errors from "../public";
 import { NextFunction, Request, Response } from "express";
 import * as notificationsdb from "../../db/notifications";
 import { randomUUID } from "crypto";
@@ -19,6 +23,7 @@ export function AddNotification(db: DB): Handler {
     const created = new Date();
     const newNotification = new Notification(newID, content, application, created, userID);
     await notificationsdb.CreateNotification(db, newNotification);
+    res.sendStatus(200)
   }
 }
 
@@ -28,7 +33,7 @@ export function GetNotification(db: DB): Handler {
 
     const notification = await notificationsdb.RetrieveNotification(db, id);
     if (!notification) {
-      next(ErrorNotifNotFound);
+      next(errors.ErrorNotifNotFound);
       return;
     }
 
@@ -68,12 +73,13 @@ export function UpdateNotification(db: DB): Handler {
 
     const notification = await notificationsdb.RetrieveNotification(db, id);
     if (!notification) {
-      next(ErrorNotifNotFound)
+      next(errors.ErrorNotifNotFound)
       return;
     }
 
     const updatedNotification = { ...notification, ...notificationData };
     await notificationsdb.UpdateNotification(db, updatedNotification);
+    res.sendStatus(200);
   }
 }
 
@@ -82,5 +88,6 @@ export function DeleteNotification(db: DB): Handler {
     const id = req.params.id;
 
     await notificationsdb.DeleteNotification(db, id);
+    res.sendStatus(200);
   };
 }

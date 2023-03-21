@@ -1,9 +1,7 @@
-import { Company, Searcher, User, UserExpanded } from "../models/user";
+import { User, UserExpanded } from "../models/user";
 import * as companiesdb from "./companies";
 import * as searchersdb from "./searchers";
 import DB from "./db";
-import { DeleteJobsByCompanyID } from "./jobs";
-import { randomUUID } from "crypto";
 import { ErrorCompanyNotFound, ErrorMultipleUsersFound, ErrorSearcherNotFound, ErrorUserNotFound } from "../service/public";
 
 
@@ -83,7 +81,7 @@ export async function UpdateUser(db: DB, user: User): Promise<void> {
 
   const baseData: { [key: string]: any } = {};
 
-  const updateKeys = ['email', 'hashedPassword', 'pfpUrl', 'location', 'notifications'];
+  const updateKeys = ['email', 'hashedPassword', 'pfpUrl', 'location', 'notifications', 'cvLink'];
   for (const key in user) {
     if (updateKeys.includes(key)) {
       baseData[key] = (user as any)[key];

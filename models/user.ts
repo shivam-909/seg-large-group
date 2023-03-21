@@ -78,16 +78,19 @@ class Searcher {
     lastName: string;
     savedJobs: string[];
     searcherID: string;
+    cvLink?: string;
 
     constructor(
         firstName: string,
         lastName: string,
         savedJobs: string[],
-        searcherID: string,) {
+        searcherID: string,
+        cvLink?: string) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.savedJobs = savedJobs;
         this.searcherID = searcherID;
+        this.cvLink = cvLink;
     }
 }
 
