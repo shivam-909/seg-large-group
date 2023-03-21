@@ -102,7 +102,7 @@ export default function EditJob() {
             <Navbar/>
             <div className='bg-lighter-grey min-h-screen justify-center flex'>
                 <div className='bg-white mt-36 rounded-md px-12 py-7 space-y-3 min-w-[45%]'>
-                    <button onClick={() => {navigate(-1)}} className={"float-left mb-5 text-3xl text-red"}><i className="fa-solid fa-circle-chevron-left"></i></button>
+                    <button onClick={() => {navigate(-1)}} className={"float-left mb-5 text-3xl text-red"}><i className="fa-regular fa-circle-xmark"></i></button>
                     <p className='font-bold text-3xl flex justify-center'>{isEdit ? "Edit" : "Add"} Job</p>
                     <div className={"border-b-[#ccc] border-b-2 m-4"}/>
                     <div className='text-input space-y-4' id="profile">
