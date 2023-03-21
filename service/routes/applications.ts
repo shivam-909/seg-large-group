@@ -5,11 +5,17 @@ import DB from "../../db/db";
 import Application from "../../models/application";
 import * as applicationdb from "../../db/applications";
 import { ErrorApplicationNotFound, getErrorMessage, Handler } from "../public";
-import { SeedApplicationListings } from "../../seeder/seed";
 import { randomUUID } from "crypto";
+import * as validate from "../routes/validation/applications";
 
 export function AddApplication(db: DB): Handler {
   return async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      await validate.AddApplication(db, req.body);
+    } catch (err) {
+      next(err);
+      return;
+    }
     const { status, searcher, jobListing } = req.body;
     const newID = randomUUID();
     const newApplication = new Application(newID, status, searcher, jobListing);
@@ -17,6 +23,7 @@ export function AddApplication(db: DB): Handler {
     await applicationdb.CreateApplication(db, newApplication);
   }
 }
+
 
 export function GetApplication(db: DB): Handler {
   return async (req: Request, res: Response, next: NextFunction) => {
@@ -33,6 +40,14 @@ export function GetApplication(db: DB): Handler {
 
 export function RetrieveApplicationByFilter(db: DB): Handler {
   return async (req: Request, res: Response, next: NextFunction) => {
+
+    try {
+      await validate.RetrieveApplicationByFilter(db, req.body);
+    } catch (err) {
+      next(err);
+      return;
+    }
+
     const filters = {
       id: req.body.id || '',
       status: req.body.status || '',
@@ -47,14 +62,16 @@ export function RetrieveApplicationByFilter(db: DB): Handler {
   };
 }
 
-export function SeedApplications(db: DB): Handler {
-  return async (req: Request, res: Response, next: NextFunction) => {
-    await SeedApplicationListings(db);
-  };
-}
-
 export function UpdateApplication(db: DB): Handler {
   return async (req: Request, res: Response, next: NextFunction) => {
+
+    try {
+      await validate.UpdateApplication(db, req.params.id, req.body);
+    } catch (err) {
+      next(err);
+      return;
+    }
+
     const id = req.params.id;
     const applicationData = req.body;
 
@@ -69,9 +86,17 @@ export function UpdateApplication(db: DB): Handler {
   }
 }
 
+
 export function DeleteApplication(db: DB): Handler {
   return async (req: Request, res: Response, next: NextFunction) => {
     const id = req.params.id;
+
+    try {
+      await validate.DeleteApplication(db, id);
+    } catch (err) {
+      return next(err);
+    }
+
     await applicationdb.DeleteApplication(db, id);
   }
 };

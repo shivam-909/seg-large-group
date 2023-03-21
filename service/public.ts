@@ -37,6 +37,17 @@ export const ErrorApplicationNotFound = "application not found";
 export const ErrorNotifNotFound = "notification not found";
 export const ErrorNoCompaniesExist = "no companies exist";
 export const ErrorNoSearchersExist = "no searchers exist";
+export const ErrorSearcherIDRequired = "no searcher id provided";
+export const ErrorJobListingIDRequired = "no joblisting id provided";
+export const ErrorMissingFilter = "no filters provided";
+export const ErrorStatusMustBeString = "status must be a string";
+export const ErrorStatusRequired = "no status provided";
+export const ErrorMissingProperty = "no property provided for update";
+export const ErrorJobDescriptionTooShort = "job description is too short";
+export const ErrorJobDescriptionTooLong = "job description is too long";
+
+
+
 
 export var ErrorToCode: Map<string, number> = new Map<string, number>(
     [
@@ -57,5 +68,15 @@ export var ErrorToCode: Map<string, number> = new Map<string, number>(
         [ErrorNotifNotFound, 404],
         [ErrorNoCompaniesExist, 404],
         [ErrorNoSearchersExist, 404],
+        [ErrorSearcherIDRequired, 400],
+        [ErrorJobListingIDRequired, 400],
+        [ErrorMissingFilter, 400],
+        [ErrorStatusMustBeString, 400],
+        [ErrorStatusRequired, 400],
+        [ErrorMissingProperty, 400],
+        [ErrorJobDescriptionTooShort, 400],
+        [ErrorJobDescriptionTooLong, 400],
+
+
     ]
 );
