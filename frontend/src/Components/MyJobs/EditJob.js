@@ -16,7 +16,7 @@ export default function EditJob() {
     const [user, setUser] = useState([]);
     const [requirements, setRequirements] = useState([]);
     const [benefits, setBenefits] = useState([]);
-    const [reqID, setReqID] = useState(requirements.length);
+    const [reqID, setReqID] = useState(0);
     const [benefitID, setBenefitID] = useState(benefits.length);
 
     useEffect(() => {
@@ -31,11 +31,12 @@ export default function EditJob() {
     },[user])
 
     useEffect(() => {
-        validate();
-    },[]) // eslint-disable-line
+        validate()
+    }, [])
 
     async function verifyCompany(){
         if (isEdit){
+            await axios.get("http://localhost:8000/api/jobs/"+id).then(response => { console.log(response.data.companyID === user.company?.companyID)})
             return await axios.get("http://localhost:8000/api/jobs/"+id).then(response => { return response.data.companyID === user.company?.companyID || !user.company?.companyID});
         }
         return true;
@@ -43,7 +44,7 @@ export default function EditJob() {
 
     async function getDefaultValues() {
         if (isEdit) {
-            await axios.get("http://localhost:8000/api/jobs/" + id).then(response => {
+            await axios.get("http://localhost:8000/api/jobs/" + id).then(async response => {
                 setJob(prevJob => ({
                     ...prevJob,
                     title: response.data.title,
@@ -52,10 +53,19 @@ export default function EditJob() {
                     location: response.data.location,
                     schedule: response.data.schedule,
                     description: response.data.description,
+                    requirements: response.data.requirements,
+                    benefits: response.data.benefits,
                 }));
+                for (let i = 0; i < response.data.requirements?.length; i++) {
+                    addRequirement(response.data.requirements[i], i);
+                }
+                for (let i = 0; i < response.data.benefits?.length; i++) {
+                    addBenefit(response.data.benefits[i], i);
+                }
             })
         }
     }
+
 
     async function validate(){
         if (await verifyCompany()) {
@@ -74,27 +84,48 @@ export default function EditJob() {
         let compensation = document.getElementById("compensation").value;
 
         const formData = new FormData();
+        let requirements = document.querySelectorAll("[id=Requirement]")
+        if(requirements.length > 0){
+            for(const req of requirements){
+                formData.append('requirements[]', req.value);
+            }
+        }
+        else{
+            formData.append("requirements","")
+        }
+
+        let benefits = document.querySelectorAll("[id=Benefit]")
+        if(benefits.length > 0) {
+            for(const benefit of benefits){
+                formData.append('benefits[]', benefit.value);
+            }
+        }
+        else{
+            formData.append("benefits","")
+
+        }
+
         formData.append('title', title);
         formData.append('location', location);
         formData.append('industry', industry);
-        formData.append('companyID', user.companyID);
+        if(!isEdit){
+            formData.append('companyID', user.companyID);
+        }
         formData.append('schedule', schedule);
-        formData.append('benefits', ["test"]);
-        formData.append('requirements', ["test"]);
         formData.append('compensation', compensation);
         formData.append('description', description);
 
         isEdit ? await axios.patch("http://localhost:8000/api/jobs/"+id, formData).then(navigate(-1)) : await axios.post("http://localhost:8000/api/jobs/add/", formData).then(navigate(-1));
     }
 
-    function addRequirement(){
-        setRequirements( [...requirements, <Card id={reqID} name={"Requirement"}/>]);
-        setReqID(reqID + 1);
+    async function addRequirement(defaultVal, i){
+        setReqID(prev => prev+1)
+        setRequirements( current => [...current, <Card id={i} defaultVal={defaultVal} name={"Requirement"}/>]);
     }
 
-    function addBenefit(){
-        setBenefits( [...benefits, <Card id={benefitID} name={"Benefit"}/>]);
-        setBenefitID(benefitID + 1);
+    function addBenefit(defaultVal, i){
+        setBenefitID(cur => cur+1);
+        setBenefits( current => [...current, <Card id={i} defaultVal={defaultVal} name={"Benefit"}/>]);
     }
 
     return (
@@ -118,10 +149,10 @@ export default function EditJob() {
                         </p>
                         <p><strong>Location: <span className={"text-red"}>&#42;</span> </strong> <input type="text" id="location" placeholder = "Please enter the Job Location" defaultValue={job.location}/></p>
                         <p><strong className={"float-left"}>Description: <span className={"text-red"}>&#42;</span></strong><textarea id={"description"} defaultValue={job.description} className={"border-2 border-[#ccc] rounded-md p-2 w-full h-36"}/></p>
-                        <p><strong>Requirements: </strong><button className={"float-right bg-[#4b6df2] rounded-md border-2 border-dark-theme-grey text-l text-white w-8 h-8"} onClick={addRequirement}><i className="fa-solid fa-plus"></i></button>
+                        <p><strong>Requirements: </strong><button className={"float-right bg-[#4b6df2] rounded-md border-2 border-dark-theme-grey text-l text-white w-8 h-8"} onClick={() => {addRequirement("", reqID)}}><i className="fa-solid fa-plus"></i></button>
                             {requirements}
                         </p>
-                        <p><strong>Benefits: </strong><button className={"float-right bg-[#4b6df2] rounded-md border-2 border-dark-theme-grey text-l text-white w-8 h-8"} onClick={addBenefit}><i className="fa-solid fa-plus"></i></button>
+                        <p><strong>Benefits: </strong><button className={"float-right bg-[#4b6df2] rounded-md border-2 border-dark-theme-grey text-l text-white w-8 h-8"} onClick={() => {addBenefit("", benefitID)}}><i className="fa-solid fa-plus"></i></button>
                             {benefits}
                         </p>
                         <button onClick={handleSubmit} className={"w-full border-2 border-dark-theme-grey rounded-md p-2 bg-blue text-white"}>Submit</button>
