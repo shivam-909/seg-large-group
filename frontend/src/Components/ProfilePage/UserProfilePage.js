@@ -165,7 +165,7 @@ function UserProfilePage() {
           <Navbar/>
         <div className='bg-lighter-grey min-h-screen items-center justify-center flex'>
             <div className='bg-white rounded-md sm:min-w-1/6 inline-grid px-12 py-7 space-y-3 mt-24 max-w-lg min-w-[40%]'>
-              <h1 className='font-bold text-3xl flex justify-center'>My Profile </h1>
+              <h1 className='font-bold text-3xl flex justify-center'>{isCompany ? profile.company?.companyName: profile.searcher?.firstName +" "+ profile.searcher?.lastName}'s Profile </h1>
                 <div className={"grid grid-cols-2 gap-10"}>
                     <div>
                         {isCompany ?
@@ -197,7 +197,7 @@ function UserProfilePage() {
                             <Skills isEditing={isEditing}/>
                             <Education isEditing={isEditing}/>
                             {!isEditing ?
-                                <p className={"mt-4 mb-2"}><strong>CV: </strong>{" "} {profile.Cv ? (<a href={profile.Cv} id= 'Cv' download><u>{fileName}</u></a> ):( "You have not uploaded a CV.")}</p>
+                                <p className={"mt-4 mb-2"}><strong>CV: </strong>{" "} {profile.Cv ? (<a href={profile.Cv} id= 'Cv' download><u>{fileName}</u></a> ):( "")}</p>
                                 :<div><p className={"mt-4 mb-2"}><strong>CV:</strong>  <input type="file" id="Cv" accept= ".pdf"  onChange={updateCV}/></p></div>}
                         </div>
                     }
