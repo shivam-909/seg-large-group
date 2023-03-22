@@ -27,7 +27,7 @@ import {
 //CONTROL
 const numCompanies = 2
 const numSearchers = 10
-const numJobListings = 5
+const numJobListings = 100
 const numApplications = 5
 
 //=====================================================USERS=====================================================

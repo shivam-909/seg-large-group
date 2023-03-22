@@ -56,8 +56,6 @@ export const ErrorCoverLetterRequired = "no value for coverLetterRequired is pro
 export const ErrorUrgentRequired = "no value for urgent is provided";
 export const ErrorQualificationsRequired = "no qualifications are provided";
 export const ErrorDatePostedRequired = "no value for date posted is provided";
-
-
 export const ErrorTitleMustBeString = "title must be a string";
 export const ErrorCompensationPostedMustBeArray = "compensation must be an array";
 export const ErrorCompensationSize = "compensation must have two elements exactly";
@@ -75,19 +73,28 @@ export const ErrorUrgentMustBeBoolean = "value provided for urgent must be a boo
 export const ErrorQualificationsMustBeArray = "qualifications must be an array";
 export const ErrorQualificationsMustBeStringArray = "every element in qualifications must be a string";
 export const ErrorDatePostedMustBeDate = "date posted must be a date";
-
 export const ErrorBenefitsPostedMustBeArray = "benefits must be an array";
 export const ErrorBenefitsMustBeStringArray = "every element in benefits must be a string";
 export const ErrorRequirementsMustBeArray = "requirements must be an array";
 export const ErrorRequirementsMustBeStringArray = "every element in requirements must be a string";
 export const ErrorScreeningQuestionsMustBeDictionary = "screening questions must be a dictionary";
 export const ErrorScreeningQuestionsIncorrectKeyValues = "incorrect key value pairs in screening questions";
-
 export const ErrorSearcherIDMustBeString = "searcher ID must be a string";
 export const ErrorNotificationsMustBeArray = "notifications must be an array";
 export const ErrorNotificationsMustBeStringArray = "every element in notifications must be a string";
-export const ErrorMissingID = "searcherID or companyID required";
+export const ErrorMissingID = "mo searcherID or companyID is provided ";
 export const ErrorPfpUrlMustBeString = "pfp url must be a string";
+export const ErrorUserIDMustBeString = "userID must be a string";
+export const ErrorContentRequired = "no content is provided";
+export const ErrorApplicationIDRequired = "no applicationID is provided";
+export const ErrorCreatedRequired = "created field is not provided";
+export const ErrorUserIDRequired = "no user ID is provided";
+export const ErrorApplicationIDMustBeString = "applicationID must be a string";
+export const ErrorContentMustBeString = "content must be a string"
+export const ErrorCreatedMustBeDate = "content must be a string"
+
+
+
 
 export var ErrorToCode: Map<string, number> = new Map<string, number>(
     [
@@ -156,6 +163,14 @@ export var ErrorToCode: Map<string, number> = new Map<string, number>(
         [ErrorNotificationsMustBeArray, 400],
         [ErrorNotificationsMustBeStringArray, 400],
         [ErrorMissingID, 400],
-        [ErrorPfpUrlMustBeString,400]
+        [ErrorPfpUrlMustBeString,400],
+        [ErrorUserIDMustBeString, 400],
+        [ErrorContentRequired, 400],
+        [ErrorApplicationIDRequired, 400],
+        [ErrorCreatedRequired, 400],
+        [ErrorUserIDRequired, 400],
+        [ErrorApplicationIDMustBeString, 400],
+        [ErrorCreatedMustBeDate, 400],
+        [ErrorContentMustBeString, 400]
     ]
 );
