@@ -1,6 +1,6 @@
 import 'express-async-errors';
 import DB from "../../db/db";
-import { ErrorNotifNotFound, getErrorMessage, Handler } from "../public";
+import { ErrorNotifNotFound, Handler } from "../public";
 import { NextFunction, Request, Response } from "express";
 import * as notificationsdb from "../../db/notifications";
 import { randomUUID } from "crypto";

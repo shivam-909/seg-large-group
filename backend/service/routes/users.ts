@@ -9,7 +9,7 @@ export function GetUser(db: DB): Handler {
     return async (req: Request, res: Response, next: NextFunction) => {
         const id = req.params.id;
         try {
-            await validate.GetUserByType(db, req.body);
+            await validate.UserExists(db, id);
         } catch (err) {
             next((err as Error).message);
             return;
