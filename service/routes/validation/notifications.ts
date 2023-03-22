@@ -4,7 +4,7 @@ import * as errors from "../../public";
 import {ValidateApplicationID, ValidateUserID} from "./checks";
 
 export async function AddNotification(db: DB, body: any): Promise<void> {
-    const { content, applicationID, created, userID } = body;
+    const {content, applicationID, created, userID} = body;
 
     if (!content) {
         throw new Error(errors.ErrorContentRequired);
@@ -35,8 +35,8 @@ export async function AddNotification(db: DB, body: any): Promise<void> {
 
 export async function UpdateNotification(db: DB, id:string, req: any): Promise<void> {
 
-    const { content, applicationID, created, userID } = req;
-
+    await NotificationExists(db, id);
+    const {content, applicationID, created, userID} = req;
     if (!content && !applicationID && !created && !userID) {
         throw new Error(errors.ErrorMissingProperty);
     }

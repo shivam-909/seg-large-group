@@ -161,12 +161,9 @@ export async function AddListing(db: DB, body: any): Promise<void> {
 }
 
 export async function UpdateListing(db: DB, id:string, req: any): Promise<void> {
+    await ListingExists(db, id);
     const { title, compensation, description, location, type, schedule, companyID, industry, coverLetterRequired, urgent, qualifications, datePosted, benefits, requirements, screeningQuestions} = req;
-    const jobListing = await jobsdb.RetrieveJobListing(db, id);
-    if (!jobListing) {
-        throw new Error(errors.ErrorJobListingNotFound);
-    }
-   await RetrieveListingByFilter(db, req);
+    await RetrieveListingByFilter(db, req);
 
 }
 
