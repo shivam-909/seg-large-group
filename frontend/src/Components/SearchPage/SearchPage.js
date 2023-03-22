@@ -4,8 +4,10 @@ import Filters from "./Filters";
 import Navbar from "../Navbar/Navbar";
 import axios from "axios";
 import JobList from "./JobList";
+import Loading from "../Loading/Loading";
 
 function SearchPage() {
+    const [isLoading, setLoading] = useState(false);
     const [jobs, setJobs] = useState([]);
     const [showJobTitleInputErrorMessage, setShowJobTitleInputErrorMessage] = useState(false);
     const [showLocationInputErrorMessage, setShowLocationInputErrorMessage] = useState(false);
@@ -14,6 +16,7 @@ function SearchPage() {
 
     function showResults() {
         if (isJobTitleInputValid() & isLocationInputValid()) {
+            setLoading(true);
             const formData = new FormData();
             formData.append('companyID', 'd39d23b8-267c-49e3-95c1-509d67c9d0d6');
             axios.post('http://localhost:8000/api/jobs/filter', formData)
@@ -25,6 +28,7 @@ function SearchPage() {
                             job.companyName = company.data.companyName;
                         });
                     }
+                    setLoading(false);
                     setJobs(response.data);
                 });
         }
@@ -59,6 +63,7 @@ function SearchPage() {
                     :
                     <div className='pt-12 space-y-24'>
                         <div className='flex flex-col items-center justify-center space-y-5'>
+                            {isLoading && <Loading className={"w-16 h-16 border-[6px] border-dark-theme-grey"}/>}
                             <p>Looking for a job? <a className='font-bold' href='/'>Upload your CV.</a></p>
                             <p>Looking for your next hire? <a className='font-bold' href='/'>Post a job.</a></p>
                         </div>
