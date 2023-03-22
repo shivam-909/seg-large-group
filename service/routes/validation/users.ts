@@ -9,6 +9,9 @@ import {isStringArray, ValidateCompanyId, ValidateSearcherId} from "./checks";
 export async function UpdateUser(db: DB, id:string, req: any): Promise<void> {
     const { email, password, pfpUrl, location, notifications, companyID, searcherID } = req;
     await UserExists(db, id);
+    if (typeof email === 'undefined' && typeof password === 'undefined' && typeof pfpUrl === 'undefined' && typeof location === 'undefined' && typeof notifications === 'undefined' && typeof companyID === 'undefined' && typeof searcherID === 'undefined'){
+        throw new Error(errors.ErrorMissingProperty);
+    }
     if (email && !ValidEmail(email)) {
         throw new Error(errors.ErrorInvalidEmail);
     }
@@ -31,7 +34,7 @@ export async function UpdateUser(db: DB, id:string, req: any): Promise<void> {
         }
     }
 
-    if(!companyID && ! searcherID){
+    if(!companyID && !searcherID){
         throw new Error(errors.ErrorMissingID);
     }
 
@@ -47,7 +50,7 @@ export async function UpdateUser(db: DB, id:string, req: any): Promise<void> {
 }
 
 export async function GetUserByType(db:DB, req:any): Promise<void>{
-    const { companyID, searcherID } = req.body;
+    const { companyID, searcherID } = req;
 
     if(!companyID && !searcherID){
         throw new Error(errors.ErrorMissingID);
