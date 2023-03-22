@@ -1,6 +1,5 @@
 import DB from "../../../db/db";
-import * as searchersdb from "../../../db/searchers";
-import * as jobsdb from "../../../db/jobs";
+
 import * as usersdb from "../../../db/users";
 import * as errors from "../../public";
 import { ValidEmail, ValidPassword } from  "../../../service/routes/auth";
