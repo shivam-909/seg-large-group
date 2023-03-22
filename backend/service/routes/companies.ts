@@ -1,9 +1,8 @@
 import { NextFunction, Request, Response } from "express";
-import { ErrorCompanyNotFound, Handler } from "../public";
+import {Handler } from "../public";
 import DB from "../../db/db";
 import * as companiesdb from "../../db/companies";
 import {ValidateCompanyId} from "./validation/checks";
-import * as validate from "./validation/notifications";
 
 export function GetCompany(db: DB): Handler {
     return async (req: Request, res: Response, next: NextFunction) => {
