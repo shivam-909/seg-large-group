@@ -1,7 +1,6 @@
 import DB from "../../../db/db";
 import * as errors from "../../public";
 import * as jobsdb from "../../../db/jobs";
-import * as companiesdb from "../../../db/companies";
 import {isStringArray, ValidateCompanyId} from "./checks";
 
 
