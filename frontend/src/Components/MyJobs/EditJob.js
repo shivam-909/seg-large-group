@@ -32,7 +32,7 @@ export default function EditJob() {
 
     useEffect(() => {
         validate()
-    }, [])
+    }, []) // eslint-disable-line
 
     async function verifyCompany(){
         if (isEdit){
