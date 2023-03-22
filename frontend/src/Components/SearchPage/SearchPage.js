@@ -3,7 +3,6 @@ import {useState} from "react";
 import Filters from "./Filters";
 import Navbar from "../Navbar/Navbar";
 import axios from "axios";
-import JobDetailsCard from "./JobDetailsCard";
 import JobList from "./JobList";
 
 function SearchPage() {
@@ -16,7 +15,7 @@ function SearchPage() {
     function showResults() {
         if (isJobTitleInputValid() & isLocationInputValid()) {
             const formData = new FormData();
-            formData.append('companyID', '7f71aac4-92b1-42bd-a022-6bd5721bf808');
+            formData.append('companyID', 'd39d23b8-267c-49e3-95c1-509d67c9d0d6');
             axios.post('http://localhost:8000/api/jobs/filter', formData)
                 .then(async response => {
                     for (const job of response.data) {
