@@ -84,6 +84,11 @@ export const ErrorRequirementsMustBeStringArray = "every element in requirements
 export const ErrorScreeningQuestionsMustBeDictionary = "screening questions must be a dictionary";
 export const ErrorScreeningQuestionsIncorrectKeyValues = "incorrect key value pairs in screening questions";
 
+export const ErrorSearcherIDMustBeString = "searcher ID must be a string";
+export const ErrorNotificationsMustBeArray = "notifications must be an array";
+export const ErrorNotificationsMustBeStringArray = "every element in notifications must be a string";
+export const ErrorMissingID = "searcherID or companyID required";
+export const ErrorPfpUrlMustBeString = "pfp url must be a string";
 
 export var ErrorToCode: Map<string, number> = new Map<string, number>(
     [
@@ -147,8 +152,12 @@ export var ErrorToCode: Map<string, number> = new Map<string, number>(
         [ErrorBenefitsMustBeStringArray, 400],
         [ErrorRequirementsMustBeStringArray, 400],
         [ErrorRequirementsMustBeArray, 400],
-        [ErrorScreeningQuestionsMustBeDictionary,400],
-        [ErrorScreeningQuestionsIncorrectKeyValues,400]
-
+        [ErrorScreeningQuestionsMustBeDictionary, 400],
+        [ErrorScreeningQuestionsIncorrectKeyValues, 400],
+        [ErrorSearcherIDMustBeString, 400],
+        [ErrorNotificationsMustBeArray, 400],
+        [ErrorNotificationsMustBeStringArray, 400],
+        [ErrorMissingID, 400],
+        [ErrorPfpUrlMustBeString,400]
     ]
 );
