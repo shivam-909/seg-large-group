@@ -2,7 +2,7 @@ import DB from "../../../db/db";
 
 import * as usersdb from "../../../db/users";
 import * as errors from "../../public";
-import { ValidEmail, ValidPassword } from  "../../../service/routes/auth";
+import { ValidEmail, ValidPassword } from "../auth";
 import {isStringArray, ValidateCompanyId, ValidateSearcherId} from "./checks";
 
 

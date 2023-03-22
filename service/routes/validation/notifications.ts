@@ -34,7 +34,6 @@ export async function AddNotification(db: DB, body: any): Promise<void> {
 }
 
 
-
 export async function NotificationExists(db: DB, id: string): Promise<void> {
     const notification = await notificationsdb.RetrieveNotification(db, id);
     if (!notification) {
