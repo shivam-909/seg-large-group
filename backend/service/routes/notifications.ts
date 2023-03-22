@@ -69,23 +69,6 @@ export function GetNotification(db: DB): Handler {
   };
 }
 
-export function UpdateNotification(db: DB): Handler {
-  return async (req: Request, res: Response, next: NextFunction) => {
-    const id = req.params.id;
-    const notificationData = req.body;
-
-    try {
-      await validate.UpdateNotification(db, id, notificationData);
-    } catch (err) {
-      next((err as Error).message);
-      return;
-    }
-
-    const notification = await notificationsdb.RetrieveNotification(db, id);
-    const updatedNotification = { ...notification, ...notificationData };
-    await notificationsdb.UpdateNotification(db, updatedNotification);
-  }
-}
 
 export function DeleteNotification(db: DB): Handler {
   return async (req: Request, res: Response, next: NextFunction) => {

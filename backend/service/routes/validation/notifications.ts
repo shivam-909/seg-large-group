@@ -33,30 +33,7 @@ export async function AddNotification(db: DB, body: any): Promise<void> {
 
 }
 
-export async function UpdateNotification(db: DB, id:string, req: any): Promise<void> {
 
-    await NotificationExists(db, id);
-    const {content, applicationID, created, userID} = req;
-    if (!content && !applicationID && !created && !userID) {
-        throw new Error(errors.ErrorMissingProperty);
-    }
-
-    if (content && typeof content !== 'string') {
-        throw new Error(errors.ErrorContentMustBeString);
-    }
-
-    if (created && !(created instanceof Date)) {
-        throw new Error(errors.ErrorCreatedMustBeDate);
-    }
-
-    if(applicationID){
-        await ValidateApplicationID(db, applicationID);
-    }
-
-    if(userID){
-        await ValidateUserID(db, userID);
-    }
-}
 
 export async function NotificationExists(db: DB, id: string): Promise<void> {
     const notification = await notificationsdb.RetrieveNotification(db, id);
