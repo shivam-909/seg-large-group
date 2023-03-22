@@ -8,11 +8,7 @@ import {isStringArray, ValidateCompanyId, ValidateSearcherId} from "./checks";
 
 export async function UpdateUser(db: DB, id:string, req: any): Promise<void> {
     const { email, password, pfpUrl, location, notifications, companyID, searcherID } = req;
-
-    const user = await usersdb.RetrieveFullUserByID(db, id);
-    if (!user) {
-        throw new Error(errors.ErrorUserNotFound);
-    }
+    await UserExists(db, id);
     if (email && !ValidEmail(email)) {
         throw new Error(errors.ErrorInvalidEmail);
     }
