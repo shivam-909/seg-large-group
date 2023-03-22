@@ -61,6 +61,7 @@ export default function EditJob() {
                 for (let i = 0; i < response.data.benefits?.length; i++) {
                     addBenefit(response.data.benefits[i], i);
                 }
+                console.log(response.data.compensation[1])
             })
         }
     }
@@ -138,7 +139,15 @@ export default function EditJob() {
                     <div className='text-input space-y-4' id="profile">
                         <p><strong>Title: <span className={"text-red"}>&#42;</span> </strong> <input type="text" id="title" placeholder = "Please enter the Job Title" defaultValue={job.title}/></p>
                         <p><strong>Industry: <span className={"text-red"}>&#42;</span> </strong> <input type="text" id="industry" placeholder = "Please enter the Job Industry" defaultValue={job.industry}/></p>
-                        <p><strong>Compensation: <span className={"text-red"}>&#42;</span> </strong> <input type="number" min={0} id="compensation" placeholder = "Please enter the Compensation" defaultValue={job.compensation}/></p>
+                        <div>
+                            <p className={"w-[75%] inline-block"}><strong>Compensation: <span className={"text-red"}>&#42;</span> </strong> <input type="number" min={0} id="compensation" placeholder = "Please enter the Compensation" defaultValue={job.compensation && job.compensation[0]}/></p>
+                            <select defaultValue={job.compensation && job.compensation[1]} className={"w-[25%] h-10 border-[#ccc] border-[1px] rounded-md"}>
+                                <option value={"yearly"}>/Year</option>
+                                <option value={"weekly"}>/Week</option>
+                                <option value={"daily"}>/Day</option>
+                                <option value={"hourly"}>/Hour</option>
+                            </select>
+                        </div>
                         <p><strong>Schedule: <span className={"text-red"}>&#42;</span></strong>
                             <select id={"schedule"} className={"border-2 border-[#ccc] p-1 rounded-md m-2"}>
                             <option selected={job.schedule==="Full-time"} value={"Full-time"}>Full-time</option>
