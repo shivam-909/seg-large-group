@@ -36,10 +36,7 @@ function ValidateCompensation(compensation: any){
 }
 
 function ValidateDescription(description: any){
-    if(description.length < 2000){
-        throw new Error(errors.ErrorJobDescriptionTooShort);
-    }
-    if(description.length > 3000){
+    if(description.length > 10000){
         throw new Error(errors.ErrorJobDescriptionTooLong);
     }
     if(typeof description !== 'string'){

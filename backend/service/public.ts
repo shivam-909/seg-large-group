@@ -43,7 +43,6 @@ export const ErrorMissingFilter = "no filters provided";
 export const ErrorStatusMustBeString = "status must be a string";
 export const ErrorStatusRequired = "no status provided";
 export const ErrorMissingProperty = "no property provided for update";
-export const ErrorJobDescriptionTooShort = "job description is too short";
 export const ErrorJobDescriptionTooLong = "job description is too long";
 export const ErrorTitleRequired = "no title is provided";
 export const ErrorCompensationRequired = "no compensation is provided";
@@ -115,7 +114,6 @@ export var ErrorToCode: Map<string, number> = new Map<string, number>(
         [ErrorStatusMustBeString, 400],
         [ErrorStatusRequired, 400],
         [ErrorMissingProperty, 400],
-        [ErrorJobDescriptionTooShort, 400],
         [ErrorJobDescriptionTooLong, 400],
         [ErrorJobListingNotFound, 404],
         [ErrorTitleRequired, 400],
