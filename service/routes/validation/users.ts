@@ -7,8 +7,6 @@ import { ValidEmail, ValidPassword } from  "../../../service/routes/auth";
 import {isStringArray, ValidateCompanyId, ValidateSearcherId} from "./checks";
 
 
-
-
 export async function UpdateUser(db: DB, id:string, req: any): Promise<void> {
     const { email, password, pfpUrl, location, notifications, companyID, searcherID } = req;
 
@@ -53,7 +51,7 @@ export async function UpdateUser(db: DB, id:string, req: any): Promise<void> {
 
 }
 
-export async function GetUserByTypeID(db:DB, req:any): Promise<void>{
+export async function GetUserByType(db:DB, req:any): Promise<void>{
     const { companyID, searcherID } = req.body;
 
     if(!companyID && !searcherID){
