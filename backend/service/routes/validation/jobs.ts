@@ -2,14 +2,8 @@ import DB from "../../../db/db";
 import * as errors from "../../public";
 import * as jobsdb from "../../../db/jobs";
 import * as companiesdb from "../../../db/companies";
+import {isStringArray, ValidateCompanyId} from "./checks";
 
-
-export function isStringArray(arr:string[]): boolean{
-    for(let i=0; i< arr.length;i++){
-        if(typeof arr[i]!== 'string') return false;
-    }
-    return true
-}
 
 function ValidateRequirements(requirements: any){
     if(!(Array.isArray(requirements))){
@@ -80,15 +74,7 @@ function ValidateQualifications(qualifications:any){
     }
 }
 
-export async function ValidateCompanyId(db:DB, companyID: any){
-    if(typeof companyID !== 'string'){
-        throw new Error(errors.ErrorCompanyIDMustBeString);
-    }
-    const company = await companiesdb.RetrieveCompanyByID(db, companyID);
-    if(!company){
-        throw new Error(errors.ErrorCompanyNotFound);
-    }
-}
+
 
 function ValidateScreeningQuestions(screeningQuestions: any){
     if(!(screeningQuestions.constructor == Object)){

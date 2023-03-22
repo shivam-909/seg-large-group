@@ -4,7 +4,7 @@ import * as jobsdb from "../../../db/jobs";
 import * as usersdb from "../../../db/users";
 import * as errors from "../../public";
 import { ValidEmail, ValidPassword } from  "../../../service/routes/auth";
-import {isStringArray, ValidateCompanyId} from "./jobs";
+import {isStringArray, ValidateCompanyId, ValidateSearcherId} from "./checks";
 
 
 
@@ -16,14 +16,14 @@ export async function UpdateUser(db: DB, id:string, req: any): Promise<void> {
     if (!user) {
         throw new Error(errors.ErrorUserNotFound);
     }
-    if (email && ValidEmail(email)) {
+    if (email && !ValidEmail(email)) {
         throw new Error(errors.ErrorInvalidEmail);
     }
-    if (password && ValidPassword(password)) {
+    if (password && !ValidPassword(password)) {
         throw new Error(errors.ErrorInvalidPassword);
     }
     if (pfpUrl && typeof pfpUrl !== 'string') {
-
+        throw new Error(errors.ErrorPfpUrlMustBeString);
     }
     if (location && typeof location !== 'string') {
         throw new Error(errors.ErrorLocationMustBeString);
@@ -31,15 +31,15 @@ export async function UpdateUser(db: DB, id:string, req: any): Promise<void> {
 
     if(notifications){
         if(!Array.isArray(notifications)){
-
+            throw new Error(errors.ErrorNotificationsMustBeArray);
         }
         if(!isStringArray(notifications)){
-
+            throw new Error(errors.ErrorNotificationsMustBeStringArray);
         }
     }
 
     if(!companyID && ! searcherID){
-
+        throw new Error(errors.ErrorMissingID);
     }
 
     if(companyID){
@@ -47,10 +47,7 @@ export async function UpdateUser(db: DB, id:string, req: any): Promise<void> {
     }
 
     if (searcherID){
-        const searcher = await searchersdb.RetrieveSearcherByID(db, searcherID);
-        if (!searcher) {
-            throw new Error(errors.ErrorSearcherNotFound);
-        }
+        await ValidateSearcherId(db,searcherID);
     }
 
 
@@ -58,14 +55,12 @@ export async function UpdateUser(db: DB, id:string, req: any): Promise<void> {
 
 export async function GetUserByTypeID(db:DB, req:any): Promise<void>{
     const { companyID, searcherID } = req.body;
-    if(!companyID && !searcherID){
 
+    if(!companyID && !searcherID){
+        throw new Error(errors.ErrorMissingID);
     }
     if(searcherID){
-        const searcher = await searchersdb.RetrieveSearcherByID(db, searcherID);
-        if (!searcher) {
-            throw new Error(errors.ErrorSearcherNotFound);
-        }
+       await ValidateSearcherId(db,searcherID);
     }
     if(companyID){
         await ValidateCompanyId(db, companyID);
