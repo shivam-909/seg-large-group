@@ -6,6 +6,8 @@ import axios from "axios";
 import {useNavigate, useParams} from "react-router-dom";
 import Card from "./Card";
 import {GetData} from "../../Auth/GetUser";
+import {setVisible} from "../Validation/validate";
+import ErrorBox from "../ErrorBox/ErrorBox";
 
 export default function EditJob() {
     const navigate = useNavigate();
@@ -68,8 +70,11 @@ export default function EditJob() {
 
 
     async function validate(){
+        setVisible("descError", false)
         if (await verifyCompany()) {
-            await getDefaultValues(); // eslint-disable-line
+            if(job.length === 0){
+                await getDefaultValues(); // eslint-disable-line
+            }
         } else {
             navigate(-1);
         }
@@ -83,10 +88,18 @@ export default function EditJob() {
         let description = document.getElementById("description").value;
         let compensation = document.getElementById("compensation").value;
 
+        if (title === "" || schedule === "" || location === "" || industry === "" || description === "" || description.length > 10000 || compensation === ""){
+            setVisible("errorBox", true);
+            return;
+        }
         const formData = new FormData();
         let requirements = document.querySelectorAll("[id=Requirement]")
         if(requirements.length > 0){
             for(const req of requirements){
+                if (req.value === ""){
+                    setVisible("errorBox", true)
+                    return;
+                }
                 formData.append('requirements[]', req.value);
             }
         }
@@ -97,6 +110,10 @@ export default function EditJob() {
         let benefits = document.querySelectorAll("[id=Benefit]")
         if(benefits.length > 0) {
             for(const benefit of benefits){
+                if (benefit.value === ""){
+                    setVisible("errorBox", true);
+                    return;
+                }
                 formData.append('benefits[]', benefit.value);
             }
         }
@@ -128,6 +145,17 @@ export default function EditJob() {
         setBenefits( current => [...current, <Card id={i} defaultVal={defaultVal} name={"Benefit"}/>]);
     }
 
+    function validateDescription(){
+        let val = document.getElementById("description").value.length
+        console.log(val)
+        if(val > 10000){
+            setVisible("descError", true)
+        }
+        else{
+            setVisible("descError", false)
+        }
+    }
+
     return (
         <div>
             <Navbar/>
@@ -156,13 +184,14 @@ export default function EditJob() {
                             </select>
                         </p>
                         <p><strong>Location: <span className={"text-red"}>&#42;</span> </strong> <input type="text" id="location" placeholder = "Please enter the Job Location" defaultValue={job.location}/></p>
-                        <p><strong className={"float-left"}>Description: <span className={"text-red"}>&#42;</span></strong><textarea id={"description"} defaultValue={job.description} className={"border-2 border-[#ccc] rounded-md p-2 w-full h-36"}/></p>
+                        <p><strong className={"float-left"}>Description: <span className={"text-red"}>&#42;</span></strong><textarea onChange={() => {validateDescription()}} id={"description"} defaultValue={job.description} className={"border-2 border-[#ccc] rounded-md p-2 w-full h-36"}/><div id={"descError"}><div className={"text-red"}>Description too long.</div></div></p>
                         <p><strong>Requirements: </strong><button className={"float-right bg-[#4b6df2] rounded-md border-2 border-dark-theme-grey text-l text-white w-8 h-8"} onClick={() => {addRequirement("", reqID)}}><i className="fa-solid fa-plus"></i></button>
                             {requirements}
                         </p>
                         <p><strong>Benefits: </strong><button className={"float-right bg-[#4b6df2] rounded-md border-2 border-dark-theme-grey text-l text-white w-8 h-8"} onClick={() => {addBenefit("", benefitID)}}><i className="fa-solid fa-plus"></i></button>
                             {benefits}
                         </p>
+                        <ErrorBox message={"Please complete all fields"}/>
                         <button onClick={handleSubmit} className={"w-full border-2 border-dark-theme-grey rounded-md p-2 bg-blue text-white"}>Submit</button>
                     </div>
                 </div>

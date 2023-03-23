@@ -53,7 +53,7 @@ export default function ViewJob() {
                         <p className='font-bold text-xl flex'>Details</p>
                         <div><img className={"inline ml-2"} src={suitcaseIcon} alt=''/><div className={"mt-2 ml-2 inline"}>{job.industry}</div></div>
                         <div><img className={"inline ml-2"} src={pindropIcon} alt=''/><div className={"mt-2 ml-2 inline"}>{job.location}</div></div>
-                        <div><img className={"inline ml-2"} src={salaryIcon} alt=''/><div className={"mt-2 ml-2 inline"}>£{job.compensation && (job.compensation[0] + " " + job.compensation[1])} - {job.schedule}</div></div>
+                        <div><img className={"inline ml-2"} src={salaryIcon} alt=''/><div className={"mt-2 ml-2 inline"}>£{job.compensation && (job.compensation[0] + "/" + job.compensation[1])} - {job.schedule}</div></div>
                         <div className={"border-b-2 border-grey flex relative mt-4"}/>
                         <p className='font-bold text-xl flex'>Requirements</p>
                         <div className={"ml-2"}>{job.requirements}</div>
