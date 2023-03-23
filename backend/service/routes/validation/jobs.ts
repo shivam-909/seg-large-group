@@ -2,6 +2,7 @@ import DB from "../../../db/db";
 import * as errors from "../../public";
 import * as jobsdb from "../../../db/jobs";
 import {isStringArray, ValidateCompanyId} from "./checks";
+import {ErrorMissingProperty} from "../../public";
 
 
 function ValidateRequirements(requirements: any){
@@ -162,6 +163,9 @@ export async function AddListing(db: DB, body: any): Promise<void> {
 
 export async function UpdateListing(db: DB, id:string, req: any): Promise<void> {
     await ListingExists(db, id);
+    if(req===undefined){
+        throw new Error(ErrorMissingProperty);
+    }
     const { title, compensation, description, location, type, schedule, companyID, industry, coverLetterRequired, urgent, qualifications, datePosted, benefits, requirements, screeningQuestions} = req;
     await RetrieveListingByFilter(db, req);
 
