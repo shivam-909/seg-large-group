@@ -82,12 +82,15 @@ async function GenerateSearcher(db: DB): Promise<Searcher> {
     const savedJobs = await RetrieveRandomJobIDArr(db);
     const firstName = faker.name.firstName();
     const lastName = faker.name.lastName();
+    const cvLink = faker.internet.url();
 
     return new Searcher(
         firstName,
         lastName,
         savedJobs,
-        id
+        id,
+        GenerateEducation(),
+        cvLink
     );
 }
 
@@ -127,6 +130,30 @@ export function hashPassword(password: string): string {
 
     return hash as string;
 }
+
+function GenerateEducation(): {subject: string, qualification: string, grade: string, duration: string}[] {
+    const subjects = ['Mathematics', 'Physics', 'Chemistry', 'Biology', 'History', 'Geography', 'English', 'French', 'German'];
+    const qualifications = ['Bachelors', 'Masters', 'PhD'];
+    const grades = ['A', 'B', 'C', 'D', 'E', 'F'];
+    const durations = ['1 year', '2 years', '3 years', '4 years', '5 years'];
+
+    const numEducations = Math.floor(Math.random() * 4) + 1;
+
+    const educations = [];
+
+    for (let i = 0; i < numEducations; i++) {
+        const subject = faker.helpers.arrayElement(subjects);
+        const qualification = faker.helpers.arrayElement(qualifications);
+        const grade = faker.helpers.arrayElement(grades);
+        const duration = faker.helpers.arrayElement(durations);
+
+
+        educations.push({subject, qualification, grade, duration});
+    }
+
+    return educations;
+}
+
 
 
 //=====================================================JOB-LISTINGS=====================================================
