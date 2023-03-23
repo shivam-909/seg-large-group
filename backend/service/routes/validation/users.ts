@@ -15,10 +15,8 @@ export async function UpdateUser(db: DB, id:string, req: any): Promise<void> {
     }
 
     const { email, password, pfpUrl, location, notifications, companyID, searcherID } = req;
-    console.log("test params " + req.params);
 
     if (!email && !password && !pfpUrl && !location && !notifications && !companyID && !searcherID){
-        console.log("TEST");
         throw new Error(errors.ErrorMissingProperty);
     }
 
@@ -51,8 +49,6 @@ export async function UpdateUser(db: DB, id:string, req: any): Promise<void> {
     if (searcherID){
         await ValidateSearcherId(db,searcherID);
     }
-
-
 }
 
 export async function GetUserByType(db:DB, req:any): Promise<void>{
