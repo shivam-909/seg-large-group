@@ -81,7 +81,7 @@ export async function UpdateUser(db: DB, user: User): Promise<void> {
 
   const baseData: { [key: string]: any } = {};
 
-  const updateKeys = ['email', 'hashedPassword', 'pfpUrl', 'location', 'notifications', 'cvLink'];
+  const updateKeys = ['email', 'hashedPassword', 'pfpUrl', 'location', 'notifications', 'cvLink', 'education', 'savedJobs'];
   for (const key in user) {
     if (updateKeys.includes(key)) {
       baseData[key] = (user as any)[key];
