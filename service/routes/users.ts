@@ -2,8 +2,9 @@ import { NextFunction, Request, Response } from "express";
 import DB from "../../db/db";
 import * as usersdb from "../../db/users";
 import 'express-async-errors';
-import { ErrorUserNotFound, getErrorMessage, Handler } from "../public";
+import {ErrorMissingProperty, ErrorUserNotFound, getErrorMessage, Handler} from "../public";
 import * as validate from "./validation/users";
+import * as errors from "../public";
 
 export function GetUser(db: DB): Handler {
     return async (req: Request, res: Response, next: NextFunction) => {
@@ -21,6 +22,7 @@ export function GetUser(db: DB): Handler {
 
 export function UpdateUser(db: DB): Handler {
     return async (req: Request, res: Response, next: NextFunction) => {
+
         const id = req.params.id;
         const userData = req.body;
         try {

@@ -4,14 +4,20 @@ import * as usersdb from "../../../db/users";
 import * as errors from "../../public";
 import { ValidEmail, ValidPassword } from "../auth";
 import {isStringArray, ValidateCompanyId, ValidateSearcherId} from "./checks";
+import {ErrorMissingProperty} from "../../public";
 
 
 export async function UpdateUser(db: DB, id:string, req: any): Promise<void> {
-    const { email, password, pfpUrl, location, notifications, companyID, searcherID } = req;
-    await UserExists(db, id);
-    if (typeof email === 'undefined' && typeof password === 'undefined' && typeof pfpUrl === 'undefined' && typeof location === 'undefined' && typeof notifications === 'undefined' && typeof companyID === 'undefined' && typeof searcherID === 'undefined'){
-        throw new Error(errors.ErrorMissingProperty);
+    console.log("TEST" + req);
+    if(req===undefined){
+        throw new Error(ErrorMissingProperty);
     }
+    await UserExists(db, id);
+    const { email, password, pfpUrl, location, notifications, companyID, searcherID } = req;
+
+    // if ((email === undefined || email === "") &&  password === undefined &&  pfpUrl === undefined &&  location === undefined &&  notifications === undefined &&  companyID === undefined &&  searcherID === undefined){
+    //     throw new Error(errors.ErrorMissingProperty);
+    // }
     if (email && !ValidEmail(email)) {
         throw new Error(errors.ErrorInvalidEmail);
     }
