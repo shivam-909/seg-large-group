@@ -180,6 +180,12 @@ export async function ListingExists(db: DB, id: string): Promise<void> {
 
 export async function RetrieveListingByFilter(db: DB, body: any): Promise<void> {
 
+    console.log("test" + body);
+
+    if(body===undefined){
+        throw new Error(ErrorMissingProperty);
+    }
+
     const { title, compensation, description, location, type, schedule, companyID, industry, coverLetterRequired, urgent, qualifications, datePosted, benefits, requirements, screeningQuestions} = body;
     if(!title && !compensation && !description && !location && !type && !schedule && !companyID && !industry && !coverLetterRequired && !urgent && !qualifications && !datePosted && !benefits && !requirements && !screeningQuestions){
         throw new Error(errors.ErrorMissingProperty);
