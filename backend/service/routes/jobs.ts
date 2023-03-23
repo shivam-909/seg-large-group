@@ -61,7 +61,7 @@ export function UpdateListing(db: DB): Handler {
       return;
     }
     await jobsdb.UpdateJobListing(db, updatedJobListing);
-
+    res.status(200).json(updatedJobListing);
 
     return;
   }
