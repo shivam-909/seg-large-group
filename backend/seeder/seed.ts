@@ -303,7 +303,7 @@ export async function RetrieveRandomJobIDArr(db: DB): Promise<string[]> {
 async function GenerateApplicationListing(db: DB): Promise<Application> {
     const randomSearcher = await RetrieveRandomSearcherId(db);
     const randomJobListing = await RetrieveRandomJobListingID(db);
-    const coverLetter = faker.internet.url();
+    const coverLetter = faker.lorem.paragraph();
 
     return new Application(
         randomUUID(),
