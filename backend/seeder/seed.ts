@@ -1,15 +1,14 @@
 import DB from "../db/db";
 
-import { randomUUID } from "crypto";
-import { faker } from '@faker-js/faker';
+import {randomUUID} from "crypto";
+import {faker} from '@faker-js/faker';
 
 import JobListing from "../models/job";
-import { User } from "../models/user";
+import {Company, Searcher, User} from "../models/user";
 import Notification from "../models/notification";
-import { Status } from "../models/enums/status.enum";
-import { Company, Searcher } from "../models/user";
+import {Status} from "../models/enums/status.enum";
 import Application from "../models/application";
-import { companyNotification, searcherNotification } from "../models/enums/userNotification.enum";
+import {companyNotification, searcherNotification} from "../models/enums/userNotification.enum";
 import bcrypt from "bcrypt";
 import * as jobsdb from "../db/jobs";
 import * as usersdb from "../db/users";
@@ -20,7 +19,8 @@ import * as searcherdb from "../db/searchers";
 import {
     ErrorCompanyNotFound,
     ErrorJobListingNotFound,
-    ErrorNoCompaniesExist, ErrorSearcherNotFound,
+    ErrorNoCompaniesExist,
+    ErrorSearcherNotFound,
     ErrorUserNotFound
 } from "../service/public";
 
@@ -42,7 +42,7 @@ async function GenerateUser(): Promise<User> {
         email,
         hashPassword(password),
         faker.image.avatar(),
-        faker.address.city(),
+        GetRandomCity(),
         [],
         undefined,
         undefined,
@@ -186,23 +186,23 @@ function GenerateCompensation(): string[]{
     const yearlyAmount = [faker.datatype.number({
         'min': 20000,
         'max': 100000
-    }).toString(), "yearly"];
+    }).toString(), "year"];
 
     const hourlyAmount = [faker.datatype.number({
         'min': 10,
         'max': 49
-    }).toString(), "hourly"];
+    }).toString(), "hour"];
 
     const dailyAmount = [faker.datatype.number({
         'min': 80,
         'max': 392
-    }).toString(), "daily"];
+    }).toString(), "day"];
 
 
-    const weeklyAmount = ["£" + faker.datatype.number({
+    const weeklyAmount = [faker.datatype.number({
         'min': 400,
         'max': 1960
-    }).toString(), "weekly"];
+    }).toString(), "week"];
 
     return faker.helpers.arrayElement([yearlyAmount,hourlyAmount,dailyAmount,weeklyAmount]);
 }
@@ -425,4 +425,86 @@ function GetRandomNotificationEnum(type: "company" | "searcher"): string {
     const statusValues = Object.values(enums).filter((value) => typeof value === 'string');
     const randomIndex = Math.floor(Math.random() * statusValues.length);
     return statusValues[randomIndex] as string;
+}
+function GetRandomCity(): string {
+    const cities = [
+        "Bath",
+        "Birmingham",
+        "Bradford",
+        "Brighton & Hove",
+        "Bristol",
+        "Cambridge",
+        "Canterbury",
+        "Carlisle",
+        "Chelmsford",
+        "Chester",
+        "Chichester",
+        "Colchester",
+        "Coventry",
+        "Derby",
+        "Doncaster",
+        "Durham",
+        "Ely",
+        "Exeter",
+        "Gloucester",
+        "Hereford",
+        "Kingston-upon-Hull",
+        "Lancaster",
+        "Leeds",
+        "Leicester",
+        "Lichfield",
+        "Lincoln",
+        "Liverpool",
+        "London",
+        "Manchester",
+        "Milton Keynes",
+        "Newcastle-upon-Tyne",
+        "Norwich",
+        "Nottingham",
+        "Oxford",
+        "Peterborough",
+        "Plymouth",
+        "Portsmouth",
+        "Preston",
+        "Ripon",
+        "Salford",
+        "Salisbury",
+        "Sheffield",
+        "Southampton",
+        "Southend-on-Sea",
+        "St Albans",
+        "Stoke on Trent",
+        "Sunderland",
+        "Truro",
+        "Wakefield",
+        "Wells",
+        "Westminster",
+        "Winchester",
+        "Wolverhampton",
+        "Worcester",
+        "York",
+        "Armagh",
+        "Bangor",
+        "Belfast",
+        "Lisburn",
+        "Londonderry",
+        "Newry",
+        "Aberdeen",
+        "Dundee",
+        "Dunfermline",
+        "Edinburgh",
+        "Glasgow",
+        "Inverness",
+        "Perth",
+        "Stirling",
+        "Bangor",
+        "Cardiff",
+        "Newport",
+        "St Asaph",
+        "St Davids",
+        "Swansea",
+        "Wrexham"
+    ]
+
+    return faker.helpers.arrayElement(cities)
 }
