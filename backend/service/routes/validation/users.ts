@@ -8,16 +8,21 @@ import {ErrorMissingProperty} from "../../public";
 
 
 export async function UpdateUser(db: DB, id:string, req: any): Promise<void> {
-    console.log("TEST" + req);
-    if(req===undefined){
+    await UserExists(db, id);
+    console.log("req: " + req);
+
+    if(req === undefined){
         throw new Error(ErrorMissingProperty);
     }
-    await UserExists(db, id);
-    const { email, password, pfpUrl, location, notifications, companyID, searcherID } = req;
 
-    // if ((email === undefined || email === "") &&  password === undefined &&  pfpUrl === undefined &&  location === undefined &&  notifications === undefined &&  companyID === undefined &&  searcherID === undefined){
-    //     throw new Error(errors.ErrorMissingProperty);
-    // }
+    const { email, password, pfpUrl, location, notifications, companyID, searcherID } = req;
+    console.log("test params " + req.params);
+
+    if (!email && !password && !pfpUrl && !location && !notifications && !companyID && !searcherID){
+        console.log("TEST");
+        throw new Error(errors.ErrorMissingProperty);
+    }
+
     if (email && !ValidEmail(email)) {
         throw new Error(errors.ErrorInvalidEmail);
     }

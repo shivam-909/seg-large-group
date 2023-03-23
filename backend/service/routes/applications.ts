@@ -79,6 +79,8 @@ export function UpdateApplication(db: DB): Handler {
 
     const updatedApplication = { ...application, ...applicationData };
     await applicationdb.UpdateApplication(db, updatedApplication);
+    res.status(200).json(updatedApplication);
+
   }
 }
 

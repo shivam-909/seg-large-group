@@ -26,7 +26,8 @@ export function UpdateUser(db: DB): Handler {
         const id = req.params.id;
         const userData = req.body;
         try {
-            await validate.UpdateUser(db, id, req.body);
+            await validate.UpdateUser(db, id, JSON.stringify(userData));
+
         } catch (err) {
             next((err as Error).message);
             return;
@@ -34,6 +35,8 @@ export function UpdateUser(db: DB): Handler {
         const user = await usersdb.RetrieveFullUserByID(db, id);
         const updatedUser = { ...user, ...userData };
         await usersdb.UpdateUser(db, updatedUser);
+        res.status(200).json(updatedUser);
+
     }
 }
 
