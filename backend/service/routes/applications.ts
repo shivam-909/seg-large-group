@@ -16,9 +16,9 @@ export function AddApplication(db: DB): Handler {
       next((err as Error).message);
       return;
     }
-    const {status, searcher, jobListing} = req.body;
+    const {status, searcher, jobListing, coverLetter} = req.body;
     const newID = randomUUID();
-    const newApplication = new Application(newID, status, searcher, jobListing);
+    const newApplication = new Application(newID, status, searcher, jobListing, coverLetter);
 
     await applicationdb.CreateApplication(db, newApplication);
     res.sendStatus(200)
@@ -54,6 +54,7 @@ export function GetApplication(db: DB): Handler {
         status: req.body.status || '',
         searcher: req.body.searcher || '',
         jobListing: req.body.jobListing || '',
+        coverLetter: req.body.coverLetter || '',
       };
 
       const applications = await applicationdb.GetApplicationsByFilter(db, filters);
