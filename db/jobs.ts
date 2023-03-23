@@ -118,6 +118,7 @@ export async function RetrieveJobListingsByFilter(db: DB, filters: any): Promise
         case 'title':
         case 'description':
         case 'location':
+        case 'type':
         case 'schedule':
         case 'companyID':
         case 'industry':
