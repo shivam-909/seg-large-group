@@ -49,6 +49,10 @@ export const ErrorNoMatchingListings = "no matching job listings found";
 export const ErrorNotifCouldNotBeUpdated = "notification could not be updated";
 export const ErrorSearchQueryRequired = "no search query provided";
 export const ErrorNoCompanyOrSearcherID = "no company or searcher id provided";
+export const ErrorJobDescriptionTooShort = "job description is too short";
+export const ErrorJobDescriptionTooLong = "job description is too long";
+
+
 
 
 export var ErrorToCode: Map<string, number> = new Map<string, number>(
@@ -83,6 +87,8 @@ export var ErrorToCode: Map<string, number> = new Map<string, number>(
         [ErrorNotifCouldNotBeUpdated, 500],
         [ErrorSearchQueryRequired, 400],
         [ErrorNoCompanyOrSearcherID, 400],
+        [ErrorJobDescriptionTooShort, 400],
+        [ErrorJobDescriptionTooLong, 400],
 
     ]
 );
