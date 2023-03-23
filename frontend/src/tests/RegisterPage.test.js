@@ -21,16 +21,14 @@ test('toggleRole function toggles visibility of Company-Fields and Seeker-Fields
       </Routes>
     </BrowserRouter>
   );
-  const seekerFields = screen.getByTestId('Seeker-Fields');
-  const companyFields = screen.getByTestId('Company-Fields');
+  const seekerFields = screen.getByRole('searcher', hidden: true});
+  const companyFields = screen.getByRole('company', hidden: true});
 
-  expect(seekerFields).toBeVisible();
-  expect(companyFields).not.toBeVisible();
-
-  fireEvent.click(screen.getByText('Company'));
-
-  expect(seekerFields).not.toBeVisible();
-  expect(companyFields).toBeVisible();
+  expect(seekerFields).toHaveClass('hidden');
+  expect(companyFields).not.toHaveClass('hidden');
+  fireEvent.click(companyFields);
+  expect(seekerFields).not.toHaveClass('hidden');
+  expect(companyFields).toHaveClass('hidden');
 });
 
 test('togglePasswordVisibility function toggles password visibility', () => {
@@ -67,16 +65,17 @@ test('checkPasswordMatch function validates passwords correctly', () => {
       </Routes>
     </BrowserRouter>
   );
-  const passwordField = screen.getByTestId('password');
-  const confirmPassField = screen.getByTestId('confirmPass');
+  const passwordField = screen.getByTestId("password");
+  expect(passwordField).toBeInTheDocument();
+  const confirmPasswordField = screen.getByTestId('confirmPassword');
   const errorText = screen.getByText('Password does not match');
 
   fireEvent.change(passwordField, { target: { value: 'password' } });
-  fireEvent.change(confirmPassField, { target: { value: 'password' } });
+  fireEvent.change(confirmPasswordField, { target: { value: 'password' } });
 
   expect(errorText).not.toBeVisible();
 
-  fireEvent.change(confirmPassField, { target: { value: 'password1' } });
+  fireEvent.change(confirmPasswordField, { target: { value: 'password1' } });
 
   expect(errorText).toBeVisible();
 });
