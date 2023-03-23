@@ -16,7 +16,7 @@ export default function CompanyJobCard(props) {
             </div>
             <div onClick={() => {navigate("/viewjob/"+props.id)}} className={"hover:cursor-pointer"}>
                 <p className='font-bold text-xl'>{props.title}</p>
-                <p>{props.schedule}</p>
+                <p>{Array.isArray(props.schedule) ? props.schedule?.map(schedule => schedule + " "): props.schedule}</p>
                 <p>{props.location}</p>
                 <p className='mb-2'>{format}</p>
             </div>
