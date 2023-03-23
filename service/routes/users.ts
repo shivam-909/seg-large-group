@@ -22,10 +22,12 @@ export function GetUser(db: DB): Handler {
 
 export function UpdateUser(db: DB): Handler {
     return async (req: Request, res: Response, next: NextFunction) => {
+
         const id = req.params.id;
         const userData = req.body;
+
         try {
-            await validate.UpdateUser(db, id, JSON.stringify(userData));
+            await validate.UpdateUser(db, req.params.id, req.body);
 
         } catch (err) {
             next((err as Error).message);
@@ -35,6 +37,7 @@ export function UpdateUser(db: DB): Handler {
         const updatedUser = { ...user, ...userData };
         await usersdb.UpdateUser(db, updatedUser);
         res.status(200).json(updatedUser);
+
     }
 }
 
