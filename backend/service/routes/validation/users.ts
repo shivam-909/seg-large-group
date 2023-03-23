@@ -9,7 +9,6 @@ import {ErrorMissingProperty} from "../../public";
 
 export async function UpdateUser(db: DB, id:string, req: any): Promise<void> {
     await UserExists(db, id);
-    console.log("req: " + req);
 
     if(req === undefined){
         throw new Error(ErrorMissingProperty);
@@ -43,10 +42,6 @@ export async function UpdateUser(db: DB, id:string, req: any): Promise<void> {
         if(!isStringArray(notifications)){
             throw new Error(errors.ErrorNotificationsMustBeStringArray);
         }
-    }
-
-    if(!companyID && !searcherID){
-        throw new Error(errors.ErrorMissingID);
     }
 
     if(companyID){

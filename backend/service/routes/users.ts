@@ -22,7 +22,6 @@ export function GetUser(db: DB): Handler {
 
 export function UpdateUser(db: DB): Handler {
     return async (req: Request, res: Response, next: NextFunction) => {
-
         const id = req.params.id;
         const userData = req.body;
         try {
@@ -36,7 +35,6 @@ export function UpdateUser(db: DB): Handler {
         const updatedUser = { ...user, ...userData };
         await usersdb.UpdateUser(db, updatedUser);
         res.status(200).json(updatedUser);
-
     }
 }
 
