@@ -4,7 +4,7 @@ import { NextFunction, Request, Response } from "express";
 import DB from "../../db/db";
 import Application from "../../models/application";
 import * as applicationdb from "../../db/applications";
-import {ErrorApplicationCouldNotBeCreated, ErrorApplicationNotFound, getErrorMessage, Handler} from "../public";
+import {ErrorApplicationNotFound, getErrorMessage, Handler} from "../public";
 import { randomUUID } from "crypto";
 import * as validate from "../routes/validation/applications";
 
@@ -84,6 +84,7 @@ export function GetApplication(db: DB): Handler {
 
       const updatedApplication = {...application, ...applicationData};
       await applicationdb.UpdateApplication(db, updatedApplication);
+      res.sendStatus(200)
     }
   }
 
