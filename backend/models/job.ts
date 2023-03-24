@@ -3,40 +3,56 @@ import {QueryDocumentSnapshot} from "firebase-admin/firestore";
 class JobListing {
   id: string;
   title: string;
-  compensation: number;
+  compensation: string[];
   description: string;
   location: string;
-  schedule: string;
+  type: string[];
+  schedule:string[];
   companyID: string;
-  type: string;
+  industry: string;
+  coverLetterRequired: boolean;
+  urgent: boolean;
+  qualifications: string[];
   datePosted: Date;
-  benefits: string[];
-  requirements: string[];
+  benefits?: string[];
+  requirements?: string[];
+  screeningQuestions?: Record<string,boolean>;
+
 
   constructor(
     id: string,
     title: string,
-    compensation: number,
+    compensation: string[],
     description: string,
     location: string,
-    schedule: string,
+    type: string[],
+    schedule:string[],
     companyID: string,
-    type: string,
+    industry: string,
+    coverLetterRequired: boolean,
+    urgent:boolean,
+    qualifications: string[],
     datePosted: Date,
-    benefits: string[],
-    requirements: string[]
-  ) {
+    benefits?: string[],
+    requirements?: string[],
+    screeningQuestions?: Record<string, boolean>,
+) {
     this.id = id;
     this.title = title;
     this.compensation = compensation;
     this.description = description;
     this.location = location;
+    this.type = type;
     this.schedule = schedule;
     this.companyID = companyID;
-    this.type = type;
+    this.industry = industry;
+    this.coverLetterRequired = coverLetterRequired;
+    this.urgent = urgent;
+    this.qualifications = qualifications;
     this.datePosted = datePosted;
     this.benefits = benefits;
     this.requirements = requirements;
+    this.screeningQuestions = screeningQuestions;
   }
 }
 

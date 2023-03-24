@@ -3,7 +3,7 @@ import DB from "../../db/db";
 import { getErrorMessage, Handler } from "../public";
 import {findJobListingsByQuery} from "../../search/search";
 
-export function SearchListings(db: DB): Handler {
+export function searchListingsRoute(db: DB): Handler {
     return async (req: Request, res: Response, next: NextFunction) => {
         try {
             const query = req.body.term.toString().toLowerCase();
