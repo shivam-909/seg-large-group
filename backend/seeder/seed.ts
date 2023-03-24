@@ -82,12 +82,18 @@ async function GenerateSearcher(db: DB): Promise<Searcher> {
     const savedJobs = await RetrieveRandomJobIDArr(db);
     const firstName = faker.name.firstName();
     const lastName = faker.name.lastName();
+    const skill = [faker.company.bsNoun() + "," + faker.datatype.number({'min': 1,'max': 10}).toString() + "," + faker.helpers.arrayElement(["weeks", "months", "years"])];
+    const qualification = faker.helpers.arrayElements([faker.helpers.arrayElement(["Engineering", "Sales", "Marketing", "Finance"]) + "," + faker.helpers.arrayElement(["GCSEs", "Bachelors", "Masters", "PhD", "High School Diploma", "International Baccalaureate"]) + "," + faker.datatype.number({'min': 1,'max': 10}) + "," + faker.datatype.number({'min': 1,'max': 10}) + "," + faker.helpers.arrayElement(["weeks", "months", "years"])]);
+    const cv = [firstName + " " + lastName + "'s CV", "https://seg-joblink.s3.eu-west-2.amazonaws.com/cv/1047a922-d91f-43dc-80f2-7273ee90acaa.png.pdf"]
 
     return new Searcher(
         firstName,
         lastName,
         savedJobs,
-        id
+        id,
+        skill,
+        qualification,
+        cv,
     );
 }
 
@@ -275,12 +281,14 @@ export async function RetrieveRandomJobIDArr(db: DB): Promise<string[]> {
 async function GenerateApplicationListing(db: DB): Promise<Application> {
     const randomSearcher = await RetrieveRandomSearcherId(db);
     const randomJobListing = await RetrieveRandomJobListingID(db);
+    const cv = [faker.name.fullName() + "'s CV", "https://seg-joblink.s3.eu-west-2.amazonaws.com/cv/1047a922-d91f-43dc-80f2-7273ee90acaa.png.pdf"]
 
     return new Application(
         randomUUID(),
         GetRandomStatus(),
         randomSearcher,
-        randomJobListing
+        randomJobListing,
+        cv,
     );
 }
 

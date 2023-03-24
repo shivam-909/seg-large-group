@@ -7,9 +7,10 @@ import ErrorBox from "../ErrorBox/ErrorBox";
 import Education from "./Education";
 import {GetData} from "../../Auth/GetUser";
 import axios from "axios";
-import {useParams} from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
 
 function UserProfilePage() {
+    const navigate = useNavigate();
     const { id } = useParams();
     const [profile, setProfile] = useState([]);
     const [user, setUser] = useState([]);
@@ -23,6 +24,7 @@ function UserProfilePage() {
             if (profile.length === 0){
                 await axios.get("http://localhost:8000/api/user/"+id).then(r => {
                     setProfile(r.data)
+                    // console.log(r.data)
                 });
             }
         };
@@ -76,7 +78,7 @@ function UserProfilePage() {
             formData.append('companyName', companyName);
             formData.append('location', location);
 
-            await axios.patch("http://localhost:8000/api/users/" + id, formData)
+            await axios.patch("http://localhost:8000/api/users/" + id, formData).then(navigate(0))
         }
     }
 
@@ -98,7 +100,7 @@ function UserProfilePage() {
             formData.append('lastName', lastName);
             formData.append('location', location);
 
-            await axios.patch("http://localhost:8000/api/users/" + id, formData)
+            await axios.patch("http://localhost:8000/api/users/" + id, formData).then(navigate(0))
         }
     }
     function validateEducation(){
@@ -140,12 +142,12 @@ function UserProfilePage() {
             setFile(file.name);
             setProfile(prevUser => ({
                 ...prevUser,
-                Cv: URL.createObjectURL(files[0])
+                cv: URL.createObjectURL(files[0])
             }));
             // TODO: Add Backend Update
         }
     }
-    function updatePfp(event){
+    async function updatePfp(event){
         const{files} = event.target;
         const  fileType = files[0]['type'];
         const validImageTypes = ['image/jpeg', 'image/png'];
@@ -153,10 +155,17 @@ function UserProfilePage() {
             // TODO: Display error if not an image
         }
         else{
-            setProfile(prevUser => ({
-                ...prevUser,
-                pfp:URL.createObjectURL(files[0])}));
-            // TODO: Add Backend Update
+            const formData = new FormData();
+            formData.append("file", files[0])
+            await axios.post("http://localhost:8000/api/storage/pfp/"+user.userID, formData).then(async res => {
+                setProfile(prevUser => ({
+                    ...prevUser,
+                    pfpUrl: res.data.URL
+                }));
+                const userPatch = new FormData();
+                userPatch.append("pfpUrl", res.data.URL)
+                await axios.patch("http://localhost:8000/api/users/" + user.userID, userPatch);
+            })
         }
     }
 
@@ -165,7 +174,7 @@ function UserProfilePage() {
           <Navbar/>
         <div className='bg-lighter-grey min-h-screen items-center justify-center flex'>
             <div className='bg-white rounded-md sm:min-w-1/6 inline-grid px-12 py-7 space-y-3 mt-24 max-w-lg min-w-[40%]'>
-              <h1 className='font-bold text-3xl flex justify-center'>My Profile </h1>
+              <h1 className='font-bold text-3xl flex justify-center'>{isCompany ? profile.company?.companyName: profile.searcher?.firstName +" "+ profile.searcher?.lastName}'s Profile </h1>
                 <div className={"grid grid-cols-2 gap-10"}>
                     <div>
                         {isCompany ?
@@ -194,10 +203,10 @@ function UserProfilePage() {
                     {isCompany ? <div/>
                         : <div>
                             <p><strong><br/><u>Qualifications</u></strong></p>
-                            <Skills isEditing={isEditing}/>
-                            <Education isEditing={isEditing}/>
+                            <Skills isEditing={isEditing} profile={profile}/>
+                            <Education isEditing={isEditing} profile={profile}/>
                             {!isEditing ?
-                                <p className={"mt-4 mb-2"}><strong>CV: </strong>{" "} {profile.Cv ? (<a href={profile.Cv} id= 'Cv' download><u>{fileName}</u></a> ):( "You have not uploaded a CV.")}</p>
+                                <p className={"mt-4 mb-2"}><strong>CV: </strong>{" "} {profile.cv ? (<a href={profile.cv} id= 'Cv' download><u>{fileName}</u></a> ):( "")}</p>
                                 :<div><p className={"mt-4 mb-2"}><strong>CV:</strong>  <input type="file" id="Cv" accept= ".pdf"  onChange={updateCV}/></p></div>}
                         </div>
                     }

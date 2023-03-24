@@ -5,13 +5,15 @@ class Application {
     status: string;
     searcher: string;
     jobListing: string;
+    cv: string[];
 
 
-    constructor(id: string, status: string, searcher: string, jobListing: string) {
+    constructor(id: string, status: string, searcher: string, jobListing: string, cv: string[]) {
         this.id = id;
         this.status = status;
         this.searcher = searcher;
         this.jobListing = jobListing;
+        this.cv = cv;
     }
 }
 

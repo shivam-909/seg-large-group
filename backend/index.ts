@@ -1,7 +1,7 @@
 import express, { Express, NextFunction, Request, Response } from 'express';
 import dotenv from 'dotenv';
 import DB from './db/db';
-import { uploadFile } from './service/storage/storage';
+import { uploadFile, getFile, deleteFile } from './service/storage/storage';
 import multer from 'multer';
 import { deseed } from "./seeder/deseeder";
 
@@ -55,7 +55,9 @@ export const run = () => {
   app.delete('/api/applications/:id', upload.none(), utils.Route(app, applicationroutes.DeleteApplication));
   app.post('/api/application/filter', upload.none(), utils.Route(app, applicationroutes.RetrieveApplicationByFilter));
 
-  app.post('/api/storage/upload', upload.single('file'), utils.Route(app, uploadFile));
+  app.get('/api/storage/:destination/:key', upload.none(), utils.Route(app, getFile));
+  app.post('/api/storage/:destination/:id', upload.single('file'), utils.Route(app, uploadFile));
+  app.delete('/api/storage/:destination/:key', upload.none(), utils.Route(app, deleteFile));
 
   app.post('/api/user/typeid', upload.none(), utils.Route(app, userroutes.GetUserByTypeID));
   app.get('/api/user/:id', upload.none(), utils.Route(app, userroutes.GetUser));
