@@ -18,7 +18,7 @@ export default function JobList(props) {
                 companyName={job.companyName} salary={`${job.compensation[0]}/${job.compensation[1]}`} urgent={job.urgent} requirements={job.requirements}
                 benefits={job.benefits}/>
         </div>])
-    };
+    }
 
     async function addCards(pageIndex){
         currentPage = pageIndex;
@@ -28,7 +28,7 @@ export default function JobList(props) {
         for (let i = startRange; i <= endRange-1; i++) {
             await createCard(props.jobs[i]);
         }
-    };
+    }
 
     let throttleTimer;
     async function throttle(callback, time){
@@ -38,11 +38,12 @@ export default function JobList(props) {
             callback();
             throttleTimer = false;
         }, time);
-    };
+    }
 
     const removeInfiniteScroll = () => {
         window.removeEventListener("scroll", handleInfiniteScroll);
     };
+
     async function handleInfiniteScroll(){
         await throttle(async () => {
             const endOfPage =
@@ -54,7 +55,7 @@ export default function JobList(props) {
                 removeInfiniteScroll();
             }
         }, 500);
-    };
+    }
 
     function selectJob(job) {
         setSelectedJob(job);
@@ -79,7 +80,7 @@ export default function JobList(props) {
             <div className='flex items-start justify-center space-x-5 mx-8'>
                 <div className='space-y-3'>
                     {cardList}
-                    <span>Showing {count} of {total} jobs</span>
+                    <span className='pl-2'>Showing {count} of {total} jobs</span>
                 </div>
                 <JobDetailsCard className={"top-48"}
                     id={selectedJob.id} age={selectedJob.age} urgent={selectedJob.urgent}
