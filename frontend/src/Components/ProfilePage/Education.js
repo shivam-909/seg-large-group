@@ -14,7 +14,7 @@ export default function Education(props) {
             let qual = qualification.split(",")
             createSkill(qual[0], qual[1], qual[2], qual[3], qual[4])
         }
-    },[props.profile])
+    },[props.profile]) // eslint-disable-line
 
     function createSkill(subject, type, grade, duration, interval){
         setEducation( [...education, <EducationDropdown name={"Education"} id={count} editing={props.isEditing} subject={subject} type={type} grade={grade} duration={duration} interval={interval}/>]);

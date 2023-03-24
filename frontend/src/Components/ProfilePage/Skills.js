@@ -14,7 +14,7 @@ export default function Skills(props) {
             let skillVals = skill.split(",")
             createSkill(skillVals[0], skillVals[1], skillVals[2])
         }
-    },[props.profile])
+    },[props.profile]) // eslint-disable-line
 
     function createSkill(skill, duration, interval){
         setSkills( [...skills, <SkillCard id={count} skill={skill} val={duration} interval={interval}/>]);
