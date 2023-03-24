@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect} from "react";
 import {useState} from "react";
 import SkillCard from "./SkillCard";
 
@@ -6,8 +6,18 @@ export default function Skills(props) {
     const [skills, setSkills] = useState([]);
     const [count, setCount] = useState(skills.length);
 
-    function createSkill(){
-        setSkills( [...skills, <SkillCard id={count}/>]);
+    useEffect(() => {
+        if (props.profile.length === 0){
+            return;
+        }
+        for (const skill of props.profile.searcher?.skills){
+            let skillVals = skill.split(",")
+            createSkill(skillVals[0], skillVals[1], skillVals[2])
+        }
+    },[props.profile])
+
+    function createSkill(skill, duration, interval){
+        setSkills( [...skills, <SkillCard id={count} skill={skill} val={duration} interval={interval}/>]);
         setCount(count + 1);
     }
     return (
