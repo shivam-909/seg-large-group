@@ -38,4 +38,6 @@ test('create searcher, retrieve searcher by email, delete user', async () => {
 
     // Delete the application.
     await db.ApplicationCollection().doc(id).delete();
+    const deletedApplication = await RetrieveApplication(db, id);
+    expect(deletedApplication).toBeNull();
 });
