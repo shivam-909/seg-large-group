@@ -78,13 +78,14 @@ export function DeleteListing(db: DB): Handler {
 
 export function RetrieveJobListingsByFilter(db: DB): Handler {
   return async (req: Request, res: Response, next: NextFunction) => {
+    const filters = req.body;
     try {
-      await validate.RetrieveListingByFilter(db, req.body);
+      await validate.RetrieveListingByFilter(db, filters);
     } catch (err) {
       next((err as Error).message);
       return;
     }
-    const filters = req.body;
+
     const jobListings = await jobsdb.RetrieveJobListingsByFilter(db, filters);
     res.status(200).json(jobListings);
   }
