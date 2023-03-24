@@ -180,8 +180,6 @@ export async function ListingExists(db: DB, id: string): Promise<void> {
 
 export async function RetrieveListingByFilter(db: DB, body: any): Promise<void> {
 
-    console.log("test" + body);
-
     if(body === undefined){
         throw new Error(ErrorMissingProperty);
     }
