@@ -181,7 +181,7 @@ function GenerateCompensation(): string[]{
     const weeklyAmount = [faker.datatype.number({
         'min': 400,
         'max': 1960
-    }).toString(), "weekly"];
+    }).toString(), "week"];
 
     return faker.helpers.arrayElement([yearlyAmount,hourlyAmount,dailyAmount,weeklyAmount]);
 }
