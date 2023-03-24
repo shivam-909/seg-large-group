@@ -118,12 +118,12 @@ export default function RegisterPage() {
                     <span id="emailError" className='invisible absolute top-0'>Invalid email</span>
                 </div>
 
-                <div>
+                <div data-testid="password">
                     <TextInputBoxWithIcon id='password' type='password' onBlur={()=>{validateField("password",/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{8,20})/)}} placeholder='Password' icon={<img id='toggleEye' src={showIcon} alt='' onClick={togglePasswordVisibility} className='cursor-pointer'/>}/>
                     <span id="passwordError" className='invisible absolute top-0'>Invalid password</span>
                 </div>
 
-                <div>
+                <div data-testid={"confirmPasword"}>
                     <TextInputBox className='w-full' id='confirmPassword' type='password' onBlur={checkPasswordMatch} placeholder='Confirm password'/>
                     <span id="passwordMismatchError" className='invisible absolute top-0'>Passwords don't match</span>
                 </div>
