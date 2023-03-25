@@ -10,9 +10,9 @@ import {GetData} from "../../Auth/GetUser";
 export default function ApplyPage() {
     const {id} = useParams();
     const [ID, setID] = useState(id);
+    const [searcherID, setSearcherID] = useState('');
     const [job, setJob] = useState({});
     const newCVId = crypto.randomUUID();
-    console.log(newCVId);
 
     const getUser = async () => {
         return await GetData();
@@ -53,6 +53,7 @@ export default function ApplyPage() {
 
     const getApplication = async () => {
         const user = await getUser();
+        setSearcherID(user.searcherID);
         const job = await getJob();
         job.screeningQuestions = Object.entries(job.screeningQuestions);
         const company = await getCompany(job.companyID);
@@ -62,10 +63,11 @@ export default function ApplyPage() {
 
     useEffect(() => {
         getApplication();
-    });
+    }, []);
 
 
-    function validateApplication() {
+    async function validateApplication() {
+        let valid = true;
         if (job.screeningQuestions.length > 0) {
             const answers = document.getElementsByTagName('textarea');
             const scrollElementIntoView = [];
@@ -89,21 +91,51 @@ export default function ApplyPage() {
                 }
             });
             if (scrollElementIntoView.length > 0) {
+                valid = false;
                 scrollElementIntoView[0].scrollIntoView({ behavior: 'smooth', block: 'center' });
             }
         }
         if (!job.cv) {
+            valid = false;
             const uploadBtn = document.getElementById('upload');
             uploadBtn.scrollIntoView({ behavior: 'smooth', block: 'center' });
         }
+        if (valid) {
+            await submitApplication();
+        }
+    }
+
+    function submitApplication() {
+        const answers = document.getElementsByName('answer');
+        const QnAs = {};
+        job.screeningQuestions.forEach((question,i) => {
+            QnAs[question[0]] = answers[i].value;
+        });
+
+        const coverLetter = document.getElementById('coverLetterInput').value;
+
+        const formData = new FormData();
+        formData.append('jobListing', ID);
+        formData.append('searcher', searcherID);
+        formData.append('cv', job.cv);
+        formData.append('status', 'Applied');
+        formData.append('QnAs', JSON.stringify(QnAs));
+        formData.append('coverLetter', coverLetter);
+
+        // axios.post(`http://localhost:8000/api/applications/add`, formData)
     }
 
     function uploadFile(e) {
+        console.log(1)
+        const formData = new FormData();
         const file = e.target.files[0];
-        axios.post(`http://localhost:8000/api/storage/cv/${newCVId}`, file)
-            .then(fileUrl => {
-                setJob({...job, cv: [file.name, fileUrl]});
-            });
+        formData.append('file', file);
+        if (file) {
+            axios.post(`http://localhost:8000/api/storage/cv/${newCVId}`, formData)
+                .then(response => {
+                    setJob({...job, cv: [file.name, response.data.URL]});
+                });
+        }
     }
 
     return (
@@ -131,10 +163,8 @@ export default function ApplyPage() {
                                         {job.screeningQuestions.map(question => {
                                             return (
                                                 <div className='flex flex-col justify-center space-y-5 py-2.5'>
-                                                    <p className='text-xl'>{question[0]}{question[1] &&
-                                                        <span className='text-red'> *</span>}</p>
-                                                    <textarea className='border rounded-md p-1 resize-none w-full h-[75px]'
-                                                              required={question[1]}></textarea>
+                                                    <p className='text-xl'>{question[0]}{question[1] && <span className='text-red'> *</span>}</p>
+                                                    <textarea name="answer" className='border rounded-md p-1 resize-none w-full h-[75px]' required={question[1]}></textarea>
                                                 </div>
                                             )
                                         })}
@@ -172,8 +202,7 @@ export default function ApplyPage() {
                                         <p className='pb-5'>You have not uploaded a cv.</p>
                                         <button className='bg-dark-theme-grey rounded-md py-2.5 px-4 font-bold text-white'>
                                             <input id="upload" type="file" accept=".pdf" onChange={uploadFile} className='hidden'/>
-                                            <label htmlFor="upload" className='cursor-pointer'><i
-                                                className="fa-solid fa-upload"></i> Upload</label>
+                                            <label htmlFor="upload" className='cursor-pointer'><i className="fa-solid fa-upload"></i> Upload</label>
                                         </button>
                                     </div>
                                 }
@@ -182,15 +211,11 @@ export default function ApplyPage() {
                             <div>
                                 <p className='font-bold text-3xl pb-5'>Write a cover letter {!job.coverLetterRequired ?
                                     <span className='text-lg'>(optional)</span> : <span className='text-red'> *</span>}</p>
-                                <textarea id="coverLetterInput"
-                                          className='border rounded-md p-1 resize-none w-full h-[200px]'
-                                          required={job.coverLetterRequired}></textarea>
+                                <textarea id="coverLetterInput" className='border rounded-md p-1 resize-none w-full h-[200px]' required={job.coverLetterRequired}></textarea>
                             </div>
                         </div>
                         <div className='py-12'>
-                            <button className='bg-dark-theme-grey rounded-md py-2.5 px-4 font-bold text-white'
-                                    onClick={validateApplication}>Submit Application
-                            </button>
+                            <button className='bg-dark-theme-grey rounded-md py-2.5 px-4 font-bold text-white' onClick={validateApplication}>Submit Application</button>
                         </div>
                     </div>
                 </div>
