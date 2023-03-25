@@ -2,24 +2,27 @@
 import { randomUUID } from "crypto";
 import DB from "../../db/db";
 import Application from "../../models/application";
-import {CreateApplication, RetrieveApplication, UpdateApplication} from "../../db/applications";
+import {
+    CreateApplication,
+    RetrieveAllApplications,
+    RetrieveApplication,
+    UpdateApplication
+} from "../../db/applications";
 import {GetAllSearcherIDs} from "../../db/searchers";
 import {GetAllJobIDs} from "../../db/jobs";
 
-test('create searcher, retrieve searcher by email, delete user', async () => {
+test('create application, retrieve application, update application, delete application', async () => {
 
     const db = new DB();
     const id = randomUUID();
     const status = 'Applied';
-    const searcherIDs = await GetAllSearcherIDs(db);
-    const searcher = searcherIDs[0];
-    const jobListingIDs = await GetAllJobIDs(db);
-    const jobListing = jobListingIDs[0];
+    const searcher = randomUUID();
+    const jobListing = randomUUID();
     const cv = ["John Doe's CV","https://seg-joblink.s3.eu-west-2.amazonaws.com/cv/1047a922-d91f-43dc-80f2-7273ee90acaa.png.pdf"]
 
     const updatedStatus = 'Applied';
-    const updatedSearcher = searcherIDs[1];
-    const updatedJobListing = jobListingIDs[1];
+    const updatedSearcher = randomUUID();
+    const updatedJobListing = randomUUID();
     const updatedCv = ["Bob Marley", "https://seg-joblink.s3.eu-west-2.amazonaws.com/cv/1047a922-d91f-43dc-80f2-7273ee90acaa.png.pdf"];
 
     const application = new Application(
@@ -39,6 +42,10 @@ test('create searcher, retrieve searcher by email, delete user', async () => {
     )
 
     await CreateApplication(db, application);
+
+    //Get all applications
+    const applications = await RetrieveAllApplications(db);
+    expect(applications.size).toEqual(1);
 
     // Retrieve the application by id.
     const retrievedApplication = await RetrieveApplication(db, id);
