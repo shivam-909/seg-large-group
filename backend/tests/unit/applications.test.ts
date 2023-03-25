@@ -8,15 +8,47 @@ import {
     RetrieveApplication,
     UpdateApplication
 } from "../../db/applications";
-import {GetAllSearcherIDs} from "../../db/searchers";
-import {GetAllJobIDs} from "../../db/jobs";
+import {Searcher, User} from "../../models/user";
+import {CreateSearcher} from "../../db/searchers";
 
 test('create application, retrieve application, update application, delete application', async () => {
 
     const db = new DB();
+    const userID = randomUUID();
+    const searcherID = randomUUID();
+    const email = 'test_crd_searcher@example.com';
+    const password = 'Password123!';
+    const firstName = 'John';
+    const lastName = 'Doe';
+
+    const searcherObject = new Searcher(
+        firstName,
+        lastName,
+        [],
+        searcherID,
+        [],
+        [],
+        cv
+    )
+
+    const user = new User(
+        userID,
+        email,
+        password,
+        "",
+        "",
+        [],
+        searcherID,
+        undefined,
+    )
+
+    await CreateSearcher(db, user, searcherObject);
+
+
+
     const id = randomUUID();
     const status = 'Applied';
-    const searcher = randomUUID();
+    const searcher = searcherObject.searcherID;
     const jobListing = randomUUID();
     const cv = ["John Doe's CV","https://seg-joblink.s3.eu-west-2.amazonaws.com/cv/1047a922-d91f-43dc-80f2-7273ee90acaa.png.pdf"]
 
