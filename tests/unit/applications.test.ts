@@ -20,6 +20,8 @@ test('create application, retrieve application, update application, delete appli
     const password = 'Password123!';
     const firstName = 'John';
     const lastName = 'Doe';
+    const cv = ["John Doe's CV","https://seg-joblink.s3.eu-west-2.amazonaws.com/cv/1047a922-d91f-43dc-80f2-7273ee90acaa.png.pdf"]
+
 
     const searcherObject = new Searcher(
         firstName,
@@ -50,7 +52,6 @@ test('create application, retrieve application, update application, delete appli
     const status = 'Applied';
     const searcher = searcherObject.searcherID;
     const jobListing = randomUUID();
-    const cv = ["John Doe's CV","https://seg-joblink.s3.eu-west-2.amazonaws.com/cv/1047a922-d91f-43dc-80f2-7273ee90acaa.png.pdf"]
 
     const updatedStatus = 'Applied';
     const updatedSearcher = randomUUID();
