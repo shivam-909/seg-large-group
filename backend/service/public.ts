@@ -92,9 +92,13 @@ export const ErrorUserIDRequired = "no user ID is provided";
 export const ErrorApplicationIDMustBeString = "applicationID must be a string";
 export const ErrorContentMustBeString = "content must be a string";
 export const ErrorCreatedMustBeDate = "content must be a string";
-export const ErrorQueryRequired = "Query string is required";
-
-
+export const ErrorQueryRequired = "query string is required";
+export const ErrorJobListingMustBeString = 'job listing must be a string';
+export const ErrorCvMustBeString = 'cv must be a string';
+export const ErrorCoverLetterMustBeString = 'cover letter must be a string';
+export const ErrorCvRequired = 'cv is required';
+export const ErrorMissingCoverLetter = 'no value for cover letter is provided';
+export const ErrorMissingQnAs = 'no value for QnAs provided'
 
 
 export var ErrorToCode: Map<string, number> = new Map<string, number>(
@@ -173,6 +177,12 @@ export var ErrorToCode: Map<string, number> = new Map<string, number>(
         [ErrorApplicationIDMustBeString, 400],
         [ErrorCreatedMustBeDate, 400],
         [ErrorContentMustBeString, 400],
-        [ErrorQueryRequired, 400]
+        [ErrorQueryRequired, 400],
+        [ErrorJobListingMustBeString, 400],
+        [ErrorCvMustBeString, 400],
+        [ErrorCoverLetterMustBeString, 400],
+        [ErrorCvRequired, 400],
+        [ErrorMissingQnAs, 400]
+
     ]
 );
