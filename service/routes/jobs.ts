@@ -22,20 +22,20 @@ export function AddListing(db: DB): Handler {
     }
     await jobsdb.CreateJobListing(db, newJobListing);
     res.sendStatus(200);
-
   }
 }
 
 export function GetListing(db: DB): Handler {
   return async (req: Request, res: Response, next: NextFunction) => {
     const id = req.params.id;
-
-    const jobListing = await jobsdb.RetrieveJobListing(db, id);
-    if (!jobListing) {
-      next(ErrorJobListingNotFound);
+    try {
+      await validate.ListingExists(db, id);
+    } catch (err) {
+      next((err as Error).message);
       return;
     }
 
+    const jobListing = await jobsdb.RetrieveJobListing(db, id);
     res.status(200).json(jobListing);
   };
 }
@@ -44,21 +44,16 @@ export function UpdateListing(db: DB): Handler {
   return async (req: Request, res: Response, next: NextFunction) => {
     const id = req.params.id;
     const listingData = req.body;
-
-    const listing = await jobsdb.RetrieveJobListing(db, id);
-    if (!listing) {
-      next(ErrorJobListingNotFound);
-      return;
-    }
-
-    const updatedJobListing = { ...listing, ...listingData };
-
     try {
-      await validate.UpdateListing(db, req.body);
+      await validate.UpdateListing(db, id,req.body);
     } catch (err) {
       next((err as Error).message);
       return;
     }
+    const listing = await jobsdb.RetrieveJobListing(db, id);
+    const updatedJobListing = { ...listing, ...listingData };
+
+
     await jobsdb.UpdateJobListing(db, updatedJobListing);
     res.status(200).json(updatedJobListing);
   }
@@ -67,6 +62,12 @@ export function UpdateListing(db: DB): Handler {
 export function DeleteListing(db: DB): Handler {
   return async (req: Request, res: Response, next: NextFunction) => {
     const id = req.params.id;
+    try {
+      await validate.ListingExists(db, id);
+    } catch (err) {
+      next((err as Error).message);
+      return;
+    }
     await jobsdb.DeleteJobListing(db, id);
     res.sendStatus(200);
   };
@@ -76,6 +77,12 @@ export function DeleteListing(db: DB): Handler {
 export function RetrieveJobListingsByFilter(db: DB): Handler {
   return async (req: Request, res: Response, next: NextFunction) => {
     const filters = req.body;
+    try {
+      await validate.RetrieveListingByFilter(db, filters);
+    } catch (err) {
+      next((err as Error).message);
+      return;
+    }
 
     const jobListings = await jobsdb.RetrieveJobListingsByFilter(db, filters);
 

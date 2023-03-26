@@ -94,7 +94,7 @@ export function Register(db: DB): Handler {
       case "searcher":
         const newSearcherID = randomUUID();
         newUser.searcherID = newSearcherID;
-        const newSearcher = new Searcher(first_name, last_name, [], newSearcherID);
+        const newSearcher = new Searcher(first_name, last_name, [], newSearcherID, [], [], []);
 
         await CreateSearcher(db, newUser, newSearcher);
     }
@@ -183,7 +183,7 @@ function ValidateRegistrationForm(
   return "";
 }
 
-function ValidEmail(email: string): boolean {
+export function ValidEmail(email: string): boolean {
 
   console.log(email);
 

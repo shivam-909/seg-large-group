@@ -3,6 +3,7 @@ import * as searchersdb from "../../../db/searchers";
 import * as jobsdb from "../../../db/jobs";
 import * as applicationsdb from "../../../db/applications";
 import * as errors from "../../public";
+import {ErrorMissingProperty} from "../../public";
 
 export async function AddApplication(db: DB, body: any): Promise<void> {
     const { status, searcher, jobListing } = body;
@@ -56,6 +57,11 @@ export async function RetrieveApplicationByFilter(db: DB, body: any): Promise<vo
 
 
 export async function UpdateApplication(db: DB, id:string, req: any): Promise<void> {
+
+    if(req===undefined){
+        throw new Error(ErrorMissingProperty);
+    }
+
     const { status, searcher, jobListing } = req;
 
     const applicationDoc = await applicationsdb.RetrieveApplication(db, id);
