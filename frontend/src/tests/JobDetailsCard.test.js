@@ -1,7 +1,6 @@
 import { render, screen, fireEvent} from "@testing-library/react";
 import JobDetailsCard from "../Components/SearchPage/JobDetailsCard";
 
-
 const jobDetails = {
   id:"1234",
   title:"Software Engineer",
@@ -74,7 +73,7 @@ describe("JobDetailsCard", () => {
     });
 
     render(<JobDetailsCard {...jobDetails} />);
-    const copyButton = screen.getByAltText(/copy/i);
+    const copyButton = screen.getByAltText(/copy/);
     fireEvent.click(copyButton);
     expect(writeTextMock).toHaveBeenCalledWith(
       `${process.env.FRONTEND_BASE_URL}${jobDetails.id}`
