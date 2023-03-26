@@ -44,6 +44,7 @@ export const ErrorStatusMustBeString = "status must be a string";
 export const ErrorStatusRequired = "no status provided";
 export const ErrorMissingProperty = "no property provided for update";
 export const ErrorJobDescriptionTooLong = "job description is too long";
+export const ErrorInvalidUserType = "invalid user type";
 export const ErrorTitleRequired = "no title is provided";
 export const ErrorCompensationRequired = "no compensation is provided";
 export const ErrorDescriptionRequired = "no description is provided";
@@ -93,12 +94,14 @@ export const ErrorApplicationIDMustBeString = "applicationID must be a string";
 export const ErrorContentMustBeString = "content must be a string";
 export const ErrorCreatedMustBeDate = "content must be a string";
 export const ErrorQueryRequired = "query string is required";
+export const ErrorFailedToCreateListing = "failed to create job listing";
 export const ErrorJobListingMustBeString = 'job listing must be a string';
 export const ErrorCvMustBeString = 'cv must be a string';
 export const ErrorCoverLetterMustBeString = 'cover letter must be a string';
 export const ErrorCvRequired = 'cv is required';
 export const ErrorMissingCoverLetter = 'no value for cover letter is provided';
 export const ErrorMissingQnAs = 'no value for QnAs provided'
+
 
 
 export var ErrorToCode: Map<string, number> = new Map<string, number>(
@@ -141,11 +144,11 @@ export var ErrorToCode: Map<string, number> = new Map<string, number>(
         [ErrorQualificationsRequired, 400],
         [ErrorDatePostedRequired, 400],
         [ErrorTitleMustBeString, 400],
-        [ErrorCompensationPostedMustBeArray,400],
-        [ErrorCompensationSize,400],
-        [ErrorCompensationMustBeStringArray,400],
+        [ErrorCompensationPostedMustBeArray, 400],
+        [ErrorCompensationSize, 400],
+        [ErrorCompensationMustBeStringArray, 400],
         [ErrorDescriptionMustBeString, 400],
-        [ErrorDescriptionMustBeString,400],
+        [ErrorDescriptionMustBeString, 400],
         [ErrorLocationMustBeString, 400],
         [ErrorTypeMustBeArray, 400],
         [ErrorTypeMustBeStringArray, 400],
@@ -168,7 +171,7 @@ export var ErrorToCode: Map<string, number> = new Map<string, number>(
         [ErrorNotificationsMustBeArray, 400],
         [ErrorNotificationsMustBeStringArray, 400],
         [ErrorMissingID, 400],
-        [ErrorPfpUrlMustBeString,400],
+        [ErrorPfpUrlMustBeString, 400],
         [ErrorUserIDMustBeString, 400],
         [ErrorContentRequired, 400],
         [ErrorApplicationIDRequired, 400],
