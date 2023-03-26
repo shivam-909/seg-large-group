@@ -19,6 +19,8 @@ export interface Token {
     exp: number
 }
 
+export const TestError = "test error";
+
 export const ErrorInvalidEmail = "invalid email";
 export const ErrorInvalidPassword = "invalid password";
 export const ErrorUserExists = "user already exists";

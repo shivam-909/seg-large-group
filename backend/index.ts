@@ -44,6 +44,8 @@ export const run = () => {
     app.set('db', db);
     app.use(cors());
 
+    app.get('/error', util.ErrorTest)
+
     app.post('/auth/login', upload.none(), utils.Route(app, authroutes.Login));
     app.post('/auth/register', upload.none(), utils.Route(app, authroutes.Register));
     app.post('/auth/refresh', upload.none(), utils.Route(app, authroutes.Refresh));
