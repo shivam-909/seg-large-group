@@ -4,6 +4,7 @@ import * as companiesdb from "../../../db/companies";
 import * as searchersdb from "../../../db/searchers";
 import * as usersdb from "../../../db/users";
 import * as applicationsdb from "../../../db/applications";
+import * as jobsdb from "../../../db/jobs";
 
 export function isStringArray(arr:string[]): boolean{
 
@@ -23,7 +24,17 @@ export async function ValidateCompanyId(db:DB, companyID: any){
     if(!company){
         throw new Error(errors.ErrorCompanyNotFound);
     }
+}
 
+export async function ValidateJobListing(db:DB, jobListing: any){
+
+    if(typeof jobListing !== 'string'){
+        throw new Error(errors.ErrorJobListingMustBeString);
+    }
+    const job = await jobsdb.RetrieveJobListing(db, jobListing);
+    if(!job){
+        throw new Error(errors.ErrorCompanyNotFound);
+    }
 }
 
 export async function ValidateSearcherId(db:DB, searcherID: any){

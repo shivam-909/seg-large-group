@@ -92,7 +92,8 @@ export const ErrorUserIDRequired = "no user ID is provided";
 export const ErrorApplicationIDMustBeString = "applicationID must be a string";
 export const ErrorContentMustBeString = "content must be a string";
 export const ErrorCreatedMustBeDate = "content must be a string";
-export const ErrorQueryRequired = "Query string is required";
+export const ErrorQueryRequired = "query string is required";
+export const ErrorJobListingMustBeString = 'job listing must be a string';
 
 
 
@@ -173,6 +174,7 @@ export var ErrorToCode: Map<string, number> = new Map<string, number>(
         [ErrorApplicationIDMustBeString, 400],
         [ErrorCreatedMustBeDate, 400],
         [ErrorContentMustBeString, 400],
-        [ErrorQueryRequired, 400]
+        [ErrorQueryRequired, 400],
+        [ErrorJobListingMustBeString, 400]
     ]
 );
