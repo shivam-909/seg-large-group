@@ -7,6 +7,7 @@ import {ValidateCompanyId} from "./validation/checks";
 export function GetCompany(db: DB): Handler {
     return async (req: Request, res: Response, next: NextFunction) => {
         const id = req.params.id;
+
         try {
             await ValidateCompanyId(db, id);
         } catch (err) {

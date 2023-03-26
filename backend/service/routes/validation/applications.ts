@@ -3,36 +3,77 @@ import * as searchersdb from "../../../db/searchers";
 import * as jobsdb from "../../../db/jobs";
 import * as applicationsdb from "../../../db/applications";
 import * as errors from "../../public";
-import {ErrorMissingProperty} from "../../public";
+import {ValidateApplicationID, ValidateJobListing, ValidateSearcherId} from "./checks";
+import {RetrieveJobListing} from "../../../db/jobs";
+
+function ValidateQnAs(QnAs: any){
+    if(!(QnAs.constructor == Object)){
+        throw new Error(errors.ErrorScreeningQuestionsMustBeDictionary);
+    }
+    for (const [key, value] of Object.entries(QnAs)) {
+        if(typeof key!== 'string' || typeof value!== 'string'){
+            throw new Error(errors.ErrorScreeningQuestionsIncorrectKeyValues);
+        }
+    }
+
+}
 
 export async function AddApplication(db: DB, body: any): Promise<void> {
-    const { status, searcher, jobListing } = body;
+
+    if(body === undefined){
+        throw new Error(errors.ErrorMissingProperty);
+    }
+
+    const { status, searcher, jobListing, cv, coverLetter, QnAs } = body;
 
     if (!status) {
         throw new Error(errors.ErrorStatusRequired);
+    }
+
+    if(typeof status !== 'string'){
+        throw new Error(errors.ErrorStatusMustBeString);
     }
 
     if (!searcher) {
         throw new Error(errors.ErrorSearcherIDRequired);
     }
 
-    const searcherDoc = await searchersdb.RetrieveSearcherByID(db, searcher);
-    if (!searcherDoc) {
-        throw new Error(errors.ErrorSearcherNotFound);
-    }
-
     if (!jobListing) {
         throw new Error(errors.ErrorJobListingIDRequired);
     }
 
-    const jobListingDoc = await jobsdb.RetrieveJobListing(db, jobListing);
-    if (!jobListingDoc) {
-        throw new Error(errors.ErrorJobListingNotFound);
+    await ValidateJobListing(db, jobListing);
+
+    if(!cv){
+        throw new Error(errors.ErrorCvRequired);
     }
+    const job = await RetrieveJobListing(db, jobListing);
+
+    if(job) {
+        if (!coverLetter && job.coverLetterRequired) {
+            throw new Error(errors.ErrorMissingCoverLetter);
+        }
+    }
+
+    if(!QnAs){
+        throw new Error(errors.ErrorMissingQnAs);
+    }
+
+    await ValidateSearcherId(db, searcher);
+    ValidateQnAs(QnAs);
+
+    if(coverLetter && typeof coverLetter!== 'string'){
+        throw new Error(errors.ErrorCoverLetterMustBeString);
+    }
+
 }
 
 
 export async function RetrieveApplicationByFilter(db: DB, body: any): Promise<void> {
+
+    if(body === undefined){
+        throw new Error(errors.ErrorMissingProperty);
+    }
 
     const { status, searcher, jobListing } = body;
 
@@ -40,37 +81,31 @@ export async function RetrieveApplicationByFilter(db: DB, body: any): Promise<vo
         throw new Error(errors.ErrorMissingFilter);
     }
 
+    if(status && typeof status !== 'string'){
+        throw new Error(errors.ErrorStatusMustBeString);
+    }
+
     if (searcher) {
-        const searcherDoc = await searchersdb.RetrieveSearcherByID(db, searcher);
-        if (!searcherDoc) {
-            throw new Error(errors.ErrorSearcherNotFound);
-        }
+        await ValidateSearcherId(db,searcher);
     }
 
     if (jobListing) {
-        const jobListingDoc = await jobsdb.RetrieveJobListing(db, jobListing);
-        if (!jobListingDoc) {
-            throw new Error(errors.ErrorJobListingNotFound);
-        }
+        await ValidateJobListing(db, jobListing);
     }
+
 }
 
 
 export async function UpdateApplication(db: DB, id:string, req: any): Promise<void> {
-    console.log("validation: ", req);
 
-    if(req===undefined){
-        throw new Error(ErrorMissingProperty);
+    if(req === undefined){
+        throw new Error(errors.ErrorMissingProperty);
     }
 
-    const { status, searcher, jobListing } = req;
+    const { status, searcher, jobListing, cv, coverLetter, QnAs } = req;
+    await ValidateApplicationID(db, id)
 
-    const applicationDoc = await applicationsdb.RetrieveApplication(db, id);
-    if (!applicationDoc) {
-        throw new Error(errors.ErrorApplicationNotFound);
-    }
-
-    if (!status && !searcher && !jobListing) {
+    if (!status && !searcher && !jobListing && !cv && !coverLetter && !QnAs) {
         throw new Error(errors.ErrorMissingProperty);
     }
 
@@ -79,25 +114,34 @@ export async function UpdateApplication(db: DB, id:string, req: any): Promise<vo
     }
 
     if (searcher) {
-        const searcherDoc = await searchersdb.RetrieveSearcherByID(db, searcher);
-        if (!searcherDoc) {
-            throw new Error(errors.ErrorSearcherNotFound);
-        }
+        await ValidateSearcherId(db, searcher);
     }
 
     if (jobListing) {
-        const jobListingDoc = await jobsdb.RetrieveJobListing(db, jobListing);
-        if (!jobListingDoc) {
-            throw new Error(errors.ErrorJobListingNotFound);
-        }
+        await ValidateJobListing(db, jobListing);
     }
+
+    if(cv && typeof cv!== 'string'){
+        throw new Error(errors.ErrorCvMustBeString);
+    }
+
+    if(coverLetter && typeof coverLetter!== 'string'){
+        throw new Error(errors.ErrorCoverLetterMustBeString);
+    }
+
+    if(QnAs){
+        ValidateQnAs(QnAs);
+    }
+
 }
-
-
 
 export async function DeleteApplication(db: DB, id: string): Promise<void> {
     const application = await applicationsdb.RetrieveApplication(db, id);
     if (!application) {
         throw new Error(errors.ErrorApplicationNotFound);
     }
+}
+
+export async function ApplicationExists(db: DB, id: string): Promise<void> {
+    await ValidateApplicationID(db, id);
 }

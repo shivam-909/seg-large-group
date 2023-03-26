@@ -4,7 +4,7 @@ import { NextFunction, Request, Response } from "express";
 import DB from "../../db/db";
 import Application from "../../models/application";
 import * as applicationdb from "../../db/applications";
-import { ErrorApplicationNotFound, getErrorMessage, Handler } from "../public";
+import {ErrorApplicationNotFound, getErrorMessage, Handler} from "../public";
 import { randomUUID } from "crypto";
 import * as validate from "../routes/validation/applications";
 
@@ -13,14 +13,15 @@ export function AddApplication(db: DB): Handler {
     try {
       await validate.AddApplication(db, req.body);
     } catch (err) {
-      next(err);
+      next((err as Error).message);
       return;
     }
-    const { status, searcher, jobListing, cv } = req.body;
+    const { status, searcher, jobListing, cv, QnAs, coverLetter} = req.body;
     const newID = randomUUID();
-    const newApplication = new Application(newID, status, searcher, jobListing, cv);
+    const newApplication = new Application(newID, status, searcher, jobListing, cv, QnAs, coverLetter);
 
     await applicationdb.CreateApplication(db, newApplication);
+    res.sendStatus(200)
   }
 }
 
@@ -28,38 +29,39 @@ export function AddApplication(db: DB): Handler {
 export function GetApplication(db: DB): Handler {
   return async (req: Request, res: Response, next: NextFunction) => {
     const { id } = req.params;
-
-    const application = await applicationdb.RetrieveApplication(db, id);
-    if (!application) {
-      next(ErrorApplicationNotFound);
-      return
+    try {
+      await validate.ApplicationExists(db, id);
+    } catch (err) {
+      return next(err);
     }
+    const application = await applicationdb.RetrieveApplication(db, id);
     res.status(200).json(application);
-  };
+  }
 }
 
-export function RetrieveApplicationByFilter(db: DB): Handler {
-  return async (req: Request, res: Response, next: NextFunction) => {
+  export function RetrieveApplicationByFilter(db: DB): Handler {
+    return async (req: Request, res: Response, next: NextFunction) => {
 
-    try {
-      await validate.RetrieveApplicationByFilter(db, req.body);
-    } catch (err) {
-      next(err);
-      return;
-    }
+      try {
+        await validate.RetrieveApplicationByFilter(db, req.body);
+      } catch (err) {
+        next((err as Error).message);
+        return;
+      }
 
-    const filters = {
-      id: req.body.id || '',
-      status: req.body.status || '',
-      searcher: req.body.searcher || '',
-      jobListing: req.body.jobListing || '',
+      const filters = {
+        id: req.body.id || '',
+        status: req.body.status || '',
+        searcher: req.body.searcher || '',
+        jobListing: req.body.jobListing || '',
+        coverLetter: req.body.coverLetter || '',
+      };
+
+      const applications = await applicationdb.GetApplicationsByFilter(db, filters);
+      res.status(200).json({
+        applications,
+      });
     };
-
-    const applications = await applicationdb.GetApplicationsByFilter(db, filters);
-    res.status(200).json({
-      applications,
-    });
-  };
 }
 
 export function UpdateApplication(db: DB): Handler {
@@ -79,23 +81,23 @@ export function UpdateApplication(db: DB): Handler {
 
     const updatedApplication = { ...application, ...applicationData };
     await applicationdb.UpdateApplication(db, updatedApplication);
-    res.status(200).json(updatedApplication);
-
+    res.sendStatus(200);
   }
 }
 
 
-export function DeleteApplication(db: DB): Handler {
-  return async (req: Request, res: Response, next: NextFunction) => {
-    const id = req.params.id;
 
-    try {
-      await validate.DeleteApplication(db, id);
-    } catch (err) {
-      return next(err);
+  export function DeleteApplication(db: DB): Handler {
+    return async (req: Request, res: Response, next: NextFunction) => {
+      const id = req.params.id;
+
+      try {
+        await validate.DeleteApplication(db, id);
+      } catch (err) {
+        return next((err as Error).message);
+      }
+
+      await applicationdb.DeleteApplication(db, id);
+      res.sendStatus(200);
     }
-
-    await applicationdb.DeleteApplication(db, id);
   }
-};
-
