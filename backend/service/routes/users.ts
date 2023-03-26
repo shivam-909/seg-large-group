@@ -18,12 +18,10 @@ export function UpdateUser(db: DB): Handler {
     return async (req: Request, res: Response, next: NextFunction) => {
 
         const id = req.params.id;
-        const userData = req.body;
+        const updatedVals = req.body;
         await validate.UpdateUser(db, req.params.id, req.body);
-        const user = await usersdb.RetrieveFullUserByID(db, id);
-        const updatedUser = { ...user, ...userData };
-        await usersdb.UpdateUser(db, updatedUser);
-        res.status(200).json(updatedUser);
+        await usersdb.UpdateUser(db, id, updatedVals);
+        res.sendStatus(200);
 
     }
 }
