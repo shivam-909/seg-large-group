@@ -2,6 +2,7 @@ import { NextFunction, Request, Response } from "express";
 import DB from "../../db/db";
 import { Handler } from "../public";
 import { findJobListingsByQuery } from "../../search/search";
+import { isQuery } from "./validation/search";
 
 export function SearchListings(db: DB): Handler {
     return async (req: Request, res: Response, next: NextFunction) => {
