@@ -6,14 +6,19 @@ class Application {
     searcher: string;
     jobListing: string;
     cv: string[];
+    QnAs: Record<string, string>;
+    coverLetter ?: string;
 
 
-    constructor(id: string, status: string, searcher: string, jobListing: string, cv: string[]) {
+
+    constructor(id: string, status: string, searcher: string, jobListing: string, cv: string[], coverLetter: string, QnAs: Record<string,string>) {
         this.id = id;
         this.status = status;
         this.searcher = searcher;
         this.jobListing = jobListing;
         this.cv = cv;
+        this.coverLetter = coverLetter;
+        this.QnAs = QnAs;
     }
 }
 
