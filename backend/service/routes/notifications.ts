@@ -1,6 +1,10 @@
 import 'express-async-errors';
 import DB from "../../db/db";
-import { ErrorNotifNotFound, Handler } from "../public";
+import {
+  getErrorMessage,
+  Handler
+} from "../public";
+import * as errors from "../public";
 import { NextFunction, Request, Response } from "express";
 import * as notificationsdb from "../../db/notifications";
 import { randomUUID } from "crypto";
@@ -24,7 +28,7 @@ export function AddNotification(db: DB): Handler {
       return;
     }
     await notificationsdb.CreateNotification(db, newNotification);
-    res.sendStatus(200);
+    res.sendStatus(200)
   }
 }
 
@@ -35,7 +39,7 @@ export function GetNotification(db: DB): Handler {
     const notification = await notificationsdb.RetrieveNotification(db, id);
 
     if (!notification) {
-      next(ErrorNotifNotFound);
+      next(errors.ErrorNotifNotFound);
       return;
     }
 

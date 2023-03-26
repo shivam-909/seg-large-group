@@ -3,7 +3,7 @@ import { NextFunction, Request, Response } from "express";
 import DB from "../../db/db";
 import JobListing from "../../models/job";
 import * as jobsdb from "../../db/jobs";
-import { ErrorFailedToCreateListing, ErrorJobListingNotFound, Handler } from "../public";
+import { ErrorFailedToCreateListing, ErrorJobListingNotFound, ErrorNoMatchingListings, Handler } from "../public";
 import { randomUUID } from "crypto";
 import { ParseScreeningQuestions, StringFromCommaSeparatedList } from './routes';
 
@@ -81,7 +81,8 @@ export function UpdateListing(db: DB): Handler {
 
 
     await jobsdb.UpdateJobListing(db, updatedJobListing);
-    res.sendStatus(200);
+    res.status(200).json(updatedJobListing);
+
     return;
   }
 }
