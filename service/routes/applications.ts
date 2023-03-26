@@ -83,6 +83,7 @@ export function UpdateApplication(db: DB): Handler {
 
     const updatedApplication = { ...application, ...applicationData };
     await applicationdb.UpdateApplication(db, updatedApplication);
+    res.sendStatus(200);
   }
 }
 
@@ -98,6 +99,7 @@ export function DeleteApplication(db: DB): Handler {
     }
 
     await applicationdb.DeleteApplication(db, id);
+    res.sendStatus(200);
   }
 };
 

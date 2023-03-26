@@ -101,17 +101,16 @@ export async function DeleteUser(db: DB, userID: string): Promise<void> {
   }
 
   const userDocRef = db.UserCollection().doc(to_delete.userID);
+  let searcherID = to_delete.searcherID;
+  let companyID = to_delete.companyID;
+  await userDocRef.delete();
 
-  if (to_delete.companyID) {
-
+  if (companyID) {
     await companiesdb.DeleteCompany(db, to_delete.companyID!);
-
-  } else if (to_delete.searcherID) {
-
+  } else if (searcherID) {
     await searchersdb.DeleteSearcher(db, to_delete.searcherID!);
   }
 
-  await userDocRef.delete();
 }
 
 export async function DeleteUserByEmail(db: DB, email: string): Promise<void> {
