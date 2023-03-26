@@ -39,7 +39,6 @@ export const run = () => {
 
   app.post('/api/notifications/add', upload.none(), utils.Route(app, notificationroutes.AddNotification));
   app.get('/api/notifications/:id', utils.Route(app, notificationroutes.GetNotification));
-  app.patch('/api/notifications/:id', upload.none(), utils.Route(app, notificationroutes.UpdateNotification));
   app.delete('/api/notifications/:id', upload.none(), utils.Route(app, notificationroutes.DeleteNotification));
 
   app.post('/api/jobs/search', upload.none(), utils.Route(app, searchListingsRoute));
