@@ -26,7 +26,6 @@ export function AddApplication(db: DB): Handler {
 
 export function GetApplication(db: DB): Handler {
   return async (req: Request, res: Response, next: NextFunction) => {
-
     const { id } = req.params;
     await validate.ApplicationExists(db, id);
     const application = await applicationdb.RetrieveApplication(db, id);
