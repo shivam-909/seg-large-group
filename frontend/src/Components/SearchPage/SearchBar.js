@@ -15,7 +15,6 @@ function SearchBar(props) {
             </div>
             <button className='bg-dark-theme-grey rounded-md py-2.5 px-4 font-bold text-white' onClick={props.onclick}>Search</button>
         </div>
-<<<<<<< HEAD
         <div>
             <label htmlFor="date-select">Date</label>
             <select className="default-dropdown" name="Date" id="date-select">
@@ -66,9 +65,3 @@ function SearchBar(props) {
   }
 
   export default SearchBar;
-=======
-    );
-}
-
-export default SearchBar;
->>>>>>> master
