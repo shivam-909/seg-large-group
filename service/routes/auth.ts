@@ -183,7 +183,7 @@ function ValidateRegistrationForm(
   return "";
 }
 
-function ValidEmail(email: string): boolean {
+export function ValidEmail(email: string): boolean {
 
   console.log(email);
 

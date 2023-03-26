@@ -76,13 +76,11 @@ export function UpdateApplication(db: DB): Handler {
     const applicationData = req.body;
 
     const application = await applicationdb.RetrieveApplication(db, id);
-    if (!application) {
-      next(ErrorApplicationNotFound);
-      return
-    }
 
     const updatedApplication = { ...application, ...applicationData };
     await applicationdb.UpdateApplication(db, updatedApplication);
+    res.status(200).json(updatedApplication);
+
   }
 }
 

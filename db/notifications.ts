@@ -34,19 +34,6 @@ export async function RetrieveNotification(db: DB, id: string): Promise<Notifica
   return doc.data() as Notification;
 }
 
-
-export async function UpdateNotification(db: DB, notification: Notification): Promise<void> {
-  const docRef = db.NotificationCollection().doc(notification.id);
-
-  const { id, ...notificationData } = notification;
-
-  try {
-    await docRef.update(notificationData);
-  } catch (err) {
-    throw err;
-  }
-}
-
 export async function DeleteNotification(db: DB, id: string) {
   const docRef = db.NotificationCollection().doc(id);
   await docRef.delete();
