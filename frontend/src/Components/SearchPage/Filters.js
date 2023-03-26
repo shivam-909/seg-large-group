@@ -1,7 +1,9 @@
 import {useEffect, useState} from "react";
+import JobList from "./JobList";
 
 export default function Filters(props) {
     const originalJobResults = props.jobs;
+    const [tempFilteredJobs, setTempFilteredJobs] = useState(props.jobs);
     const [filteredJobs, setFilteredJobs] = useState(props.jobs);
     const [showFilters, setShowFilters] = useState(false);
     const [filters, setFilters] = useState({});
@@ -93,9 +95,7 @@ export default function Filters(props) {
                 }
             });
         }
-
         addFilters();
-
     }, [props.jobs]);
 
     function validateSalaryInput(id, min, max) {
@@ -122,16 +122,12 @@ export default function Filters(props) {
 
         // If no filters are selected, show all jobs - perhaps verify that no filters have been checked by setting an initial state with default filters
 
-        // if the list is empty, don't apply a filter
         let allFilteredJobs = originalJobResults;
 
         // Date posted filter
         if (age !== '') {
             allFilteredJobs = originalJobResults.filter(job => job.age < age);
         }
-        console.log('new')
-        console.log('after age filter')
-        console.log(allFilteredJobs)
 
         // TODO: Distance filter
 
@@ -145,8 +141,6 @@ export default function Filters(props) {
             });
         });
         allFilteredJobs = newFilteredJobs;
-        console.log('after salary filter')
-        console.log(allFilteredJobs)
 
         // Job type filter
         if (schedules.length > 0) {
@@ -154,8 +148,6 @@ export default function Filters(props) {
             schedules.forEach(schedule => allSchedules.push(schedule.value));
             allFilteredJobs = allFilteredJobs.filter(job => job.schedule.some(schedule => allSchedules.includes(schedule)));
         }
-        console.log('after schedule filter')
-        console.log(allFilteredJobs)
 
         // On-site/Remote filter
         if (types.length > 0) {
@@ -163,8 +155,6 @@ export default function Filters(props) {
             types.forEach(type => allTypes.push(type.value));
             allFilteredJobs = allFilteredJobs.filter(job => job.type.some(type => allTypes.includes(type)));
         }
-        console.log('after type filter')
-        console.log(allFilteredJobs)
 
         // Job qualification filter
         if (qualifications.length > 0) {
@@ -172,8 +162,6 @@ export default function Filters(props) {
             qualifications.forEach(qualification => allQualifications.push(qualification.value));
             allFilteredJobs = allFilteredJobs.filter(job => job.qualifications.some(qualification => allQualifications.includes(qualification)));
         }
-        console.log('after qualification filter')
-        console.log(allFilteredJobs)
 
         // Industry filter
         if (industries.length > 0) {
@@ -181,8 +169,6 @@ export default function Filters(props) {
             industries.forEach(industry => allIndustries.push(industry.value));
             allFilteredJobs = allFilteredJobs.filter(job => allIndustries.includes(job.industry));
         }
-        console.log('after industry filter')
-        console.log(allFilteredJobs)
 
         // Location filter
         if (locations.length > 0) {
@@ -190,8 +176,6 @@ export default function Filters(props) {
             locations.forEach(location => allLocations.push(location.value));
             allFilteredJobs = allFilteredJobs.filter(job => allLocations.includes(job.location));
         }
-        console.log('after location filter')
-        console.log(allFilteredJobs)
 
         // Company filter
         if (companies.length > 0) {
@@ -199,8 +183,7 @@ export default function Filters(props) {
             companies.forEach(company => allCompanies.push(company.value));
             allFilteredJobs = allFilteredJobs.filter(job => allCompanies.includes(job.companyName));
         }
-        console.log('after company filter')
-        console.log(allFilteredJobs)
+        setTempFilteredJobs(allFilteredJobs);
     }
 
     return (
@@ -368,10 +351,13 @@ export default function Filters(props) {
                     </div>
                     <div className='flex items-center justify-end border-b border-x rounded-b-md border-darker-grey pb-2 pr-2 mx-4'>
                         <button className='rounded-md py-2.5 px-4 font-bold text-dark-theme-grey mr-2'>Clear</button>
-                        <button className='bg-dark-theme-grey rounded-md py-2.5 px-4 font-bold text-white'>Show results ({filteredJobs.length})</button>
+                        <button className='bg-dark-theme-grey rounded-md py-2.5 px-4 font-bold text-white' onClick={() => setFilteredJobs(tempFilteredJobs)}>Show results ({tempFilteredJobs.length})</button>
                     </div>
                 </div>
             }
+            <div className='mt-12'>
+                <JobList jobs={filteredJobs}/>
+            </div>
         </div>
     );
 }

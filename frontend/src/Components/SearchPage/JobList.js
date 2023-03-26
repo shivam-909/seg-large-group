@@ -4,7 +4,7 @@ import JobDetailsCard from "./JobDetailsCard";
 
 export default function JobList(props) {
     const [count, setCount] = useState(0);
-    const [total] = useState(props.jobs.length);
+    const total = props.jobs.length;
     const increase = 9;
     const pageCount = Math.ceil(total / increase) || 1;
     let currentPage = 1;
@@ -68,12 +68,13 @@ export default function JobList(props) {
     }
 
     useEffect(() => {
+        setCardList([]);
         window.addEventListener("scroll", handleInfiniteScroll);
         async function addCardScroll(){
             await addCards(currentPage);
         }
         addCardScroll();
-    },[]) // eslint-disable-line
+    },[total])
 
     return (
         <div>

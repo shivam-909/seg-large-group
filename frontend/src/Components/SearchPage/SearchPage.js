@@ -19,7 +19,7 @@ function SearchPage() {
         if (isJobTitleInputValid() & isLocationInputValid()) {
             setLoading(true);
             const formData = new FormData();
-            formData.append('companyID', '4c3807c7-315e-4673-b4c1-b7b752f8a06d');
+            formData.append('companyID', 'ae184393-68d1-41d4-81a5-5e819d4f2721');
             axios.post('http://localhost:8000/api/jobs/filter', formData)
                 .then(async response => {
                     for (const job of response.data) {
@@ -57,10 +57,7 @@ function SearchPage() {
             <div className='mt-36 space-y-5 flex-col mb-12'>
                 <SearchBar onclick={showResults} onJobTitleInputChange={() => setShowJobTitleInputErrorMessage(false)} onLocationInputChange={() => setShowLocationInputErrorMessage(false)} displayJobTitleInputErrorMessage={showJobTitleInputErrorMessage} displayLocationInputErrorMessage={showLocationInputErrorMessage}/>
                 {jobs.length > 0 ?
-                    <div className='space-y-12'>
-                        <Filters jobs={jobs}/>
-                        <JobList jobs={jobs}/>
-                    </div>
+                    <Filters jobs={jobs}/>
                     :
                     <div className='pt-12 space-y-24'>
                         <div className='flex flex-col items-center justify-center space-y-5'>
