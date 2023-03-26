@@ -42,15 +42,16 @@ export function Login(db: DB): Handler {
 
 export function Register(db: DB): Handler {
   return async (req: Request, res: Response, next: NextFunction) => {
-    console.log("register endpoint hit with email ", req.body.email)
-
     const { user_type, company_name, first_name, last_name, email, password, pfp_url, location } = req.body;
+
+    if (email == "test_listings_create@example.com") {
+      console.log("RECEIVED TEST EMAIL")
+    }
 
     let user: User | null = await RetrieveFullUserByEmail(db, email);
 
     // Sanity check for user.
     if (user !== null) {
-      console.log("user already exists", user)
       next(ErrorUserExists)
       return
     }
@@ -98,7 +99,6 @@ export function Register(db: DB): Handler {
         const newCompany = new Company(company_name, newCompanyID);
 
         await CreateCompany(db, newUser, newCompany);
-        console.log("created company", email)
         break;
 
       case "searcher":
@@ -107,7 +107,6 @@ export function Register(db: DB): Handler {
         const newSearcher = new Searcher(first_name, last_name, [], newSearcherID, [], [], []);
 
         await CreateSearcher(db, newUser, newSearcher);
-        console.log("created searcher", email)
         break;
     }
 
@@ -196,8 +195,6 @@ function ValidateRegistrationForm(
 }
 
 export function ValidEmail(email: string): boolean {
-
-  console.log(email);
 
   const parts = email.split("@");
   if (parts.length !== 2) {
