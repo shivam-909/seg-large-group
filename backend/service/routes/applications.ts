@@ -16,9 +16,9 @@ export function AddApplication(db: DB): Handler {
       next(err);
       return;
     }
-    const { status, searcher, jobListing, cv } = req.body;
+    const { status, searcher, jobListing, cv, coverLetter, QnAs } = req.body;
     const newID = randomUUID();
-    const newApplication = new Application(newID, status, searcher, jobListing, cv);
+    const newApplication = new Application(newID, status, searcher, jobListing, cv, coverLetter, QnAs);
 
     await applicationdb.CreateApplication(db, newApplication);
   }
@@ -28,12 +28,12 @@ export function AddApplication(db: DB): Handler {
 export function GetApplication(db: DB): Handler {
   return async (req: Request, res: Response, next: NextFunction) => {
     const { id } = req.params;
-
-    const application = await applicationdb.RetrieveApplication(db, id);
-    if (!application) {
-      next(ErrorApplicationNotFound);
-      return
+    try {
+      await validate.ApplicationExists(db, id);
+    } catch (err) {
+      return next(err);
     }
+    const application = await applicationdb.RetrieveApplication(db, id);
     res.status(200).json(application);
   };
 }
@@ -89,7 +89,7 @@ export function DeleteApplication(db: DB): Handler {
     const id = req.params.id;
 
     try {
-      await validate.DeleteApplication(db, id);
+      await validate.ApplicationExists(db, id);
     } catch (err) {
       return next(err);
     }
