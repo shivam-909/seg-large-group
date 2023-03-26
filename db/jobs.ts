@@ -7,9 +7,22 @@ export async function CreateJobListing(db: DB, jobListing: JobListing): Promise<
 
   try {
     await docRef.set({
-      ...jobListing,
-      datePosted: new Date(),
       id: jobListing.id,
+      title: jobListing.title,
+      compensation: jobListing.compensation,
+      description: jobListing.description,
+      location: jobListing.location,
+      type: jobListing.type,
+      schedule: jobListing.schedule,
+      companyID: jobListing.companyID,
+      industry: jobListing.industry,
+      coverLetterRequired: jobListing.coverLetterRequired,
+      urgent: jobListing.urgent,
+      qualifications: jobListing.qualifications,
+      datePosted: jobListing.datePosted,
+      benefits: jobListing.benefits,
+      requirements: jobListing.requirements,
+      screeningQuestions: jobListing.screeningQuestions,
     });
   } catch (err) {
     throw err;

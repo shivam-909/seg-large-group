@@ -1,11 +1,13 @@
+import 'express-async-errors';
 import { NextFunction, Request, Response } from 'express';
 import { ErrorToCode, Token } from './public';
 import { VerifyJWT } from './tokens';
 
 export const ErrorMW = (err: any, req: Request, res: Response, next: NextFunction) => {
     console.error(err.stack);
-    const code = ErrorToCode.get(err) || 500;
-    res.status(code).json({ message: err || 'internal server error' });
+    const em = typeof err === "string" ? err : err.message;
+    const code = ErrorToCode.get(em) || 500;
+    res.status(code).json({ message: em || 'internal server error' });
 };
 
 export const AuthMW = (req: Request, res: Response, next: NextFunction) => {
