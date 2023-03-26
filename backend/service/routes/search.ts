@@ -3,17 +3,20 @@ import DB from "../../db/db";
 import {getErrorMessage, Handler} from "../public";
 import * as errors from "../public";
 import {findJobListingsByQuery} from "../../search/search";
+import {isQuery} from "./validation/search";
 
 export function searchListingsRoute(db: DB): Handler {
     return async (req: Request, res: Response, next: NextFunction) => {
-        const query = req.body.term.toString().toLowerCase();
 
-        if (!query) {
-            next(errors.ErrorSearchQueryRequired)
+        try {
+            await isQuery(db, req.body);
+        } catch (err) {
+            next((err as Error).message);
             return;
-        } else {
-            const results = await findJobListingsByQuery(db, query);
-            res.status(200).json({ results });
         }
+
+        const results = await findJobListingsByQuery(db, req.body.term.toString().toLowerCase());
+        res.status(200).json({ results });
+
     };
 }

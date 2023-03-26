@@ -5,17 +5,20 @@ class Application {
     status: string;
     searcher: string;
     jobListing: string;
+    cv: string[];
     coverLetter?: string;
 
 
-    constructor(id: string, status: string, searcher: string, jobListing: string, coverLetter?: string) {
+    constructor(id: string, status: string, searcher: string, jobListing: string, cv: string[], coverLetter?: string) {
         this.id = id;
         this.status = status;
         this.searcher = searcher;
         this.jobListing = jobListing;
+        this.cv = cv;
         this.coverLetter = coverLetter;
     }
 }
+
 
 export const ApplicationConverter = {
     toFirestore: (application: Application) => application,

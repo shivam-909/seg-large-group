@@ -82,15 +82,18 @@ async function GenerateSearcher(db: DB): Promise<Searcher> {
     const savedJobs = await RetrieveRandomJobIDArr(db);
     const firstName = faker.name.firstName();
     const lastName = faker.name.lastName();
-    const cvLink = faker.internet.url();
+    const skill = [faker.company.bsNoun() + "," + faker.datatype.number({'min': 1,'max': 10}).toString() + "," + faker.helpers.arrayElement(["weeks", "months", "years"])];
+    const qualification = faker.helpers.arrayElements([faker.helpers.arrayElement(["Engineering", "Sales", "Marketing", "Finance"]) + "," + faker.helpers.arrayElement(["GCSEs", "Bachelors", "Masters", "PhD", "High School Diploma", "International Baccalaureate"]) + "," + faker.datatype.number({'min': 1,'max': 10}) + "," + faker.datatype.number({'min': 1,'max': 10}) + "," + faker.helpers.arrayElement(["weeks", "months", "years"])]);
+    const cv = [firstName + " " + lastName + "'s CV", "https://seg-joblink.s3.eu-west-2.amazonaws.com/cv/1047a922-d91f-43dc-80f2-7273ee90acaa.png.pdf"]
 
     return new Searcher(
         firstName,
         lastName,
         savedJobs,
         id,
-        GenerateEducation(),
-        cvLink
+        skill,
+        qualification,
+        cv,
     );
 }
 
@@ -182,7 +185,6 @@ async function GetRandomCompany(db: DB): Promise<Company> {
 
 
 function GenerateCompensation(): string[]{
-
     const yearlyAmount = [faker.datatype.number({
         'min': 20000,
         'max': 100000
@@ -258,7 +260,7 @@ async function GenerateJobListing(db: DB): Promise<JobListing> {
         id,
         faker.name.jobTitle(),
         GenerateCompensation(),
-        faker.lorem.paragraph(),
+        faker.lorem.paragraphs(5000).substring(0, Math.floor(Math.random() * (1000 + 1)) + 2000),
         user.location,
         faker.helpers.arrayElements(["Remote", "Hybrid", "In-Office"]),
         faker.helpers.arrayElements(["Part Time", "Full Time", "Internship", "Contract", "Apprenticeship"]),
@@ -304,13 +306,15 @@ async function GenerateApplicationListing(db: DB): Promise<Application> {
     const randomSearcher = await RetrieveRandomSearcherId(db);
     const randomJobListing = await RetrieveRandomJobListingID(db);
     const coverLetter = faker.lorem.paragraph();
+    const cv = [faker.name.fullName() + "'s CV", "https://seg-joblink.s3.eu-west-2.amazonaws.com/cv/1047a922-d91f-43dc-80f2-7273ee90acaa.png.pdf"]
 
     return new Application(
         randomUUID(),
         GetRandomStatus(),
         randomSearcher,
         randomJobListing,
-        coverLetter
+        cv,
+        coverLetter,
     );
 }
 

@@ -16,9 +16,9 @@ export function AddApplication(db: DB): Handler {
       next((err as Error).message);
       return;
     }
-    const {status, searcher, jobListing, coverLetter} = req.body;
+    const { status, searcher, jobListing, cv, coverLetter} = req.body;
     const newID = randomUUID();
-    const newApplication = new Application(newID, status, searcher, jobListing, coverLetter);
+    const newApplication = new Application(newID, status, searcher, jobListing, cv, coverLetter);
 
     await applicationdb.CreateApplication(db, newApplication);
     res.sendStatus(200)
@@ -62,32 +62,30 @@ export function GetApplication(db: DB): Handler {
         applications,
       });
     };
-  }
+}
 
-  export function UpdateApplication(db: DB): Handler {
-    return async (req: Request, res: Response, next: NextFunction) => {
+export function UpdateApplication(db: DB): Handler {
+  return async (req: Request, res: Response, next: NextFunction) => {
 
-      try {
-        await validate.UpdateApplication(db, req.params.id, req.body);
-      } catch (err) {
-        next((err as Error).message);
-        return;
-      }
-
-      const id = req.params.id;
-      const applicationData = req.body;
-
-      const application = await applicationdb.RetrieveApplication(db, id);
-      if (!application) {
-        next(ErrorApplicationNotFound);
-        return
-      }
-
-      const updatedApplication = {...application, ...applicationData};
-      await applicationdb.UpdateApplication(db, updatedApplication);
-      res.sendStatus(200)
+    try {
+      await validate.UpdateApplication(db, req.params.id, req.body);
+    } catch (err) {
+      next(err);
+      return;
     }
+
+    const id = req.params.id;
+    const applicationData = req.body;
+
+    const application = await applicationdb.RetrieveApplication(db, id);
+
+    const updatedApplication = { ...application, ...applicationData };
+    await applicationdb.UpdateApplication(db, updatedApplication);
+    res.status(200).json(updatedApplication);
+
   }
+}
+
 
 
   export function DeleteApplication(db: DB): Handler {
