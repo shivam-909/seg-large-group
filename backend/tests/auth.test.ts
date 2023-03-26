@@ -16,12 +16,13 @@ test('create searcher, retrieve user by email and id, delete user', async () => 
     const email = 'auth_crud_test@example.com'
     const hashedPassword = 'password';
     const pfpUrl = 'https://example.com/pfp.png';
+    const cv = ["John Doe's CV","https://seg-joblink.s3.eu-west-2.amazonaws.com/cv/1047a922-d91f-43dc-80f2-7273ee90acaa.png.pdf"];
     const location = 'Toronto, ON';
     const notifications: string[] = [];
 
     const user = new User(userID, email, hashedPassword, pfpUrl, location, notifications);
 
-    const searcher = new Searcher(firstName, lastName, [], userID);
+    const searcher = new Searcher(firstName, lastName, [], userID, [], [],cv);
 
     user.searcherID = userID;
 

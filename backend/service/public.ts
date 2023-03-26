@@ -19,6 +19,8 @@ export interface Token {
     exp: number
 }
 
+export const TestError = "test error";
+
 export const ErrorInvalidEmail = "invalid email";
 export const ErrorInvalidPassword = "invalid password";
 export const ErrorUserExists = "user already exists";
@@ -43,9 +45,71 @@ export const ErrorMissingFilter = "no filters provided";
 export const ErrorStatusMustBeString = "status must be a string";
 export const ErrorStatusRequired = "no status provided";
 export const ErrorMissingProperty = "no property provided for update";
+export const ErrorApplicationCouldNotBeCreated = "application could not be created";
+export const ErrorNotifCouldNotBeCreated = "notification could not be created";
+export const ErrorNoMatchingListings = "no matching job listings found";
+export const ErrorNotifCouldNotBeUpdated = "notification could not be updated";
+export const ErrorSearchQueryRequired = "no search query provided";
+export const ErrorNoCompanyOrSearcherID = "no company or searcher id provided";
 export const ErrorJobDescriptionTooShort = "job description is too short";
 export const ErrorJobDescriptionTooLong = "job description is too long";
-
+export const ErrorInvalidUserType = "invalid user type";
+export const ErrorTitleRequired = "no title is provided";
+export const ErrorCompensationRequired = "no compensation is provided";
+export const ErrorDescriptionRequired = "no description is provided";
+export const ErrorLocationRequired = "no location is provided";
+export const ErrorTypeRequired = "no type is provided";
+export const ErrorScheduleRequired = "no schedule is provided";
+export const ErrorCompanyIDRequired = "no company id is provided";
+export const ErrorIndustryRequired = "no industry is provided";
+export const ErrorCoverLetterRequired = "no value for coverLetterRequired is provided";
+export const ErrorUrgentRequired = "no value for urgent is provided";
+export const ErrorQualificationsRequired = "no qualifications are provided";
+export const ErrorDatePostedRequired = "no value for date posted is provided";
+export const ErrorTitleMustBeString = "title must be a string";
+export const ErrorCompensationPostedMustBeArray = "compensation must be an array";
+export const ErrorCompensationSize = "compensation must have two elements exactly";
+export const ErrorCompensationMustBeStringArray = "every element in compensation must be a string";
+export const ErrorDescriptionMustBeString = "description must be a string";
+export const ErrorLocationMustBeString = "location must be a string";
+export const ErrorTypeMustBeArray = "type must be an array";
+export const ErrorTypeMustBeStringArray = "every element in type must be a string";
+export const ErrorScheduleMustBeArray = "schedule must be an array";
+export const ErrorScheduleMustBeStringArray = "every element in schedule must be a string";
+export const ErrorCompanyIDMustBeString = "companyID must be a string";
+export const ErrorIndustryMustBeString = "industry must be a string";
+export const ErrorCoverLetterRequiredMustBeBoolean = "value provided for cover letter required must be a boolean";
+export const ErrorUrgentMustBeBoolean = "value provided for urgent must be a boolean";
+export const ErrorQualificationsMustBeArray = "qualifications must be an array";
+export const ErrorQualificationsMustBeStringArray = "every element in qualifications must be a string";
+export const ErrorDatePostedMustBeDate = "date posted must be a date";
+export const ErrorBenefitsPostedMustBeArray = "benefits must be an array";
+export const ErrorBenefitsMustBeStringArray = "every element in benefits must be a string";
+export const ErrorRequirementsMustBeArray = "requirements must be an array";
+export const ErrorRequirementsMustBeStringArray = "every element in requirements must be a string";
+export const ErrorScreeningQuestionsMustBeDictionary = "screening questions must be a dictionary";
+export const ErrorScreeningQuestionsIncorrectKeyValues = "incorrect key value pairs in screening questions";
+export const ErrorSearcherIDMustBeString = "searcher ID must be a string";
+export const ErrorNotificationsMustBeArray = "notifications must be an array";
+export const ErrorNotificationsMustBeStringArray = "every element in notifications must be a string";
+export const ErrorMissingID = "mo searcherID or companyID is provided ";
+export const ErrorPfpUrlMustBeString = "pfp url must be a string";
+export const ErrorUserIDMustBeString = "userID must be a string";
+export const ErrorContentRequired = "no content is provided";
+export const ErrorApplicationIDRequired = "no applicationID is provided";
+export const ErrorCreatedRequired = "created field is not provided";
+export const ErrorUserIDRequired = "no user ID is provided";
+export const ErrorApplicationIDMustBeString = "applicationID must be a string";
+export const ErrorContentMustBeString = "content must be a string";
+export const ErrorCreatedMustBeDate = "content must be a string";
+export const ErrorQueryRequired = "query string is required";
+export const ErrorFailedToCreateListing = "failed to create job listing";
+export const ErrorJobListingMustBeString = 'job listing must be a string';
+export const ErrorCvMustBeString = 'cv must be a string';
+export const ErrorCoverLetterMustBeString = 'cover letter must be a string';
+export const ErrorCvRequired = 'cv is required';
+export const ErrorMissingCoverLetter = 'no value for cover letter is provided';
+export const ErrorMissingQnAs = 'no value for QnAs provided'
 
 
 
@@ -61,6 +125,7 @@ export var ErrorToCode: Map<string, number> = new Map<string, number>(
         [ErrorMissingLastName, 400],
         [ErrorInvalidRefreshToken, 403],
         [ErrorUserNotFound, 404],
+        [ErrorJobListingNotFound, 404],
         [ErrorMultipleUsersFound, 500],
         [ErrorCompanyNotFound, 404],
         [ErrorSearcherNotFound, 404],
@@ -74,9 +139,71 @@ export var ErrorToCode: Map<string, number> = new Map<string, number>(
         [ErrorStatusMustBeString, 400],
         [ErrorStatusRequired, 400],
         [ErrorMissingProperty, 400],
+        [ErrorApplicationCouldNotBeCreated, 500],
+        [ErrorNotifCouldNotBeCreated, 500],
+        [ErrorNoMatchingListings, 404],
+        [ErrorNotifCouldNotBeUpdated, 500],
+        [ErrorSearchQueryRequired, 400],
+        [ErrorNoCompanyOrSearcherID, 400],
         [ErrorJobDescriptionTooShort, 400],
         [ErrorJobDescriptionTooLong, 400],
-
+        [ErrorJobDescriptionTooLong, 400],
+        [ErrorJobListingNotFound, 404],
+        [ErrorTitleRequired, 400],
+        [ErrorCompensationRequired, 400],
+        [ErrorDescriptionRequired, 400],
+        [ErrorLocationRequired, 400],
+        [ErrorTypeRequired, 400],
+        [ErrorScheduleRequired, 400],
+        [ErrorCompanyIDRequired, 400],
+        [ErrorIndustryRequired, 400],
+        [ErrorCoverLetterRequired, 400],
+        [ErrorUrgentRequired, 400],
+        [ErrorQualificationsRequired, 400],
+        [ErrorDatePostedRequired, 400],
+        [ErrorTitleMustBeString, 400],
+        [ErrorCompensationPostedMustBeArray, 400],
+        [ErrorCompensationSize, 400],
+        [ErrorCompensationMustBeStringArray, 400],
+        [ErrorDescriptionMustBeString, 400],
+        [ErrorDescriptionMustBeString, 400],
+        [ErrorLocationMustBeString, 400],
+        [ErrorTypeMustBeArray, 400],
+        [ErrorTypeMustBeStringArray, 400],
+        [ErrorScheduleMustBeArray, 400],
+        [ErrorScheduleMustBeStringArray, 400],
+        [ErrorCompanyIDMustBeString, 400],
+        [ErrorIndustryMustBeString, 400],
+        [ErrorCoverLetterRequiredMustBeBoolean, 400],
+        [ErrorUrgentMustBeBoolean, 400],
+        [ErrorQualificationsMustBeArray, 400],
+        [ErrorQualificationsMustBeStringArray, 400],
+        [ErrorDatePostedMustBeDate, 400],
+        [ErrorBenefitsPostedMustBeArray, 400],
+        [ErrorBenefitsMustBeStringArray, 400],
+        [ErrorRequirementsMustBeStringArray, 400],
+        [ErrorRequirementsMustBeArray, 400],
+        [ErrorScreeningQuestionsMustBeDictionary, 400],
+        [ErrorScreeningQuestionsIncorrectKeyValues, 400],
+        [ErrorSearcherIDMustBeString, 400],
+        [ErrorNotificationsMustBeArray, 400],
+        [ErrorNotificationsMustBeStringArray, 400],
+        [ErrorMissingID, 400],
+        [ErrorPfpUrlMustBeString, 400],
+        [ErrorUserIDMustBeString, 400],
+        [ErrorContentRequired, 400],
+        [ErrorApplicationIDRequired, 400],
+        [ErrorCreatedRequired, 400],
+        [ErrorUserIDRequired, 400],
+        [ErrorApplicationIDMustBeString, 400],
+        [ErrorCreatedMustBeDate, 400],
+        [ErrorContentMustBeString, 400],
+        [ErrorQueryRequired, 400],
+        [ErrorJobListingMustBeString, 400],
+        [ErrorCvMustBeString, 400],
+        [ErrorCoverLetterMustBeString, 400],
+        [ErrorCvRequired, 400],
+        [ErrorMissingQnAs, 400]
 
     ]
 );
