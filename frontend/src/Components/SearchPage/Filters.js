@@ -106,6 +106,7 @@ export default function Filters(props) {
         else if (salaryInput.value > max) {
             salaryInput.value = max;
         }
+        updateJobResults();
     }
 
     function updateJobResults() {
@@ -119,58 +120,87 @@ export default function Filters(props) {
         const locations = document.querySelectorAll('input[name="location"]:checked');
         const companies = document.querySelectorAll('input[name="company"]:checked');
 
-        // if the list is empty, don't apply a filter
-        let allFilteredJobs = [];
+        // If no filters are selected, show all jobs - perhaps verify that no filters have been checked by setting an initial state with default filters
 
+        // if the list is empty, don't apply a filter
+        let allFilteredJobs = originalJobResults;
+
+        // Date posted filter
         if (age !== '') {
             allFilteredJobs = originalJobResults.filter(job => job.age < age);
         }
+        console.log('new')
+        console.log('after age filter')
         console.log(allFilteredJobs)
 
-        // if (distance !== '') {
-        //     // Calculate distance of job.location from inputted location
-        //     const locationInput = document.getElementById('locationInput').value;
-        //
-        //     // const newFilteredJobs = originalJobResults.filter(job => distanceFromLocation < distance);
-        //     // allFilteredJobs = allFilteredJobs.concat(newFilteredJobs);
-        // }
+        // TODO: Distance filter
 
-        if (salaries.length > 0) {
+        // Salary filter
+        let newFilteredJobs = [];
+        allFilteredJobs.filter(job => {
             salaries.forEach(salary => {
-                allFilteredJobs = allFilteredJobs.filter(job => job.compensation[1] === salary.id && job.compensation[0] >= salary.value);
-                console.log(allFilteredJobs)
+                if (salary.id === job.compensation[1] && parseInt(job.compensation[0].replace(/,/g, '')) >= parseInt(salary.value)) {
+                    newFilteredJobs.push(job);
+                }
             });
-        }
+        });
+        allFilteredJobs = newFilteredJobs;
+        console.log('after salary filter')
         console.log(allFilteredJobs)
 
-        // const filteredJobs = originalJobResults.filter(job => {
-        //     if (age !== '' && job.age > age) {
-        //         return false;
-        //     }
-        //     if (distance !== '' && job.distance > distance) {
-        //         return false;
-        //     }
-        //     if (salary !== '' && job.compensation[1] < salary) {
-        //         return false;
-        //     }
-        //     if (type !== '' && !job.type.includes(type)) {
-        //         return false;
-        //     }
-        //     if (schedule !== '' && !job.schedule.includes(schedule)) {
-        //         return false;
-        //     }
-        //     if (qualification !== '' && !job.qualifications.includes(qualification)) {
-        //         return false;
-        //     }
-        //     if (industry !== '' && !job.industry.includes(industry)) {
-        //         return false;
-        //     }
-        //     if (location !== '' && job.location !== location) {
-        //         return false;
-        //     }
-        //     return !(company !== '' && job.companyName !== company);
-        // });
-        // setFilteredJobs(filteredJobs);
+        // Job type filter
+        if (schedules.length > 0) {
+            const allSchedules = [];
+            schedules.forEach(schedule => allSchedules.push(schedule.value));
+            allFilteredJobs = allFilteredJobs.filter(job => job.schedule.some(schedule => allSchedules.includes(schedule)));
+        }
+        console.log('after schedule filter')
+        console.log(allFilteredJobs)
+
+        // On-site/Remote filter
+        if (types.length > 0) {
+            const allTypes = [];
+            types.forEach(type => allTypes.push(type.value));
+            allFilteredJobs = allFilteredJobs.filter(job => job.type.some(type => allTypes.includes(type)));
+        }
+        console.log('after type filter')
+        console.log(allFilteredJobs)
+
+        // Job qualification filter
+        if (qualifications.length > 0) {
+            const allQualifications = [];
+            qualifications.forEach(qualification => allQualifications.push(qualification.value));
+            allFilteredJobs = allFilteredJobs.filter(job => job.qualifications.some(qualification => allQualifications.includes(qualification)));
+        }
+        console.log('after qualification filter')
+        console.log(allFilteredJobs)
+
+        // Industry filter
+        if (industries.length > 0) {
+            const allIndustries = [];
+            industries.forEach(industry => allIndustries.push(industry.value));
+            allFilteredJobs = allFilteredJobs.filter(job => allIndustries.includes(job.industry));
+        }
+        console.log('after industry filter')
+        console.log(allFilteredJobs)
+
+        // Location filter
+        if (locations.length > 0) {
+            const allLocations = [];
+            locations.forEach(location => allLocations.push(location.value));
+            allFilteredJobs = allFilteredJobs.filter(job => allLocations.includes(job.location));
+        }
+        console.log('after location filter')
+        console.log(allFilteredJobs)
+
+        // Company filter
+        if (companies.length > 0) {
+            const allCompanies = [];
+            companies.forEach(company => allCompanies.push(company.value));
+            allFilteredJobs = allFilteredJobs.filter(job => allCompanies.includes(job.companyName));
+        }
+        console.log('after company filter')
+        console.log(allFilteredJobs)
     }
 
     return (
@@ -181,19 +211,19 @@ export default function Filters(props) {
                     <div className='flex border-x border-t rounded-t-md border-darker-grey space-x-8 pt-3 px-3 mx-4'>
                         <div className='flex flex-col space-y-3'>
                             <p className='font-bold'>Date posted</p>
-                            <div className='space-x-2'>
+                            <div className='space-x-2' onClick={updateJobResults}>
                                 <input id='anyTime' type='radio' value='' name='age' checked/>
                                 <label onClick={() => document.getElementById('anyTime').checked = true}>Any time</label>
                             </div>
-                            <div className='space-x-2'>
+                            <div className='space-x-2' onClick={updateJobResults}>
                                 <input id='past24Hours' type='radio' value='1' name='age'/>
                                 <label onClick={() => document.getElementById('past24Hours').checked = true}>Past 24 hours</label>
                             </div>
-                            <div className='space-x-2'>
+                            <div className='space-x-2' onClick={updateJobResults}>
                                 <input id='pastWeek' type='radio' value='7' name='age'/>
                                 <label onClick={() => document.getElementById('pastWeek').checked = true}>Past week</label>
                             </div>
-                            <div className='space-x-2'>
+                            <div className='space-x-2' onClick={updateJobResults}>
                                 <input id='pastMonth' type='radio' value='30' name='age'/>
                                 <label onClick={() => document.getElementById('pastMonth').checked = true}>Past month</label>
                             </div>
@@ -201,35 +231,35 @@ export default function Filters(props) {
 
                         <div className='flex flex-col space-y-3'>
                             <p className='font-bold'>Distance</p>
-                            <div className='space-x-2'>
+                            <div className='space-x-2' onClick={updateJobResults}>
                                 <input id='anyDistance' type='radio' value='' name='distance' checked/>
                                 <label onClick={() => document.getElementById('anyDistance').checked = true}>Any distance</label>
                             </div>
-                            <div className='space-x-2'>
+                            <div className='space-x-2' onClick={updateJobResults}>
                                 <input id='1mile' type='radio' value='1' name='distance'/>
                                 <label onClick={() => document.getElementById('1mile').checked = true}>1 mile</label>
                             </div>
-                            <div className='space-x-2'>
+                            <div className='space-x-2' onClick={updateJobResults}>
                                 <input id='5miles' type='radio' value='5' name='distance'/>
                                 <label onClick={() => document.getElementById('5miles').checked = true}>5 miles</label>
                             </div>
-                            <div className='space-x-2'>
+                            <div className='space-x-2' onClick={updateJobResults}>
                                 <input id='10miles' type='radio' value='10' name='distance'/>
                                 <label onClick={() => document.getElementById('10miles').checked = true}>10 miles</label>
                             </div>
-                            <div className='space-x-2'>
+                            <div className='space-x-2' onClick={updateJobResults}>
                                 <input id='15miles' type='radio' value='15' name='distance'/>
                                 <label onClick={() => document.getElementById('15miles').checked = true}>15 miles</label>
                             </div>
-                            <div className='space-x-2'>
+                            <div className='space-x-2' onClick={updateJobResults}>
                                 <input id='25miles' type='radio' value='25' name='distance'/>
                                 <label onClick={() => document.getElementById('25miles').checked = true}>25 miles</label>
                             </div>
-                            <div className='space-x-2'>
+                            <div className='space-x-2' onClick={updateJobResults}>
                                 <input id='35miles' type='radio' value='35' name='distance'/>
                                 <label onClick={() => document.getElementById('35miles').checked = true}>35 miles</label>
                             </div>
-                            <div className='space-x-2'>
+                            <div className='space-x-2' onClick={updateJobResults}>
                                 <input id='50miles' type='radio' value='50' name='distance'/>
                                 <label onClick={() => document.getElementById('50miles').checked = true}>50 miles</label>
                             </div>
@@ -257,7 +287,7 @@ export default function Filters(props) {
                             { filters.schedule.length > 0 &&
                                 filters.schedule.map(schedule => {
                                     return (
-                                        <div className='space-x-2'>
+                                        <div className='space-x-2' onClick={updateJobResults}>
                                             <input id={schedule} name='schedule' type='checkbox' value={schedule}/>
                                             <label onClick={() => document.getElementById(schedule).checked = !document.getElementById(schedule).checked}>{schedule}</label>
                                         </div>
@@ -271,7 +301,7 @@ export default function Filters(props) {
                             { filters.type.length > 0 &&
                                 filters.type.map(type => {
                                     return (
-                                        <div className='space-x-2'>
+                                        <div className='space-x-2' onClick={updateJobResults}>
                                             <input id={type} name='type' type='checkbox' value={type}/>
                                             <label onClick={() => document.getElementById(type).checked = !document.getElementById(type).checked}>{type}</label>
                                         </div>
@@ -285,7 +315,7 @@ export default function Filters(props) {
                             { filters.qualification.length > 0 &&
                                 filters.qualification.map(qualification => {
                                     return (
-                                        <div className='space-x-2'>
+                                        <div className='space-x-2' onClick={updateJobResults}>
                                             <input id={qualification} name='qualification' type='checkbox' value={qualification}/>
                                             <label onClick={() => document.getElementById(qualification).checked = !document.getElementById(qualification).checked}>{qualification}</label>
                                         </div>
@@ -313,7 +343,7 @@ export default function Filters(props) {
                             { filters.location.length > 0 &&
                                 filters.location.map(location => {
                                     return (
-                                        <div className='space-x-2'>
+                                        <div className='space-x-2' onClick={updateJobResults}>
                                             <input id={location} name='location' type='checkbox' value={location}/>
                                             <label onClick={() => document.getElementById(location).checked = !document.getElementById(location).checked}>{location}</label>
                                         </div>
@@ -327,7 +357,7 @@ export default function Filters(props) {
                             { filters.company.length > 0 &&
                                 filters.company.map(company => {
                                     return (
-                                        <div className='space-x-2'>
+                                        <div className='space-x-2' onClick={updateJobResults}>
                                             <input id={company} name='company' type='checkbox' value={company}/>
                                             <label onClick={() => document.getElementById(company).checked = !document.getElementById(company).checked}>{company}</label>
                                         </div>
