@@ -17,12 +17,7 @@ export function AddNotification(db: DB): Handler {
     const newID = randomUUID();
     const created = new Date();
     const newNotification = new Notification(newID, content, application, created, userID);
-    try {
-      await validate.AddNotification(db, { content, application, created, userID });
-    } catch (err) {
-      next((err as Error).message);
-      return;
-    }
+    await validate.AddNotification(db, { content, application, created, userID });
     await notificationsdb.CreateNotification(db, newNotification);
     res.sendStatus(200);
   }
@@ -70,14 +65,7 @@ export function GetNotification(db: DB): Handler {
 export function DeleteNotification(db: DB): Handler {
   return async (req: Request, res: Response, next: NextFunction) => {
     const id = req.params.id;
-
-    try {
-      await validate.NotificationExists(db, id);
-    } catch (err) {
-      next((err as Error).message);
-      return;
-    }
-
+    await validate.NotificationExists(db, id);
     await notificationsdb.DeleteNotification(db, id);
     res.sendStatus(200);
   };
