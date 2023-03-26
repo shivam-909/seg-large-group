@@ -111,7 +111,6 @@ export var ErrorToCode: Map<string, number> = new Map<string, number>(
         [ErrorNoCompanyOrSearcherID, 400],
         [ErrorJobDescriptionTooShort, 400],
         [ErrorJobDescriptionTooLong, 400],
-        [ErrorJobDescriptionTooLong, 400],
         [ErrorJobListingNotFound, 404],
         [ErrorTitleRequired, 400],
         [ErrorCompensationRequired, 400],

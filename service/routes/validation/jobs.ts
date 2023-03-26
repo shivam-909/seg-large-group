@@ -57,9 +57,6 @@ export async function AddListing(db: DB, body: any): Promise<void> {
     if(!datePosted){
         throw new Error(errors.ErrorDatePostedRequired);
     }
-    if(!(datePosted instanceof Date)){
-        throw new Error(errors.ErrorDatePostedMustBeDate);
-    }
 
     await ValidateCompanyId(db,companyID);
 

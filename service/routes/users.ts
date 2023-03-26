@@ -19,7 +19,7 @@ export function UpdateUser(db: DB): Handler {
 
         const id = req.params.id;
         const updatedVals = req.body;
-        await validate.UpdateUser(db, req.params.id, req.body);
+        await validate.UpdateUser(db, id, updatedVals);
         await usersdb.UpdateUser(db, id, updatedVals);
         res.sendStatus(200);
 
