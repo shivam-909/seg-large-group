@@ -45,6 +45,7 @@ export const ErrorStatusRequired = "no status provided";
 export const ErrorMissingProperty = "no property provided for update";
 export const ErrorJobDescriptionTooShort = "job description is too short";
 export const ErrorJobDescriptionTooLong = "job description is too long";
+export const ErrorInvalidUserType = "invalid user type";
 
 
 

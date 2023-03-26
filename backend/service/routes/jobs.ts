@@ -3,33 +3,59 @@ import { NextFunction, Request, Response } from "express";
 import DB from "../../db/db";
 import JobListing from "../../models/job";
 import * as jobsdb from "../../db/jobs";
-import {ErrorJobListingNotFound, Handler} from "../public";
+import { ErrorJobListingNotFound, Handler } from "../public";
 import { randomUUID } from "crypto";
 import * as validate from "../routes/validation/jobs";
+import { ParseScreeningQuestions, StringFromCommaSeparatedList } from './routes';
 
 
 
 export function AddListing(db: DB): Handler {
   return async (req: Request, res: Response, next: NextFunction) => {
-    const { title, compensation, description, location, type, schedule, companyID, industry, coverLetterRequired, urgent, qualifications, datePosted, benefits, requirements, screeningQuestions } = req.body;
+    const { title, compensation, description, location, type, schedule, industry, cover_letter_required, urgent, qualifications, benefits, requirements, screening_questions } = req.body;
     const newID = randomUUID();
-    const newJobListing = new JobListing(newID, title, compensation, description, location, type, schedule, companyID, industry, coverLetterRequired, urgent, qualifications, datePosted, benefits, requirements, screeningQuestions);
-    try {
-      await validate.AddListing(db, req.body);
-    } catch (err) {
-      next((err as Error).message);
-      return;
-    }
 
-    await jobsdb.CreateJobListing(db, newJobListing);
+    // Get auth_username from headers.
+    const companyID = req.headers.auth_username as string;
+    const parsedCompensation = StringFromCommaSeparatedList(compensation);
+    const parsedQualifications = StringFromCommaSeparatedList(qualifications);
+    const parsedBenefits = StringFromCommaSeparatedList(benefits);
+    const parsedType = StringFromCommaSeparatedList(type);
+    const parsedRequirements = StringFromCommaSeparatedList(requirements);
+    const parsedSchedule = StringFromCommaSeparatedList(schedule);
+    const parsedScreeningQuestions = ParseScreeningQuestions(screening_questions);
+    const datePosted = new Date();
 
+    const newJobListing = new JobListing(
+      newID,
+      title,
+      parsedCompensation,
+      description,
+      location,
+      parsedType,
+      parsedSchedule,
+      companyID,
+      industry,
+      cover_letter_required,
+      urgent,
+      parsedQualifications,
+      datePosted,
+      parsedBenefits,
+      parsedRequirements,
+      parsedScreeningQuestions);
+
+    await validate.AddListing(db, req.body);
+    const listing = await jobsdb.CreateJobListing(db, newJobListing);
+
+    res.json({
+      id: listing.id,
+    }).send();
   }
 }
 
 export function GetListing(db: DB): Handler {
   return async (req: Request, res: Response, next: NextFunction) => {
     const id = req.params.id;
-
     const jobListing = await jobsdb.RetrieveJobListing(db, id);
     if (!jobListing) {
       next(ErrorJobListingNotFound);
@@ -62,8 +88,7 @@ export function UpdateListing(db: DB): Handler {
     }
     await jobsdb.UpdateJobListing(db, updatedJobListing);
 
-
-    return;
+    res.sendStatus(200);
   }
 }
 
@@ -71,9 +96,7 @@ export function DeleteListing(db: DB): Handler {
   return async (req: Request, res: Response, next: NextFunction) => {
     const id = req.params.id;
     await jobsdb.DeleteJobListing(db, id);
-    res.status(200).json({
-      message: 'Job deleted'
-    });
+    res.sendStatus(200);
   };
 }
 

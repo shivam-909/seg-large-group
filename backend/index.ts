@@ -16,8 +16,9 @@ import * as notificationroutes from "./service/routes/notifications";
 import * as companiesroutes from "./service/routes/companies";
 import * as searcherroutes from "./service/routes/searchers";
 import * as util from './service/routes/routes';
+import * as searchroutes from "./service/routes/search";
+
 import cors from 'cors';
-import {searchListingsRoute} from "./service/routes/search";
 
 export const db = new DB();
 
@@ -42,16 +43,16 @@ export const run = () => {
   app.patch('/api/notifications/:id', upload.none(), utils.Route(app, notificationroutes.UpdateNotification));
   app.delete('/api/notifications/:id', upload.none(), utils.Route(app, notificationroutes.DeleteNotification));
 
-  app.post('/api/jobs/search', upload.none(), utils.Route(app, searchListingsRoute));
+  app.post('/api/jobs/search', upload.none(), utils.Route(app, searchroutes.SearchListings));
   app.post('/api/jobs/filter', upload.none(), utils.Route(app, listingroutes.RetrieveJobListingsByFilter));
-  app.post('/api/jobs/add', upload.none(), utils.Route(app, listingroutes.AddListing));
+  app.post('/api/jobs/', upload.none(), utils.Route(app, listingroutes.AddListing));
   app.get('/api/jobs/:id', utils.Route(app, listingroutes.GetListing));
   app.patch('/api/jobs/:id', upload.none(), utils.Route(app, listingroutes.UpdateListing));
   app.delete('/api/jobs/:id', upload.none(), utils.Route(app, listingroutes.DeleteListing));
 
   app.post('/api/applications/add', upload.none(), utils.Route(app, applicationroutes.AddApplication));
   app.get('/api/applications/:id', utils.Route(app, applicationroutes.GetApplication));
-  app.post('/api/applications/filter', upload.none() ,utils.Route(app, applicationroutes.RetrieveApplicationByFilter));
+  app.post('/api/applications/filter', upload.none(), utils.Route(app, applicationroutes.RetrieveApplicationByFilter));
   app.patch('/api/applications/:id', upload.none(), utils.Route(app, applicationroutes.UpdateApplication));
   app.delete('/api/applications/:id', upload.none(), utils.Route(app, applicationroutes.DeleteApplication));
   app.post('/api/application/filter', upload.none(), utils.Route(app, applicationroutes.RetrieveApplicationByFilter));
