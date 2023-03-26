@@ -1,5 +1,6 @@
+import 'express-async-errors';
 import { Application, Request, Response } from "express";
-import { Handler, HandlerWrapper } from "../public";
+import { Handler, HandlerWrapper, TestError } from "../public";
 
 // Route wraps a handler function to provide the database connection.
 export function Route(app: Application, handler: HandlerWrapper): Handler {
@@ -29,4 +30,12 @@ export function ParseScreeningQuestions(str: string): Record<string, boolean> {
         parsedQuestions[question.question] = question.answer;
     }
     return parsedQuestions;
+}
+
+async function throwsError() {
+    throw new Error(TestError);
+}
+
+export async function ErrorTest(req: Request, res: Response) {
+    await throwsError();
 }
