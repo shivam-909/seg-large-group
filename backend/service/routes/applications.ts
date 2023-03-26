@@ -16,9 +16,9 @@ export function AddApplication(db: DB): Handler {
       next(err);
       return;
     }
-    const { status, searcher, jobListing, cv } = req.body;
+    const { status, searcher, jobListing, cv, coverLetter, QnAs } = req.body;
     const newID = randomUUID();
-    const newApplication = new Application(newID, status, searcher, jobListing, cv);
+    const newApplication = new Application(newID, status, searcher, jobListing, cv, coverLetter, QnAs);
 
     await applicationdb.CreateApplication(db, newApplication);
   }
