@@ -15,6 +15,7 @@ test('create searcher, retrieve searcher by email, delete user', async () => {
     const password = 'Password123!';
     const firstName = 'John';
     const lastName = 'Doe';
+    const cv = ["John Doe's CV","https://seg-joblink.s3.eu-west-2.amazonaws.com/cv/1047a922-d91f-43dc-80f2-7273ee90acaa.png.pdf"]
 
 
 
@@ -23,6 +24,9 @@ test('create searcher, retrieve searcher by email, delete user', async () => {
         lastName,
         [],
         searcherID,
+        [],
+        [],
+        cv
     )
 
     const user = new User(

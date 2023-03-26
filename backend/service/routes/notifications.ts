@@ -1,6 +1,6 @@
 import 'express-async-errors';
 import DB from "../../db/db";
-import { ErrorNotifNotFound, getErrorMessage, Handler } from "../public";
+import { ErrorNotifNotFound, Handler } from "../public";
 import { NextFunction, Request, Response } from "express";
 import * as notificationsdb from "../../db/notifications";
 import { randomUUID } from "crypto";
@@ -9,8 +9,7 @@ import { RetrieveApplication } from "../../db/applications";
 import { RetrieveJobListing } from "../../db/jobs";
 import { RetrieveCompanyByID } from "../../db/companies";
 import { RetrieveFullUserByID } from "../../db/users";
-
-
+import *  as validate from "../routes/validation/notifications";
 
 export function AddNotification(db: DB): Handler {
   return async (req: Request, res: Response, next: NextFunction) => {
@@ -18,6 +17,12 @@ export function AddNotification(db: DB): Handler {
     const newID = randomUUID();
     const created = new Date();
     const newNotification = new Notification(newID, content, application, created, userID);
+    try {
+      await validate.AddNotification(db, { content, application, created, userID });
+    } catch (err) {
+      next((err as Error).message);
+      return;
+    }
     await notificationsdb.CreateNotification(db, newNotification);
     res.sendStatus(200);
   }
@@ -28,6 +33,7 @@ export function GetNotification(db: DB): Handler {
     const id = req.params.id;
 
     const notification = await notificationsdb.RetrieveNotification(db, id);
+
     if (!notification) {
       next(ErrorNotifNotFound);
       return;
@@ -61,26 +67,16 @@ export function GetNotification(db: DB): Handler {
   };
 }
 
-export function UpdateNotification(db: DB): Handler {
-  return async (req: Request, res: Response, next: NextFunction) => {
-    const id = req.params.id;
-    const notificationData = req.body;
-
-    const notification = await notificationsdb.RetrieveNotification(db, id);
-    if (!notification) {
-      next(ErrorNotifNotFound)
-      return;
-    }
-
-    const updatedNotification = { ...notification, ...notificationData };
-    await notificationsdb.UpdateNotification(db, updatedNotification);
-    res.sendStatus(200);
-  }
-}
-
 export function DeleteNotification(db: DB): Handler {
   return async (req: Request, res: Response, next: NextFunction) => {
     const id = req.params.id;
+
+    try {
+      await validate.NotificationExists(db, id);
+    } catch (err) {
+      next((err as Error).message);
+      return;
+    }
 
     await notificationsdb.DeleteNotification(db, id);
     res.sendStatus(200);
