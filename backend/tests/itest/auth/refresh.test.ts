@@ -1,5 +1,5 @@
-import DB from "../../db/db";
-import { DeleteUserByEmail } from "../../db/users";
+import DB from "../../../db/db";
+import { DeleteUserByEmail } from "../../../db/users";
 
 test("refresh token", async () => {
     jest.setTimeout(10000);
@@ -59,5 +59,10 @@ test("refresh token", async () => {
     expect(refreshBody.refresh).not.toEqual('');
     expect(refreshBody.refresh).not.toEqual(regres.refresh);
 
-    await DeleteUserByEmail(db, email);
+    try {
+        await DeleteUserByEmail(db, email);
+    } catch (e) {
+        expect(e).toBeNull();
+    }
+
 });

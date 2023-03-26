@@ -302,19 +302,58 @@ export async function RetrieveRandomJobIDArr(db: DB): Promise<string[]> {
 
 //=====================================================APPLICATIONS=====================================================
 
+function GetRandomQnAs(): Record<string, string> {
+    const MAX_QnAs = Math.floor(Math.random() * 5) + 1;
+    const QnAs: Record<string, string> = {};
+
+    const interviewQuestions: [string, string][] = [
+        ["Why haven’t you gotten your Bachelor’s Degree/Master’s Degree/Ph.D.?", faker.lorem.words()],
+        ["Why have you switched jobs so many times?", faker.lorem.words()],
+        ["Why did you change your career path?", faker.lorem.words()],
+        ["Why did you decide to leave your previous/current job?", faker.lorem.words()],
+        ["Why is there a gap in your work experience?", faker.lorem.words()],
+        ["Why were you fired?", faker.lorem.words()],
+        ["How do you feel about working weekends or late hours?", faker.lorem.words()],
+        ["How would your boss describe you?", faker.lorem.words()],
+        ["Do you have any serious medical conditions?", faker.lorem.words()],
+        ["What would your first 30, 60, or 90 days look like in this role?", faker.lorem.words()],
+        ["Are you a team player?", faker.lorem.words()],
+        ["Are you a risk-taker?", faker.lorem.words()],
+        ["How do you deal with pressure or stressful situation?", faker.lorem.words()],
+        ["Do you think there is a difference between hard work and smart work?", faker.lorem.words()],
+        ["How quickly do you adapt to new technology?", faker.lorem.words()],
+        ["Do you have any interests outside of work?", faker.lorem.words()],
+        ["What do you think our company/organization could do better?", faker.lorem.words()],
+        ["Give an example of how you have handled a challenge in the workplace before.", faker.lorem.words()],
+        ["Give an example of when you performed well under pressure.", faker.lorem.words()],
+        ["Give an example of when you showed leadership qualities.", faker.lorem.words()]
+    ];
+
+    const shuffledQuestions = interviewQuestions.sort(() => Math.random() - 0.5);
+
+    for (let i = 0; i < MAX_QnAs && i < shuffledQuestions.length; i++) {
+        QnAs[shuffledQuestions[i][0]] = shuffledQuestions[i][1];
+    }
+
+    return QnAs;
+}
+
+
 async function GenerateApplicationListing(db: DB): Promise<Application> {
     const randomSearcher = await RetrieveRandomSearcherId(db);
     const randomJobListing = await RetrieveRandomJobListingID(db);
-    const coverLetter = faker.lorem.paragraph();
     const cv = [faker.name.fullName() + "'s CV", "https://seg-joblink.s3.eu-west-2.amazonaws.com/cv/1047a922-d91f-43dc-80f2-7273ee90acaa.png.pdf"]
+    const coverLetter = faker.lorem.paragraphs(5000).substring(0, Math.floor(Math.random() * (100 + 1)) + 500);
 
-    return new Application(
+        return new Application(
         randomUUID(),
         GetRandomStatus(),
         randomSearcher,
         randomJobListing,
         cv,
+        GetRandomQnAs(),
         coverLetter,
+
     );
 }
 

@@ -14,7 +14,8 @@ export async function CreateApplication(db: DB, application: Application) {
         'searcher': application.searcher,
         'jobListing': application.jobListing,
         'cv': application.cv,
-        'coverLetter': application.coverLetter
+        'coverLetter': application.coverLetter,
+        'QnAs': application.QnAs
     });
 }
 
@@ -43,7 +44,10 @@ export async function UpdateApplication(db: DB, application: Application): Promi
             'id': application.id,
             'status': application.status,
             'searcher': application.searcher,
-            'jobListing': application.jobListing
+            'jobListing': application.jobListing,
+            'cv': application.cv,
+            'coverLetter': application.coverLetter,
+            'QnAs': application.QnAs
         })
     } catch (err) {
         throw err
