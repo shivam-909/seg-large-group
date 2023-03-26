@@ -45,6 +45,13 @@ export const ErrorMissingFilter = "no filters provided";
 export const ErrorStatusMustBeString = "status must be a string";
 export const ErrorStatusRequired = "no status provided";
 export const ErrorMissingProperty = "no property provided for update";
+export const ErrorApplicationCouldNotBeCreated = "application could not be created";
+export const ErrorNotifCouldNotBeCreated = "notification could not be created";
+export const ErrorNoMatchingListings = "no matching job listings found";
+export const ErrorNotifCouldNotBeUpdated = "notification could not be updated";
+export const ErrorSearchQueryRequired = "no search query provided";
+export const ErrorNoCompanyOrSearcherID = "no company or searcher id provided";
+export const ErrorJobDescriptionTooShort = "job description is too short";
 export const ErrorJobDescriptionTooLong = "job description is too long";
 export const ErrorInvalidUserType = "invalid user type";
 export const ErrorTitleRequired = "no title is provided";
@@ -118,6 +125,7 @@ export var ErrorToCode: Map<string, number> = new Map<string, number>(
         [ErrorMissingLastName, 400],
         [ErrorInvalidRefreshToken, 403],
         [ErrorUserNotFound, 404],
+        [ErrorJobListingNotFound, 404],
         [ErrorMultipleUsersFound, 500],
         [ErrorCompanyNotFound, 404],
         [ErrorSearcherNotFound, 404],
@@ -131,6 +139,14 @@ export var ErrorToCode: Map<string, number> = new Map<string, number>(
         [ErrorStatusMustBeString, 400],
         [ErrorStatusRequired, 400],
         [ErrorMissingProperty, 400],
+        [ErrorApplicationCouldNotBeCreated, 500],
+        [ErrorNotifCouldNotBeCreated, 500],
+        [ErrorNoMatchingListings, 404],
+        [ErrorNotifCouldNotBeUpdated, 500],
+        [ErrorSearchQueryRequired, 400],
+        [ErrorNoCompanyOrSearcherID, 400],
+        [ErrorJobDescriptionTooShort, 400],
+        [ErrorJobDescriptionTooLong, 400],
         [ErrorJobDescriptionTooLong, 400],
         [ErrorJobListingNotFound, 404],
         [ErrorTitleRequired, 400],

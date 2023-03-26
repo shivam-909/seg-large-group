@@ -7,11 +7,11 @@ class Application {
     jobListing: string;
     cv: string[];
     QnAs: Record<string, string>;
-    coverLetter ?: string;
+    coverLetter?: string;
 
 
 
-    constructor(id: string, status: string, searcher: string, jobListing: string, cv: string[], coverLetter: string, QnAs: Record<string,string>) {
+    constructor(id: string, status: string, searcher: string, jobListing: string, cv: string[], QnAs: Record<string,string>, coverLetter?: string) {
         this.id = id;
         this.status = status;
         this.searcher = searcher;
@@ -21,6 +21,7 @@ class Application {
         this.QnAs = QnAs;
     }
 }
+
 
 export const ApplicationConverter = {
     toFirestore: (application: Application) => application,
