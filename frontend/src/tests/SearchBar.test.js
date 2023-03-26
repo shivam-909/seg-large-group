@@ -1,5 +1,5 @@
 import { render , screen } from "@testing-library/react";
-
+import userEvent from '@testing-library/user-event';
 import SearchBar from "../Components/SearchPage/SearchBar";
 
 describe('SearchBar', () => {
@@ -12,17 +12,17 @@ describe('SearchBar', () => {
 
   it('renders the dropdown fields with options', () => {
     render(<SearchBar />);
-    expect(screen.getByLabeltext('Date')).toBeInTheDocument();
-    expect(screen.getByLabeltext('Distance')).toBeInTheDocument();
-    expect(screen.getByLabeltext('Salary')).toBeInTheDocument();
-    expect(screen.getByLabeltext('Job Type')).toBeInTheDocument();
-    expect(screen.getByLabeltext('Situation')).toBeInTheDocument();
+    expect(screen.getByLabelText('Date')).toBeInTheDocument();
+    expect(screen.getByLabelText('Distance')).toBeInTheDocument();
+    expect(screen.getByLabelText('Salary')).toBeInTheDocument();
+    expect(screen.getByLabelText('Job Type')).toBeInTheDocument();
+    expect(screen.getByLabelText('Situation')).toBeInTheDocument();
 
-    expect(screen.getByLabeltext('Date')).toHaveValue('None');
-    expect(screen.getByLabeltext('Distance')).toHaveValue('None');
-    expect(screen.getByLabeltext('Salary')).toHaveValue('None');
-    expect(screen.getByLabeltext('Job Type')).toHaveValue('None');
-    expect(screen.getByLabeltext('Situation')).toHaveValue('None');
+    expect(screen.getByLabelText('Date')).toHaveValue('None');
+    expect(screen.getByLabelText('Distance')).toHaveValue('None');
+    expect(screen.getByLabelText('Salary')).toHaveValue('None');
+    expect(screen.getByLabelText('Job Type')).toHaveValue('None');
+    expect(screen.getByLabelText('Situation')).toHaveValue('None');
 
     userEvent.selectOptions(screen.getByLabelText('Date'),['3']);
     userEvent.selectOptions(screen.getByLabelText('Distance'),['10']);
@@ -30,11 +30,11 @@ describe('SearchBar', () => {
     userEvent.selectOptions(screen.getByLabelText('Job Type'),['Permanent']);
     userEvent.selectOptions(screen.getByLabelText('Situation'),['Remote']);
 
-    expect(screen.getByLabeltext('Date')).toHaveValue('3');
-    expect(screen.getByLabeltext('Distance')).toHaveValue('10');
-    expect(screen.getByLabeltext('Salary')).toHaveValue('75000');
-    expect(screen.getByLabeltext('Job Type')).toHaveValue('Permanent');
-    expect(screen.getByLabeltext('Situation')).toHaveValue('Remote');
+    expect(screen.getByLabelText('Date')).toHaveValue('3');
+    expect(screen.getByLabelText('Distance')).toHaveValue('10');
+    expect(screen.getByLabelText('Salary')).toHaveValue('75000');
+    expect(screen.getByLabelText('Job Type')).toHaveValue('Permanent');
+    expect(screen.getByLabelText('Situation')).toHaveValue('Remote');
 
   });
 

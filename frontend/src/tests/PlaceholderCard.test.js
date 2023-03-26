@@ -15,11 +15,10 @@ describe('PlaceholderCard', () => {
     const img = screen.getByAltText('');
     expect(img.src).toContain(props.img);
 
-    const prefix = screen.getByText(props.prefix);
-    expect(prefix).toBeInTheDocument();
+    const prefixRegex = new RegExp(`\\${props.prefix}${props.content}`);
+    const prefix = screen.getByRole('button').querySelector('p');
+    expect(prefix).toHaveTextContent(prefixRegex);
 
-    const content = screen.getByText(props.content);
-    expect(content).toBeInTheDocument();
   });
 
   it('calls the onclick function when clicked', () => {

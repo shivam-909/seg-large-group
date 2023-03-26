@@ -7,14 +7,16 @@ function SearchBar() {
             <button className="default-button">Search</button>
         </div>
         <div>
-            <select className="default-dropdown" name="Date">
+            <label htmlFor="date-select">Date</label>
+            <select className="default-dropdown" name="Date" id="date-select">
                 <option value="None">Date Posted</option>
                 <option value="1">Last 24 hours</option>
                 <option value="3">Last 3 days</option>
                 <option value="7">Last 7 days</option>
                 <option value="14">Last 14 days</option>
             </select>
-            <select className="default-dropdown" name="Distance">
+            <label htmlFor="distance-select">Distance</label>
+            <select className="default-dropdown" name="Distance" id="distance-select">
                 <option value="None">Distance</option>
                 <option value="5">5 miles</option>
                 <option value="10">10 miles</option>
@@ -22,7 +24,8 @@ function SearchBar() {
                 <option value="20">20 miles</option>
                 <option value="25">25 miles</option>
             </select>
-            <select className="default-dropdown" name="Salary">
+            <label htmlFor="salary-select">Salary</label>
+            <select className="default-dropdown" name="Salary" id="salary-select">
                 <option value="None">Salary</option>
                 <option value="30000">£30,000+</option>
                 <option value="45000">£45,000+</option>
@@ -30,7 +33,8 @@ function SearchBar() {
                 <option value="75000">£75,000+</option>
                 <option value="90000">£90,000+</option>
             </select>
-            <select className="default-dropdown" name="Type">
+            <label htmlFor="type-select">Job Type</label>
+            <select className="default-dropdown" name="Type" id="type-select">
                 <option value="None">Job Type</option>
                 <option value="Permanent">Permanent</option>
                 <option value="Full Time">Full Time</option>
@@ -39,7 +43,8 @@ function SearchBar() {
                 <option value="Internship">Internship</option>
                 <option value="Apprenticeship">Apprenticeship</option>
             </select>
-            <select className="default-dropdown" name="Situation">
+            <label htmlFor="situation-select">Situation</label>
+            <select className="default-dropdown" name="Situation" id="situation-select">
                 <option value="None">Situation</option>
                 <option value="Office">In-Office</option>
                 <option value="Remote">Remote</option>
@@ -49,6 +54,5 @@ function SearchBar() {
     </div>
     );
   }
-  
+
   export default SearchBar;
-  

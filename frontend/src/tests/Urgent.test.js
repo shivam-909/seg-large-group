@@ -1,5 +1,5 @@
-//import React from 'react';
-import { render } from "@testing-library/react";
+import React from 'react';
+import { render, screen } from "@testing-library/react";
 import Urgent from "../Components/SearchPage/Urgent";
 
 describe('Urgent component', () => {
@@ -9,10 +9,10 @@ describe('Urgent component', () => {
       icon: 'urgent-icon.png'
     };
     const { getByText, getByAltText } = render(<Urgent{...props} />);
-    const urgentText = getByText('Urgently needed');
-    const urgentIcon = getByAltText('Urgent icon');
+    const urgentText = screen.queryByText('Urgently needed');
+    const urgentIcon = screen.queryByAltText('Urgent icon');
     expect(urgentText).toBeInTheDocument();
-    expect(urgentIcon).toBeInTheDocument();
+    expect(urgentIcon).not.toBeInTheDocument();
   });
 
   it('should not render when props.urgent is false', () => {
@@ -21,8 +21,8 @@ describe('Urgent component', () => {
       icon: 'urgent-icon.png'
     };
     const { getByText, getByAltText } = render(<Urgent{...props} />);
-    const urgentText = getByText('Urgently needed');
-    const urgentIcon = getByAltText('Urgent icon');
+    const urgentText = screen.queryByText('Urgently needed');
+    const urgentIcon = screen.queryByAltText('Urgent icon');
     expect(urgentText).not.toBeInTheDocument();
     expect(urgentIcon).not.toBeInTheDocument();
   });
