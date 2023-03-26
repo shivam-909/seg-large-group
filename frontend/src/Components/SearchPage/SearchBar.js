@@ -1,11 +1,21 @@
-function SearchBar() {
+function SearchBar(props) {
     return (
-    <div>
-        <div>
-            <input className="default-input" placeholder="What"/>
-            <input className="default-input" placeholder="Where"/>
-            <button className="default-button">Search</button>
+        <div className='flex items-start justify-center space-x-4'>
+            <div className='w-1/4'>
+                <input id='jobTitleInput' className="p-2 border rounded-md border-dark-theme-grey min-w-full" placeholder='Job title' onChange={props.onJobTitleInputChange}/>
+                {props.displayJobTitleInputErrorMessage &&
+                    <p id='jobTitleInputErrorMessage' className='text-sm text-red'>Please enter a job title.</p>
+                }
+            </div>
+            <div className='w-1/4'>
+                <input id='locationInput' className="p-2 border rounded-md border-dark-theme-grey min-w-full" placeholder='Location' onChange={props.onLocationInputChange}/>
+                {props.displayLocationInputErrorMessage &&
+                    <p id='locationInputErrorMessage' className='text-sm text-red'>Please enter a location.</p>
+                }
+            </div>
+            <button className='bg-dark-theme-grey rounded-md py-2.5 px-4 font-bold text-white' onClick={props.onclick}>Search</button>
         </div>
+<<<<<<< HEAD
         <div>
             <label htmlFor="date-select">Date</label>
             <select className="default-dropdown" name="Date" id="date-select">
@@ -56,3 +66,9 @@ function SearchBar() {
   }
 
   export default SearchBar;
+=======
+    );
+}
+
+export default SearchBar;
+>>>>>>> master

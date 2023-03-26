@@ -32,7 +32,7 @@ function JobDetailsCard(props) {
     }
 
     return (
-        <div className='overflow-y-scroll border-2 border-darker-grey rounded-xl w-5/12 px-5 py-8 max-h-screen'>
+        <div className='max-h-screen overflow-y-scroll border-2 border-darker-grey rounded-xl px-5 py-8 sticky top-0 max-w-[800px]'>
             <p className='font-bold text-xl'>{props.title}</p>
             <a href='/' target='_blank'>{props.companyName}</a>
             <p className='mb-5'>{props.location}</p>
