@@ -4,6 +4,19 @@ import * as jobsdb from "../../../db/jobs";
 import * as applicationsdb from "../../../db/applications";
 import * as errors from "../../public";
 import {ValidateApplicationID, ValidateJobListing, ValidateSearcherId} from "./checks";
+import {RetrieveJobListing} from "../../../db/jobs";
+
+function ValidateQnAs(QnAs: any){
+    if(!(QnAs.constructor == Object)){
+        throw new Error(errors.ErrorScreeningQuestionsMustBeDictionary);
+    }
+    for (const [key, value] of Object.entries(QnAs)) {
+        if(typeof key!== 'string' || typeof value!== 'string'){
+            throw new Error(errors.ErrorScreeningQuestionsIncorrectKeyValues);
+        }
+    }
+
+}
 
 export async function AddApplication(db: DB, body: any): Promise<void> {
 
@@ -11,7 +24,7 @@ export async function AddApplication(db: DB, body: any): Promise<void> {
         throw new Error(errors.ErrorMissingProperty);
     }
 
-    const { status, searcher, jobListing } = body;
+    const { status, searcher, jobListing, cv, coverLetter, QnAs } = body;
 
     if (!status) {
         throw new Error(errors.ErrorStatusRequired);
@@ -25,13 +38,34 @@ export async function AddApplication(db: DB, body: any): Promise<void> {
         throw new Error(errors.ErrorSearcherIDRequired);
     }
 
-    await ValidateSearcherId(db, searcher);
-
     if (!jobListing) {
         throw new Error(errors.ErrorJobListingIDRequired);
     }
 
     await ValidateJobListing(db, jobListing);
+
+    if(!cv){
+        throw new Error(errors.ErrorCvRequired);
+    }
+    const job = await RetrieveJobListing(db, jobListing);
+
+    if(job) {
+        if (!coverLetter && job.coverLetterRequired) {
+            throw new Error(errors.ErrorMissingCoverLetter);
+        }
+    }
+
+    if(!QnAs){
+        throw new Error(errors.ErrorMissingQnAs);
+    }
+
+    await ValidateSearcherId(db, searcher);
+    ValidateQnAs(QnAs);
+
+    if(coverLetter && typeof coverLetter!== 'string'){
+        throw new Error(errors.ErrorCoverLetterMustBeString);
+    }
+
 }
 
 
@@ -58,6 +92,7 @@ export async function RetrieveApplicationByFilter(db: DB, body: any): Promise<vo
     if (jobListing) {
         await ValidateJobListing(db, jobListing);
     }
+
 }
 
 
@@ -67,10 +102,10 @@ export async function UpdateApplication(db: DB, id:string, req: any): Promise<vo
         throw new Error(errors.ErrorMissingProperty);
     }
 
-    const { status, searcher, jobListing } = req;
+    const { status, searcher, jobListing, cv, coverLetter, QnAs } = req;
     await ValidateApplicationID(db, id)
 
-    if (!status && !searcher && !jobListing) {
+    if (!status && !searcher && !jobListing && !cv && !coverLetter && !QnAs) {
         throw new Error(errors.ErrorMissingProperty);
     }
 
@@ -84,6 +119,18 @@ export async function UpdateApplication(db: DB, id:string, req: any): Promise<vo
 
     if (jobListing) {
         await ValidateJobListing(db, jobListing);
+    }
+
+    if(cv && typeof cv!== 'string'){
+        throw new Error(errors.ErrorCvMustBeString);
+    }
+
+    if(coverLetter && typeof coverLetter!== 'string'){
+        throw new Error(errors.ErrorCoverLetterMustBeString);
+    }
+
+    if(QnAs){
+        ValidateQnAs(QnAs);
     }
 
 }

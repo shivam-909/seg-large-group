@@ -6,8 +6,9 @@ class Application {
     searcher: string;
     jobListing: string;
     cv: string[];
-    coverLetter: string;
     QnAs: Record<string, string>;
+    coverLetter ?: string;
+
 
 
     constructor(id: string, status: string, searcher: string, jobListing: string, cv: string[], coverLetter: string, QnAs: Record<string,string>) {
