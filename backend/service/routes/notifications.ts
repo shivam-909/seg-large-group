@@ -5,13 +5,11 @@ import { NextFunction, Request, Response } from "express";
 import * as notificationsdb from "../../db/notifications";
 import { randomUUID } from "crypto";
 import Notification from "../../models/notification";
-import {RetrieveApplication} from "../../db/applications";
-import {RetrieveJobListing} from "../../db/jobs";
-import {RetrieveCompanyByID} from "../../db/companies";
-import {RetrieveFullUserByID} from "../../db/users";
-import * as validate from "./validation/notifications";
-
-
+import { RetrieveApplication } from "../../db/applications";
+import { RetrieveJobListing } from "../../db/jobs";
+import { RetrieveCompanyByID } from "../../db/companies";
+import { RetrieveFullUserByID } from "../../db/users";
+import *  as validate from "../routes/validation/notifications";
 
 export function AddNotification(db: DB): Handler {
   return async (req: Request, res: Response, next: NextFunction) => {
@@ -20,12 +18,13 @@ export function AddNotification(db: DB): Handler {
     const created = new Date();
     const newNotification = new Notification(newID, content, application, created, userID);
     try {
-      await validate.AddNotification(db, { content, application, created, userID});
+      await validate.AddNotification(db, { content, application, created, userID });
     } catch (err) {
       next((err as Error).message);
       return;
     }
     await notificationsdb.CreateNotification(db, newNotification);
+    res.sendStatus(200);
   }
 }
 
@@ -42,19 +41,19 @@ export function GetNotification(db: DB): Handler {
 
     const application = await RetrieveApplication(db, notification.applicationID);
     let jobListing = null;
-    if(application) jobListing = await RetrieveJobListing(db, application.jobListing);
+    if (application) jobListing = await RetrieveJobListing(db, application.jobListing);
     let title = null;
     let company = null;
-    if(jobListing){
+    if (jobListing) {
       title = jobListing.title;
-      company = await RetrieveCompanyByID(db,jobListing.companyID);
+      company = await RetrieveCompanyByID(db, jobListing.companyID);
     }
     let companyName = null;
-    if(company) companyName = company.companyName;
+    if (company) companyName = company.companyName;
 
     const user = await RetrieveFullUserByID(db, notification.userID);
     let searcherID = null;
-    if(user) searcherID = user.searcherID;
+    if (user) searcherID = user.searcherID;
 
 
     const newNotification = {
@@ -65,10 +64,8 @@ export function GetNotification(db: DB): Handler {
     }
 
     res.status(200).json(newNotification);
-
   };
 }
-
 
 export function DeleteNotification(db: DB): Handler {
   return async (req: Request, res: Response, next: NextFunction) => {
@@ -82,5 +79,6 @@ export function DeleteNotification(db: DB): Handler {
     }
 
     await notificationsdb.DeleteNotification(db, id);
+    res.sendStatus(200);
   };
 }

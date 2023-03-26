@@ -1,5 +1,5 @@
-import DB from "../../db/db";
-import { RetrieveFullUserByEmail, DeleteUser } from "../../db/users";
+import DB from "../../../db/db";
+import { RetrieveFullUserByEmail, DeleteUser } from "../../../db/users";
 
 test('login user', async () => {
 
@@ -59,5 +59,9 @@ test('login user', async () => {
 
     expect(user).not.toBeNull();
 
-    await DeleteUser(db, user!.userID);
+    try {
+        await DeleteUser(db, user!.userID);
+    } catch (e) {
+        expect(e).toBeNull();
+    }
 });
