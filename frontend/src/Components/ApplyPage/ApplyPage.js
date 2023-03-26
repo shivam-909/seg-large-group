@@ -62,7 +62,7 @@ export default function ApplyPage() {
     }
 
     useEffect(() => {
-        getApplication();
+        getApplication().catch(err => console.log(err));
     }, []);
 
 
@@ -106,6 +106,7 @@ export default function ApplyPage() {
     }
 
     function submitApplication() {
+        console.log(2)
         const answers = document.getElementsByName('answer');
         const QnAs = {};
         job.screeningQuestions.forEach((question,i) => {
@@ -122,7 +123,9 @@ export default function ApplyPage() {
         formData.append('QnAs', JSON.stringify(QnAs));
         formData.append('coverLetter', coverLetter);
 
-        // axios.post(`http://localhost:8000/api/applications/add`, formData)
+        axios.post(`http://localhost:8000/api/applications/add`, formData)
+            .then(response => console.log(response))
+            .catch(err => console.log(err));
     }
 
     function uploadFile(e) {
