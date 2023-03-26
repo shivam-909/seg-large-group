@@ -92,7 +92,12 @@ export async function UpdateApplication(db: DB, id:string, req: any): Promise<vo
 
 }
 
-
+export async function DeleteApplication(db: DB, id: string): Promise<void> {
+    const application = await applicationsdb.RetrieveApplication(db, id);
+    if (!application) {
+        throw new Error(errors.ErrorApplicationNotFound);
+    }
+}
 
 export async function ApplicationExists(db: DB, id: string): Promise<void> {
     await ValidateApplicationID(db, id);

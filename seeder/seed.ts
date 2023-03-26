@@ -1,15 +1,14 @@
 import DB from "../db/db";
 
-import { randomUUID } from "crypto";
-import { faker } from '@faker-js/faker';
+import {randomUUID} from "crypto";
+import {faker} from '@faker-js/faker';
 
 import JobListing from "../models/job";
-import { User } from "../models/user";
+import {Company, Searcher, User} from "../models/user";
 import Notification from "../models/notification";
-import { Status } from "../models/enums/status.enum";
-import { Company, Searcher } from "../models/user";
+import {Status} from "../models/enums/status.enum";
 import Application from "../models/application";
-import { companyNotification, searcherNotification } from "../models/enums/userNotification.enum";
+import {companyNotification, searcherNotification} from "../models/enums/userNotification.enum";
 import bcrypt from "bcrypt";
 import * as jobsdb from "../db/jobs";
 import * as usersdb from "../db/users";
@@ -20,15 +19,16 @@ import * as searcherdb from "../db/searchers";
 import {
     ErrorCompanyNotFound,
     ErrorJobListingNotFound,
-    ErrorNoCompaniesExist, ErrorSearcherNotFound,
+    ErrorNoCompaniesExist,
+    ErrorSearcherNotFound,
     ErrorUserNotFound
 } from "../service/public";
 
 //CONTROL
-const numCompanies = 2
+const numCompanies = 5
 const numSearchers = 10
 const numJobListings = 100
-const numApplications = 5
+const numApplications = 20
 
 //=====================================================USERS=====================================================
 
@@ -42,10 +42,11 @@ async function GenerateUser(): Promise<User> {
         email,
         hashPassword(password),
         faker.image.avatar(),
-        faker.address.city(),
+        GetRandomCity(),
         [],
+        faker.lorem.paragraph(),
         undefined,
-        undefined,
+        undefined
     )
 }
 
@@ -134,6 +135,30 @@ export function hashPassword(password: string): string {
     return hash as string;
 }
 
+function GenerateEducation(): {subject: string, qualification: string, grade: string, duration: string}[] {
+    const subjects = ['Mathematics', 'Physics', 'Chemistry', 'Biology', 'History', 'Geography', 'English', 'French', 'German'];
+    const qualifications = ['Bachelors', 'Masters', 'PhD'];
+    const grades = ['A', 'B', 'C', 'D', 'E', 'F'];
+    const durations = ['1 year', '2 years', '3 years', '4 years', '5 years'];
+
+    const numEducations = Math.floor(Math.random() * 4) + 1;
+
+    const educations = [];
+
+    for (let i = 0; i < numEducations; i++) {
+        const subject = faker.helpers.arrayElement(subjects);
+        const qualification = faker.helpers.arrayElement(qualifications);
+        const grade = faker.helpers.arrayElement(grades);
+        const duration = faker.helpers.arrayElement(durations);
+
+
+        educations.push({subject, qualification, grade, duration});
+    }
+
+    return educations;
+}
+
+
 
 //=====================================================JOB-LISTINGS=====================================================
 
@@ -220,7 +245,6 @@ function GetRandomQuestions(): Record<string, boolean> {
 
     return randomQuestions;
 }
-
 
 
 async function GenerateJobListing(db: DB): Promise<JobListing> {
@@ -318,9 +342,8 @@ function GetRandomQnAs(): Record<string, string> {
 async function GenerateApplicationListing(db: DB): Promise<Application> {
     const randomSearcher = await RetrieveRandomSearcherId(db);
     const randomJobListing = await RetrieveRandomJobListingID(db);
-    const cv = [faker.name.fullName() + "'s CV", "https://seg-joblink.s3.eu-west-2.amazonaws.com/cv/1047a922-d91f-43dc-80f2-7273ee90acaa.png.pdf"];
+    const cv = [faker.name.fullName() + "'s CV", "https://seg-joblink.s3.eu-west-2.amazonaws.com/cv/1047a922-d91f-43dc-80f2-7273ee90acaa.png.pdf"]
     const coverLetter = faker.lorem.paragraphs(5000).substring(0, Math.floor(Math.random() * (100 + 1)) + 500);
-
 
         return new Application(
         randomUUID(),
@@ -328,8 +351,9 @@ async function GenerateApplicationListing(db: DB): Promise<Application> {
         randomSearcher,
         randomJobListing,
         cv,
+        GetRandomQnAs(),
         coverLetter,
-        GetRandomQnAs()
+
     );
 }
 
@@ -446,4 +470,86 @@ function GetRandomNotificationEnum(type: "company" | "searcher"): string {
     const statusValues = Object.values(enums).filter((value) => typeof value === 'string');
     const randomIndex = Math.floor(Math.random() * statusValues.length);
     return statusValues[randomIndex] as string;
+}
+function GetRandomCity(): string {
+    const cities = [
+        "Bath",
+        "Birmingham",
+        "Bradford",
+        "Brighton & Hove",
+        "Bristol",
+        "Cambridge",
+        "Canterbury",
+        "Carlisle",
+        "Chelmsford",
+        "Chester",
+        "Chichester",
+        "Colchester",
+        "Coventry",
+        "Derby",
+        "Doncaster",
+        "Durham",
+        "Ely",
+        "Exeter",
+        "Gloucester",
+        "Hereford",
+        "Kingston-upon-Hull",
+        "Lancaster",
+        "Leeds",
+        "Leicester",
+        "Lichfield",
+        "Lincoln",
+        "Liverpool",
+        "London",
+        "Manchester",
+        "Milton Keynes",
+        "Newcastle-upon-Tyne",
+        "Norwich",
+        "Nottingham",
+        "Oxford",
+        "Peterborough",
+        "Plymouth",
+        "Portsmouth",
+        "Preston",
+        "Ripon",
+        "Salford",
+        "Salisbury",
+        "Sheffield",
+        "Southampton",
+        "Southend-on-Sea",
+        "St Albans",
+        "Stoke on Trent",
+        "Sunderland",
+        "Truro",
+        "Wakefield",
+        "Wells",
+        "Westminster",
+        "Winchester",
+        "Wolverhampton",
+        "Worcester",
+        "York",
+        "Armagh",
+        "Bangor",
+        "Belfast",
+        "Lisburn",
+        "Londonderry",
+        "Newry",
+        "Aberdeen",
+        "Dundee",
+        "Dunfermline",
+        "Edinburgh",
+        "Glasgow",
+        "Inverness",
+        "Perth",
+        "Stirling",
+        "Bangor",
+        "Cardiff",
+        "Newport",
+        "St Asaph",
+        "St Davids",
+        "Swansea",
+        "Wrexham"
+    ]
+
+    return faker.helpers.arrayElement(cities)
 }

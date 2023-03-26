@@ -2,7 +2,8 @@ import { NextFunction, Request, Response } from "express";
 import 'express-async-errors';
 import *  as validate from "../routes/validation/search";
 import DB from "../../db/db";
-import { Handler } from "../public";
+import {getErrorMessage, Handler} from "../public";
+import * as errors from "../public";
 import { findJobListingsByQuery } from "../../search/search";
 import { isQuery } from "./validation/search";
 
