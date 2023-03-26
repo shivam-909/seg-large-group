@@ -1,15 +1,14 @@
 import DB from "../db/db";
 
-import { randomUUID } from "crypto";
-import { faker } from '@faker-js/faker';
+import {randomUUID} from "crypto";
+import {faker} from '@faker-js/faker';
 
 import JobListing from "../models/job";
-import { User } from "../models/user";
+import {Company, Searcher, User} from "../models/user";
 import Notification from "../models/notification";
-import { Status } from "../models/enums/status.enum";
-import { Company, Searcher } from "../models/user";
+import {Status} from "../models/enums/status.enum";
 import Application from "../models/application";
-import { companyNotification, searcherNotification } from "../models/enums/userNotification.enum";
+import {companyNotification, searcherNotification} from "../models/enums/userNotification.enum";
 import bcrypt from "bcrypt";
 import * as jobsdb from "../db/jobs";
 import * as usersdb from "../db/users";
@@ -20,15 +19,16 @@ import * as searcherdb from "../db/searchers";
 import {
     ErrorCompanyNotFound,
     ErrorJobListingNotFound,
-    ErrorNoCompaniesExist, ErrorSearcherNotFound,
+    ErrorNoCompaniesExist,
+    ErrorSearcherNotFound,
     ErrorUserNotFound
 } from "../service/public";
 
 //CONTROL
-const numCompanies = 2
+const numCompanies = 5
 const numSearchers = 10
 const numJobListings = 100
-const numApplications = 100
+const numApplications = 20
 
 //=====================================================USERS=====================================================
 
@@ -42,10 +42,11 @@ async function GenerateUser(): Promise<User> {
         email,
         hashPassword(password),
         faker.image.avatar(),
-        faker.address.city(),
+        GetRandomCity(),
         [],
+        faker.lorem.paragraph(),
         undefined,
-        undefined,
+        undefined
     )
 }
 
@@ -133,6 +134,30 @@ export function hashPassword(password: string): string {
 
     return hash as string;
 }
+
+function GenerateEducation(): {subject: string, qualification: string, grade: string, duration: string}[] {
+    const subjects = ['Mathematics', 'Physics', 'Chemistry', 'Biology', 'History', 'Geography', 'English', 'French', 'German'];
+    const qualifications = ['Bachelors', 'Masters', 'PhD'];
+    const grades = ['A', 'B', 'C', 'D', 'E', 'F'];
+    const durations = ['1 year', '2 years', '3 years', '4 years', '5 years'];
+
+    const numEducations = Math.floor(Math.random() * 4) + 1;
+
+    const educations = [];
+
+    for (let i = 0; i < numEducations; i++) {
+        const subject = faker.helpers.arrayElement(subjects);
+        const qualification = faker.helpers.arrayElement(qualifications);
+        const grade = faker.helpers.arrayElement(grades);
+        const duration = faker.helpers.arrayElement(durations);
+
+
+        educations.push({subject, qualification, grade, duration});
+    }
+
+    return educations;
+}
+
 
 
 //=====================================================JOB-LISTINGS=====================================================
@@ -222,7 +247,6 @@ function GetRandomQuestions(): Record<string, boolean> {
 }
 
 
-
 async function GenerateJobListing(db: DB): Promise<JobListing> {
     const company = await GetRandomCompany(db);
     const user = await usersdb.RetrieveUserByCompanyID(db, company.companyID);
@@ -278,17 +302,58 @@ export async function RetrieveRandomJobIDArr(db: DB): Promise<string[]> {
 
 //=====================================================APPLICATIONS=====================================================
 
+function GetRandomQnAs(): Record<string, string> {
+    const MAX_QnAs = Math.floor(Math.random() * 5) + 1;
+    const QnAs: Record<string, string> = {};
+
+    const interviewQuestions: [string, string][] = [
+        ["Why haven’t you gotten your Bachelor’s Degree/Master’s Degree/Ph.D.?", faker.lorem.words()],
+        ["Why have you switched jobs so many times?", faker.lorem.words()],
+        ["Why did you change your career path?", faker.lorem.words()],
+        ["Why did you decide to leave your previous/current job?", faker.lorem.words()],
+        ["Why is there a gap in your work experience?", faker.lorem.words()],
+        ["Why were you fired?", faker.lorem.words()],
+        ["How do you feel about working weekends or late hours?", faker.lorem.words()],
+        ["How would your boss describe you?", faker.lorem.words()],
+        ["Do you have any serious medical conditions?", faker.lorem.words()],
+        ["What would your first 30, 60, or 90 days look like in this role?", faker.lorem.words()],
+        ["Are you a team player?", faker.lorem.words()],
+        ["Are you a risk-taker?", faker.lorem.words()],
+        ["How do you deal with pressure or stressful situation?", faker.lorem.words()],
+        ["Do you think there is a difference between hard work and smart work?", faker.lorem.words()],
+        ["How quickly do you adapt to new technology?", faker.lorem.words()],
+        ["Do you have any interests outside of work?", faker.lorem.words()],
+        ["What do you think our company/organization could do better?", faker.lorem.words()],
+        ["Give an example of how you have handled a challenge in the workplace before.", faker.lorem.words()],
+        ["Give an example of when you performed well under pressure.", faker.lorem.words()],
+        ["Give an example of when you showed leadership qualities.", faker.lorem.words()]
+    ];
+
+    const shuffledQuestions = interviewQuestions.sort(() => Math.random() - 0.5);
+
+    for (let i = 0; i < MAX_QnAs && i < shuffledQuestions.length; i++) {
+        QnAs[shuffledQuestions[i][0]] = shuffledQuestions[i][1];
+    }
+
+    return QnAs;
+}
+
+
 async function GenerateApplicationListing(db: DB): Promise<Application> {
     const randomSearcher = await RetrieveRandomSearcherId(db);
     const randomJobListing = await RetrieveRandomJobListingID(db);
     const cv = [faker.name.fullName() + "'s CV", "https://seg-joblink.s3.eu-west-2.amazonaws.com/cv/1047a922-d91f-43dc-80f2-7273ee90acaa.png.pdf"]
+    const coverLetter = faker.lorem.paragraphs(5000).substring(0, Math.floor(Math.random() * (100 + 1)) + 500);
 
-    return new Application(
+        return new Application(
         randomUUID(),
         GetRandomStatus(),
         randomSearcher,
         randomJobListing,
         cv,
+        GetRandomQnAs(),
+        coverLetter,
+
     );
 }
 
@@ -405,4 +470,86 @@ function GetRandomNotificationEnum(type: "company" | "searcher"): string {
     const statusValues = Object.values(enums).filter((value) => typeof value === 'string');
     const randomIndex = Math.floor(Math.random() * statusValues.length);
     return statusValues[randomIndex] as string;
+}
+function GetRandomCity(): string {
+    const cities = [
+        "Bath",
+        "Birmingham",
+        "Bradford",
+        "Brighton & Hove",
+        "Bristol",
+        "Cambridge",
+        "Canterbury",
+        "Carlisle",
+        "Chelmsford",
+        "Chester",
+        "Chichester",
+        "Colchester",
+        "Coventry",
+        "Derby",
+        "Doncaster",
+        "Durham",
+        "Ely",
+        "Exeter",
+        "Gloucester",
+        "Hereford",
+        "Kingston-upon-Hull",
+        "Lancaster",
+        "Leeds",
+        "Leicester",
+        "Lichfield",
+        "Lincoln",
+        "Liverpool",
+        "London",
+        "Manchester",
+        "Milton Keynes",
+        "Newcastle-upon-Tyne",
+        "Norwich",
+        "Nottingham",
+        "Oxford",
+        "Peterborough",
+        "Plymouth",
+        "Portsmouth",
+        "Preston",
+        "Ripon",
+        "Salford",
+        "Salisbury",
+        "Sheffield",
+        "Southampton",
+        "Southend-on-Sea",
+        "St Albans",
+        "Stoke on Trent",
+        "Sunderland",
+        "Truro",
+        "Wakefield",
+        "Wells",
+        "Westminster",
+        "Winchester",
+        "Wolverhampton",
+        "Worcester",
+        "York",
+        "Armagh",
+        "Bangor",
+        "Belfast",
+        "Lisburn",
+        "Londonderry",
+        "Newry",
+        "Aberdeen",
+        "Dundee",
+        "Dunfermline",
+        "Edinburgh",
+        "Glasgow",
+        "Inverness",
+        "Perth",
+        "Stirling",
+        "Bangor",
+        "Cardiff",
+        "Newport",
+        "St Asaph",
+        "St Davids",
+        "Swansea",
+        "Wrexham"
+    ]
+
+    return faker.helpers.arrayElement(cities)
 }
