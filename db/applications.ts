@@ -14,6 +14,7 @@ export async function CreateApplication(db: DB, application: Application) {
         'searcher': application.searcher,
         'jobListing': application.jobListing,
         'cv': application.cv,
+        'coverLetter': application.coverLetter
     });
 }
 
