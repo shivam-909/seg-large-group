@@ -8,8 +8,8 @@ export default function Category(props) {
     const [jobsList, setJobsList] = useState([]);
     const [user, setUser] = useState([])
 
-    async function addCard(id, title, company, location, isSaved){
-        await setJobsList( current => [...current, <JobCard id={id} title={title} company={company} location={location} isSaved={isSaved}/>]);
+    async function addCard(applicationID, jobID, title, company, location, status){
+        await setJobsList( current => [...current, <JobCard id={applicationID} jobID={jobID} title={title} company={company} location={location} status={status}/>]);
     }
 
     async function addCompanyCard(id, title, schedule, location, date){
@@ -72,7 +72,7 @@ export default function Category(props) {
                         axios.get("http://localhost:8000/api/jobs/" + filterJobs[i].jobListing)
                             .then(async job => {
                                 const companyName = await axios.get("http://localhost:8000/api/company/"+job.data.companyID).then(company => {return company.data.companyName})
-                                await addCard(job.data.id, job.data.title, companyName, job.data.location, false);
+                                await addCard(filterJobs[i].id, job.data.id, job.data.title, companyName, job.data.location, filterJobs[i].status);
                             })
                     }
                 } else {
@@ -98,7 +98,7 @@ export default function Category(props) {
                         axios.get("http://localhost:8000/api/jobs/" + savedJobs[i])
                             .then(async job => {
                                 const companyName = await axios.get("http://localhost:8000/api/company/"+job.data.companyID).then(company => {return company.data.companyName})
-                                await addCard(job.data.id, job.data.title, companyName, job.data.location, true);
+                                await addCard("",job.data.id, job.data.title, companyName, job.data.location, "Saved");
                             })
                     }
                 } else {

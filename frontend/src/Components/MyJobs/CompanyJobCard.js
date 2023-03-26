@@ -18,7 +18,7 @@ export default function CompanyJobCard(props) {
                 <p className='font-bold text-xl'>{props.title}</p>
                 <p>{Array.isArray(props.schedule) ? props.schedule?.map(schedule => schedule + " "): props.schedule}</p>
                 <p>{props.location}</p>
-                <p className='mb-2'>{format}</p>
+                <p>{format}</p>
             </div>
         </div>
     );

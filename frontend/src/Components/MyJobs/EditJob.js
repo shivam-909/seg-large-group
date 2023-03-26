@@ -59,6 +59,7 @@ export default function EditJob() {
                     description: response.data.description,
                     requirements: response.data.requirements,
                     benefits: response.data.benefits,
+                    type: response.data.type,
                 }));
                 for (let i = 0; i < response.data.requirements?.length; i++) {
                     addRequirement(response.data.requirements[i], i);
@@ -97,8 +98,11 @@ export default function EditJob() {
         let internship = document.getElementById("internship").checked;
         let apprenticeship = document.getElementById("apprenticeship").checked;
         let contract = document.getElementById("contract").checked;
+        let inoffice = document.getElementById("inoffice").checked;
+        let hybrid = document.getElementById("hybrid").checked;
+        let remote = document.getElementById("remote").checked;
 
-        if (title === "" || location === "" || industry === "" || description === "" || description.length > 10000 || compensation === "" || (!fullTime && !apprenticeship && !partTime && !internship && !contract)){
+        if (title === "" || location === "" || industry === "" || description === "" || description.length > 10000 || compensation === "" || (!fullTime && !apprenticeship && !partTime && !internship && !contract) || (!inoffice && !hybrid && !remote)){
             setVisible("errorBox", true);
             return;
         }
@@ -131,12 +135,12 @@ export default function EditJob() {
             formData.append("benefits","")
         }
 
-        let skills = document.querySelectorAll("[id=skill]")
+        let skills = document.querySelectorAll("[id^=skillInput]")
         let skillDurations = document.querySelectorAll("[id=skillDuration]")
         let skillInterval = document.querySelectorAll("[id=skillInterval]")
         if(skills.length > 0) {
             for(let i = 0; i < skills.length; i++){
-                if (skills[i].value === ""){
+                if (skills[i].value === "" || skills[i].value.includes(",")){
                     setVisible("errorBox", true);
                     return;
                 }
@@ -147,11 +151,16 @@ export default function EditJob() {
             formData.append("requirements","")
         }
 
-        fullTime && formData.append("schedule","Full-time")
-        partTime && formData.append("schedule","Part-time")
-        internship && formData.append("schedule","Internship")
-        contract && formData.append("schedule","Contract")
-        apprenticeship && formData.append("schedule","Apprenticeship")
+        fullTime && formData.append("schedule[]","Full-time")
+        partTime && formData.append("schedule[]","Part-time")
+        internship && formData.append("schedule[]","Internship")
+        contract && formData.append("schedule[]","Contract")
+        apprenticeship && formData.append("schedule[]","Apprenticeship")
+
+        inoffice && formData.append("type[]","In-Office")
+        hybrid && formData.append("type[]","Hybrid")
+        remote && formData.append("type[]","Remote")
+
 
         formData.append('title', title);
         formData.append('location', location);
@@ -205,20 +214,26 @@ export default function EditJob() {
                         <p><strong>Industry: <span className={"text-red"}>&#42;</span> </strong> <input type="text" id="industry" placeholder = "Please enter the Job Industry" defaultValue={job.industry}/></p>
                         <div>
                             <p className={"w-[75%] inline-block"}><strong>Compensation: <span className={"text-red"}>&#42;</span> </strong> <input type="number" min={0} id="compensation" placeholder = "Please enter the Compensation" defaultValue={job.compensation && job.compensation[0]}/></p>
-                            <select id={"compensationRate"} defaultValue={job.compensation && job.compensation[1]} className={"w-[25%] h-10 border-[#ccc] border-[1px] rounded-md"}>
-                                <option value={"yearly"}>/Year</option>
-                                <option value={"weekly"}>/Week</option>
-                                <option value={"daily"}>/Day</option>
-                                <option value={"hourly"}>/Hour</option>
+                            <select id={"compensationRate"} defaultValue={job.compensation?.at(1)} className={"w-[25%] h-10 border-[#ccc] border-[1px] rounded-md"}>
+                                <option value={"year"}>/Year</option>
+                                <option value={"week"}>/Week</option>
+                                <option value={"day"}>/Day</option>
+                                <option value={"hour"}>/Hour</option>
                             </select>
                         </div>
                         <p><strong>Schedule: <span className={"text-red"}>&#42;</span></strong></p>
-                        <div className={""}>
-                            <label><input type="checkbox" id={"fullTime"} value={"Full-time"} className={"peer sr-only"}/><span className={"border-2 border-[#ccc] p-1 rounded-md m-2 peer-checked:bg-[#2196F3] select-none peer-checked:border-dark-theme-grey"}>Full-time</span></label>
-                            <label><input type="checkbox" id={"partTime"} value={"Part-time"} className={"peer sr-only"}/><span className={"border-2 border-[#ccc] p-1 rounded-md m-2 peer-checked:bg-[#2196F3] select-none peer-checked:border-dark-theme-grey"}>Part-time</span></label>
-                            <label><input type="checkbox" id={"internship"} value={"Internship"} className={"peer sr-only"}/><span className={"border-2 border-[#ccc] p-1 rounded-md m-2 peer-checked:bg-[#2196F3] select-none peer-checked:border-dark-theme-grey"}>Internship</span></label>
-                            <label><input type="checkbox" id={"apprenticeship"} value={"Apprenticeship"} className={"peer sr-only"}/><span className={"border-2 border-[#ccc] p-1 rounded-md m-2 peer-checked:bg-[#2196F3] select-none w-full peer-checked:border-dark-theme-grey"}>Apprenticeship</span></label>
-                            <label><input type="checkbox" id={"contract"} value={"Contract"} className={"peer sr-only"}/><span className={"border-2 border-[#ccc] p-1 rounded-md m-2 peer-checked:bg-[#2196F3] select-none w-full peer-checked:border-dark-theme-grey"}>Contract</span></label>
+                        <div>
+                            <label><input type="checkbox" id={"fullTime"} defaultChecked={job.schedule?.includes("Full-time")} value={"Full-time"} className={"peer sr-only"}/><span className={"border-2 border-[#ccc] p-1 rounded-md m-2 peer-checked:bg-[#2196F3] select-none peer-checked:border-dark-theme-grey"}>Full-time</span></label>
+                            <label><input type="checkbox" id={"partTime"} defaultChecked={job.schedule?.includes("Part-time")} value={"Part-time"} className={"peer sr-only"}/><span className={"border-2 border-[#ccc] p-1 rounded-md m-2 peer-checked:bg-[#2196F3] select-none peer-checked:border-dark-theme-grey"}>Part-time</span></label>
+                            <label><input type="checkbox" id={"internship"} defaultChecked={job.schedule?.includes("Internship")} value={"Internship"} className={"peer sr-only"}/><span className={"border-2 border-[#ccc] p-1 rounded-md m-2 peer-checked:bg-[#2196F3] select-none peer-checked:border-dark-theme-grey"}>Internship</span></label>
+                            <label><input type="checkbox" id={"apprenticeship"} defaultChecked={job.schedule?.includes("Apprenticeship")} value={"Apprenticeship"} className={"peer sr-only"}/><span className={"border-2 border-[#ccc] p-1 rounded-md m-2 peer-checked:bg-[#2196F3] select-none w-full peer-checked:border-dark-theme-grey"}>Apprenticeship</span></label>
+                            <label><input type="checkbox" id={"contract"} defaultChecked={job.schedule?.includes("Contract")} value={"Contract"} className={"peer sr-only"}/><span className={"border-2 border-[#ccc] p-1 rounded-md m-2 peer-checked:bg-[#2196F3] select-none w-full peer-checked:border-dark-theme-grey"}>Contract</span></label>
+                        </div>
+                        <p><strong>Destination: <span className={"text-red"}>&#42;</span></strong></p>
+                        <div>
+                            <label><input type="checkbox" id={"inoffice"} defaultChecked={job.type?.includes("In-Office")} value={"In-Office"} className={"peer sr-only"}/><span className={"border-2 border-[#ccc] p-1 rounded-md m-2 peer-checked:bg-[#2196F3] select-none peer-checked:border-dark-theme-grey"}>In-Office</span></label>
+                            <label><input type="checkbox" id={"hybrid"} defaultChecked={job.type?.includes("Hybrid")} value={"Hybrid"} className={"peer sr-only"}/><span className={"border-2 border-[#ccc] p-1 rounded-md m-2 peer-checked:bg-[#2196F3] select-none peer-checked:border-dark-theme-grey"}>Hybrid</span></label>
+                            <label><input type="checkbox" id={"remote"} defaultChecked={job.type?.includes("Remote")} value={"Remote"} className={"peer sr-only"}/><span className={"border-2 border-[#ccc] p-1 rounded-md m-2 peer-checked:bg-[#2196F3] select-none peer-checked:border-dark-theme-grey"}>Remote</span></label>
                         </div>
                         <p><strong>Location: <span className={"text-red"}>&#42;</span> </strong> <input type="text" id="location" placeholder = "Please enter the Job Location" defaultValue={job.location}/></p>
                         <p><strong className={"float-left"}>Description: <span className={"text-red"}>&#42;</span></strong><textarea onChange={() => {validateDescription()}} id={"description"} defaultValue={job.description} className={"border-2 border-[#ccc] rounded-md p-2 w-full h-48"}/><div id={"descError"}><div className={"text-red"}>Description too long.</div></div></p>

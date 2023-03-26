@@ -33,6 +33,7 @@ function UserProfilePage() {
     },[profile]) // eslint-disable-line
 
     useEffect(() => {
+        toggleKeys(false)
         const getUser = async () => {
             if (user.length === 0){
                 await GetData().then(r => {
@@ -78,7 +79,7 @@ function UserProfilePage() {
             formData.append('companyName', companyName);
             formData.append('location', location);
 
-            await axios.patch("http://localhost:8000/api/users/" + id, formData).then(navigate(0))
+            await axios.patch("http://localhost:8000/api/users/" + id, formData).then(setProfile([]))
         }
     }
 
@@ -104,21 +105,21 @@ function UserProfilePage() {
         }
     }
     function validateEducation(){
-        let subjects = document.querySelectorAll("[id=subject]");
-        let grades = document.querySelectorAll("[id=grade]");
+        let subjects = document.querySelectorAll("[id^=subject]");
+        let grades = document.querySelectorAll("[id^=grade]");
         let durations = document.querySelectorAll("[id=educationDuration]");
         for(let i = 0; i < subjects.length; i++) {
-            if (subjects[i].value === "" || grades[i].value === "" || durations[i].value === ""){
+            if (subjects[i].value === "" || grades[i].value === "" || durations[i].value === "" || subjects[i].value.includes(",") || grades[i].value.includes(",")){
                 return false;
             }
         }
         return true;
     }
     function validateSkills(){
-        let keyInputs = document.querySelectorAll("[id=skill]");
+        let keyInputs = document.querySelectorAll("[id^=skillInput]");
         let durationsInputs = document.querySelectorAll("[id=skillDuration]");
         for(let i = 0; i < keyInputs.length; i++) {
-            if (keyInputs[i].value === "" || durationsInputs[i].value === ""){
+            if (keyInputs[i].value === "" || durationsInputs[i].value === "" || keyInputs[i].value.includes(",")){
                 return false;
             }
         }

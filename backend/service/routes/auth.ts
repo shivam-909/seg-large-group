@@ -198,6 +198,6 @@ export function ValidEmail(email: string): boolean {
 }
 
 export function ValidPassword(password: string): boolean {
-  const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{8,20})/;
+  const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[.!@#$%^&*])(?=.{8,20})/;
   return regex.test(password);
 }
