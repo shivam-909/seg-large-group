@@ -46,9 +46,10 @@ describe('JobPostCard', () => {
     });
   });
 
+
   it('renders the urgent status', () => {
     render(<JobPostCard {...jobPostProps} />);
-    const urgentStatus = screen.getByTextId('urgent-status');
+    const urgentStatus = screen.getByTestId('urgent-status');
     expect(urgentStatus).toBeInTheDocument();
   });
 

@@ -1,20 +1,6 @@
 import { render, screen, fireEvent} from "@testing-library/react";
 import JobDetailsCard from "../Components/SearchPage/JobDetailsCard";
 
-import saveIcon from '../icons/saveIcon.png';
-import savedIcon from '../icons/savedIcon.png';
-import salaryIcon from "../icons/salaryIcon.png";
-import PlaceholderCard from "../Components/SearchPage/PlaceholderCard";
-import suitcaseIcon2 from "../icons/suitcaseIcon2.png";
-import calendarIcon from "../icons/calendarIcon.png";
-import shareIcon from "../icons/shareIcon.png";
-import emailIcon from "../icons/emailIcon.png";
-import copyIcon from "../icons/copyIcon.png";
-import {useState} from "react";
-import clockIcon from "../icons/clockIcon.png";
-import Urgent from "../Components/SearchPage/Urgent";
-import JobPostAge from "../Components/SearchPage/JobPostAge";
-import openInNewTabIcon from "../icons/openInNewTabIcon.png";
 
 const jobDetails = {
   id:"1234",

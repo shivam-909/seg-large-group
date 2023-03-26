@@ -119,7 +119,7 @@ function JobDetailsCard(props) {
 
                             <div className='grid items-center justify-center'>
                                 <div className='mt-10 bg-lighter-grey rounded inline-flex items-center text-lg space-x-3 px-2 py-1 cursor-pointer' onClick={copyJobPostLink}>
-                                    <img src={copyIcon} alt=''/>
+                                    <img src={copyIcon} alt='copy icon'/>
                                     <p>Copy link</p>
                                 </div>
 
