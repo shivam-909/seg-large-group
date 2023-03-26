@@ -19,7 +19,7 @@ function SearchPage() {
         if (isJobTitleInputValid() & isLocationInputValid()) {
             setLoading(true);
             const formData = new FormData();
-            formData.append('companyID', '6e9be0f9-9444-4cf0-aa1b-c6242133fa16');
+            formData.append('companyID', '848082c4-e679-44a3-bcfa-f7854a9a8c59');
             axios.post('http://localhost:8000/api/jobs/filter', formData)
                 .then(async response => {
                     for (const job of response.data) {

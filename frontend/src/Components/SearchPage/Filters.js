@@ -1,19 +1,10 @@
 import {useEffect, useState} from "react";
 
 export default function Filters(props) {
+    const originalJobResults = props.jobs;
+    const [filteredJobs, setFilteredJobs] = useState(props.jobs);
     const [showFilters, setShowFilters] = useState(false);
-    const [filters, setFilters] = useState({
-        age: [],
-        distance: [],
-        salary: {},
-        compensation: [],
-        type: [],
-        schedule: [],
-        qualification: [],
-        industry: [],
-        location: [],
-        company: [],
-    });
+    const [filters, setFilters] = useState({});
 
     useEffect(() => {
         async function addFilters() {
@@ -86,8 +77,8 @@ export default function Filters(props) {
             const schedules = Array.from(new Set(allFilters.schedule.toString().split(',')));
             const qualifications = Array.from(new Set(allFilters.qualification.toString().split(',')));
             const industry = Array.from(new Set(allFilters.industry.toString().split(',')));
-            const locations = Array.from(new Set(allFilters.location.toString().split(',')));
-            const companies = Array.from(new Set(allFilters.company.toString().split(',')));
+            const locations = Array.from(new Set(allFilters.location));
+            const companies = Array.from(new Set(allFilters.company));
 
             setFilters(prevState => {
                 return {
@@ -117,12 +108,77 @@ export default function Filters(props) {
         }
     }
 
+    function updateJobResults() {
+        const age = document.querySelector('input[name="age"]:checked').value;
+        const distance = document.querySelector('input[name="distance"]:checked').value;
+        const salaries = document.getElementsByName('salary');
+        const schedules = document.querySelectorAll('input[name="schedule"]:checked');
+        const types = document.querySelectorAll('input[name="type"]:checked');
+        const qualifications = document.querySelectorAll('input[name="qualification"]:checked');
+        const industries = document.querySelectorAll('input[name="industry"]:checked');
+        const locations = document.querySelectorAll('input[name="location"]:checked');
+        const companies = document.querySelectorAll('input[name="company"]:checked');
+
+        // if the list is empty, don't apply a filter
+        let allFilteredJobs = [];
+
+        if (age !== '') {
+            allFilteredJobs = originalJobResults.filter(job => job.age < age);
+        }
+        console.log(allFilteredJobs)
+
+        // if (distance !== '') {
+        //     // Calculate distance of job.location from inputted location
+        //     const locationInput = document.getElementById('locationInput').value;
+        //
+        //     // const newFilteredJobs = originalJobResults.filter(job => distanceFromLocation < distance);
+        //     // allFilteredJobs = allFilteredJobs.concat(newFilteredJobs);
+        // }
+
+        if (salaries.length > 0) {
+            salaries.forEach(salary => {
+                allFilteredJobs = allFilteredJobs.filter(job => job.compensation[1] === salary.id && job.compensation[0] >= salary.value);
+                console.log(allFilteredJobs)
+            });
+        }
+        console.log(allFilteredJobs)
+
+        // const filteredJobs = originalJobResults.filter(job => {
+        //     if (age !== '' && job.age > age) {
+        //         return false;
+        //     }
+        //     if (distance !== '' && job.distance > distance) {
+        //         return false;
+        //     }
+        //     if (salary !== '' && job.compensation[1] < salary) {
+        //         return false;
+        //     }
+        //     if (type !== '' && !job.type.includes(type)) {
+        //         return false;
+        //     }
+        //     if (schedule !== '' && !job.schedule.includes(schedule)) {
+        //         return false;
+        //     }
+        //     if (qualification !== '' && !job.qualifications.includes(qualification)) {
+        //         return false;
+        //     }
+        //     if (industry !== '' && !job.industry.includes(industry)) {
+        //         return false;
+        //     }
+        //     if (location !== '' && job.location !== location) {
+        //         return false;
+        //     }
+        //     return !(company !== '' && job.companyName !== company);
+        // });
+        // setFilteredJobs(filteredJobs);
+    }
+
     return (
         <div className='flex flex-col items-center justify-center'>
             <button className='underline mb-3' onClick={() => setShowFilters(!showFilters)}>{showFilters ? 'Hide' : 'Show'} filters</button>
             {showFilters &&
                 <div>
-                    <div className='flex border-x border-t rounded-t-md border-darker-grey space-x-8 pt-3 px-3'>
+                    <div className='flex border-x border-t rounded-t-md border-darker-grey space-x-8 pt-3 px-3 mx-4'>
                         <div className='flex flex-col space-y-3'>
                             <p className='font-bold'>Date posted</p>
                             <div className='space-x-2'>
@@ -188,7 +244,7 @@ export default function Filters(props) {
                                     return (
                                         <div className='flex items-center'>
                                             <p className='pr-0.5'>£</p>
-                                            <input className='border border-lighter-grey rounded-md p-1' id={`${key}Min`} name='salaries' type='number' defaultValue={minSalary} min={minSalary} max={maxSalary} onBlur={() => validateSalaryInput(`${key}Min`, minSalary, maxSalary)}/>
+                                            <input className='border border-lighter-grey rounded-md p-1' id={key} name='salary' type='number' defaultValue={minSalary} min={minSalary} max={maxSalary} onBlur={() => validateSalaryInput(key, minSalary, maxSalary)}/>
                                             <p>+/{key}</p>
                                         </div>
                                     );
@@ -202,7 +258,7 @@ export default function Filters(props) {
                                 filters.schedule.map(schedule => {
                                     return (
                                         <div className='space-x-2'>
-                                            <input id={schedule} name={schedule} type='checkbox' value={schedule}/>
+                                            <input id={schedule} name='schedule' type='checkbox' value={schedule}/>
                                             <label onClick={() => document.getElementById(schedule).checked = !document.getElementById(schedule).checked}>{schedule}</label>
                                         </div>
                                     );
@@ -216,7 +272,7 @@ export default function Filters(props) {
                                 filters.type.map(type => {
                                     return (
                                         <div className='space-x-2'>
-                                            <input id={type} name={type} type='checkbox' value={type}/>
+                                            <input id={type} name='type' type='checkbox' value={type}/>
                                             <label onClick={() => document.getElementById(type).checked = !document.getElementById(type).checked}>{type}</label>
                                         </div>
                                     );
@@ -230,7 +286,7 @@ export default function Filters(props) {
                                 filters.qualification.map(qualification => {
                                     return (
                                         <div className='space-x-2'>
-                                            <input id={qualification} name={qualification} type='checkbox' value={qualification}/>
+                                            <input id={qualification} name='qualification' type='checkbox' value={qualification}/>
                                             <label onClick={() => document.getElementById(qualification).checked = !document.getElementById(qualification).checked}>{qualification}</label>
                                         </div>
                                     );
@@ -243,8 +299,8 @@ export default function Filters(props) {
                             { filters.industry.length > 0 &&
                                 filters.industry.map(industry => {
                                     return (
-                                        <div className='space-x-2'>
-                                            <input id={industry} name={industry} type='checkbox' value={industry}/>
+                                        <div className='space-x-2' onClick={updateJobResults}>
+                                            <input id={industry} name='industry' type='checkbox' value={industry}/>
                                             <label onClick={() => document.getElementById(industry).checked = !document.getElementById(industry).checked}>{industry}</label>
                                         </div>
                                     );
@@ -258,7 +314,7 @@ export default function Filters(props) {
                                 filters.location.map(location => {
                                     return (
                                         <div className='space-x-2'>
-                                            <input id={location} name={location} type='checkbox' value={location}/>
+                                            <input id={location} name='location' type='checkbox' value={location}/>
                                             <label onClick={() => document.getElementById(location).checked = !document.getElementById(location).checked}>{location}</label>
                                         </div>
                                     );
@@ -272,7 +328,7 @@ export default function Filters(props) {
                                 filters.company.map(company => {
                                     return (
                                         <div className='space-x-2'>
-                                            <input id={company} name={company} type='checkbox' value={company}/>
+                                            <input id={company} name='company' type='checkbox' value={company}/>
                                             <label onClick={() => document.getElementById(company).checked = !document.getElementById(company).checked}>{company}</label>
                                         </div>
                                     );
@@ -280,9 +336,9 @@ export default function Filters(props) {
                             }
                         </div>
                     </div>
-                    <div className='flex items-center justify-end border-b border-x rounded-b-md border-darker-grey pb-2 pr-2'>
+                    <div className='flex items-center justify-end border-b border-x rounded-b-md border-darker-grey pb-2 pr-2 mx-4'>
                         <button className='rounded-md py-2.5 px-4 font-bold text-dark-theme-grey mr-2'>Clear</button>
-                        <button className='bg-dark-theme-grey rounded-md py-2.5 px-4 font-bold text-white'>Show results</button>
+                        <button className='bg-dark-theme-grey rounded-md py-2.5 px-4 font-bold text-white'>Show results ({filteredJobs.length})</button>
                     </div>
                 </div>
             }
