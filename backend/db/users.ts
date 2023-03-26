@@ -13,6 +13,7 @@ export async function CreateUser(db: DB, user: User) {
     pfpUrl: user.pfpUrl,
     location: user.location,
     notifications: user.notifications,
+    description: user.description,
     companyID: user.companyID,
     searcherID: user.searcherID,
   },
@@ -80,7 +81,7 @@ export async function UpdateUser(db: DB, id: string, data: any): Promise<void> {
 
   const baseData: { [key: string]: any } = {};
 
-  const updateKeys = ['email', 'hashedPassword', 'pfpUrl', 'location', 'notifications'];
+  const updateKeys = ['email', 'hashedPassword', 'pfpUrl', 'location', 'notifications', 'description'];
 
   updateKeys.forEach(key => {
     if (key in data && key in user!) {

@@ -25,10 +25,10 @@ import {
 } from "../service/public";
 
 //CONTROL
-const numCompanies = 2
+const numCompanies = 5
 const numSearchers = 10
 const numJobListings = 100
-const numApplications = 5
+const numApplications = 20
 
 //=====================================================USERS=====================================================
 
@@ -44,8 +44,9 @@ async function GenerateUser(): Promise<User> {
         faker.image.avatar(),
         GetRandomCity(),
         [],
+        faker.lorem.paragraph(),
         undefined,
-        undefined,
+        undefined
     )
 }
 
@@ -244,7 +245,6 @@ function GetRandomQuestions(): Record<string, boolean> {
 
     return randomQuestions;
 }
-
 
 
 async function GenerateJobListing(db: DB): Promise<JobListing> {
