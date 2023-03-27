@@ -3,10 +3,12 @@ import JobCard from "./JobCard";
 import axios from "axios";
 import CompanyJobCard from "./CompanyJobCard";
 import {GetData} from "../../Auth/GetUser";
+import Loading from "../Loading/Loading";
 
 export default function Category(props) {
     const [jobsList, setJobsList] = useState([]);
     const [user, setUser] = useState([])
+    const [loading, setLoading] = useState(true)
 
     async function addCard(applicationID, jobID, title, company, location, status){
         await setJobsList( current => [...current, <JobCard id={applicationID} jobID={jobID} title={title} company={company} location={location} status={status}/>]);
@@ -27,14 +29,17 @@ export default function Category(props) {
         getUser()
     }, [user])
     useEffect(() => {
-        if (props.filter === "Postings") {
-            getPostings(); // eslint-disable-line
+        setLoading(true)
+        async function updateListings() {
+            if (props.filter === "Postings") {
+                await getPostings(); // eslint-disable-line
+            } else if (props.filter === "Saved") {
+                await getSavedJobs(); // eslint-disable-line
+            } else {
+                await getApplication(props.filter); // eslint-disable-line
+            }
         }
-        else if (props.filter === "Saved") {
-            getSavedJobs(); // eslint-disable-line
-        } else {
-            getApplication(props.filter); // eslint-disable-line
-        }
+        updateListings();
     },[props.filter, user]) // eslint-disable-line
 
     async function getPostings(){
@@ -52,9 +57,11 @@ export default function Category(props) {
                 } else {
                     console.log("no applications found")
                 }
+                setLoading(false);
             })
             .catch(error => {
                 // TODO: Display error message.
+                setLoading(false);
                 console.error(error);
             });
     }
@@ -78,10 +85,12 @@ export default function Category(props) {
                 } else {
                     console.log("no applications found")
                 }
+                setLoading(false);
             })
             .catch(error => {
                 // TODO: Display error message.
                 console.error(error);
+                setLoading(false);
             });
     }
 
@@ -104,18 +113,22 @@ export default function Category(props) {
                 } else {
                     // TODO: Display for 0 Jobs
                 }
+                setLoading(false);
             })
             .catch(error => {
                 // TODO: Display error message.
                 console.error(error);
+                setLoading(false);
             });
     }
 
     return (
         <div className='items-center justify-center flex relative w-full'>
+            {!loading ?
             <div className={"display-block w-full"}>
                 {jobsList}
             </div>
+                : <div><Loading/></div>}
         </div>
     );
 }

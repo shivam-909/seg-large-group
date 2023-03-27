@@ -6,6 +6,7 @@ import {useNavigate, useParams} from "react-router-dom";
 import {GetData} from "../../Auth/GetUser";
 import ApplicantCard from "./ApplicantCard";
 import axios from "axios";
+import Loading from "../Loading/Loading";
 
 export default function Applicants() {
     const navigate = useNavigate();
@@ -13,7 +14,10 @@ export default function Applicants() {
     const [applicants, setApplicants] = useState([])
     const { id } = useParams();
     const [filter, setFilter] = useState("Applied")
+    const [loading, setLoading] = useState(true)
+
     useEffect(() => {
+        setLoading(true);
         getApplicants(filter)
     },[filter]) // eslint-disable-line
 
@@ -50,6 +54,7 @@ export default function Applicants() {
                 })
             }
         }).catch(error => {console.log(error)})
+        setLoading(false);
     }
 
     function changeFilter(type){
@@ -69,13 +74,11 @@ export default function Applicants() {
                         <li className={"filterJobs"}><button id={"Interview"} className={"filters"} onClick={() => changeFilter("Interview")} disabled={filter==="Interview"}>Interviews</button></li>
                         <li className={"filterJobs"}><button id={"Rejected"} className={"filters"} onClick={() => changeFilter("Rejected")} disabled={filter==="Rejected"}>Rejected</button></li>
                     </ul>
-                        <div>
-                            <div className={"border-b-2 border-grey flex relative"}/>
-                        </div>
                     <div className='items-center justify-center flex relative w-full'>
-                        <div className={"display-block w-full"}>
+                        {!loading ? <div className={"display-block w-full"}>
                             {applicants}
                         </div>
+                            : <Loading/>}
                     </div>
                 </div>
             </div>

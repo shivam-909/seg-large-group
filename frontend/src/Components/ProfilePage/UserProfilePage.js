@@ -8,6 +8,7 @@ import Education from "./Education";
 import {GetData} from "../../Auth/GetUser";
 import axios from "axios";
 import {useNavigate, useParams} from "react-router-dom";
+import Loading from "../Loading/Loading";
 
 function UserProfilePage() {
     const navigate = useNavigate();
@@ -18,14 +19,15 @@ function UserProfilePage() {
     const [isCompany, setCompany] = useState(false)
     const [fileName, setFile]= useState('');
     const [isOwner, setIsOwner] = useState(false);
+    const [loading, setLoading] = useState(true)
 
     useEffect(() => {
         const getProfile = async () => {
             if (profile.length === 0){
                 await axios.get("http://localhost:8000/api/user/"+id).then(r => {
                     setProfile(r.data)
-                    // console.log(r.data)
                 });
+                setLoading(false)
             }
         };
         getProfile()
@@ -175,7 +177,8 @@ function UserProfilePage() {
           <Navbar/>
         <div className='bg-lighter-grey min-h-screen items-center justify-center flex'>
             <div className='bg-white rounded-md sm:min-w-1/6 inline-grid px-12 py-7 space-y-3 mt-24 max-w-lg min-w-[40%]'>
-              <h1 className='font-bold text-3xl flex justify-center'>{isCompany ? profile.company?.companyName: profile.searcher?.firstName +" "+ profile.searcher?.lastName}'s Profile </h1>
+                {!loading ? <div>
+                <h1 className='font-bold text-3xl flex justify-center'>{isCompany ? profile.company?.companyName: profile.searcher?.firstName +" "+ profile.searcher?.lastName}'s Profile </h1>
                 <div className={"grid grid-cols-2 gap-10"}>
                     <div>
                         {isCompany ?
@@ -215,7 +218,8 @@ function UserProfilePage() {
             </div>
                 {isOwner && !isEditing && <button className="border-2 border-dark-theme-grey bg-[#ccc] rounded-md m-2 p-2 text-black" onClick={EditOnClick} ><i className="fa-solid fa-pen-to-square pr-2"></i>Edit</button>}
                 {isOwner && isEditing && <button className="save-btn" onClick={saveProfile}><i className="fa-solid fa-floppy-disk pr-1"></i> Save</button>}
-          </div>
+                </div>: <div className={"flex justify-center"}><Loading/></div>}
+                </div>
         </div>
       </div>
 

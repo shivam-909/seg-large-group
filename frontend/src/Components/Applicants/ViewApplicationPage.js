@@ -5,7 +5,6 @@ import "react-pdf/dist/esm/Page/TextLayer.css";
 import "react-pdf/dist/esm/Page/AnnotationLayer.css";
 import {useNavigate, useParams} from "react-router-dom";
 import axios from "axios";
-import {GetData} from "../../Auth/GetUser";
 import Loading from "../Loading/Loading";
 
 export default function ViewApplicationPage() {
@@ -14,7 +13,6 @@ export default function ViewApplicationPage() {
     const [application, setApplication] = useState({});
     const [searcher, setSearcher] = useState({})
     const [user, setUser] = useState({})
-    const newCVId = crypto.randomUUID();
     const [loading, setLoading] = useState(true)
     const navigate = useNavigate();
 
@@ -79,7 +77,7 @@ export default function ViewApplicationPage() {
                                 <button onClick={() => {navigate(-1)}} className={"mb-5 text-3xl text-red"}><i className="fa-regular fa-circle-xmark"></i></button>
                                 <div className={"text-4xl font-bold underline hover:cursor-pointer"} onClick={() => navigate("/profile/"+user.userID)}>
                                     {searcher.firstName} {searcher.lastName}
-                                    <img src={user.pfpUrl} className={"rounded-full float-right bottom-10 relative"} width={"100px"} height={"100px"}/>
+                                    <img src={user.pfpUrl} className={"rounded-full float-right bottom-10 relative"} width={"100px"} height={"100px"} alt={"avatar"}/>
                                 </div>
                                 <div className='bg-darker-grey h-[0.1px] my-6'></div>
                                 <div className='pt-6'>
