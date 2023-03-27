@@ -17,8 +17,8 @@ class Application {
         this.searcher = searcher;
         this.jobListing = jobListing;
         this.cv = cv;
-        this.coverLetter = coverLetter;
         this.QnAs = QnAs;
+        this.coverLetter = coverLetter;
     }
 }
 
