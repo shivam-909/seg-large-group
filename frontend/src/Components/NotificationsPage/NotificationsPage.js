@@ -3,19 +3,18 @@ import Navbar from "../Navbar/Navbar";
 import axios from "axios";
 
 export default function NotificationsPage() {
-    const [notifications, setNotifications] = useState([{id: '1', content: 'Withdrawal'},{id: '2', content: 'Accepted'}, {id: '3', content: 'Rejection'}, {id: '4', content: 'Interview'}, {id: '5', content: 'NewApplicant'}]);
+    const [notifications, setNotifications] = useState([]);
     const token = localStorage.getItem('token');
 
     useEffect(() => {
-        async function getNotifications() {
-            const userID = await axios.post('http://localhost:8000/api/echo', {}, {headers: {Authorization: `Bearer ${token}`}}).then(response => {return response.data});
-            axios.get(`http://localhost:8000/notifications/user/${userID}`, {headers: {Authorization: `Bearer ${token}`}}).then(notifications => setNotifications(notifications.data));
-        }
-        getNotifications().catch(error => {console.log(error)});
+        axios.get(`http://localhost:8000/api/notifications/${id}`, {headers: {Authorization: `Bearer ${token}`}})
+            .then(notifications => setNotifications(notifications.data))
+            .catch(error => {console.log(error)});
     }, [notifications, token]);
 
     function deleteNotification(id) {
-        axios.delete(`http://localhost:8000/notifications/${id}`, {headers: {Authorization: `Bearer ${token}`}}).then(response => {console.log(response)}).catch(error => {console.log(error)});
+        axios.delete(`http://localhost:8000/api/notifications/${id}`, {headers: {Authorization: `Bearer ${token}`}})
+            .catch(error => {console.log(error)});
         document.getElementById(id).remove();
     }
 
