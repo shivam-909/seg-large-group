@@ -12,14 +12,11 @@ function SearchPage() {
     const [showJobTitleInputErrorMessage, setShowJobTitleInputErrorMessage] = useState(false);
     const [showLocationInputErrorMessage, setShowLocationInputErrorMessage] = useState(false);
 
-    // TODO: Accommodate for navbar
-    // TODO: Do filter system
-
     function showResults() {
         if (isJobTitleInputValid() & isLocationInputValid()) {
             setLoading(true);
             const formData = new FormData();
-            formData.append('companyID', 'ae184393-68d1-41d4-81a5-5e819d4f2721');
+            formData.append('companyID', 'fc61506e-a6b9-45d6-9deb-51b888c41d36');
             axios.post('http://localhost:8000/api/jobs/filter', formData)
                 .then(async response => {
                     for (const job of response.data) {
