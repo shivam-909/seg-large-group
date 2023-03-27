@@ -11,7 +11,7 @@ export default function SkillCard(props) {
             <div>
             <div className={"value w-[70%] float-left"}>
                 <input id={"skillDuration"} className={"duration"} placeholder={"Duration"} type={"number"} min={"0"} editable={"true"} defaultValue={props.val}/>
-                <select className={"w-[50%]"} editable={"true"}>
+                <select id={"skillInterval"} defaultValue={props.interval} className={"w-[50%]"} editable={"true"}>
                     <option value={"weeks"}>Week/s</option>
                     <option value={"months"}>Month/s</option>
                     <option value={"years"}>Year/s</option>

@@ -7,12 +7,12 @@ export default function EducationDropdown(props) {
     }
     return (
         <div id={"Education" + props.id} className={"my-2 border-2 border-[#c3c3c3] rounded-md p-2 grid grid-cols-2 gap-2"}>
-            <input id={"subject"} className={"grade w-full"} placeholder={"Subject"} editable={"true"}/>
+            <input id={"subject"} className={"grade w-full"} placeholder={"Subject"} editable={"true"} defaultValue={props.subject}/>
             <div>
             <button className={"delete"} onClick={deleteEducation} editable={"true"}><i className="fa-solid fa-trash"></i></button>
             <div id={"course"} className={"value w-[70%]"}>
-                <select className={"w-full"} editable={"true"}>
-                    <option value={"GCSE"}>GCSE</option>
+                <select defaultValue={props.type} className={"w-full"} editable={"true"}>
+                    <option value={"GCSEs"}>GCSE</option>
                     <option value={"A-Levels"}>A-levels</option>
                     <option value={"Bachelor's"}>Bachelor's</option>
                     <option value={"Master's"}>Master's</option>
@@ -20,10 +20,10 @@ export default function EducationDropdown(props) {
                 </select>
             </div>
             </div>
-            <input id={"grade"} className={"grade w-full"} placeholder={"Grade"} editable={"true"}/>
+            <input id={"grade"} defaultValue={props.grade} className={"grade w-full"} placeholder={"Grade"} editable={"true"}/>
             <div className={"value"}>
-                <input id={"educationDuration"} className={"duration"} placeholder={"Duration"} type={"number"} min={"0"} editable={"true"}/>
-                <select className={""} editable={"true"}>
+                <input id={"educationDuration"} defaultValue={props.duration} className={"duration"} placeholder={"Duration"} type={"number"} min={"0"} editable={"true"}/>
+                <select className={""} defaultValue={props.interval} editable={"true"}>
                     <option value={"weeks"}>Week/s</option>
                     <option value={"months"}>Month/s</option>
                     <option value={"years"}>Year/s</option>

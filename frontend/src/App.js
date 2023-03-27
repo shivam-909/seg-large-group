@@ -12,21 +12,23 @@ import Applicants from "./Components/Applicants/Applicants";
 import ViewJob from "./Components/ViewJobs/ViewJob";
 import CompanyRoute from "./Auth/CompanyRoute";
 import ResetPassword from './Components/ResetPassword/ResetPassword';
+import ApplyPage from "./Components/ApplyPage/ApplyPage";
 
 export default function App() {
     return (
       <BrowserRouter>
           <Routes>
               <Route element={<PrivateRoutes/>}>
-                      <Route path="/jobs">
-                          <Route path="" element={<MyJobs/>}/>
-                          <Route element={<CompanyRoute/>}>
-                              <Route path="add/" element={ <EditJob/> }/>
-                              <Route path="edit/:id" element={ <EditJob/> }/>
-                              <Route path="applicants/:id" element={ <Applicants/> }/>
+                  <Route path="/jobs">
+                      <Route path="" element={<MyJobs/>}/>
+                      <Route element={<CompanyRoute/>}>
+                          <Route path="add/" element={ <EditJob/> }/>
+                          <Route path="edit/:id" element={ <EditJob/> }/>
+                          <Route path="applicants/:id" element={ <Applicants/> }/>
                       </Route>
                   </Route>
                   <Route path="/profile/:id" element={ <UserProfilePage/> }/>
+                  <Route path="/apply/:id" element={ <ApplyPage/> }/>
               </Route>
               <Route path="/" element={ <SearchPage/> }/>
               <Route path="/login" element={ <LoginPage/> }/>
