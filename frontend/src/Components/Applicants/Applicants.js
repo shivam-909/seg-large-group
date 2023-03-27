@@ -12,10 +12,11 @@ export default function Applicants() {
     const [user, setUser] = useState([])
     const [applicants, setApplicants] = useState([])
     const { id } = useParams();
-
+    const [filter, setFilter] = useState("Applied")
     useEffect(() => {
-        getApplicants();
-    },[]) // eslint-disable-line
+        getApplicants(filter)
+    },[filter]) // eslint-disable-line
+
     useEffect(() => {
         const getUser = async () => {
             if (user.length === 0){
@@ -28,13 +29,15 @@ export default function Applicants() {
         // setCompany(user.searcherID === undefined)
     },[user]) // eslint-disable-line
 
-    async function addCard(profileID, pfp, name, email, status){
-        await setApplicants( current => [...current, <ApplicantCard id={profileID} pfpUrl={pfp} name={name} email={email} status={status}/>]);
+    async function addCard(applicationID, pfp, name, email, status){
+        await setApplicants( current => [...current, <ApplicantCard id={applicationID} pfpUrl={pfp} name={name} email={email} status={status}/>]);
     }
 
-    async function getApplicants(){
+    async function getApplicants(filter){
+        setApplicants([])
         const formData = new FormData();
         formData.append('jobListing', id);
+        formData.append("status", filter)
         await axios.post("http://localhost:8000/api/application/filter", formData).then(async res => {
             let applications = res.data.applications;
             for (let i = 0; i < applications.length; i++) {
@@ -42,11 +45,15 @@ export default function Applicants() {
                     const searcherID = new FormData();
                     searcherID.append("searcherID",searcher.data.searcherID)
                     await axios.post("http://localhost:8000/api/user/typeid", searcherID).then(usr => {
-                        addCard(usr.data.userID, usr.data.pfpUrl, searcher.data.firstName + " " + searcher.data.lastName, usr.data.email, applications[i].status)
+                        addCard(applications[i].id, usr.data.pfpUrl, searcher.data.firstName + " " + searcher.data.lastName, usr.data.email, applications[i].status)
                     })
                 })
             }
         }).catch(error => {console.log(error)})
+    }
+
+    function changeFilter(type){
+        setFilter(type);
     }
 
     return (
@@ -57,6 +64,11 @@ export default function Applicants() {
                 <div className='bg-white mt-24 rounded-md px-12 py-7 space-y-3 min-w-[45%]'>
                     <button onClick={() => {navigate(-1)}} className={"float-left mb-5 text-3xl text-red"}><i className="fa-regular fa-circle-xmark"></i></button>
                     <p className='font-bold text-3xl flex justify-center'>Applicants</p>
+                    <ul className={"border-b-2 border-grey flex relative"}>
+                        <li className={"filterJobs"}><button id={"Applied"} className={"filters"} onClick={() => changeFilter("Applied")} disabled={filter==="Applied"}>Applied</button></li>
+                        <li className={"filterJobs"}><button id={"Interview"} className={"filters"} onClick={() => changeFilter("Interview")} disabled={filter==="Interview"}>Interviews</button></li>
+                        <li className={"filterJobs"}><button id={"Rejected"} className={"filters"} onClick={() => changeFilter("Rejected")} disabled={filter==="Rejected"}>Rejected</button></li>
+                    </ul>
                         <div>
                             <div className={"border-b-2 border-grey flex relative"}/>
                         </div>
