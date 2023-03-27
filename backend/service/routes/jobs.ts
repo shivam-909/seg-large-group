@@ -15,7 +15,6 @@ export function AddListing(db: DB): Handler {
   return async (req: Request, res: Response, next: NextFunction) => {
     const { title, compensation, description, location, type, schedule, industry, cover_letter_required, urgent, qualifications, benefits, requirements, screening_questions } = req.body;
     const newID = randomUUID();
-    await validate.AddListing(db, req.body);
     console.log("RECEIVED CREATE JOB LISTING REQUEST")
 
     // Get auth_username from headers.
