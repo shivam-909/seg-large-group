@@ -13,7 +13,7 @@ export default function JobCard(props) {
                 {props.status === "Applied" &&
                     <div className={"float-right"}>
                     <button onClick={() => {setIsOpen(true)}} className={"px-5 pb-2"}><i className="fa-solid fa-ellipsis-vertical text-2xl"></i></button>
-                        <TestModal modalIsOpen={modalIsOpen} closeModal={() => {setIsOpen(false)}} id={props.id}/> </div>}
+                        <UpdateJobStatus modalIsOpen={modalIsOpen} closeModal={() => {setIsOpen(false)}} id={props.id}/> </div>}
                 <div>
                     {props.status === "Saved" && <button className={"border-2 border-blue rounded-md px-5 py-1 text-white bg-blue float-right font-bold"}>Apply now</button>}
                     <p onClick={() => {navigate("/viewjob/"+props.jobID)}} className='font-bold text-xl hover:cursor-pointer underline w-auto'>{props.title}</p>
@@ -25,7 +25,7 @@ export default function JobCard(props) {
     );
 }
 
-export function TestModal(props){
+export function UpdateJobStatus(props){
     const navigate = useNavigate();
 
     const customStyles = {

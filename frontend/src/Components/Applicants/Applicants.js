@@ -17,6 +17,7 @@ export default function Applicants() {
     const [loading, setLoading] = useState(true)
 
     useEffect(() => {
+        setApplicants([])
         setLoading(true);
         getApplicants(filter)
     },[filter]) // eslint-disable-line
@@ -44,17 +45,18 @@ export default function Applicants() {
         formData.append("status", filter)
         await axios.post("http://localhost:8000/api/application/filter", formData).then(async res => {
             let applications = res.data.applications;
+            setApplicants([])
             for (let i = 0; i < applications.length; i++) {
                 await axios.get("http://localhost:8000/api/searcher/" + applications[i].searcher).then(async searcher => {
                     const searcherID = new FormData();
                     searcherID.append("searcherID",searcher.data.searcherID)
                     await axios.post("http://localhost:8000/api/user/typeid", searcherID).then(usr => {
                         addCard(applications[i].id, usr.data.pfpUrl, searcher.data.firstName + " " + searcher.data.lastName, usr.data.email, applications[i].status)
+                        setLoading(false);
                     })
                 })
             }
         }).catch(error => {console.log(error)})
-        setLoading(false);
     }
 
     function changeFilter(type){
@@ -73,6 +75,7 @@ export default function Applicants() {
                         <li className={"filterJobs"}><button id={"Applied"} className={"filters"} onClick={() => changeFilter("Applied")} disabled={filter==="Applied"}>Applied</button></li>
                         <li className={"filterJobs"}><button id={"Interview"} className={"filters"} onClick={() => changeFilter("Interview")} disabled={filter==="Interview"}>Interviews</button></li>
                         <li className={"filterJobs"}><button id={"Rejected"} className={"filters"} onClick={() => changeFilter("Rejected")} disabled={filter==="Rejected"}>Rejected</button></li>
+                        <li className={"filterJobs"}><button id={"Rejected"} className={"filters"} onClick={() => changeFilter("Hired")} disabled={filter==="Hired"}>Hired</button></li>
                     </ul>
                     <div className='items-center justify-center flex relative w-full'>
                         {!loading ? <div className={"display-block w-full"}>
