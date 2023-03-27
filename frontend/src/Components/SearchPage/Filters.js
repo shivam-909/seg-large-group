@@ -1,8 +1,6 @@
 import {useEffect, useState} from "react";
 import JobList from "./JobList";
 
-// TODO: Fix radio button bug
-
 export default function Filters(props) {
     const originalJobResults = props.jobs;
     const [tempFilteredJobs, setTempFilteredJobs] = useState(props.jobs);
