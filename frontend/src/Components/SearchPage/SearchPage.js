@@ -54,7 +54,7 @@ function SearchPage() {
     return (
         <div>
             <Navbar/>
-            <div className='mt-36 space-y-5 flex-col mb-12'>
+            <div className='mt-36 space-y-5 flex-col'>
                 <SearchBar onclick={showResults} onJobTitleInputChange={() => setShowJobTitleInputErrorMessage(false)} onLocationInputChange={() => setShowLocationInputErrorMessage(false)} displayJobTitleInputErrorMessage={showJobTitleInputErrorMessage} displayLocationInputErrorMessage={showLocationInputErrorMessage}/>
                 {jobs.length > 0 ?
                     <Filters jobs={jobs}/>

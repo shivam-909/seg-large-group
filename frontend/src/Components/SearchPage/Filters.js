@@ -186,6 +186,39 @@ export default function Filters(props) {
         setTempFilteredJobs(allFilteredJobs);
     }
 
+    function clearFilters() {
+        setFilteredJobs(originalJobResults);
+        setTempFilteredJobs(originalJobResults);
+        document.getElementById('anyTime').checked = true;
+        document.getElementById('anyDistance').checked = true;
+        const hour = document.getElementById('hour');
+        const day = document.getElementById('day');
+        const week = document.getElementById('week');
+        const month = document.getElementById('month');
+        const year = document.getElementById('year');
+        if (hour) {
+            hour.value = hour.defaultValue;
+        }
+        if (day) {
+            day.value = day.defaultValue;
+        }
+        if (week) {
+            week.value = week.defaultValue;
+        }
+        if (month) {
+            month.value = month.defaultValue;
+        }
+        if (year) {
+            year.value = year.defaultValue;
+        }
+        document.querySelectorAll('input[name="schedule"]').forEach(schedule => schedule.checked = false);
+        document.querySelectorAll('input[name="type"]').forEach(type => type.checked = false);
+        document.querySelectorAll('input[name="qualification"]').forEach(qualification => qualification.checked = false);
+        document.querySelectorAll('input[name="industry"]').forEach(industry => industry.checked = false);
+        document.querySelectorAll('input[name="location"]').forEach(location => location.checked = false);
+        document.querySelectorAll('input[name="company"]').forEach(company => company.checked = false);
+    }
+
     return (
         <div className='flex flex-col items-center justify-center'>
             <button className='underline mb-3' onClick={() => setShowFilters(!showFilters)}>{showFilters ? 'Hide' : 'Show'} filters</button>
@@ -350,7 +383,7 @@ export default function Filters(props) {
                         </div>
                     </div>
                     <div className='flex items-center justify-end border-b border-x rounded-b-md border-darker-grey pb-2 pr-2 mx-4'>
-                        <button className='rounded-md py-2.5 px-4 font-bold text-dark-theme-grey mr-2'>Clear</button>
+                        <button className='rounded-md py-2.5 px-4 font-bold text-dark-theme-grey mr-2' onClick={clearFilters}>Clear</button>
                         <button className='bg-dark-theme-grey rounded-md py-2.5 px-4 font-bold text-white' onClick={() => setFilteredJobs(tempFilteredJobs)}>Show results ({tempFilteredJobs.length})</button>
                     </div>
                 </div>

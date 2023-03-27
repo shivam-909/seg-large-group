@@ -4,9 +4,9 @@ import JobDetailsCard from "./JobDetailsCard";
 
 export default function JobList(props) {
     const [count, setCount] = useState(0);
-    const total = props.jobs.length;
-    const increase = 9;
-    const pageCount = Math.ceil(total / increase) || 1;
+    let total = props.jobs.length;
+    let increase = 9;
+    let pageCount = Math.ceil(total / increase) || 1;
     let currentPage = 1;
     const [cardList, setCardList] = useState([]);
     const [selectedJob, setSelectedJob] = useState(props.jobs[0]);
@@ -44,14 +44,11 @@ export default function JobList(props) {
         window.removeEventListener("scroll", handleInfiniteScroll);
     };
 
-    async function handleInfiniteScroll(){
+    async function handleInfiniteScroll(newPageCount) {
         await throttle(async () => {
-            const endOfPage =
-                window.innerHeight + window.scrollY >= document.body.offsetHeight - 2;
-            if (endOfPage) {
+            if (currentPage < newPageCount) {
                 await addCards(currentPage + 1);
-            }
-            if (currentPage >= pageCount) {
+            } else {
                 removeInfiniteScroll();
             }
         }, 500);
@@ -69,8 +66,10 @@ export default function JobList(props) {
 
     useEffect(() => {
         setCardList([]);
-        window.addEventListener("scroll", handleInfiniteScroll);
-        async function addCardScroll(){
+        setSelectedJob(props.jobs[0]);
+        setCount(0);
+        window.addEventListener("scroll", handleInfiniteScroll(Math.ceil(total / increase) || 1));
+        async function addCardScroll() {
             await addCards(currentPage);
         }
         addCardScroll();
@@ -79,7 +78,7 @@ export default function JobList(props) {
     return (
         <div>
             <div className='flex items-start justify-center space-x-5 mx-8'>
-                <div className='space-y-3'>
+                <div className='space-y-3 pb-12'>
                     {cardList}
                     <span className='pl-2'>Showing {count} of {total} jobs</span>
                 </div>
