@@ -77,6 +77,7 @@ export async function RetrieveFullUserByEmail(db: DB, email: string): Promise<Us
 
 
 export async function UpdateUser(db: DB, id: string, data: any): Promise<void> {
+
   let user = await RetrieveFullUserByID(db, id);
 
   const baseData: { [key: string]: any } = {};
@@ -92,7 +93,6 @@ export async function UpdateUser(db: DB, id: string, data: any): Promise<void> {
   if (Object.keys(baseData).length > 0) {
     await db.UserCollection().doc(id).update(baseData);
   }
-
   if (user!.searcherID) {
     const searcherData: { [key: string]: any } = {};
     const searcherUpdateKeys = ['savedJobs', 'skills', 'firstName', 'lastName', 'qualifications', 'cv'];
@@ -123,6 +123,7 @@ export async function UpdateUser(db: DB, id: string, data: any): Promise<void> {
       await db.CompanyCollection().doc(user!.companyID).update(companyData);
     }
   }
+
 }
 
 export async function DeleteUser(db: DB, userID: string): Promise<void> {
