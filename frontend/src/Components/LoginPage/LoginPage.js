@@ -74,8 +74,8 @@ function LoginPage() {
             <p className='mb-6 font-bold text-2xl flex justify-center'>Sign in to your account</p>
 
             <div>
-              <TextInputBox id='email' cache={localStorage.getItem("email")} className="w-full" onBlur={()=>{validateField("email",/^\w+(\.\w+)*@\w+(-?\w+)*(\.\w{2,10})+$/)}} placeholder='Email address'/>
-              <span id="emailError" className={"invisible absolute top-0"}>Invalid Email</span>
+              <TextInputBox id='email' type='email'  data-testid="email-input" cache={localStorage.getItem("email")} className="w-full" onBlur={()=>{validateField("email",/^\w+(\.\w+)*@\w+(-?\w+)*(\.\w{2,10})+$/)}} placeholder='Email address'/>
+              <span id="emailError" data-testid="error" className={"invisible absolute top-0"}>Invalid Email</span>
             </div>
 
             <TextInputBoxWithIcon id='password' type='password' cache={localStorage.getItem("password")} placeholder='Password' icon={<img id='toggleEye' src={showIcon} alt='' onClick={togglePasswordVisibility} className='cursor-pointer'/>}/>
