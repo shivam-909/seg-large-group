@@ -11,6 +11,7 @@ function SearchPage() {
     const [jobs, setJobs] = useState([]);
     const [showJobTitleInputErrorMessage, setShowJobTitleInputErrorMessage] = useState(false);
     const [showLocationInputErrorMessage, setShowLocationInputErrorMessage] = useState(false);
+    const [noJobsFound, setNoJobsFound] = useState(false);
 
     function showResults() {
         if (isJobTitleInputValid() & isLocationInputValid()) {
@@ -19,6 +20,9 @@ function SearchPage() {
             formData.append('companyID', 'fc61506e-a6b9-45d6-9deb-51b888c41d36');
             axios.post('http://localhost:8000/api/jobs/filter', formData)
                 .then(async response => {
+                    if (response.data.length === 0) {
+                        setNoJobsFound(true);
+                    }
                     for (const job of response.data) {
                         job.age = Math.floor(((Date.now() / 1000) - job.datePosted._seconds) / 86400);
                         job.compensation[0] = job.compensation[0].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
@@ -57,19 +61,27 @@ function SearchPage() {
                     <Filters jobs={jobs}/>
                     :
                     <div className='pt-12 space-y-24'>
-                        <div className='flex flex-col items-center justify-center space-y-5'>
-                            {isLoading ?
-                                <Loading className={"w-16 h-16 border-[6px] border-dark-theme-grey"}/>
+                        {noJobsFound ?
+                            <div>
+                                <p className='text-center text-2xl'>No jobs found.</p>
+                            </div>
                             :
-                                <div>
-                                    <p>Looking for a job? <a className='font-bold' href='/'>Upload your CV.</a></p>
-                                    <p>Looking for your next hire? <a className='font-bold' href='/'>Post a job.</a></p>
+                            <div>
+                                <div className='flex flex-col items-center justify-center'>
+                                    {isLoading ?
+                                        <Loading className='w-16 h-16 border-[6px] border-dark-theme-grey'/>
+                                    :
+                                        <div className='space-y-5'>
+                                            <p>Looking for a job? <a className='font-bold' href='/'>Upload your CV.</a></p>
+                                            <p>Looking for your next hire? <a className='font-bold' href='/'>Post a job.</a></p>
+                                        </div>
+                                    }
                                 </div>
-                            }
-                        </div>
-                        <div className='bg-darker-grey min-w-screen flex items-center justify-center'>
-                            <p>For You</p>
-                        </div>
+                                <div className='bg-darker-grey min-w-screen flex items-center justify-center mt-24'>
+                                    <p>For You</p>
+                                </div>
+                            </div>
+                        }
                     </div>
                 }
             </div>
