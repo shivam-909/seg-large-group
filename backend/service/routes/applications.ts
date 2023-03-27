@@ -4,23 +4,20 @@ import { NextFunction, Request, Response } from "express";
 import DB from "../../db/db";
 import Application from "../../models/application";
 import * as applicationdb from "../../db/applications";
-import { ErrorApplicationNotFound, getErrorMessage, Handler } from "../public";
+import { Handler } from "../public";
 import { randomUUID } from "crypto";
 import * as validate from "../routes/validation/applications";
 import 'express-async-errors';
 
 
 export function AddApplication(db: DB): Handler {
-
   return async (req: Request, res: Response, next: NextFunction) => {
-
     await validate.AddApplication(db, req.body);
     const { status, searcher, jobListing, cv, coverLetter, QnAs } = req.body;
     const newID = randomUUID();
-    const newApplication = new Application(newID, status, searcher, jobListing, cv, coverLetter, QnAs);
+    const newApplication = new Application(newID, status, searcher, jobListing, cv, JSON.parse(QnAs), coverLetter);
     await applicationdb.CreateApplication(db, newApplication);
   }
-
 }
 
 

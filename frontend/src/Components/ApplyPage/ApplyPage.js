@@ -106,30 +106,27 @@ export default function ApplyPage() {
     }
 
     function submitApplication() {
-        console.log(2)
         const answers = document.getElementsByName('answer');
         const QnAs = {};
         job.screeningQuestions.forEach((question,i) => {
             QnAs[question[0]] = answers[i].value;
         });
-
         const coverLetter = document.getElementById('coverLetterInput').value;
 
         const formData = new FormData();
         formData.append('jobListing', ID);
         formData.append('searcher', searcherID);
-        formData.append('cv', job.cv);
+        formData.append('cv[]', job.cv[0]);
+        formData.append('cv[]', job.cv[1]);
         formData.append('status', 'Applied');
         formData.append('QnAs', JSON.stringify(QnAs));
         formData.append('coverLetter', coverLetter);
 
         axios.post(`http://localhost:8000/api/applications/add`, formData)
-            .then(response => console.log(response))
             .catch(err => console.log(err));
     }
 
     function uploadFile(e) {
-        console.log(1)
         const formData = new FormData();
         const file = e.target.files[0];
         formData.append('file', file);
