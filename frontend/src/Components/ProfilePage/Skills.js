@@ -1,7 +1,6 @@
 import React, {useEffect} from "react";
 import {useState} from "react";
 import SkillCard from "./SkillCard";
-import {isEditable} from "@testing-library/user-event/dist/utils";
 
 export default function Skills(props) {
     const [skills, setSkills] = useState([]);
