@@ -10,6 +10,7 @@ import Applicants from "./Components/Applicants/Applicants";
 import ViewJob from "./Components/ViewJobs/ViewJob";
 import CompanyRoute from "./Auth/CompanyRoute";
 import ApplyPage from "./Components/ApplyPage/ApplyPage";
+import ViewApplicationPage from "./Components/Applicants/ViewApplicationPage";
 
 export default function App() {
     return (
@@ -26,6 +27,9 @@ export default function App() {
                   </Route>
                   <Route path="/profile/:id" element={ <UserProfilePage/> }/>
                   <Route path="/apply/:id" element={ <ApplyPage/> }/>
+                  <Route element={<CompanyRoute/>}>
+                      <Route path="/application/:id" element={ <ViewApplicationPage/> }/>
+                  </Route>
               </Route>
               <Route path="/" element={ <SearchPage/> }/>
               <Route path="/login" element={ <LoginPage/> }/>

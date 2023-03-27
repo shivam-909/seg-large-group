@@ -25,10 +25,10 @@ import {
 } from "../service/public";
 
 //CONTROL
-const numCompanies = 5
+const numCompanies = 1
 const numSearchers = 10
-const numJobListings = 100
-const numApplications = 20
+const numJobListings = 5
+const numApplications = 50
 
 //=====================================================USERS=====================================================
 
@@ -256,6 +256,7 @@ async function GenerateJobListing(db: DB): Promise<JobListing> {
     }
 
     const id = randomUUID();
+    const skill = faker.company.bsNoun() + "," + faker.datatype.number({'min': 1,'max': 10}).toString() + "," + faker.helpers.arrayElement(["weeks", "months", "years"]);
     return new JobListing(
         id,
         faker.name.jobTitle(),
@@ -271,7 +272,7 @@ async function GenerateJobListing(db: DB): Promise<JobListing> {
         faker.helpers.arrayElements(["Pass in  Maths and English GCSEs", "Bachelors Degree", "Masters Degree", "PhD", "High School Diploma", "International Baccalaureate"]),
         faker.date.past(),
         [faker.lorem.words(), faker.lorem.words(), faker.lorem.words()],
-        [faker.lorem.words(), faker.lorem.words(), faker.lorem.words()],
+    [skill, skill, skill],
         GetRandomQuestions()
 );
 }

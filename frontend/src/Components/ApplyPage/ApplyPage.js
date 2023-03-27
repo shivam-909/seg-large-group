@@ -6,6 +6,7 @@ import "react-pdf/dist/esm/Page/AnnotationLayer.css";
 import {useParams} from "react-router-dom";
 import axios from "axios";
 import {GetData} from "../../Auth/GetUser";
+import Loading from "../Loading/Loading";
 
 export default function ApplyPage() {
     const {id} = useParams();
@@ -13,6 +14,7 @@ export default function ApplyPage() {
     const [searcherID, setSearcherID] = useState('');
     const [job, setJob] = useState({});
     const newCVId = crypto.randomUUID();
+    const [loading, setLoading] = useState(true)
 
     const getUser = async () => {
         return await GetData();
@@ -59,9 +61,11 @@ export default function ApplyPage() {
         const company = await getCompany(job.companyID);
         const searcher = await getSearcher(user.searcherID);
         setJob({...job, company: company.companyName, cv: searcher.cv});
+        setLoading(false);
     }
 
     useEffect(() => {
+        setLoading(true);
         getApplication().catch(err => console.log(err));
     }, []); // eslint-disable-line
 
@@ -140,7 +144,7 @@ export default function ApplyPage() {
 
     return (
         <div>
-            { ID ?
+            {!loading ?  (ID ?
                 <div>
                     <Navbar/>
                     <div className='mt-36 flex flex-col items-center'>
@@ -153,7 +157,7 @@ export default function ApplyPage() {
                                 {job.compensation &&
                                     <p className='text-xl'>{`£${job.compensation[0]}/${job.compensation[1]}`}</p>
                                 }
-                                <button className='text-xl pt-3'><a className='underline' href={`/job/${ID}`} target='_blank' rel='noreferrer'>View job</a></button>
+                                <button className='text-xl pt-3'><a className='underline' href={`/viewjob/${ID}`} target='_blank' rel='noreferrer'>View job</a></button>
                             </div>
                             <div className='bg-darker-grey h-[0.1px] my-5'></div>
                             <div className='pt-6'>
@@ -226,7 +230,7 @@ export default function ApplyPage() {
                         <p className='text-3xl'>Job not found</p>
                     </div>
                 </div>
-            }
+            ) : <div className='mt-36 flex flex-col items-center'><Loading/></div>}
         </div>
     );
 }
