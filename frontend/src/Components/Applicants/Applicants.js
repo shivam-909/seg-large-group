@@ -57,6 +57,7 @@ export default function Applicants() {
                 })
             }
         }).catch(error => {console.log(error)})
+        setLoading(false);
     }
 
     function changeFilter(type){

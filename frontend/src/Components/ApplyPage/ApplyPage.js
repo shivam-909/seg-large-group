@@ -157,7 +157,7 @@ export default function ApplyPage() {
                                 {job.compensation &&
                                     <p className='text-xl'>{`£${job.compensation[0]}/${job.compensation[1]}`}</p>
                                 }
-                                <button className='text-xl pt-3'><a className='underline' href={`/job/${ID}`} target='_blank' rel='noreferrer'>View job</a></button>
+                                <button className='text-xl pt-3'><a className='underline' href={`/viewjob/${ID}`} target='_blank' rel='noreferrer'>View job</a></button>
                             </div>
                             <div className='bg-darker-grey h-[0.1px] my-5'></div>
                             <div className='pt-6'>
