@@ -2,36 +2,54 @@
 
 import { randomUUID } from "crypto";
 import DB from "../../db/db";
-import { createUser, retrieveUserByEmail } from "../../db/users";
-import {Searcher, User} from "../../models/user";
+import { CreateSearcher } from "../../db/searchers";
+import { CreateUser, RetrieveFullUserByEmail } from "../../db/users";
+import { Searcher, User } from "../../models/user";
 
-test('create user, retrieve user by email, delete user', async () => {
+test('create searcher, retrieve searcher by email, delete user', async () => {
     // Create a searcher in the db.
     const db = new DB();
-    const id = randomUUID();
-    const email = 'test_crd_user@example.com';
-    const password = 'password';
+    const userID = randomUUID();
+    const searcherID = randomUUID();
+    const email = 'test_user_crud@example.com';
+    const password = 'Password123!';
+    const firstName = 'John';
+    const lastName = 'Doe';
+    const cv = ["John Doe's CV", "https://seg-joblink.s3.eu-west-2.amazonaws.com/cv/1047a922-d91f-43dc-80f2-7273ee90acaa.png.pdf"]
+
+
+
     const searcher = new Searcher(
-        id,
-        "John",
-        "Doe",
+        firstName,
+        lastName,
+        [],
+        searcherID,
+        [],
+        [],
+        cv
+    )
+
+    const user = new User(
+        userID,
         email,
         password,
-        "picture_url",
-        "London",
+        "",
+        "",
         [],
-        [],
-        "0123456789"
-    );
+        searcherID,
+        undefined,
+    )
 
-    await createUser(db, searcher);
+    await CreateSearcher(db, user, searcher)
 
     // Retrieve the searcher by email.
-    const retrievedUser = await retrieveUserByEmail(db, email);
+    const retrievedUser = await RetrieveFullUserByEmail(db, email);
     expect(retrievedUser).not.toBeNull();
-    expect(retrievedUser?.userID).toEqual(id);
-    expect(retrievedUser?.email).toEqual(email);
+    expect(retrievedUser!.userID).toEqual(userID);
+    expect(retrievedUser!.email).toEqual(email);
+    expect(retrievedUser!.searcherID).toEqual(searcherID);
+    expect(retrievedUser!.searcher).not.toBeNull();
 
     // Delete the user.
-    await db.UserCollection().doc(id).delete();
+    await db.UserCollection().doc(userID).delete();
 });

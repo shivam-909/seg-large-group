@@ -6,6 +6,7 @@
   "scripts": {
     "build": "npx tsc",
     "start": "node dist/index.js",
+    "seed": "npx tsc && node dist/index.js --seed",
     "dev": "concurrently \"npx tsc --watch\" \"nodemon -q dist/index.js\"",
     "test": "jest"
   },
@@ -14,11 +15,12 @@
   "license": "ISC",
   "dependencies": {
     "@types/bcrypt": "^5.0.0",
+    "@types/cors": "^2.8.13",
     "@types/faker": "^6.6.9",
     "@types/firebase": "^3.2.1",
     "@types/multer": "^1.4.7",
     "@types/node-fetch": "^2.6.2",
-    "@types/cors": "^2.8.13",
+    "aws-sdk": "^2.1338.0",
     "bcrypt": "^5.1.0",
     "cors": "^2.8.5",
     "dotenv": "^16.0.3",

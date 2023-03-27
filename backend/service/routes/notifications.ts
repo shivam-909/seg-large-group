@@ -1,94 +1,76 @@
+import 'express-async-errors';
 import DB from "../../db/db";
-import {getErrorMessage, Handler} from "../public";
-import {NextFunction, Request, Response} from "express";
-import {createNotification, deleteNotification, retrieveNotification, updateNotification} from "../../db/notifications";
-import {randomUUID} from "crypto";
+import {
+  getErrorMessage,
+  Handler
+} from "../public";
+import * as errors from "../public";
+import { NextFunction, Request, Response } from "express";
+import * as notificationsdb from "../../db/notifications";
+import { randomUUID } from "crypto";
 import Notification from "../../models/notification";
-import {retrieveUserByID} from "../../db/users";
+import { RetrieveApplication } from "../../db/applications";
+import { RetrieveJobListing } from "../../db/jobs";
+import { RetrieveCompanyByID } from "../../db/companies";
+import { RetrieveFullUserByID } from "../../db/users";
+import *  as validate from "../routes/validation/notifications";
 
+export function AddNotification(db: DB): Handler {
+  return async (req: Request, res: Response, next: NextFunction) => {
+    const { content, application, userID } = req.body;
+    const newID = randomUUID();
+    const created = new Date();
+    const newNotification = new Notification(newID, content, application, created, userID);
+    await validate.AddNotification(db, { content, application, created, userID });
+    await notificationsdb.CreateNotification(db, newNotification);
+    res.sendStatus(200)
+  }
+}
 
-export function addNotificationRoute(db: DB): Handler {
-    return async (req: Request, res: Response, next: NextFunction) => {
-        const { content, applicationID, userID } = req.body;
-        const newID = randomUUID();
-        const created = new Date();
-        const newNotification = new Notification(newID, content, applicationID, created, userID);
+export function GetNotification(db: DB): Handler {
+  return async (req: Request, res: Response, next: NextFunction) => {
+    const id = req.params.id;
 
-        try {
-            let notification = await createNotification(db, newNotification);
-            res.status(200).json({
-                msg: `Notification ${notification.id} created`,
-            });
-        } catch (err) {
-            next({
-                message: getErrorMessage(err),
-            });
-        }
+    const notification = await notificationsdb.RetrieveNotification(db, id);
+
+    if (!notification) {
+      next(errors.ErrorNotifNotFound);
+      return;
     }
-}
 
-export function getNotificationRoute(db: DB): Handler {
-    return async (req: Request, res: Response, next: NextFunction) => {
-        const id = req.params.id;
-
-        try {
-            const notification = await retrieveNotification(db, id);
-            if (notification) {
-                res.status(200).json(notification);
-            } else {
-                res.status(404).json({
-                    message: `Notification ${id} not found`,
-                });
-            }
-        } catch (err) {
-            next({
-                message: getErrorMessage(err),
-            });
-        }
-    };
-}
-
-export function updateNotificationRoute(db: DB): Handler {
-    return async (req: Request, res: Response, next: NextFunction) => {
-        const id = req.params.id;
-        const notificationData = req.body;
-
-        try {
-            const notification = await retrieveNotification(db, id);
-            if (!notification) {
-                return res.status(404).json({
-                    msg: `Notification ${id} not found`
-                });
-            }
-
-            const updatedNotification = { ...notification, ...notificationData };
-            await updateNotification(db, updatedNotification);
-
-            res.status(200).json({
-                msg: "Notification updated"
-            });
-        } catch (err) {
-            next({
-                message: getErrorMessage(err),
-            });
-        }
+    const application = await RetrieveApplication(db, notification.applicationID);
+    let jobListing = null;
+    if (application) jobListing = await RetrieveJobListing(db, application.jobListing);
+    let title = null;
+    let company = null;
+    if (jobListing) {
+      title = jobListing.title;
+      company = await RetrieveCompanyByID(db, jobListing.companyID);
     }
+    let companyName = null;
+    if (company) companyName = company.companyName;
+
+    const user = await RetrieveFullUserByID(db, notification.userID);
+    let searcherID = null;
+    if (user) searcherID = user.searcherID;
+
+
+    const newNotification = {
+      ...notification,
+      companyName,
+      title,
+      searcherID,
+    }
+
+    res.status(200).json(newNotification);
+  };
 }
 
-export function deleteNotificationRoute(db: DB): Handler {
-    return async (req: Request, res: Response, next: NextFunction) => {
-        const id = req.params.id;
-
-        try {
-            await deleteNotification(db, id);
-            res.status(200).json({
-                msg: `Notification ${id} has been deleted`,
-            });
-        } catch (err) {
-            next({
-                message: getErrorMessage(err),
-            });
-        }
-
-    };
+export function DeleteNotification(db: DB): Handler {
+  return async (req: Request, res: Response, next: NextFunction) => {
+    const id = req.params.id;
+    await validate.NotificationExists(db, id);
+    await notificationsdb.DeleteNotification(db, id);
+    res.sendStatus(200);
+  };
 }
