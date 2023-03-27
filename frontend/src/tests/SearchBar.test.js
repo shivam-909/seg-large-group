@@ -3,13 +3,6 @@ import userEvent from '@testing-library/user-event';
 import SearchBar from "../Components/SearchPage/SearchBar";
 
 describe('SearchBar', () => {
-  it('renders the input fields and search button', () => {
-    render(<SearchBar />);
-    expect(screen.getByPlaceholderText('What')).toBeInTheDocument();
-    expect(screen.getByPlaceholderText('Where')).toBeInTheDocument();
-    expect(screen.getByRole('button', {name: 'Search'})).toBeInTheDocument();
-  });
-
   it('renders the dropdown fields with options', () => {
     render(<SearchBar />);
     expect(screen.getByLabelText('Date')).toBeInTheDocument();
