@@ -9,6 +9,7 @@ import {GetData} from "../../Auth/GetUser";
 import {setVisible} from "../Validation/validate";
 import ErrorBox from "../ErrorBox/ErrorBox";
 import SkillCard from "../ProfilePage/SkillCard";
+import Loading from "../Loading/Loading";
 
 export default function EditJob() {
     const navigate = useNavigate();
@@ -23,6 +24,7 @@ export default function EditJob() {
     const [eduID, setEduID] = useState(0);
     const [reqID, setReqID] = useState(0);
     const [benefitID, setBenefitID] = useState(0);
+    const [loading, setLoading] = useState(false);
 
     useEffect(() => {
         const getUser = async () => {
@@ -36,6 +38,7 @@ export default function EditJob() {
     },[user])
 
     useEffect(() => {
+        setLoading(true);
         validate()
     }, []) // eslint-disable-line
 
@@ -71,6 +74,10 @@ export default function EditJob() {
                     addEducation(response.data.qualifications[i], i);
                 }
             })
+            setLoading(false);
+        }
+        else{
+            setLoading(false);
         }
     }
 
@@ -209,7 +216,7 @@ export default function EditJob() {
                     <button onClick={() => {navigate(-1)}} className={"float-left mb-5 text-3xl text-red"}><i className="fa-regular fa-circle-xmark"></i></button>
                     <p className='font-bold text-3xl flex justify-center'>{isEdit ? "Edit" : "Add"} Job</p>
                     <div className={"border-b-[#ccc] border-b-2 m-4"}/>
-                    <div className='text-input space-y-4' id="profile">
+                    {!loading ? <div className='text-input space-y-4' id="profile">
                         <p><strong>Title: <span className={"text-red"}>&#42;</span> </strong> <input type="text" id="title" placeholder = "Please enter the Job Title" defaultValue={job.title}/></p>
                         <p><strong>Industry: <span className={"text-red"}>&#42;</span> </strong> <input type="text" id="industry" placeholder = "Please enter the Job Industry" defaultValue={job.industry}/></p>
                         <div>
@@ -236,7 +243,7 @@ export default function EditJob() {
                             <label><input type="checkbox" id={"remote"} defaultChecked={job.type?.includes("Remote")} value={"Remote"} className={"peer sr-only"}/><span className={"border-2 border-[#ccc] p-1 rounded-md m-2 peer-checked:bg-[#2196F3] select-none peer-checked:border-dark-theme-grey"}>Remote</span></label>
                         </div>
                         <p><strong>Location: <span className={"text-red"}>&#42;</span> </strong> <input type="text" id="location" placeholder = "Please enter the Job Location" defaultValue={job.location}/></p>
-                        <p><strong className={"float-left"}>Description: <span className={"text-red"}>&#42;</span></strong><textarea onChange={() => {validateDescription()}} id={"description"} defaultValue={job.description} className={"border-2 border-[#ccc] rounded-md p-2 w-full h-48"}/><div id={"descError"}><div className={"text-red"}>Description too long.</div></div></p>
+                        <p><strong className={"float-left"}>Description: <span className={"text-red"}>&#42;</span></strong><textarea onChange={() => {validateDescription()}} id={"description"} defaultValue={job.description} className={"border-2 border-[#ccc] rounded-md p-2 w-full h-48"}/><div id={"descError"} className={"invisible top-0 absolute"}><div className={"text-red"}>Description too long.</div></div></p>
                         <p><strong>Requirements: </strong><button className={"float-right bg-[#4b6df2] rounded-md border-2 border-dark-theme-grey text-l text-white w-8 h-8"} onClick={() => {addRequirement("", reqID)}}><i className="fa-solid fa-plus"></i></button>
                             {requirements}
                         </p>
@@ -248,7 +255,7 @@ export default function EditJob() {
                         </p>
                         <ErrorBox message={"Please complete all fields"}/>
                         <button onClick={handleSubmit} className={"w-full border-2 border-dark-theme-grey rounded-md p-2 bg-blue text-white"}>Submit</button>
-                    </div>
+                    </div> : <div className={"justify-center flex"}><Loading/></div>}
                 </div>
             </div>
         </div>

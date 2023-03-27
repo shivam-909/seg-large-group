@@ -10,7 +10,7 @@ export default function ApplicantCard(props) {
         <div className='border-2 border-darker-grey rounded-xl w-full p-4 m-2'>
             <div className={"float-right"}>
                 <button onClick={() => {setIsOpen(true)}} className={"px-5 pb-2"}><i className="fa-solid fa-ellipsis-vertical text-2xl"></i></button>
-                <UpdateApplicantStatus modalIsOpen={modalIsOpen} closeModal={() => {setIsOpen(false)}} id={props.id}/> </div>
+                <UpdateApplicantStatus modalIsOpen={modalIsOpen} closeModal={() => {setIsOpen(false)}} id={props.id} status={props.status}/> </div>
             <img className={"rounded-full float-left mr-2"} src={props.pfpUrl} alt="Avatar" height={"80"} width={"80"}/>
             <div className={'hover:cursor-pointer'} onClick={() => {navigate("/application/"+props.id)}} >
                 <p className='font-bold text-xl'>{props.name}</p>
@@ -54,12 +54,13 @@ export function UpdateApplicantStatus(props){
             >
                 <button onClick={props.closeModal} className={"float-left"}><i className="fa-regular fa-circle-xmark text-red text-2xl"></i></button>
                 <div className={"justify-center flex grid items-center text-center"}>
-                    <div className={"text-2xl mb-5"}>Change Status</div>
+                    <div className={"text-2xl"}>Change Status</div>
+                    <div className={"border-b-2 border-grey flex relative mb-5"}/>
                     <div className={"space-y-2"}>
-                        <div className={"text-xl hover:cursor-pointer border-2 border-dark-theme-grey rounded-md text-blue font-bold"} onClick={() => {changeStatus("Applied")}}><i className="fa-sharp fa-solid fa-folder pr-2"></i>Applied</div>
-                        <div className={"text-xl hover:cursor-pointer border-2 border-dark-theme-grey rounded-md text-green font-bold"} onClick={() => {changeStatus("Hired")}}><i className="fa-sharp fa-solid fa-folder pr-2"></i>Hired</div>
-                        <div className={"text-xl hover:cursor-pointer border-2 border-dark-theme-grey rounded-md font-bold"} onClick={() => {changeStatus("Interview")}}><i className="fa-sharp fa-solid fa-folder pr-2"></i>Interview</div>
-                        <div className={"text-xl hover:cursor-pointer border-2 border-dark-theme-grey rounded-md text-red font-bold"} onClick={() => {changeStatus("Rejected")}}><i className="fa-sharp fa-solid fa-folder pr-2"></i>Reject</div>
+                        {props.status !== "Applied" && <div className={"text-xl hover:cursor-pointer border-2 border-dark-theme-grey rounded-md text-blue font-bold"} onClick={() => {changeStatus("Applied")}}><i className="fa-solid fa-envelope pr-2"></i>Applied</div>}
+                        {props.status !== "Interview" && <div className={"text-xl hover:cursor-pointer border-2 border-dark-theme-grey rounded-md font-bold"} onClick={() => {changeStatus("Interview")}}><i className="fa-solid fa-calendar-day pr-2"></i>Interview</div>}
+                        {props.status !== "Hired" && <div className={"text-xl hover:cursor-pointer border-2 border-dark-theme-grey rounded-md text-[#597D35] font-bold"} onClick={() => {changeStatus("Hired")}}><i className="fa-solid fa-user-tie pr-2"></i>Hired</div>}
+                        {props.status !== "Rejected" && <div className={"text-xl hover:cursor-pointer border-2 border-dark-theme-grey rounded-md text-red font-bold"} onClick={() => {changeStatus("Rejected")}}><i className="fa-solid fa-thumbs-down pr-2"></i>Reject</div>}
                     </div>
                 </div>
             </Modal>
