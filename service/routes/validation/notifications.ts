@@ -20,16 +20,9 @@ export async function AddNotification(db: DB, body: any): Promise<void> {
     if (!userID) {
         throw new Error(errors.ErrorUserIDRequired);
     }
+
     await ValidateUserID(db, userID);
     await ValidateApplicationID(db, applicationID);
-
-    if(typeof content !== 'string' ){
-        throw new Error(errors.ErrorContentMustBeString);
-    }
-    if(!(created instanceof Date)){
-        throw new Error(errors.ErrorCreatedMustBeDate);
-    }
-
 
 }
 

@@ -2,8 +2,6 @@ import DB from "./db";
 import Application from "../models/application";
 import { firestore } from "firebase-admin";
 import QuerySnapshot = firestore.QuerySnapshot;
-import {RetrieveJobListing} from "./jobs";
-import {RetrieveCompanyByID} from "./companies";
 
 export async function CreateApplication(db: DB, application: Application) {
     const docRef = db.ApplicationCollection().doc(application.id);
@@ -14,8 +12,8 @@ export async function CreateApplication(db: DB, application: Application) {
         'searcher': application.searcher,
         'jobListing': application.jobListing,
         'cv': application.cv,
-        'coverLetter': application.coverLetter,
-        'QnAs': application.QnAs
+        'QnAs': application.QnAs,
+        'coverLetter': application.coverLetter
     });
 }
 
