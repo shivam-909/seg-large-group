@@ -1,6 +1,8 @@
 import {useEffect, useState} from "react";
 import JobList from "./JobList";
 
+// TODO: Fix radio button bug
+
 export default function Filters(props) {
     const originalJobResults = props.jobs;
     const [tempFilteredJobs, setTempFilteredJobs] = useState(props.jobs);
@@ -120,8 +122,6 @@ export default function Filters(props) {
         const locations = document.querySelectorAll('input[name="location"]:checked');
         const companies = document.querySelectorAll('input[name="company"]:checked');
 
-        // If no filters are selected, show all jobs - perhaps verify that no filters have been checked by setting an initial state with default filters
-
         let allFilteredJobs = originalJobResults;
 
         // Date posted filter
@@ -219,6 +219,11 @@ export default function Filters(props) {
         document.querySelectorAll('input[name="company"]').forEach(company => company.checked = false);
     }
 
+    function selectRadio(id) {
+        document.getElementById(id).checked = true;
+        updateJobResults();
+    }
+
     return (
         <div className='flex flex-col items-center justify-center'>
             <button className='underline mb-3' onClick={() => setShowFilters(!showFilters)}>{showFilters ? 'Hide' : 'Show'} filters</button>
@@ -227,58 +232,22 @@ export default function Filters(props) {
                     <div className='flex border-x border-t rounded-t-md border-darker-grey space-x-8 pt-3 px-3 mx-4'>
                         <div className='flex flex-col space-y-3'>
                             <p className='font-bold'>Date posted</p>
-                            <div className='space-x-2' onClick={updateJobResults}>
-                                <input id='anyTime' type='radio' value='' name='age' checked/>
-                                <label onClick={() => document.getElementById('anyTime').checked = true}>Any time</label>
-                            </div>
-                            <div className='space-x-2' onClick={updateJobResults}>
-                                <input id='past24Hours' type='radio' value='1' name='age'/>
-                                <label onClick={() => document.getElementById('past24Hours').checked = true}>Past 24 hours</label>
-                            </div>
-                            <div className='space-x-2' onClick={updateJobResults}>
-                                <input id='pastWeek' type='radio' value='7' name='age'/>
-                                <label onClick={() => document.getElementById('pastWeek').checked = true}>Past week</label>
-                            </div>
-                            <div className='space-x-2' onClick={updateJobResults}>
-                                <input id='pastMonth' type='radio' value='30' name='age'/>
-                                <label onClick={() => document.getElementById('pastMonth').checked = true}>Past month</label>
-                            </div>
+                            <label onFocus={() => selectRadio('anyTime')}><input id='anyTime' type='radio' value='' name='age' checked/><span className='pl-2.5'>Any time</span></label>
+                            <label onFocus={() => selectRadio('past24Hours')}><input id='past24Hours' type='radio' value='1' name='age'/><span className='pl-2.5'>Past 24 hours</span></label>
+                            <label onFocus={() => selectRadio('pastWeek')}><input id='pastWeek' type='radio' value='7' name='age'/><span className='pl-2.5'>Past week</span></label>
+                            <label onFocus={() => selectRadio('pastMonth')}><input id='pastMonth' type='radio' value='30' name='age'/><span className='pl-2.5'>Past month</span></label>
                         </div>
 
                         <div className='flex flex-col space-y-3'>
                             <p className='font-bold'>Distance</p>
-                            <div className='space-x-2' onClick={updateJobResults}>
-                                <input id='anyDistance' type='radio' value='' name='distance' checked/>
-                                <label onClick={() => document.getElementById('anyDistance').checked = true}>Any distance</label>
-                            </div>
-                            <div className='space-x-2' onClick={updateJobResults}>
-                                <input id='1mile' type='radio' value='1' name='distance'/>
-                                <label onClick={() => document.getElementById('1mile').checked = true}>1 mile</label>
-                            </div>
-                            <div className='space-x-2' onClick={updateJobResults}>
-                                <input id='5miles' type='radio' value='5' name='distance'/>
-                                <label onClick={() => document.getElementById('5miles').checked = true}>5 miles</label>
-                            </div>
-                            <div className='space-x-2' onClick={updateJobResults}>
-                                <input id='10miles' type='radio' value='10' name='distance'/>
-                                <label onClick={() => document.getElementById('10miles').checked = true}>10 miles</label>
-                            </div>
-                            <div className='space-x-2' onClick={updateJobResults}>
-                                <input id='15miles' type='radio' value='15' name='distance'/>
-                                <label onClick={() => document.getElementById('15miles').checked = true}>15 miles</label>
-                            </div>
-                            <div className='space-x-2' onClick={updateJobResults}>
-                                <input id='25miles' type='radio' value='25' name='distance'/>
-                                <label onClick={() => document.getElementById('25miles').checked = true}>25 miles</label>
-                            </div>
-                            <div className='space-x-2' onClick={updateJobResults}>
-                                <input id='35miles' type='radio' value='35' name='distance'/>
-                                <label onClick={() => document.getElementById('35miles').checked = true}>35 miles</label>
-                            </div>
-                            <div className='space-x-2' onClick={updateJobResults}>
-                                <input id='50miles' type='radio' value='50' name='distance'/>
-                                <label onClick={() => document.getElementById('50miles').checked = true}>50 miles</label>
-                            </div>
+                            <label onFocus={() => selectRadio('anyDistance')}><input id='anyDistance' type='radio' value='' name='distance' checked/><span className='pl-2.5'>Any distance</span></label>
+                            <label onFocus={() => selectRadio('1mile')}><input id='1mile' type='radio' value='1' name='distance'/><span className='pl-2.5'>1 mile</span></label>
+                            <label onFocus={() => selectRadio('5miles')}><input id='5miles' type='radio' value='5' name='distance'/><span className='pl-2.5'>5 miles</span></label>
+                            <label onFocus={() => selectRadio('10miles')}><input id='10miles' type='radio' value='10' name='distance'/><span className='pl-2.5'>10 miles</span></label>
+                            <label onFocus={() => selectRadio('15miles')}><input id='15miles' type='radio' value='15' name='distance'/><span className='pl-2.5'>15 miles</span></label>
+                            <label onFocus={() => selectRadio('25miles')}><input id='25miles' type='radio' value='25' name='distance'/><span className='pl-2.5'>25 miles</span></label>
+                            <label onFocus={() => selectRadio('35miles')}><input id='35miles' type='radio' value='35' name='distance'/><span className='pl-2.5'>35 miles</span></label>
+                            <label onFocus={() => selectRadio('50miles')}><input id='50miles' type='radio' value='50' name='distance'/><span className='pl-2.5'>50 miles</span></label>
                         </div>
 
                         <div className='space-y-2'>
