@@ -3,7 +3,7 @@ import DB from "../../../db/db";
 import * as usersdb from "../../../db/users";
 import * as errors from "../../public";
 import { ValidEmail, ValidPassword } from "../auth";
-import {isStringArray, ValidateCompanyId, ValidateSearcherId} from "./checks";
+import {ValidateCompanyId, ValidateSearcherId} from "./checks";
 import {ErrorMissingProperty} from "../../public";
 
 
@@ -25,21 +25,6 @@ export async function UpdateUser(db: DB, id:string, req: any): Promise<void> {
     }
     if (password && !ValidPassword(password)) {
         throw new Error(errors.ErrorInvalidPassword);
-    }
-    if (pfpUrl && typeof pfpUrl !== 'string') {
-        throw new Error(errors.ErrorPfpUrlMustBeString);
-    }
-    if (location && typeof location !== 'string') {
-        throw new Error(errors.ErrorLocationMustBeString);
-    }
-
-    if(notifications){
-        if(!Array.isArray(notifications)){
-            throw new Error(errors.ErrorNotificationsMustBeArray);
-        }
-        if(!isStringArray(notifications)){
-            throw new Error(errors.ErrorNotificationsMustBeStringArray);
-        }
     }
 
     if(companyID){
