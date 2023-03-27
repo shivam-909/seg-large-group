@@ -28,7 +28,7 @@ import {
 const numCompanies = 1
 const numSearchers = 10
 const numJobListings = 5
-const numApplications = 100
+const numApplications = 50
 
 //=====================================================USERS=====================================================
 
