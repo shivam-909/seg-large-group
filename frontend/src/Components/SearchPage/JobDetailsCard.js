@@ -32,16 +32,16 @@ function JobDetailsCard(props) {
     }
 
     return (
-        <div className='max-h-screen overflow-y-scroll border-2 border-darker-grey rounded-xl px-5 py-8 sticky top-0 max-w-[800px]'>
+        <div className='max-h-screen overflow-y-scroll border-2 border-darker-grey rounded-xl px-5 py-8 top-0 max-w-[800px] sticky'>
             <p className='font-bold text-xl'>{props.title}</p>
             <a href='/' target='_blank'>{props.companyName}</a>
             <p className='mb-5'>{props.location}</p>
 
             <div className='flex space-x-5'>
-                <button className='bg-dark-theme-grey rounded-md py-2.5 px-4 font-bold text-white'><a href='/' target='_blank' rel='noreferrer'>Apply Now</a></button>
+                <button className='bg-dark-theme-grey rounded-md py-2.5 px-4 font-bold text-white'><a href={`/apply/${props.id}`} target='_blank' rel='noreferrer'>Apply Now</a></button>
                 <button className='bg-darker-grey rounded-md w-11 flex items-center justify-center' onClick={() => setOpenShareModal(true)}><img src={shareIcon} alt=''/></button>
                 <button className='bg-darker-grey rounded-md w-11 flex items-center justify-center' onClick={saveJobPost}><img src={savedJobPost ? savedIcon : saveIcon} alt=''/></button>
-                <button className='bg-darker-grey rounded-md w-11 flex items-center justify-center'><a href='/' target='_blank' rel='noreferrer'><img src={openInNewTabIcon} alt=''/></a></button>
+                <button className='bg-darker-grey rounded-md w-11 flex items-center justify-center'><a href={`/job/${props.id}`} target='_blank' rel='noreferrer'><img src={openInNewTabIcon} alt=''/></a></button>
             </div>
 
             <div className='bg-darker-grey h-[0.1px] my-5'></div>

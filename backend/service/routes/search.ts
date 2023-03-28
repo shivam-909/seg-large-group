@@ -2,7 +2,7 @@ import { NextFunction, Request, Response } from "express";
 import 'express-async-errors';
 import *  as validate from "../routes/validation/search";
 import DB from "../../db/db";
-import {getErrorMessage, Handler} from "../public";
+import {Handler} from "../public";
 import { findJobListingsByQuery } from "../../search/search";
 
 export function SearchListings(db: DB): Handler {
