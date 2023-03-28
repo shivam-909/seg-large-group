@@ -5,12 +5,19 @@ import EducationDropdown from "./EducationDropdown";
 export default function Education(props) {
     const [education, setEducation] = useState([]);
     const [count, setCount] = useState(education.length);
-    const [editing, setEdit] = useState(props.isEditing)
+
     useEffect(() => {
-        setEdit(props.isEditing);
-    },[props.isEditing])
-    function createSkill(){
-        setEducation( [...education, <EducationDropdown name={"Education"} id={count} editing={editing}/>]);
+        if (props.profile.length === 0){
+            return;
+        }
+        for (const qualification of props.profile.searcher?.qualifications){
+            let qual = qualification.split(",")
+            createSkill(qual[0], qual[1], qual[2], qual[3], qual[4])
+        }
+    },[props.profile]) // eslint-disable-line
+
+    function createSkill(subject, type, grade, duration, interval){
+        setEducation( [...education, <EducationDropdown name={"Education"} id={count} editing={props.isEditing} subject={subject} type={type} grade={grade} duration={duration} interval={interval}/>]);
         setCount(count + 1);
     }
     return (

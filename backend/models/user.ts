@@ -7,17 +7,19 @@ class User {
     pfpUrl: string;
     location: string;
     notifications: string[];
+    description?: string;
     companyID?: string;
     searcherID?: string;
 
 
-    constructor(userID: string, email: string, hashedPassword: string, pfpUrl: string, location: string, notifications: string[], searcherID?: string, companyID?: string) {
+    constructor(userID: string, email: string, hashedPassword: string, pfpUrl: string, location: string, notifications: string[], description?: string, searcherID?: string, companyID?: string) {
         this.userID = userID;
         this.email = email;
         this.hashedPassword = hashedPassword;
         this.pfpUrl = pfpUrl;
         this.location = location;
         this.notifications = notifications;
+        this.description = description;
         this.companyID = companyID;
         this.searcherID = searcherID;
     }
@@ -35,11 +37,12 @@ class UserExpanded extends User {
         pfpUrl: string,
         location: string,
         notifications: string[],
+        description?: string,
         searcherID?: string,
         companyID?: string,
         company?: Company,
         searcher?: Searcher) {
-        super(userID, email, hashedPassword, pfpUrl, location, notifications, searcherID, companyID);
+        super(userID, email, hashedPassword, pfpUrl, location, notifications, description, searcherID, companyID);
         this.company = company;
         this.searcher = searcher;
     }
@@ -52,6 +55,7 @@ class UserExpanded extends User {
             user.pfpUrl,
             user.location,
             user.notifications,
+            user.description,
             user.searcherID,
             user.companyID,
             company,
@@ -78,16 +82,25 @@ class Searcher {
     lastName: string;
     savedJobs: string[];
     searcherID: string;
+    skills: string[];
+    qualifications: string[];
+    cv: string[];
 
     constructor(
         firstName: string,
         lastName: string,
         savedJobs: string[],
-        searcherID: string,) {
+        searcherID: string,
+        skills: string[],
+        qualifications: string[],
+        cv: string[],) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.savedJobs = savedJobs;
         this.searcherID = searcherID;
+        this.skills = skills;
+        this.qualifications = qualifications;
+        this.cv = cv;
     }
 }
 
