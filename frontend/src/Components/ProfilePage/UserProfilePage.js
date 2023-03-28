@@ -7,9 +7,11 @@ import ErrorBox from "../ErrorBox/ErrorBox";
 import Education from "./Education";
 import {GetData} from "../../Auth/GetUser";
 import axios from "axios";
-import {useParams} from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
+import Loading from "../Loading/Loading";
 
 function UserProfilePage() {
+    const navigate = useNavigate();
     const { id } = useParams();
     const [profile, setProfile] = useState([]);
     const [user, setUser] = useState([]);
@@ -17,6 +19,7 @@ function UserProfilePage() {
     const [isCompany, setCompany] = useState(false)
     const [fileName, setFile]= useState('');
     const [isOwner, setIsOwner] = useState(false);
+    const [loading, setLoading] = useState(true)
 
     useEffect(() => {
         const getProfile = async () => {
@@ -24,6 +27,7 @@ function UserProfilePage() {
                 await axios.get("http://localhost:8000/api/user/"+id).then(r => {
                     setProfile(r.data)
                 });
+                setLoading(false)
             }
         };
         getProfile()
@@ -31,6 +35,7 @@ function UserProfilePage() {
     },[profile]) // eslint-disable-line
 
     useEffect(() => {
+        toggleKeys(false)
         const getUser = async () => {
             if (user.length === 0){
                 await GetData().then(r => {
@@ -76,7 +81,7 @@ function UserProfilePage() {
             formData.append('companyName', companyName);
             formData.append('location', location);
 
-            await axios.patch("http://localhost:8000/api/users/" + id, formData)
+            await axios.patch("http://localhost:8000/api/users/" + id, formData).then(setProfile([]))
         }
     }
 
@@ -98,25 +103,25 @@ function UserProfilePage() {
             formData.append('lastName', lastName);
             formData.append('location', location);
 
-            await axios.patch("http://localhost:8000/api/users/" + id, formData)
+            await axios.patch("http://localhost:8000/api/users/" + id, formData).then(navigate(0))
         }
     }
     function validateEducation(){
-        let subjects = document.querySelectorAll("[id=subject]");
-        let grades = document.querySelectorAll("[id=grade]");
+        let subjects = document.querySelectorAll("[id^=subject]");
+        let grades = document.querySelectorAll("[id^=grade]");
         let durations = document.querySelectorAll("[id=educationDuration]");
         for(let i = 0; i < subjects.length; i++) {
-            if (subjects[i].value === "" || grades[i].value === "" || durations[i].value === ""){
+            if (subjects[i].value === "" || grades[i].value === "" || durations[i].value === "" || subjects[i].value.includes(",") || grades[i].value.includes(",")){
                 return false;
             }
         }
         return true;
     }
     function validateSkills(){
-        let keyInputs = document.querySelectorAll("[id=skill]");
+        let keyInputs = document.querySelectorAll("[id^=skillInput]");
         let durationsInputs = document.querySelectorAll("[id=skillDuration]");
         for(let i = 0; i < keyInputs.length; i++) {
-            if (keyInputs[i].value === "" || durationsInputs[i].value === ""){
+            if (keyInputs[i].value === "" || durationsInputs[i].value === "" || keyInputs[i].value.includes(",")){
                 return false;
             }
         }
@@ -140,12 +145,12 @@ function UserProfilePage() {
             setFile(file.name);
             setProfile(prevUser => ({
                 ...prevUser,
-                Cv: URL.createObjectURL(files[0])
+                cv: URL.createObjectURL(files[0])
             }));
             // TODO: Add Backend Update
         }
     }
-    function updatePfp(event){
+    async function updatePfp(event){
         const{files} = event.target;
         const  fileType = files[0]['type'];
         const validImageTypes = ['image/jpeg', 'image/png'];
@@ -153,10 +158,17 @@ function UserProfilePage() {
             // TODO: Display error if not an image
         }
         else{
-            setProfile(prevUser => ({
-                ...prevUser,
-                pfp:URL.createObjectURL(files[0])}));
-            // TODO: Add Backend Update
+            const formData = new FormData();
+            formData.append("file", files[0])
+            await axios.post("http://localhost:8000/api/storage/pfp/"+user.userID, formData).then(async res => {
+                setProfile(prevUser => ({
+                    ...prevUser,
+                    pfpUrl: res.data.URL
+                }));
+                const userPatch = new FormData();
+                userPatch.append("pfpUrl", res.data.URL)
+                await axios.patch("http://localhost:8000/api/users/" + user.userID, userPatch);
+            })
         }
     }
 
@@ -165,7 +177,8 @@ function UserProfilePage() {
           <Navbar/>
         <div className='bg-lighter-grey min-h-screen items-center justify-center flex'>
             <div className='bg-white rounded-md sm:min-w-1/6 inline-grid px-12 py-7 space-y-3 mt-24 max-w-lg min-w-[40%]'>
-              <h1 className='font-bold text-3xl flex justify-center'>My Profile </h1>
+                {!loading ? <div>
+                <h1 className='font-bold text-3xl flex justify-center'>{isCompany ? profile.company?.companyName: profile.searcher?.firstName +" "+ profile.searcher?.lastName}'s Profile </h1>
                 <div className={"grid grid-cols-2 gap-10"}>
                     <div>
                         {isCompany ?
@@ -194,10 +207,10 @@ function UserProfilePage() {
                     {isCompany ? <div/>
                         : <div>
                             <p><strong><br/><u>Qualifications</u></strong></p>
-                            <Skills isEditing={isEditing}/>
-                            <Education isEditing={isEditing}/>
+                            <Skills isEditing={isEditing} profile={profile}/>
+                            <Education isEditing={isEditing} profile={profile}/>
                             {!isEditing ?
-                                <p className={"mt-4 mb-2"}><strong>CV: </strong>{" "} {profile.Cv ? (<a href={profile.Cv} id= 'Cv' download><u>{fileName}</u></a> ):( "You have not uploaded a CV.")}</p>
+                                <p className={"mt-4 mb-2"}><strong>CV: </strong>{" "} {profile.cv ? (<a href={profile.cv} id= 'Cv' download><u>{fileName}</u></a> ):( "")}</p>
                                 :<div><p className={"mt-4 mb-2"}><strong>CV:</strong>  <input type="file" id="Cv" accept= ".pdf"  onChange={updateCV}/></p></div>}
                         </div>
                     }
@@ -205,7 +218,8 @@ function UserProfilePage() {
             </div>
                 {isOwner && !isEditing && <button className="border-2 border-dark-theme-grey bg-[#ccc] rounded-md m-2 p-2 text-black" onClick={EditOnClick} ><i className="fa-solid fa-pen-to-square pr-2"></i>Edit</button>}
                 {isOwner && isEditing && <button className="save-btn" onClick={saveProfile}><i className="fa-solid fa-floppy-disk pr-1"></i> Save</button>}
-          </div>
+                </div>: <div className={"flex justify-center"}><Loading/></div>}
+                </div>
         </div>
       </div>
 

@@ -91,11 +91,11 @@ export default function RegisterPage() {
             <div className='bg-white rounded-md sm:min-w-1/6 inline-grid px-12 py-7 space-y-3 flex min-w-[500px]'>
                 <p className='mb-6 font-bold text-2xl flex justify-center px-8'>Register an account</p>
 
-                <div className='flex items-center justify-center font-bold pb-2'>
-                    <button className={`rounded-l p-2.5 ${role === 'searcher' ? 'text-white' : 'text-black'} ${role === 'searcher' ? 'bg-[#5A5A5A]' : 'bg-[#D6D6D6]'}`} onClick={() => setRole('searcher')}>
+                <div className='flex items-center justify-center font-bold border-2 border-[#000] rounded-md'>
+                    <button className={`rounded-l p-2.5 w-full ${role === 'searcher' ? 'text-white' : 'text-black'} ${role === 'searcher' ? 'bg-[#5A5A5A]' : 'bg-[#D6D6D6]'}`} onClick={() => setRole('searcher')}>
                         Job Seeker
                     </button>
-                    <button className={`rounded-r p-2.5 ${role === 'company' ? 'text-white' : 'text-black'} ${role === 'searcher' ? 'bg-[#D6D6D6]' : 'bg-[#5A5A5A]'}`} onClick={() => setRole('company')}>
+                    <button className={`rounded-r p-2.5 w-full ${role === 'company' ? 'text-white' : 'text-black'} ${role === 'searcher' ? 'bg-[#D6D6D6]' : 'bg-[#5A5A5A]'}`} onClick={() => setRole('company')}>
                         Company
                     </button>
                 </div>
@@ -106,7 +106,7 @@ export default function RegisterPage() {
                             <TextInputBox className='w-full' id='companyName' placeholder='Company name'/>
                         </div>
                         :
-                        <div className='space-x-0.5'>
+                        <div className='space-x-1'>
                             <TextInputBox id='firstName' placeholder='First name'/>
                             <TextInputBox id='lastName' placeholder='Last name'/>
                         </div>
@@ -118,12 +118,18 @@ export default function RegisterPage() {
                     <span id="emailError" className='invisible absolute top-0'>Invalid email</span>
                 </div>
 
-                <div>
-                    <TextInputBoxWithIcon id='password' type='password' onBlur={()=>{validateField("password",/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{8,20})/)}} placeholder='Password' icon={<img id='toggleEye' src={showIcon} alt='' onClick={togglePasswordVisibility} className='cursor-pointer'/>}/>
-                    <span id="passwordError" className='invisible absolute top-0'>Invalid password</span>
+                <div data-testid="password">
+                    <TextInputBoxWithIcon id='password' type='password' onBlur={()=>{validateField("password",/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{8,20})/); checkPasswordMatch()}} placeholder='Password' icon={<img id='toggleEye' src={showIcon} alt='' onClick={togglePasswordVisibility} className='cursor-pointer'/>}/>
+                    <span id="passwordError" className='invisible absolute top-0'>Invalid Password </span>
+                    <div className={"rounded-md border-2 border-dark-theme-grey px-2 pb-2 mt-2"}>Please include:
+                        <div>• 8-20 Characters</div>
+                        <div>• 1 Capital</div>
+                        <div>• 1 Number</div>
+                        <div>• 1 Special Character: (.!@#$%^&*)</div>
+                    </div>
                 </div>
 
-                <div>
+                <div data-testid={"confirmPasword"}>
                     <TextInputBox className='w-full' id='confirmPassword' type='password' onBlur={checkPasswordMatch} placeholder='Confirm password'/>
                     <span id="passwordMismatchError" className='invisible absolute top-0'>Passwords don't match</span>
                 </div>
