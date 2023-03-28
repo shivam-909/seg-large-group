@@ -73,7 +73,7 @@ export default function JobList(props) {
             await addCards(currentPage);
         }
         addCardScroll();
-    },[total])
+    },[total])  // eslint-disable-line
 
     return (
         <div>

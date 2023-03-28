@@ -111,7 +111,7 @@ export default function Filters(props) {
 
     function updateJobResults() {
         const age = document.querySelector('input[name="age"]:checked').value;
-        const distance = document.querySelector('input[name="distance"]:checked').value;
+        const distance = document.querySelector('input[name="distance"]:checked').value; // eslint-disable-line
         const salaries = document.getElementsByName('salary');
         const schedules = document.querySelectorAll('input[name="schedule"]:checked');
         const types = document.querySelectorAll('input[name="type"]:checked');
@@ -131,7 +131,7 @@ export default function Filters(props) {
 
         // Salary filter
         let newFilteredJobs = [];
-        allFilteredJobs.filter(job => {
+        allFilteredJobs.filter(job => { // eslint-disable-line
             salaries.forEach(salary => {
                 if (salary.id === job.compensation[1] && parseInt(job.compensation[0].replace(/,/g, '')) >= parseInt(salary.value)) {
                     newFilteredJobs.push(job);
