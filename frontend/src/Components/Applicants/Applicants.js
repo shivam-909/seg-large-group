@@ -34,24 +34,20 @@ export default function Applicants() {
         // setCompany(user.searcherID === undefined)
     },[user]) // eslint-disable-line
 
-    async function addCard(applicationID, pfp, name, email, status){
-        await setApplicants( current => [...current, <ApplicantCard id={applicationID} pfpUrl={pfp} name={name} email={email} status={status}/>]);
-    }
-
-    async function getApplicants(filter){
-        setApplicants([])
+    function getApplicants(filter) {
+        setApplicants([]);
         const formData = new FormData();
         formData.append('jobListing', id);
         formData.append("status", filter)
-        await axios.post("http://localhost:8000/api/application/filter", formData).then(async res => {
+        axios.post("http://localhost:8000/api/application/filter", formData).then(res => {
             let applications = res.data.applications;
-            setApplicants([])
+            setApplicants([]);
             for (let i = 0; i < applications.length; i++) {
-                await axios.get("http://localhost:8000/api/searcher/" + applications[i].searcher).then(async searcher => {
+                axios.get("http://localhost:8000/api/searcher/" + applications[i].searcher).then(searcher => {
                     const searcherID = new FormData();
                     searcherID.append("searcherID",searcher.data.searcherID)
-                    await axios.post("http://localhost:8000/api/user/typeid", searcherID).then(usr => {
-                        addCard(applications[i].id, usr.data.pfpUrl, searcher.data.firstName + " " + searcher.data.lastName, usr.data.email, applications[i].status)
+                    axios.post("http://localhost:8000/api/user/typeid", searcherID).then(usr => {
+                        setApplicants( current => [...current, <ApplicantCard id={applications[i].id} pfpUrl={usr.data.pfpUrl} name={searcher.data.firstName + " " + searcher.data.lastName} email={usr.data.email} status={applications[i].status}/>]);
                         setLoading(false);
                     })
                 })
