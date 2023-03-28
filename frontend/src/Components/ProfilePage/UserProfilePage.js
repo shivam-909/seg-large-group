@@ -9,6 +9,7 @@ import {GetData} from "../../Auth/GetUser";
 import axios from "axios";
 import {useNavigate, useParams} from "react-router-dom";
 import Loading from "../Loading/Loading";
+import {Location} from "./Location";
 
 function UserProfilePage() {
     const navigate = useNavigate();
@@ -26,6 +27,7 @@ function UserProfilePage() {
             if (profile.length === 0){
                 await axios.get("http://localhost:8000/api/user/"+id).then(r => {
                     setProfile(r.data)
+                    setFile(r.data.searcher?.cv[0])
                 });
                 setLoading(false)
             }
@@ -67,7 +69,7 @@ function UserProfilePage() {
 
     async function saveCompany() {
         let companyName = document.getElementById("firstName")?.value;
-        let location = document.getElementById("location").value;
+        let location = document.getElementById("locationInput").value;
 
         if (companyName === "") {
             setVisible("errorBox", true)
@@ -81,14 +83,14 @@ function UserProfilePage() {
             formData.append('companyName', companyName);
             formData.append('location', location);
 
-            await axios.patch("http://localhost:8000/api/users/" + id, formData).then(setProfile([]))
+            await axios.patch("http://localhost:8000/api/users/" + id, formData).then(navigate(0))
         }
     }
 
     async function saveSearcher() {
         let firstName = document.getElementById("firstName")?.value;
         let lastName = document.getElementById("lastName")?.value;
-        let location = document.getElementById("location").value;
+        let location = document.getElementById("locationInput").value;
 
         if (firstName === "" || lastName === "" || !validateSkills() || !validateEducation()) {
             setVisible("errorBox", true)
@@ -133,21 +135,25 @@ function UserProfilePage() {
             inputs[i].disabled = !flag;
         }
     }
-    function updateCV(event){
+    async function updateCV(event) {
         const {files} = event.target;
         const file = event.target.files[0];
-        const  fileType = file['type'];
+        const fileType = file['type'];
         const validImageTypes = ['application/pdf'];
         if (!validImageTypes.includes(fileType)) {
             // TODO: Display error if not an image
-        }
-        else {
+        } else {
             setFile(file.name);
-            setProfile(prevUser => ({
-                ...prevUser,
-                cv: URL.createObjectURL(files[0])
-            }));
             // TODO: Add Backend Update
+            const formData = new FormData();
+            formData.append("file", files[0])
+            await axios.post("http://localhost:8000/api/storage/cv/" + user.userID, formData).then(async res => {
+                const userPatch = new FormData();
+                console.log(file.name, res.data.URL)
+                userPatch.append("cv[]", file.name)
+                userPatch.append("cv[]", res.data.URL)
+                await axios.patch("http://localhost:8000/api/users/" + id, userPatch)
+            })
         }
     }
     async function updatePfp(event){
@@ -161,10 +167,6 @@ function UserProfilePage() {
             const formData = new FormData();
             formData.append("file", files[0])
             await axios.post("http://localhost:8000/api/storage/pfp/"+user.userID, formData).then(async res => {
-                setProfile(prevUser => ({
-                    ...prevUser,
-                    pfpUrl: res.data.URL
-                }));
                 const userPatch = new FormData();
                 userPatch.append("pfpUrl", res.data.URL)
                 await axios.patch("http://localhost:8000/api/users/" + user.userID, userPatch);
@@ -203,14 +205,14 @@ function UserProfilePage() {
                             <p><strong>Last Name: <span className={"text-red"}>&#42;</span></strong> <input type="text" id="lastName" placeholder = "Please enter your Last Name" defaultValue= {profile.searcher?.lastName} disabled={!isEditing}/></p> </div>
                     }
                     <p><strong>Email: </strong> <input type="email" id="email" placeholder = "Email" defaultValue= {profile.email} disabled/></p>
-                    <p><strong>Location: </strong> <input type="text" id="location" placeholder = "Please enter your Location" defaultValue= {profile.location} disabled={!isEditing}/></p>
+                    <p><strong>Location: </strong> <Location defaultLocation={profile.location} disabled={!isEditing}/></p>
                     {isCompany ? <div/>
                         : <div>
                             <p><strong><br/><u>Qualifications</u></strong></p>
                             <Skills isEditing={isEditing} profile={profile}/>
                             <Education isEditing={isEditing} profile={profile}/>
                             {!isEditing ?
-                                <p className={"mt-4 mb-2"}><strong>CV: </strong>{" "} {profile.cv ? (<a href={profile.cv} id= 'Cv' download><u>{fileName}</u></a> ):( "")}</p>
+                                <p className={"mt-4 mb-2"}><strong>CV: </strong>{" "} {profile.searcher?.cv ? (<a href={profile.searcher?.cv[1]} target={"_blank"} rel={"noreferrer"} id= 'Cv' download><u>{fileName}</u></a> ):("No CV")}</p>
                                 :<div><p className={"mt-4 mb-2"}><strong>CV:</strong>  <input type="file" id="Cv" accept= ".pdf"  onChange={updateCV}/></p></div>}
                         </div>
                     }

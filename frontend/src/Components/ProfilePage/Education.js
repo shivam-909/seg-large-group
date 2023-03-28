@@ -10,6 +10,7 @@ export default function Education(props) {
         if (props.profile.length === 0){
             return;
         }
+        setEducation([])
         for (const qualification of props.profile.searcher?.qualifications){
             let qual = qualification.split(",")
             createSkill(qual[0], qual[1], qual[2], qual[3], qual[4])

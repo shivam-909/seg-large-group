@@ -4,16 +4,21 @@ import SkillCard from "./SkillCard";
 
 export default function Skills(props) {
     const [skills, setSkills] = useState([]);
-    const [count, setCount] = useState(skills.length);
+    const [count, setCount] = useState(0);
 
     useEffect(() => {
-        if (props.profile.length === 0){
-            return;
+        async function getSkills(){
+            setSkills([])
+            if (props.profile.length === 0){
+                return;
+            }
+            for (const skill of props.profile.searcher?.skills){
+                let skillVals = skill.split(",")
+                createSkill(skillVals[0], skillVals[1], skillVals[2])
+            }
         }
-        for (const skill of props.profile.searcher?.skills){
-            let skillVals = skill.split(",")
-            createSkill(skillVals[0], skillVals[1], skillVals[2])
-        }
+        setSkills([])
+        getSkills()
     },[props.profile]) // eslint-disable-line
 
     function createSkill(skill, duration, interval){

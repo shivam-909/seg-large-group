@@ -1,5 +1,9 @@
 import {useEffect, useState} from "react";
 import JobList from "./JobList";
+import {distanceTo} from 'geolocation-utils'
+import Geocode from "react-geocode";
+
+Geocode.setApiKey("AIzaSyC0FpC_LZEQb2iyXwOEcyM57llwjE9hBOQ");
 
 export default function Filters(props) {
     const originalJobResults = props.jobs;
@@ -109,9 +113,25 @@ export default function Filters(props) {
         updateJobResults();
     }
 
-    function updateJobResults() {
+    async function calcDistance(jobLocation) {
+        const distance = document.querySelector('input[name="distance"]:checked').value;
+        const locationInput = document.getElementById("locationInput").value;
+        const locInput = await Geocode.fromAddress(locationInput).then(response => {
+            return {lat: response.results[0].geometry.location.lat, lon: response.results[0].geometry.location.lng};
+        });
+        const jobLoc = await Geocode.fromAddress(jobLocation.location).then(res => {
+            console.log(res.results[0].formatted_address)
+            return {
+                lat: res.results[0].geometry.location.lat,
+                lon: res.results[0].geometry.location.lng
+            };
+        });
+        console.log((distanceTo(locInput, jobLoc) * 0.000621371) <= distance)
+        return (distanceTo(locInput, jobLoc) * 0.000621371) < distance
+    }
+    async function updateJobResults() {
         const age = document.querySelector('input[name="age"]:checked').value;
-        const distance = document.querySelector('input[name="distance"]:checked').value; // eslint-disable-line
+        const distance = document.querySelector('input[name="distance"]:checked').value;
         const salaries = document.getElementsByName('salary');
         const schedules = document.querySelectorAll('input[name="schedule"]:checked');
         const types = document.querySelectorAll('input[name="type"]:checked');
@@ -124,10 +144,14 @@ export default function Filters(props) {
 
         // Date posted filter
         if (age !== '') {
-            allFilteredJobs = originalJobResults.filter(job => job.age < age);
+            allFilteredJobs = allFilteredJobs.filter(job => job.age < age);
         }
 
-        // TODO: Distance filter
+        // Date posted filter
+        if (distance !== '') {
+                allFilteredJobs = allFilteredJobs.filter(calcDistance);
+                console.log(allFilteredJobs.length)
+        }
 
         // Salary filter
         let newFilteredJobs = [];
