@@ -22,7 +22,7 @@ function SearchPage() {
                     if (response.data.results.length === 0) {
                         setNoJobsFound(true);
                     }
-                    for (const job of response.data) {
+                    for (const job of response.data.results) {
                         job.age = Math.floor(((Date.now() / 1000) - job.datePosted._seconds) / 86400);
                         job.compensation[0] = job.compensation[0].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
                         await axios.get(`http://localhost:8000/api/company/${job.companyID}`).then(company => {
@@ -30,7 +30,7 @@ function SearchPage() {
                         });
                     }
                     setLoading(false);
-                    setJobs(response.data);
+                    setJobs(response.data.results);
                 });
         }
      }
