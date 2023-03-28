@@ -7,19 +7,50 @@ import calendarIcon from "../../icons/calendarIcon.png";
 import shareIcon from "../../icons/shareIcon.png";
 import emailIcon from "../../icons/emailIcon.png";
 import copyIcon from "../../icons/copyIcon.png";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import clockIcon from "../../icons/clockIcon.png";
 import Urgent from "./Urgent";
 import JobPostAge from "./JobPostAge";
 import openInNewTabIcon from "../../icons/openInNewTabIcon.png";
+import {GetData} from "../../Auth/GetUser";
+import {useNavigate} from "react-router-dom";
+import axios from "axios";
 
 function JobDetailsCard(props) {
+    const navigate = useNavigate()
     const [openShareModal, setOpenShareModal] = useState(false);
     const [savedJobPost, setSavedJopPost] = useState(false);
+    const [user, setUser] = useState([])
+    const [companyUser, setCompany] = useState([])
 
+    useEffect(() => {
+        const getUser = async () => {
+            if (user.length === 0){
+                await GetData().then(r => {
+                    setUser(r)
+                });
+            }
+        };
+        getUser()
+    },[user]) // eslint-disable-line
+
+    useEffect(()=> {
+        async function getCompany(){
+            const formData = new FormData();
+            formData.append("companyID", props.companyID)
+            await axios.post("http://localhost:8000/api/user/typeid", formData).then(r => {
+                setCompany(r.data.userID);
+            })
+        }
+        getCompany();
+    },[props.companyID])
     function saveJobPost() {
-        // TODO: implement
-        setSavedJopPost(!savedJobPost);
+        if (user.userID){
+            setSavedJopPost(!savedJobPost);
+        }
+        else{
+            navigate("/login")
+        }
     }
 
     function emailJobPost() {
@@ -34,14 +65,14 @@ function JobDetailsCard(props) {
     return (
         <div className='max-h-screen overflow-y-scroll border-2 border-darker-grey rounded-xl px-5 py-8 top-0 max-w-[800px] sticky'>
             <p className='font-bold text-xl'>{props.title}</p>
-            <a href='/' target='_blank'>{props.companyName}</a>
+            <a href={"/profile/"+companyUser} target='_blank'>{props.companyName}</a>
             <p className='mb-5'>{props.location}</p>
 
             <div className='flex space-x-5'>
                 <button className='bg-dark-theme-grey rounded-md py-2.5 px-4 font-bold text-white'><a href={`/apply/${props.id}`} target='_blank' rel='noreferrer'>Apply Now</a></button>
                 <button className='bg-darker-grey rounded-md w-11 flex items-center justify-center' onClick={() => setOpenShareModal(true)}><img src={shareIcon} alt=''/></button>
                 <button className='bg-darker-grey rounded-md w-11 flex items-center justify-center' onClick={saveJobPost}><img src={savedJobPost ? savedIcon : saveIcon} alt=''/></button>
-                <button className='bg-darker-grey rounded-md w-11 flex items-center justify-center'><a href={`/job/${props.id}`} target='_blank' rel='noreferrer'><img src={openInNewTabIcon} alt=''/></a></button>
+                <button className='bg-darker-grey rounded-md w-11 flex items-center justify-center'><a href={`/viewjob/${props.id}`} target='_blank' rel='noreferrer'><img src={openInNewTabIcon} alt=''/></a></button>
             </div>
 
             <div className='bg-darker-grey h-[0.1px] my-5'></div>

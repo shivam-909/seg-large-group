@@ -84,7 +84,7 @@ export default function JobList(props) {
                 </div>
                 <JobDetailsCard className={"top-48"}
                     id={selectedJob.id} age={selectedJob.age} urgent={selectedJob.urgent}
-                    title={selectedJob.title} location={selectedJob.location} companyName={selectedJob.companyName} salary={`${selectedJob.compensation[0]}/${selectedJob.compensation[1]}`}
+                    title={selectedJob.title} location={selectedJob.location} companyName={selectedJob.companyName} companyID={selectedJob.companyID} salary={`${selectedJob.compensation[0]}/${selectedJob.compensation[1]}`}
                     types={selectedJob.type} schedule={selectedJob.schedule}
                     qualifications={selectedJob.qualifications}
                     benefits={selectedJob.benefits}
