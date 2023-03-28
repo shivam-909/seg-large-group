@@ -14,11 +14,28 @@ export async function UpdateUser(db: DB, id:string, req: any): Promise<void> {
         throw new Error(ErrorMissingProperty);
     }
 
-    const { email, password, pfpUrl, location, notifications, companyID, searcherID } = req;
+    const { email, password, pfpUrl, location, notifications, companyName, cv, firstName, lastName, qualifications, savedJobs, skills } = req;
 
-    if (!email && !password && !pfpUrl && !location && !notifications && !companyID && !searcherID){
+    const user = await usersdb.RetrieveFullUserByID(db, id);
+
+    if(user?.searcher){
+        if(companyName){
+            throw new Error(errors.ErrorInvalidSearcherFields);
+        }
+    }
+
+    else{
+        if(user?.company){
+            if(cv || firstName || lastName || qualifications || savedJobs || skills){
+                throw new Error(errors.ErrorInvalidCompanyFields);
+            }
+        }
+    }
+
+    if (!email && !password && !pfpUrl && !location && !notifications && !companyName && !cv && !firstName && !lastName && !qualifications && !savedJobs && !skills){
         throw new Error(errors.ErrorMissingProperty);
     }
+
 
     if (email && !ValidEmail(email)) {
         throw new Error(errors.ErrorInvalidEmail);
@@ -27,13 +44,7 @@ export async function UpdateUser(db: DB, id:string, req: any): Promise<void> {
         throw new Error(errors.ErrorInvalidPassword);
     }
 
-    if(companyID){
-        await ValidateCompanyId(db,companyID);
-    }
 
-    if (searcherID){
-        await ValidateSearcherId(db,searcherID);
-    }
 }
 
 export async function GetUserByType(db:DB, req:any): Promise<void>{
