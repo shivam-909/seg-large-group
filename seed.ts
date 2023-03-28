@@ -8,6 +8,6 @@ export async function FullSeed(db: DB): Promise<void> {
     await seeder.SeedCompanies(db);
     await seeder.SeedSearchers(db);
     await seeder.SeedJobListings(db);
-    await seeder.SeedAllNotifications(db);
     await seeder.SeedApplicationListings(db);
+    await seeder.SeedAllNotifications(db);
 }
