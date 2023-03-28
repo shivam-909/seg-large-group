@@ -74,7 +74,9 @@ export const ErrorQueryRequired = "query string is required";
 export const ErrorFailedToCreateListing = "failed to create job listing";
 export const ErrorCvRequired = 'cv is required';
 export const ErrorMissingCoverLetter = 'no value for cover letter is provided';
-export const ErrorMissingQnAs = 'no value for QnAs provided'
+export const ErrorMissingQnAs = 'no value for QnAs provided';
+export const ErrorInvalidSearcherFields = "cannot update fields for searcher that belong to company";
+export const ErrorInvalidCompanyFields = "cannot update fields for company that belong to searcher";
 
 
 
@@ -131,7 +133,9 @@ export var ErrorToCode: Map<string, number> = new Map<string, number>(
         [ErrorUserIDRequired, 400],
         [ErrorQueryRequired, 400],
         [ErrorCvRequired, 400],
-        [ErrorMissingQnAs, 400]
+        [ErrorMissingQnAs, 400],
+        [ErrorInvalidSearcherFields, 400],
+        [ErrorInvalidCompanyFields, 400]
 
     ]
 );
