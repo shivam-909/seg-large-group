@@ -3,13 +3,15 @@ import JobCard from "./JobCard";
 import axios from "axios";
 import CompanyJobCard from "./CompanyJobCard";
 import {GetData} from "../../Auth/GetUser";
+import Loading from "../Loading/Loading";
 
 export default function Category(props) {
     const [jobsList, setJobsList] = useState([]);
     const [user, setUser] = useState([])
+    const [loading, setLoading] = useState(true)
 
-    async function addCard(title, company, location){
-        await setJobsList( current => [...current, <JobCard title={title} company={company} location={location}/>]);
+    async function addCard(applicationID, jobID, title, company, location, status){
+        await setJobsList( current => [...current, <JobCard id={applicationID} jobID={jobID} title={title} company={company} location={location} status={status}/>]);
     }
 
     async function addCompanyCard(id, title, schedule, location, date){
@@ -18,23 +20,27 @@ export default function Category(props) {
 
     useEffect(() => {
         const getUser = async () => {
-            if (user.length === 0){
+            if (user.length === 0) {
                 await GetData().then(r => {
                     setUser(r)
                 });
             }
         };
         getUser()
-
-        if (props.filter === "Postings") {
-            getPostings(); // eslint-disable-line
+    }, [user])
+    useEffect(() => {
+        setLoading(true)
+        async function updateListings() {
+            if (props.filter === "Postings") {
+                await getPostings(); // eslint-disable-line
+            } else if (props.filter === "Saved") {
+                await getSavedJobs(); // eslint-disable-line
+            } else {
+                await getApplication(props.filter); // eslint-disable-line
+            }
         }
-        else if (props.filter === "Saved") {
-            getSavedJobs(); // eslint-disable-line
-        } else {
-            getApplication(props.filter); // eslint-disable-line
-        }
-    },[user, props.filter]) // eslint-disable-line
+        updateListings();
+    },[props.filter, user]) // eslint-disable-line
 
     async function getPostings(){
         const companyID = user.companyID;
@@ -51,9 +57,11 @@ export default function Category(props) {
                 } else {
                     console.log("no applications found")
                 }
+                setLoading(false);
             })
             .catch(error => {
                 // TODO: Display error message.
+                setLoading(false);
                 console.error(error);
             });
     }
@@ -61,26 +69,28 @@ export default function Category(props) {
     async function getApplication(filter){
         const formData = new FormData();
         formData.append('status', filter);
-        formData.append('searcher', user.userID); // eslint-disable-line
-        axios.post('http://localhost:8000/api/applications/filter', formData)
+        formData.append('searcher', user.searcherID); // eslint-disable-line
+        axios.post('http://localhost:8000/api/application/filter', formData)
             .then(response => {
                 if (response.data !== undefined) {
                     let filterJobs = response.data.applications
                     setJobsList([])
                     for (let i = 0; i < filterJobs.length; i++) {
-                        axios.get("http://localhost:8000/jobs/" + filterJobs[i].jobListing)
+                        axios.get("http://localhost:8000/api/jobs/" + filterJobs[i].jobListing)
                             .then(async job => {
-                                const companyName = await axios.get("http://localhost:8000/company/"+job.data.companyID).then(company => {return company.data.companyName})
-                                await addCard(job.data.title, companyName, job.data.location);
+                                const companyName = await axios.get("http://localhost:8000/api/company/"+job.data.companyID).then(company => {return company.data.companyName})
+                                await addCard(filterJobs[i].id, job.data.id, job.data.title, companyName, job.data.location, filterJobs[i].status);
                             })
                     }
                 } else {
                     console.log("no applications found")
                 }
+                setLoading(false);
             })
             .catch(error => {
                 // TODO: Display error message.
                 console.error(error);
+                setLoading(false);
             });
     }
 
@@ -90,31 +100,35 @@ export default function Category(props) {
         }
         axios.get('http://localhost:8000/api/user/' + user.userID)
             .then(response => {
-                if (response.data.savedJobs !== undefined) {
-                    let savedJobs = response.data.savedJobs
+                if (response.data.searcher?.savedJobs !== undefined) {
+                    let savedJobs = response.data.searcher?.savedJobs
                     setJobsList([])
                     for (let i = 0; i < savedJobs.length; i++) {
-                        axios.get("http://localhost:8000/jobs/" + savedJobs[i])
+                        axios.get("http://localhost:8000/api/jobs/" + savedJobs[i])
                             .then(async job => {
-                                const companyName = await axios.get("http://localhost:8000/company/"+job.data.companyID).then(company => {return company.data.companyName})
-                                await addCard(job.data.title, companyName, job.data.location);
+                                const companyName = await axios.get("http://localhost:8000/api/company/"+job.data.companyID).then(company => {return company.data.companyName})
+                                await addCard("",job.data.id, job.data.title, companyName, job.data.location, "Saved");
                             })
                     }
                 } else {
                     // TODO: Display for 0 Jobs
                 }
+                setLoading(false);
             })
             .catch(error => {
                 // TODO: Display error message.
                 console.error(error);
+                setLoading(false);
             });
     }
 
     return (
         <div className='items-center justify-center flex relative w-full'>
+            {!loading ?
             <div className={"display-block w-full"}>
                 {jobsList}
             </div>
+                : <div><Loading/></div>}
         </div>
     );
 }

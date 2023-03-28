@@ -74,7 +74,7 @@ function LoginPage() {
             <p className='mb-6 font-bold text-2xl flex justify-center'>Sign in to your account</p>
 
             <div>
-              <TextInputBox id='email' cache={localStorage.getItem("email")} className="w-full" onBlur={()=>{validateField("email",/^\w+(-?\w+)*@\w+(-?\w+)*(\.\w{2,10})+$/)}} placeholder='Email address'/>
+              <TextInputBox id='email' cache={localStorage.getItem("email")} className="w-full" onBlur={()=>{validateField("email",/^\w+(\.\w+)*@\w+(-?\w+)*(\.\w{2,10})+$/)}} placeholder='Email address'/>
               <span id="emailError" className={"invisible absolute top-0"}>Invalid Email</span>
             </div>
 
@@ -88,7 +88,7 @@ function LoginPage() {
             <div className='p-0.5'></div>
 
             <button className='bg-dark-theme-grey rounded-md text-white p-2.5 flex items-center justify-center space-x-2' onClick={loginButton} id={"loginButton"}>
-              {loading ? <Loading/> : <p id={"loadText"}>Sign In<i className="fa-solid fa-right-to-bracket pl-2"></i></p>}
+              {loading ? <Loading className={"h-10 w-10 border-[3px] border-dark-theme-grey"}/> : <p id={"loadText"}>Sign In<i className="fa-solid fa-right-to-bracket pl-2"></i></p>}
             </button>
 
             <p className='text-center pt-4'>New user? <a className='LoginPage-link' href='/signup'>Sign up.</a></p>
