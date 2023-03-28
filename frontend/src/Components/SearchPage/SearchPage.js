@@ -3,7 +3,6 @@ import {useState} from "react";
 import Filters from "./Filters";
 import Navbar from "../Navbar/Navbar";
 import axios from "axios";
-import JobList from "./JobList";
 import Loading from "../Loading/Loading";
 
 function SearchPage() {
