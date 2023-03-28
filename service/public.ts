@@ -76,7 +76,7 @@ export const ErrorCvRequired = 'cv is required';
 export const ErrorMissingCoverLetter = 'no value for cover letter is provided';
 export const ErrorMissingQnAs = 'no value for QnAs provided';
 export const ErrorInvalidSearcherFields = "cannot update fields for searcher that belong to company";
-export const ErrorInvalidCompanyFields = "cannot update fields for company that belong t searcher";
+export const ErrorInvalidCompanyFields = "cannot update fields for company that belong to searcher";
 
 
 
