@@ -1,9 +1,5 @@
 import {useEffect, useState} from "react";
 import JobList from "./JobList";
-import {distanceTo} from 'geolocation-utils'
-import Geocode from "react-geocode";
-
-Geocode.setApiKey("AIzaSyC0FpC_LZEQb2iyXwOEcyM57llwjE9hBOQ");
 
 export default function Filters(props) {
     const originalJobResults = props.jobs;
@@ -113,22 +109,6 @@ export default function Filters(props) {
         updateJobResults();
     }
 
-    async function calcDistance(jobLocation) {
-        const distance = document.querySelector('input[name="distance"]:checked').value;
-        const locationInput = document.getElementById("locationInput").value;
-        const locInput = await Geocode.fromAddress(locationInput).then(response => {
-            return {lat: response.results[0].geometry.location.lat, lon: response.results[0].geometry.location.lng};
-        });
-        const jobLoc = await Geocode.fromAddress(jobLocation.location).then(res => {
-            console.log(res.results[0].formatted_address)
-            return {
-                lat: res.results[0].geometry.location.lat,
-                lon: res.results[0].geometry.location.lng
-            };
-        });
-        console.log((distanceTo(locInput, jobLoc) * 0.000621371) <= distance)
-        return (distanceTo(locInput, jobLoc) * 0.000621371) < distance
-    }
     async function updateJobResults() {
         const age = document.querySelector('input[name="age"]:checked').value;
         const distance = document.querySelector('input[name="distance"]:checked').value;
@@ -147,10 +127,10 @@ export default function Filters(props) {
             allFilteredJobs = allFilteredJobs.filter(job => job.age < age);
         }
 
-        // Date posted filter
+        // Distance filter
+        console.log(distance)
         if (distance !== '') {
-                allFilteredJobs = allFilteredJobs.filter(calcDistance);
-                console.log(allFilteredJobs.length)
+            allFilteredJobs = allFilteredJobs.filter(job => job.distance < distance);
         }
 
         // Salary filter
