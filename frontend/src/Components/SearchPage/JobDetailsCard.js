@@ -4,17 +4,17 @@ import salaryIcon from "../../icons/salaryIcon.png";
 import PlaceholderCard from "./PlaceholderCard";
 import suitcaseIcon2 from "../../icons/suitcaseIcon2.png";
 import calendarIcon from "../../icons/calendarIcon.png";
-import shareIcon from "../../icons/shareIcon.png";
-import emailIcon from "../../icons/emailIcon.png";
-import copyIcon from "../../icons/copyIcon.png";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import clockIcon from "../../icons/clockIcon.png";
 import Urgent from "./Urgent";
 import JobPostAge from "./JobPostAge";
 import openInNewTabIcon from "../../icons/openInNewTabIcon.png";
+import {useNavigate} from "react-router-dom";
+import axios from "axios";
+import {GetData} from "../../Auth/GetUser";
 
 function JobDetailsCard(props) {
-    const [openShareModal, setOpenShareModal] = useState(false);
+    const navigate = useNavigate()
     const [savedJobPost, setSavedJopPost] = useState(false);
     const [user, setUser] = useState([])
     const [companyUser, setCompany] = useState([])
@@ -28,6 +28,7 @@ function JobDetailsCard(props) {
             }
         };
         getUser()
+        setSavedJopPost(user.searcher?.savedJobs.includes(props.id))
     },[user]) // eslint-disable-line
 
     useEffect(()=> {
@@ -40,8 +41,33 @@ function JobDetailsCard(props) {
         }
         getCompany();
     },[props.companyID])
-    function saveJobPost() {
+
+    async function saveJobPost() {
         if (user.userID){
+            if(!savedJobPost){
+                const savedJobs = user.searcher?.savedJobs;
+                savedJobs.push(props.id)
+                const newUser = new FormData()
+                for (const job of savedJobs){
+                    newUser.append("savedJobs[]", job)
+                }
+                await axios.patch("http://localhost:8000/api/users/"+user.userID,newUser)
+            }
+            else{
+                const savedJobs = user.searcher?.savedJobs;
+                const index = savedJobs.indexOf(props.id)
+                if(index > -1){
+                    savedJobs.splice(index,1)
+                    const newUser = new FormData()
+                    for (const job of savedJobs){
+                        newUser.append("savedJobs[]", job)
+                    }
+                    await axios.patch("http://localhost:8000/api/users/"+user.userID,newUser)
+                }
+                else{
+                    console.log("job not saved")
+                }
+            }
             setSavedJopPost(!savedJobPost);
         }
         else{
@@ -52,12 +78,12 @@ function JobDetailsCard(props) {
     return (
         <div className={`px-5 py-8 border-2 border-darker-grey rounded-xl bg-white ${props.fullScreen ? 'max-w-[1200px]' : 'max-w-[800px] overflow-y-scroll max-h-screen sticky'}`}>
             <p className='font-bold text-xl'>{props.title}</p>
-            <a href='/' target='_blank'>{props.companyName}</a>
-            <p className='mb-5'>{props.location}</p>
+            <a href={'/profile/'+user.userID} target='_blank' rel={"noreferrer"}>{props.companyName}</a>
+            <p className='mb-5'>{companyUser.location}</p>
 
             <div className='flex space-x-5'>
                 <button className='bg-dark-theme-grey rounded-md py-2.5 px-4 font-bold text-white'><a href={`/apply/${props.id}`} target='_blank' rel='noreferrer'>Apply Now</a></button>
-                <button className='bg-darker-grey rounded-md w-11 flex items-center justify-center' onClick={saveJobPost}><img src={savedJobPost ? savedIcon : saveIcon} alt=''/></button>
+                { user.searcher && <button className='bg-darker-grey rounded-md w-11 flex items-center justify-center' onClick={saveJobPost}><img src={savedJobPost ? savedIcon : saveIcon} alt=''/></button>}
                 {!props.fullScreen &&
                     <button className='bg-darker-grey rounded-md w-11 flex items-center justify-center'><a href={`/viewjob/${props.id}`} target='_blank' rel='noreferrer'><img src={openInNewTabIcon} alt=''/></a></button>
                 }

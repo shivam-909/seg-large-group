@@ -111,9 +111,8 @@ function UserProfilePage() {
     function validateEducation(){
         let subjects = document.querySelectorAll("[id^=subject]");
         let grades = document.querySelectorAll("[id^=grade]");
-        let durations = document.querySelectorAll("[id=educationDuration]");
         for(let i = 0; i < subjects.length; i++) {
-            if (subjects[i].value === "" || grades[i].value === "" || durations[i].value === "" || subjects[i].value.includes(",") || grades[i].value.includes(",")){
+            if (subjects[i].value === "" || grades[i].value === "" || subjects[i].value.includes(",") || grades[i].value.includes(",")){
                 return false;
             }
         }
@@ -180,8 +179,9 @@ function UserProfilePage() {
         <div className='bg-lighter-grey min-h-screen items-center justify-center flex'>
             <div className='bg-white rounded-md sm:min-w-1/6 inline-grid px-12 py-7 space-y-3 mt-24 max-w-lg min-w-[40%]'>
                 {!loading ? <div>
-                <h1 className='font-bold text-3xl flex justify-center'>{isCompany ? profile.company?.companyName: profile.searcher?.firstName +" "+ profile.searcher?.lastName}'s Profile </h1>
-                <div className={"grid grid-cols-2 gap-10"}>
+                {/*<h1 className='font-bold text-3xl flex justify-center'>{isCompany ? profile.company?.companyName: profile.searcher?.firstName +" "+ profile.searcher?.lastName}'s Profile </h1>*/}
+                {/*    <h1 className='font-bold text-3xl flex justify-center'>Profile </h1>*/}
+                    <div className={"grid grid-cols-2 border-[1px] border-[#ccc] rounded-md shadow-md"}>
                     <div>
                         {isCompany ?
                             <p className={"ml-6 mt-2 text-2xl font-bold"}>{profile.company?.companyName}</p>
@@ -195,20 +195,22 @@ function UserProfilePage() {
                         {isEditing && <label for={"pfpUpload"} className={"float-right"}><i className="fa-solid fa-pen-to-square pr-2"></i></label>}
                     </div>
                 </div>
-            <div className='text-input' id="profile">
-                <p><strong><u>Contact Information</u></strong></p>
-                    {isCompany ?
-                        <p><strong>Company Name: <span className={"text-red"}>&#42;</span> </strong> <input type="text" id="firstName" placeholder = "Please enter your First Name" defaultValue= {profile.company?.companyName} disabled={!isEditing}/></p>
-                        :
-                        <div>
-                            <p><strong>First Name: <span className={"text-red"}>&#42;</span> </strong> <input type="text" id="firstName" placeholder = "Please enter your First Name" defaultValue= {profile.searcher?.firstName} disabled={!isEditing}/></p>
-                            <p><strong>Last Name: <span className={"text-red"}>&#42;</span></strong> <input type="text" id="lastName" placeholder = "Please enter your Last Name" defaultValue= {profile.searcher?.lastName} disabled={!isEditing}/></p> </div>
-                    }
+            <div className='text-input'>
+                    <div className={"border-[1px] border-[#ccc] rounded-md shadow-md p-2"}>
+                    <p><strong><u>Contact Information</u></strong></p>
+                {isCompany ?
+                    <p><strong>Company Name: <span className={"text-red"}>&#42;</span> </strong> <input type="text" id="firstName" placeholder = "Please enter your First Name" defaultValue= {profile.company?.companyName} disabled={!isEditing}/></p>
+                    :
+                    <div>
+                    <p><strong>First Name: <span className={"text-red"}>&#42;</span> </strong> <input type="text" id="firstName" placeholder = "Please enter your First Name" defaultValue= {profile.searcher?.firstName} disabled={!isEditing}/></p>
+                    <p><strong>Last Name: <span className={"text-red"}>&#42;</span></strong> <input type="text" id="lastName" placeholder = "Please enter your Last Name" defaultValue= {profile.searcher?.lastName} disabled={!isEditing}/></p> </div>
+                }
                     <p><strong>Email: </strong> <input type="email" id="email" placeholder = "Email" defaultValue= {profile.email} disabled/></p>
                     <p><strong>Location: </strong> <Location defaultLocation={profile.location} disabled={!isEditing}/></p>
+                    </div>
                     {isCompany ? <div/>
-                        : <div>
-                            <p><strong><br/><u>Qualifications</u></strong></p>
+                        : <div className={"border-[1px] border-[#ccc] rounded-md shadow-md mt-4"}>
+                            <p><strong><u>Qualifications</u></strong></p>
                             <Skills isEditing={isEditing} profile={profile}/>
                             <Education isEditing={isEditing} profile={profile}/>
                             {!isEditing ?
@@ -218,9 +220,9 @@ function UserProfilePage() {
                     }
                 <ErrorBox message={"Please complete all required fields."}/>
             </div>
-                {isOwner && !isEditing && <button className="border-2 border-dark-theme-grey bg-[#ccc] rounded-md m-2 p-2 text-black" onClick={EditOnClick} ><i className="fa-solid fa-pen-to-square pr-2"></i>Edit</button>}
-                {isOwner && isEditing && <button className="save-btn" onClick={saveProfile}><i className="fa-solid fa-floppy-disk pr-1"></i> Save</button>}
-                </div>: <div className={"flex justify-center"}><Loading/></div>}
+                {isOwner && !isEditing && <button className="border-2 border-dark-theme-grey bg-dark-theme-grey text-white font-bold rounded-md m-2 p-2 w-full" onClick={EditOnClick} ><i className="fa-solid fa-pen-to-square pr-2"></i>Edit</button>}
+                {isOwner && isEditing && <button className="border-2 bg-[#375efa] text-white font-bold rounded-md m-2 p-2 w-full hover:bg-[#204cfa]" onClick={saveProfile}><i className="fa-solid fa-floppy-disk pr-1"></i> Save</button>}
+                </div>: <div className={"flex justify-center"}><Loading className={"h-10 w-10 border-[3px] border-dark-theme-grey"}/></div>}
                 </div>
         </div>
       </div>

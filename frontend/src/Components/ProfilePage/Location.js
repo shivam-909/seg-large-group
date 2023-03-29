@@ -9,7 +9,9 @@ export class Location extends React.Component {
     }
 
     handleChange = address => {
-        this.props.onChange();
+        if(this.props.onChange){
+            this.props.onChange();
+        }
         this.setState({ address: address });
     };
 

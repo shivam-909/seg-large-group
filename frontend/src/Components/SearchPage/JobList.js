@@ -86,6 +86,7 @@ export default function JobList(props) {
                     id={selectedJob.id} age={selectedJob.age} urgent={selectedJob.urgent}
                     title={selectedJob.title} location={selectedJob.location}
                     companyName={selectedJob.companyName}
+                    companyID = {selectedJob.companyID}
                     salary={selectedJob.compensation}
                     types={selectedJob.type} schedule={selectedJob.schedule}
                     qualifications={selectedJob.qualifications}

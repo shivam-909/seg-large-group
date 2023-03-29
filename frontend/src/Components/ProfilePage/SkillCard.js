@@ -28,7 +28,7 @@ export default function SkillCard(props) {
                     <option value={"years"}>Year/s</option>
                 </select>
             </div>
-            <button className={"delete"} onClick={deleteSkill} editable={"true"}><i className="fa-solid fa-trash"></i></button>
+            <button className={"delete w-[24%]"} onClick={deleteSkill} editable={"true"}><i className="fa-solid fa-trash"></i></button>
             </div>
             {!valid && <div className={"text-red"}>Please remove all commas</div>}
         </div>

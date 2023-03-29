@@ -78,7 +78,7 @@ export default function Applicants() {
                         {!loading ? <div className={"display-block w-full"}>
                             {applicants}
                         </div>
-                            : <Loading/>}
+                            : <Loading className={"h-10 w-10 border-[3px] border-dark-theme-grey"}/>}
                     </div>
                 </div>
             </div>

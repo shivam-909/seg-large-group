@@ -8,7 +8,7 @@ export default function CompanyJobCard(props) {
     let date = new Date(Date(props.date));
     let format = date.getDate().toString() + "/" + date.getMonth().toString() + "/" + date.getFullYear().toString()
     return (
-        <div className='border-2 border-darker-grey rounded-xl w-full p-4 m-2'>
+        <div className='border-2 border-darker-grey rounded-xl w-full p-4 m-2 shadow-md'>
             <div className={"float-right grid grid-cols-1 space-y-2"}>
                 <button onClick={() => {navigate("/jobs/edit/" + props.id)}} className={""}><i className="fa-solid fa-pen-to-square text-xl"></i></button>
                 <button onClick={async () => {navigate("/jobs/applicants/"+props.id)}} className={"bottom-0"}><i className="fa-solid fa-users text-xl"></i></button>

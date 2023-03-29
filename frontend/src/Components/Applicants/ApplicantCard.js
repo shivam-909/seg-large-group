@@ -7,7 +7,7 @@ export default function ApplicantCard(props) {
     const navigate = useNavigate();
     const [modalIsOpen, setIsOpen] = useState(false);
     return (
-        <div className='border-2 border-darker-grey rounded-xl w-full p-4 m-2'>
+        <div className='border-2 border-darker-grey rounded-xl w-full p-4 m-2 shadow-md'>
             <div className={"float-right"}>
                 <button onClick={() => {setIsOpen(true)}} className={"px-5 pb-2"}><i className="fa-solid fa-ellipsis-vertical text-2xl"></i></button>
                 <UpdateApplicantStatus modalIsOpen={modalIsOpen} closeModal={() => {setIsOpen(false)}} id={props.id} status={props.status}/> </div>
