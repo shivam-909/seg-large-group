@@ -12,6 +12,8 @@ test('renders RegisterPage component without crashing', () => {
       </Routes>
     </BrowserRouter>
   );
+  // render(<RegisterPage />);
+
 });
 
 test('toggleRole function toggles visibility of Company-Fields and Seeker-Fields sections', () => {
@@ -40,8 +42,8 @@ test('togglePasswordVisibility function toggles password visibility', () => {
       </Routes>
     </BrowserRouter>
   );
-  const passwordField = screen.getByTestId('password');
-  const confirmPassField = screen.getByTestId('confirmPass');
+  const passwordField = screen.queryByTestId('password');
+  const confirmPassField = screen.queryByTestId('confirmPass');
   const eyeIcon = screen.getByAltText('toggle password');
 
   expect(passwordField.type).toBe('password');
@@ -66,10 +68,10 @@ test('checkPasswordMatch function validates passwords correctly', () => {
       </Routes>
     </BrowserRouter>
   );
-  const passwordField = screen.getByTestId("password");
+  const passwordField = screen.getByPlaceholder("Password");
   expect(passwordField).toBeInTheDocument();
-  const confirmPasswordField = screen.getByTestId('confirmPassword');
-  const errorText = screen.getByText('Password does not match');
+  const confirmPasswordField = screen.getByTestId('confirm-password');
+  const errorText = screen.getByText('Passwords does not match');
 
   fireEvent.change(passwordField, { target: { value: 'password' } });
   fireEvent.change(confirmPasswordField, { target: { value: 'password' } });
