@@ -23,7 +23,7 @@ export default function JobPage() {
             console.log(job)
         };
         getJob()
-    },[])
+    },[]) // eslint-disable-line
 
     return (
         <div>
