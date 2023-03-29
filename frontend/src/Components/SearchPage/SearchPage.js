@@ -18,6 +18,7 @@ function SearchPage() {
 
     function showResults() {
         if (isJobTitleInputValid() & isLocationInputValid()) {
+            setJobs([])
             setLoading(true);
             const formData = new FormData();
             formData.append('term', document.getElementById('jobTitleInput').value);
@@ -51,7 +52,6 @@ function SearchPage() {
                         job.distance = distanceTo(locInput, jobLoc) * 0.000621371;
                     }
                     setLoading(false);
-                    console.log(response.data.results)
                     setJobs(response.data.results);
                 });
         }

@@ -128,7 +128,6 @@ export default function Filters(props) {
         }
 
         // Distance filter
-        console.log(distance)
         if (distance !== '') {
             allFilteredJobs = allFilteredJobs.filter(job => job.distance < distance);
         }
