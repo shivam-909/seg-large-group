@@ -33,9 +33,9 @@ function JobDetailsCard(props) {
 
     useEffect(()=> {
         async function getCompany(){
-            const formData = new FormData();
-            formData.append("companyID", props.companyID)
-            await axios.post("http://localhost:8000/api/user/typeid", formData).then(r => {
+            const getCompanyUser = new FormData();
+            getCompanyUser.append("companyID", props.companyID)
+            await axios.post("http://localhost:8000/api/user/typeid", getCompanyUser).then(r => {
                 setCompany(r.data.userID);
             })
         }
@@ -78,7 +78,7 @@ function JobDetailsCard(props) {
     return (
         <div className={`px-5 py-8 border-2 border-darker-grey rounded-xl bg-white ${props.fullScreen ? 'max-w-[1200px]' : 'max-w-[800px] overflow-y-scroll max-h-screen sticky'}`}>
             <p className='font-bold text-xl'>{props.title}</p>
-            <a href={'/profile/'+companyUser.userID} target='_blank' rel={"noreferrer"}>{props.companyName}</a>
+            <a href={'/profile/'+companyUser} target='_blank' rel={"noreferrer"}>{props.companyName}</a>
             <p className='mb-5'>{companyUser.location}</p>
 
             <div className='flex space-x-5'>
