@@ -34,7 +34,7 @@ export default function App() {
               <Route path="/" element={ <SearchPage/> }/>
               <Route path="/login" element={ <LoginPage/> }/>
               <Route path="/signup" element={ <RegisterPage/> }/>
-              <Route path="/job/:id" element={ <JobPage/> }/>
+              <Route path="/viewjob/:id" element={ <JobPage/> }/>
           </Routes>
       </BrowserRouter>
   );

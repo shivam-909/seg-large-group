@@ -129,7 +129,7 @@ export default function ViewApplicationPage() {
                             <p className='text-3xl'>Application not found</p>
                         </div>
                     </div>
-            ) : <div className='mt-36 flex flex-col items-center'><Loading/></div>}
+            ) : <div className='mt-36 flex flex-col items-center'><Loading className={"h-10 w-10 border-[3px] border-dark-theme-grey"}/></div>}
         </div>
     );
 }

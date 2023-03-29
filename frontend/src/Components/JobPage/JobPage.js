@@ -4,12 +4,25 @@ import Navbar from "../Navbar/Navbar";
 import {useEffect, useState} from "react";
 import axios from "axios";
 import Loading from "../Loading/Loading";
+import {GetData} from "../../Auth/GetUser";
 
 export default function JobPage() {
     const {id} = useParams();
     const [job, setJob] = useState(null);
     const [companyName, setCompanyName] = useState(null);
     const [isLoading, setLoading] = useState(true);
+    const [user, setUser] = useState([]);
+
+    useEffect(() => {
+        const getUser = async () => {
+            if (user.length === 0){
+                await GetData().then(r => {
+                    setUser(r)
+                });
+            }
+        };
+        getUser()
+    },[user]) // eslint-disable-line
 
     useEffect(() => {
         const getJob = async () => {
@@ -20,10 +33,9 @@ export default function JobPage() {
                     setLoading(false);
                 })
                 .catch(() => setLoading(false));
-            console.log(job)
         };
         getJob()
-    },[]) // eslint-disable-line
+    },[user]) // eslint-disable-line
 
     return (
         <div>
@@ -39,6 +51,7 @@ export default function JobPage() {
                             <JobDetailsCard
                                 id={id} age={job.age} urgent={job.urgent}
                                 title={job.title} location={job.location}
+                                companyID={job.companyID}
                                 companyName={companyName}
                                 salary={job.compensation}
                                 types={job.type} schedule={job.schedule}

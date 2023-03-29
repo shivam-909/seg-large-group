@@ -4,6 +4,10 @@ import Filters from "./Filters";
 import Navbar from "../Navbar/Navbar";
 import axios from "axios";
 import Loading from "../Loading/Loading";
+import {distanceTo} from 'geolocation-utils';
+import Geocode from "react-geocode";
+
+Geocode.setApiKey("AIzaSyC0FpC_LZEQb2iyXwOEcyM57llwjE9hBOQ");
 
 function SearchPage() {
     const [isLoading, setLoading] = useState(false);
@@ -14,6 +18,7 @@ function SearchPage() {
 
     function showResults() {
         if (isJobTitleInputValid() & isLocationInputValid()) {
+            setJobs([])
             setLoading(true);
             const formData = new FormData();
             formData.append('term', document.getElementById('jobTitleInput').value);
@@ -22,12 +27,29 @@ function SearchPage() {
                     if (response.data.results.length === 0) {
                         setNoJobsFound(true);
                     }
+
+                    const locationInput = document.getElementById("locationInput").value;
+                    const locInput = await Geocode.fromAddress(locationInput).then(response => {
+                        return {lat: response.results[0].geometry.location.lat, lon: response.results[0].geometry.location.lng};
+                    });
+
                     for (const job of response.data.results) {
                         job.age = Math.floor(((Date.now() / 1000) - job.datePosted._seconds) / 86400);
+
                         job.compensation[0] = job.compensation[0].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
                         await axios.get(`http://localhost:8000/api/company/${job.companyID}`).then(company => {
                             job.companyName = company.data.companyName;
                         });
+
+                        const jobLoc = await Geocode.fromAddress(job.location)
+                            .then(res => {
+                                return {
+                                    lat: res.results[0].geometry.location.lat,
+                                    lon: res.results[0].geometry.location.lng
+                                };
+                            })
+                            .catch(err => console.log(err));
+                        job.distance = distanceTo(locInput, jobLoc) * 0.000621371;
                     }
                     setLoading(false);
                     setJobs(response.data.results);
