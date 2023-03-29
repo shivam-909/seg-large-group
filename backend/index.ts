@@ -15,6 +15,7 @@ import * as companiesroutes from "./service/routes/companies";
 import * as searcherroutes from "./service/routes/searchers";
 import * as util from './service/routes/routes';
 import * as searchroutes from "./service/routes/search";
+import * as matchmakeroutes from "./service/routes/matchmaking";
 
 import cors from 'cors';
 import { FullSeed } from './seed';
@@ -53,6 +54,10 @@ export const run = () => {
     app.post('/api/notifications/add', upload.none(), utils.Route(app, notificationroutes.AddNotification));
     app.get('/api/notifications/:id', utils.Route(app, notificationroutes.GetNotification));
     app.delete('/api/notifications/:id', upload.none(), utils.Route(app, notificationroutes.DeleteNotification));
+
+    app.get('/api/match/:id', upload.none(), utils.Route(app, matchmakeroutes.getJobListingsForSearcherRoute));
+
+    app.get('/api/user/:id', upload.none(), utils.Route(app, userroutes.GetUser));
 
     app.post('/api/jobs/search', upload.none(), utils.Route(app, searchroutes.SearchListings));
     app.post('/api/jobs/filter', upload.none(), utils.Route(app, listingroutes.RetrieveJobListingsByFilter));
