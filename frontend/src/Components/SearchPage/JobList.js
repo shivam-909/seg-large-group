@@ -12,7 +12,6 @@ export default function JobList(props) {
     const [selectedJob, setSelectedJob] = useState(props.jobs[0]);
 
     async function createCard(job){
-        console.log(job)
         setCardList(current => [...current, <div id={job.id} onClick={() => {selectJob(job)}}>
             <JobPostCard
                 title={job.title} age={job.age} location={job.location} types={job.schedule}
