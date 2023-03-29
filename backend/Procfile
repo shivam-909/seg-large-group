@@ -1,1 +1,1 @@
-web: node ./dist/index.js
+web: cp ./config/admin-sdk.json ./dist/config/admin-sdk.json && node ./dist/index.js
