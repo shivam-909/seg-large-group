@@ -92,7 +92,6 @@ export default function RegisterPage() {
                 <p className='mb-6 font-bold text-2xl flex justify-center px-8'>Register an account</p>
 
                 <div className='flex items-center justify-center font-bold pb-2'>
-                    <input type="text" id="search" role="textbox" />
                     <button className={`rounded-l p-2.5 ${role === 'searcher' ? 'text-white' : 'text-black'} ${role === 'searcher' ? 'bg-[#5A5A5A]' : 'bg-[#D6D6D6]'}`} onClick={() => setRole('searcher')}>
                         Job Seeker
                     </button>
@@ -119,7 +118,7 @@ export default function RegisterPage() {
                     <span id="emailError" className='invisible absolute top-0'>Invalid email</span>
                 </div>
 
-                <div data-testid = 'password'>
+                <div>
                     <TextInputBoxWithIcon id='password' type='password' onBlur={()=>{validateField("password",/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{8,20})/)}} placeholder='Password' icon={<img id='toggleEye' src={showIcon} alt='' onClick={togglePasswordVisibility} className='cursor-pointer'/>}/>
                     <span id="passwordError" className='invisible absolute top-0'>Invalid password</span>
                 </div>
