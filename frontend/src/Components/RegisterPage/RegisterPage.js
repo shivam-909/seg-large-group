@@ -92,6 +92,7 @@ export default function RegisterPage() {
                 <p className='mb-6 font-bold text-2xl flex justify-center px-8'>Register an account</p>
 
                 <div className='flex items-center justify-center font-bold pb-2'>
+                    <input type="text" id="search" role="textbox" />
                     <button className={`rounded-l p-2.5 ${role === 'searcher' ? 'text-white' : 'text-black'} ${role === 'searcher' ? 'bg-[#5A5A5A]' : 'bg-[#D6D6D6]'}`} onClick={() => setRole('searcher')}>
                         Job Seeker
                     </button>
