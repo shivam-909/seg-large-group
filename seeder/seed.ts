@@ -28,7 +28,7 @@ import {
 const numCompanies = 1
 const numSearchers = 10
 const numJobListings = 5
-const numApplications = 50
+const numApplications = 20
 
 //=====================================================USERS=====================================================
 
@@ -84,7 +84,7 @@ async function GenerateSearcher(db: DB): Promise<Searcher> {
     const firstName = faker.name.firstName();
     const lastName = faker.name.lastName();
     const skill = [faker.company.bsNoun() + "," + faker.datatype.number({'min': 1,'max': 10}).toString() + "," + faker.helpers.arrayElement(["weeks", "months", "years"])];
-    const qualification = faker.helpers.arrayElements([faker.helpers.arrayElement(["Engineering", "Sales", "Marketing", "Finance"]) + "," + faker.helpers.arrayElement(["GCSEs", "Bachelors", "Masters", "PhD", "High School Diploma", "International Baccalaureate"]) + "," + faker.datatype.number({'min': 1,'max': 10}) + "," + faker.datatype.number({'min': 1,'max': 10}) + "," + faker.helpers.arrayElement(["weeks", "months", "years"])]);
+    // const qualification = faker.helpers.arrayElements([faker.helpers.arrayElement(["Engineering", "Sales", "Marketing", "Finance"]) + "," + faker.helpers.arrayElement(["GCSEs", "Bachelors", "Masters", "PhD", "High School Diploma", "International Baccalaureate"]) + "," + faker.datatype.number({'min': 1,'max': 10}) + "," + faker.datatype.number({'min': 1,'max': 10}) + "," + faker.helpers.arrayElement(["weeks", "months", "years"])]);
     const cv = [firstName + " " + lastName + "'s CV", "https://seg-joblink.s3.eu-west-2.amazonaws.com/cv/1047a922-d91f-43dc-80f2-7273ee90acaa.png.pdf"]
 
     return new Searcher(
@@ -93,7 +93,7 @@ async function GenerateSearcher(db: DB): Promise<Searcher> {
         savedJobs,
         id,
         skill,
-        qualification,
+        GenerateEducation(),
         cv,
     );
 }
@@ -135,28 +135,41 @@ export function hashPassword(password: string): string {
     return hash as string;
 }
 
-function GenerateEducation(): {subject: string, qualification: string, grade: string, duration: string}[] {
+function GenerateEducation(): string[] {
     const subjects = ['Mathematics', 'Physics', 'Chemistry', 'Biology', 'History', 'Geography', 'English', 'French', 'German'];
-    const qualifications = ['Bachelors', 'Masters', 'PhD'];
+    const levels = ['Bachelors', 'Masters', 'PhD', "GCSE", "A Level"];
+    const bachClasses = ['1st', '2:1', '2:2', '3rd'];
+    const mastersClasses = ['Distinction', 'Merit', 'Pass'];
     const grades = ['A', 'B', 'C', 'D', 'E', 'F'];
-    const durations = ['1 year', '2 years', '3 years', '4 years', '5 years'];
 
-    const numEducations = Math.floor(Math.random() * 4) + 1;
+    const numEducations = Math.floor(Math.random() * 2) + 1;
 
     const educations = [];
 
     for (let i = 0; i < numEducations; i++) {
         const subject = faker.helpers.arrayElement(subjects);
-        const qualification = faker.helpers.arrayElement(qualifications);
-        const grade = faker.helpers.arrayElement(grades);
-        const duration = faker.helpers.arrayElement(durations);
+        const level = faker.helpers.arrayElement(levels);
+        let qualification = '';
+        let grade = '';
 
+        if (level === 'Bachelors') {
+            const bachClass = faker.helpers.arrayElement(bachClasses);
+            qualification = `${subject}, ${level}, ${bachClass}`;
+        } else if (level === 'Masters') {
+            const mastersClass = faker.helpers.arrayElement(mastersClasses);
+            qualification = `${subject}, ${level}, ${mastersClass}`;
+        } else if (level === 'PhD') {
+            qualification = `${subject}, ${level}`;
+        } else if (level === 'GCSE' || level === 'A Level') {
+            grade = faker.helpers.arrayElement(grades);
+            qualification = `${subject}, ${level}, ${grade}`;
+        }
 
-        educations.push({subject, qualification, grade, duration});
+        educations.push(qualification);
     }
-
     return educations;
 }
+
 
 
 
@@ -269,7 +282,8 @@ async function GenerateJobListing(db: DB): Promise<JobListing> {
         faker.helpers.arrayElement(["Engineering", "Sales", "Marketing", "Finance"]),
         faker.datatype.boolean(),
         faker.datatype.boolean(),
-        faker.helpers.arrayElements(["Pass in  Maths and English GCSEs", "Bachelors Degree", "Masters Degree", "PhD", "High School Diploma", "International Baccalaureate"]),
+        // faker.helpers.arrayElements(["Pass in  Maths and English GCSEs", "Bachelors Degree", "Masters Degree", "PhD", "High School Diploma", "International Baccalaureate"]),
+        GenerateEducation(),
         faker.date.past(),
         [faker.lorem.words(), faker.lorem.words(), faker.lorem.words()],
     [skill, skill, skill],
