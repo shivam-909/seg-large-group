@@ -3,7 +3,7 @@ import Navbar from "../Navbar/Navbar";
 import { Document, Page } from 'react-pdf/dist/esm/entry.webpack';
 import "react-pdf/dist/esm/Page/TextLayer.css";
 import "react-pdf/dist/esm/Page/AnnotationLayer.css";
-import {useParams} from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
 import axios from "axios";
 import {GetData} from "../../Auth/GetUser";
 import Loading from "../Loading/Loading";
@@ -15,6 +15,7 @@ export default function ApplyPage() {
     const [job, setJob] = useState({});
     const newCVId = crypto.randomUUID();
     const [loading, setLoading] = useState(true)
+    const navigate = useNavigate();
 
     const getUser = async () => {
         return await GetData();
@@ -107,6 +108,9 @@ export default function ApplyPage() {
         if (valid) {
             await submitApplication();
         }
+        else{
+            console.log("error")
+        }
     }
 
     function submitApplication() {
@@ -128,6 +132,7 @@ export default function ApplyPage() {
 
         axios.post(`http://localhost:8000/api/applications/add`, formData)
             .catch(err => console.log(err));
+        navigate("/");
     }
 
     function uploadFile(e) {

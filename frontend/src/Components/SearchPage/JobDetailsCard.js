@@ -18,6 +18,7 @@ function JobDetailsCard(props) {
     const [savedJobPost, setSavedJopPost] = useState(false);
     const [user, setUser] = useState([])
     const [companyUser, setCompany] = useState([])
+    const [hasApplied, setHasApplied] = useState(false);
 
     useEffect(() => {
         const getUser = async () => {
@@ -33,14 +34,29 @@ function JobDetailsCard(props) {
 
     useEffect(()=> {
         async function getCompany(){
+            if(!props.companyID){
+                return;
+            }
             const getCompanyUser = new FormData();
             getCompanyUser.append("companyID", props.companyID)
-            await axios.post("http://localhost:8000/api/user/typeid", getCompanyUser).then(r => {
+            await axios.post("http://localhost:8000/api/user/typeid", getCompanyUser).then(async r => {
                 setCompany(r.data.userID);
+                if (!user.searcher?.searcherID){
+                    return;
+                }
+                const userApplications = new FormData();
+                userApplications.append("searcher", user.searcher?.searcherID)
+                await axios.post("http://localhost:8000/api/application/filter", userApplications).then(res => {
+                    for (const appl of res.data.applications) {
+                        if (appl.searcher === user.searcher?.searcherID) {
+                            setHasApplied(true);
+                        }
+                    }
+                });
             })
         }
         getCompany();
-    },[props.companyID])
+    },[props.companyID, user]) // eslint-disable-line
 
     async function saveJobPost() {
         if (user.userID){
@@ -82,7 +98,7 @@ function JobDetailsCard(props) {
             <p className='mb-5'>{companyUser.location}</p>
 
             <div className='flex space-x-5'>
-                <button className='bg-dark-theme-grey rounded-md py-2.5 px-4 font-bold text-white'><a href={`/apply/${props.id}`} target='_blank' rel='noreferrer'>Apply Now</a></button>
+                <button className='bg-dark-theme-grey rounded-md py-2.5 px-4 font-bold text-white' onClick={() => {navigate(`/apply/${props.id}`)}} disabled={hasApplied}>{hasApplied ? "Applied" : "Apply Now"}</button>
                 { user.searcher && <button className='bg-darker-grey rounded-md w-11 flex items-center justify-center' onClick={saveJobPost}><img src={savedJobPost ? savedIcon : saveIcon} alt=''/></button>}
                 {!props.fullScreen &&
                     <button className='bg-darker-grey rounded-md w-11 flex items-center justify-center'><a href={`/viewjob/${props.id}`} target='_blank' rel='noreferrer'><img src={openInNewTabIcon} alt=''/></a></button>
