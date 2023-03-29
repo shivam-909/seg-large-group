@@ -1,15 +1,14 @@
 import DB from "../db/db";
 
-import { randomUUID } from "crypto";
-import { faker } from '@faker-js/faker';
+import {randomUUID} from "crypto";
+import {faker} from '@faker-js/faker';
 
 import JobListing from "../models/job";
-import { User } from "../models/user";
+import {Company, Searcher, User} from "../models/user";
 import Notification from "../models/notification";
-import { Status } from "../models/enums/status.enum";
-import { Company, Searcher } from "../models/user";
+import {Status} from "../models/enums/status.enum";
 import Application from "../models/application";
-import { companyNotification, searcherNotification } from "../models/enums/userNotification.enum";
+import {companyNotification, searcherNotification} from "../models/enums/userNotification.enum";
 import bcrypt from "bcrypt";
 import * as jobsdb from "../db/jobs";
 import * as usersdb from "../db/users";
@@ -20,15 +19,16 @@ import * as searcherdb from "../db/searchers";
 import {
     ErrorCompanyNotFound,
     ErrorJobListingNotFound,
-    ErrorNoCompaniesExist, ErrorSearcherNotFound,
+    ErrorNoCompaniesExist,
+    ErrorSearcherNotFound,
     ErrorUserNotFound
 } from "../service/public";
 
 //CONTROL
-const numCompanies = 2
-const numSearchers = 10
-const numJobListings = 100
-const numApplications = 5
+const numCompanies = 15
+const numSearchers = 15
+const numJobListings = 20
+const numApplications = 50
 
 //=====================================================USERS=====================================================
 
@@ -42,10 +42,11 @@ async function GenerateUser(): Promise<User> {
         email,
         hashPassword(password),
         faker.image.avatar(),
-        faker.address.city(),
+        GetRandomCity(),
         [],
+        faker.lorem.paragraph(),
         undefined,
-        undefined,
+        undefined
     )
 }
 
@@ -83,7 +84,7 @@ async function GenerateSearcher(db: DB): Promise<Searcher> {
     const firstName = faker.name.firstName();
     const lastName = faker.name.lastName();
     const skill = [faker.company.bsNoun() + "," + faker.datatype.number({'min': 1,'max': 10}).toString() + "," + faker.helpers.arrayElement(["weeks", "months", "years"])];
-    const qualification = faker.helpers.arrayElements([faker.helpers.arrayElement(["Engineering", "Sales", "Marketing", "Finance"]) + "," + faker.helpers.arrayElement(["GCSEs", "Bachelors", "Masters", "PhD", "High School Diploma", "International Baccalaureate"]) + "," + faker.datatype.number({'min': 1,'max': 10}) + "," + faker.datatype.number({'min': 1,'max': 10}) + "," + faker.helpers.arrayElement(["weeks", "months", "years"])]);
+    // const qualification = faker.helpers.arrayElements([faker.helpers.arrayElement(["Engineering", "Sales", "Marketing", "Finance"]) + "," + faker.helpers.arrayElement(["GCSEs", "Bachelors", "Masters", "PhD", "High School Diploma", "International Baccalaureate"]) + "," + faker.datatype.number({'min': 1,'max': 10}) + "," + faker.datatype.number({'min': 1,'max': 10}) + "," + faker.helpers.arrayElement(["weeks", "months", "years"])]);
     const cv = [firstName + " " + lastName + "'s CV", "https://seg-joblink.s3.eu-west-2.amazonaws.com/cv/1047a922-d91f-43dc-80f2-7273ee90acaa.png.pdf"]
 
     return new Searcher(
@@ -92,7 +93,7 @@ async function GenerateSearcher(db: DB): Promise<Searcher> {
         savedJobs,
         id,
         skill,
-        qualification,
+        GenerateEducation(),
         cv,
     );
 }
@@ -133,6 +134,43 @@ export function hashPassword(password: string): string {
 
     return hash as string;
 }
+
+function GenerateEducation(): string[] {
+    const subjects = ['Mathematics', 'Physics', 'Chemistry', 'Biology', 'History', 'Geography', 'English', 'French', 'German'];
+    const levels = ['Bachelors', 'Masters', 'PhD', "GCSE", "A Level"];
+    const bachClasses = ['1st', '2:1', '2:2', '3rd'];
+    const mastersClasses = ['Distinction', 'Merit', 'Pass'];
+    const grades = ['A', 'B', 'C', 'D', 'E', 'F'];
+
+    const numEducations = Math.floor(Math.random() * 2) + 1;
+
+    const educations = [];
+
+    for (let i = 0; i < numEducations; i++) {
+        const subject = faker.helpers.arrayElement(subjects);
+        const level = faker.helpers.arrayElement(levels);
+        let qualification = '';
+        let grade = '';
+
+        if (level === 'Bachelors') {
+            const bachClass = faker.helpers.arrayElement(bachClasses);
+            qualification = `${subject}, ${level}, ${bachClass}`;
+        } else if (level === 'Masters') {
+            const mastersClass = faker.helpers.arrayElement(mastersClasses);
+            qualification = `${subject}, ${level}, ${mastersClass}`;
+        } else if (level === 'PhD') {
+            qualification = `${subject}, ${level}`;
+        } else if (level === 'GCSE' || level === 'A Level') {
+            grade = faker.helpers.arrayElement(grades);
+            qualification = `${subject}, ${level}, ${grade}`;
+        }
+
+        educations.push(qualification);
+    }
+    return educations;
+}
+
+
 
 
 //=====================================================JOB-LISTINGS=====================================================
@@ -222,7 +260,6 @@ function GetRandomQuestions(): Record<string, boolean> {
 }
 
 
-
 async function GenerateJobListing(db: DB): Promise<JobListing> {
     const company = await GetRandomCompany(db);
     const user = await usersdb.RetrieveUserByCompanyID(db, company.companyID);
@@ -232,6 +269,7 @@ async function GenerateJobListing(db: DB): Promise<JobListing> {
     }
 
     const id = randomUUID();
+    const skill = faker.company.bsNoun() + "," + faker.datatype.number({'min': 1,'max': 10}).toString() + "," + faker.helpers.arrayElement(["weeks", "months", "years"]);
     return new JobListing(
         id,
         faker.name.jobTitle(),
@@ -244,10 +282,11 @@ async function GenerateJobListing(db: DB): Promise<JobListing> {
         faker.helpers.arrayElement(["Engineering", "Sales", "Marketing", "Finance"]),
         faker.datatype.boolean(),
         faker.datatype.boolean(),
-        faker.helpers.arrayElements(["Pass in  Maths and English GCSEs", "Bachelors Degree", "Masters Degree", "PhD", "High School Diploma", "International Baccalaureate"]),
+        // faker.helpers.arrayElements(["Pass in  Maths and English GCSEs", "Bachelors Degree", "Masters Degree", "PhD", "High School Diploma", "International Baccalaureate"]),
+        GenerateEducation(),
         faker.date.past(),
         [faker.lorem.words(), faker.lorem.words(), faker.lorem.words()],
-        [faker.lorem.words(), faker.lorem.words(), faker.lorem.words()],
+    [skill, skill, skill],
         GetRandomQuestions()
 );
 }
@@ -318,9 +357,8 @@ function GetRandomQnAs(): Record<string, string> {
 async function GenerateApplicationListing(db: DB): Promise<Application> {
     const randomSearcher = await RetrieveRandomSearcherId(db);
     const randomJobListing = await RetrieveRandomJobListingID(db);
-    const cv = [faker.name.fullName() + "'s CV", "https://seg-joblink.s3.eu-west-2.amazonaws.com/cv/1047a922-d91f-43dc-80f2-7273ee90acaa.png.pdf"];
+    const cv = [faker.name.fullName() + "'s CV", "https://seg-joblink.s3.eu-west-2.amazonaws.com/cv/1047a922-d91f-43dc-80f2-7273ee90acaa.png.pdf"]
     const coverLetter = faker.lorem.paragraphs(5000).substring(0, Math.floor(Math.random() * (100 + 1)) + 500);
-
 
         return new Application(
         randomUUID(),
@@ -328,8 +366,9 @@ async function GenerateApplicationListing(db: DB): Promise<Application> {
         randomSearcher,
         randomJobListing,
         cv,
+        GetRandomQnAs(),
         coverLetter,
-        GetRandomQnAs()
+
     );
 }
 
@@ -446,4 +485,86 @@ function GetRandomNotificationEnum(type: "company" | "searcher"): string {
     const statusValues = Object.values(enums).filter((value) => typeof value === 'string');
     const randomIndex = Math.floor(Math.random() * statusValues.length);
     return statusValues[randomIndex] as string;
+}
+function GetRandomCity(): string {
+    const cities = [
+        "Bath",
+        "Birmingham",
+        "Bradford",
+        "Brighton & Hove",
+        "Bristol",
+        "Cambridge",
+        "Canterbury",
+        "Carlisle",
+        "Chelmsford",
+        "Chester",
+        "Chichester",
+        "Colchester",
+        "Coventry",
+        "Derby",
+        "Doncaster",
+        "Durham",
+        "Ely",
+        "Exeter",
+        "Gloucester",
+        "Hereford",
+        "Kingston-upon-Hull",
+        "Lancaster",
+        "Leeds",
+        "Leicester",
+        "Lichfield",
+        "Lincoln",
+        "Liverpool",
+        "London",
+        "Manchester",
+        "Milton Keynes",
+        "Newcastle-upon-Tyne",
+        "Norwich",
+        "Nottingham",
+        "Oxford",
+        "Peterborough",
+        "Plymouth",
+        "Portsmouth",
+        "Preston",
+        "Ripon",
+        "Salford",
+        "Salisbury",
+        "Sheffield",
+        "Southampton",
+        "Southend-on-Sea",
+        "St Albans",
+        "Stoke on Trent",
+        "Sunderland",
+        "Truro",
+        "Wakefield",
+        "Wells",
+        "Westminster",
+        "Winchester",
+        "Wolverhampton",
+        "Worcester",
+        "York",
+        "Armagh",
+        "Bangor",
+        "Belfast",
+        "Lisburn",
+        "Londonderry",
+        "Newry",
+        "Aberdeen",
+        "Dundee",
+        "Dunfermline",
+        "Edinburgh",
+        "Glasgow",
+        "Inverness",
+        "Perth",
+        "Stirling",
+        "Bangor",
+        "Cardiff",
+        "Newport",
+        "St Asaph",
+        "St Davids",
+        "Swansea",
+        "Wrexham"
+    ]
+
+    return faker.helpers.arrayElement(cities)
 }

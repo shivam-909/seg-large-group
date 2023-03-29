@@ -1,9 +1,7 @@
-import { Company, Searcher, User, UserExpanded } from "../models/user";
+import {User, UserExpanded} from "../models/user";
 import * as companiesdb from "./companies";
 import * as searchersdb from "./searchers";
 import DB from "./db";
-import { DeleteJobsByCompanyID } from "./jobs";
-import { randomUUID } from "crypto";
 import { ErrorCompanyNotFound, ErrorMultipleUsersFound, ErrorSearcherNotFound, ErrorUserNotFound } from "../service/public";
 
 
@@ -15,6 +13,7 @@ export async function CreateUser(db: DB, user: User) {
     pfpUrl: user.pfpUrl,
     location: user.location,
     notifications: user.notifications,
+    description: user.description,
     companyID: user.companyID,
     searcherID: user.searcherID,
   },
@@ -76,23 +75,56 @@ export async function RetrieveFullUserByEmail(db: DB, email: string): Promise<Us
   throw new Error('invalid user type');
 }
 
-export async function UpdateUser(db: DB, user: User): Promise<void> {
-  const { userID, ...userData } = user;
 
-  const userDocRef = db.UserCollection().doc(userID);
+export async function UpdateUser(db: DB, id: string, data: any): Promise<void> {
+
+  let user = await RetrieveFullUserByID(db, id);
 
   const baseData: { [key: string]: any } = {};
 
-  const updateKeys = ['email', 'hashedPassword', 'pfpUrl', 'location', 'notifications'];
-  for (const key in user) {
-    if (updateKeys.includes(key)) {
-      baseData[key] = (user as any)[key];
+  const updateKeys = ['email', 'hashedPassword', 'pfpUrl', 'location', 'notifications', 'description'];
+
+  updateKeys.forEach(key => {
+    if (key in data && key in user!) {
+      baseData[key] = data[key];
+    }
+  });
+
+  if (Object.keys(baseData).length > 0) {
+    await db.UserCollection().doc(id).update(baseData);
+  }
+  if (user!.searcherID) {
+    const searcherData: { [key: string]: any } = {};
+    const searcherUpdateKeys = ['savedJobs', 'skills', 'firstName', 'lastName', 'qualifications', 'cv'];
+
+    searcherUpdateKeys.forEach(key => {
+      if (key in data && key in user!.searcher!) {
+        searcherData[key] = data[key];
+      }
+    });
+
+    if (Object.keys(searcherData).length > 0) {
+      await db.SearcherCollection().doc(user!.searcherID).update(searcherData);
+    }
+
+  }
+
+  if (user!.companyID) {
+    const companyData: { [key: string]: any } = {};
+    const companyUpdateKeys = ['companyName'];
+
+    companyUpdateKeys.forEach(key => {
+      if (key in data && key in user!.company!) {
+        companyData[key] = data[key];
+      }
+    });
+
+    if (Object.keys(companyData).length > 0) {
+      await db.CompanyCollection().doc(user!.companyID).update(companyData);
     }
   }
 
-  await userDocRef.update(baseData);
 }
-
 
 export async function DeleteUser(db: DB, userID: string): Promise<void> {
   const to_delete = await RetrieveFullUserByID(db, userID);

@@ -88,7 +88,7 @@ function LoginPage() {
             <div className='p-0.5'></div>
 
             <button className='bg-dark-theme-grey rounded-md text-white p-2.5 flex items-center justify-center space-x-2' onClick={loginButton} id={"loginButton"}>
-              {loading ? <Loading/> : <p id={"loadText"}>Sign In<i className="fa-solid fa-right-to-bracket pl-2"></i></p>}
+              {loading ? <Loading className={"h-10 w-10 border-[3px] border-dark-theme-grey"}/> : <p id={"loadText"}>Sign In<i className="fa-solid fa-right-to-bracket pl-2"></i></p>}
             </button>
 
             <p className='text-center pt-4'>New user? <a className='LoginPage-link' href='/signup'>Sign up.</a></p>

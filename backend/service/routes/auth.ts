@@ -31,7 +31,7 @@ export function Login(db: DB): Handler {
       return
     }
 
-    const { access, refresh } = GenerateKeyPair(user!.userID);
+    const { access, refresh } = await GenerateKeyPair(user!.userID);
 
     return res.status(200).json({
       access,
@@ -110,7 +110,7 @@ export function Register(db: DB): Handler {
         break;
     }
 
-    const { access, refresh } = GenerateKeyPair(newUser.userID);
+    const { access, refresh } = await GenerateKeyPair(newUser.userID);
     return res.status(200).json({
       access,
       refresh,
@@ -207,6 +207,6 @@ export function ValidEmail(email: string): boolean {
 }
 
 export function ValidPassword(password: string): boolean {
-  const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{8,20})/;
+  const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[.!@#$%^&*])(?=.{8,20})/;
   return regex.test(password);
 }
