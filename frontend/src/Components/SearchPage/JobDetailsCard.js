@@ -78,7 +78,7 @@ function JobDetailsCard(props) {
     return (
         <div className={`px-5 py-8 border-2 border-darker-grey rounded-xl bg-white ${props.fullScreen ? 'max-w-[1200px]' : 'max-w-[800px] overflow-y-scroll max-h-screen sticky'}`}>
             <p className='font-bold text-xl'>{props.title}</p>
-            <a href={'/profile/'+user.userID} target='_blank' rel={"noreferrer"}>{props.companyName}</a>
+            <a href={'/profile/'+companyUser.userID} target='_blank' rel={"noreferrer"}>{props.companyName}</a>
             <p className='mb-5'>{companyUser.location}</p>
 
             <div className='flex space-x-5'>
