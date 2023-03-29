@@ -137,7 +137,7 @@ export default function RegisterPage() {
                 <div className='p-0.5'></div>
 
                 <button className='bg-dark-theme-grey rounded-md text-white p-2.5 flex items-center justify-center space-x-2' onClick={signUpButton}>
-                    {loading ? <Loading/> : <p>Sign Up<i className="fa-solid fa-right-to-bracket pl-2"></i></p>}
+                    {loading ? <Loading className={"h-10 w-10 border-[3px] border-dark-theme-grey"}/> : <p>Sign Up<i className="fa-solid fa-right-to-bracket pl-2"></i></p>}
                 </button>
 
                 <p className='text-center pt-4'>Already a user? <a className='LoginPage-link' href='/login'>Sign in.</a></p>

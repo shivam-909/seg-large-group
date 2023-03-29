@@ -25,10 +25,10 @@ import {
 } from "../service/public";
 
 //CONTROL
-const numCompanies = 1
-const numSearchers = 10
-const numJobListings = 5
-const numApplications = 20
+const numCompanies = 15
+const numSearchers = 15
+const numJobListings = 20
+const numApplications = 50
 
 //=====================================================USERS=====================================================
 
