@@ -6,16 +6,22 @@ import {useNavigate, useParams} from "react-router-dom";
 import {GetData} from "../../Auth/GetUser";
 import ApplicantCard from "./ApplicantCard";
 import axios from "axios";
+import Loading from "../Loading/Loading";
 
 export default function Applicants() {
     const navigate = useNavigate();
     const [user, setUser] = useState([])
     const [applicants, setApplicants] = useState([])
     const { id } = useParams();
+    const [filter, setFilter] = useState("Applied")
+    const [loading, setLoading] = useState(true)
 
     useEffect(() => {
-        getApplicants();
-    },[]) // eslint-disable-line
+        setApplicants([])
+        setLoading(true);
+        getApplicants(filter)
+    },[filter]) // eslint-disable-line
+
     useEffect(() => {
         const getUser = async () => {
             if (user.length === 0){
@@ -28,25 +34,30 @@ export default function Applicants() {
         // setCompany(user.searcherID === undefined)
     },[user]) // eslint-disable-line
 
-    async function addCard(profileID, pfp, name, email, status){
-        await setApplicants( current => [...current, <ApplicantCard id={profileID} pfpUrl={pfp} name={name} email={email} status={status}/>]);
-    }
-
-    async function getApplicants(){
+    function getApplicants(filter) {
+        setApplicants([]);
         const formData = new FormData();
         formData.append('jobListing', id);
-        await axios.post("http://localhost:8000/api/application/filter", formData).then(async res => {
+        formData.append("status", filter)
+        axios.post(`${process.env.REACT_APP_BACKEND_URL}api/application/filter`, formData).then(res => {
             let applications = res.data.applications;
+            setApplicants([]);
             for (let i = 0; i < applications.length; i++) {
-                await axios.get("http://localhost:8000/api/searcher/" + applications[i].searcher).then(async searcher => {
+                axios.get(`${process.env.REACT_APP_BACKEND_URL}api/searcher/${applications[i].searcher}`).then(searcher => {
                     const searcherID = new FormData();
                     searcherID.append("searcherID",searcher.data.searcherID)
-                    await axios.post("http://localhost:8000/api/user/typeid", searcherID).then(usr => {
-                        addCard(usr.data.userID, usr.data.pfpUrl, searcher.data.firstName + " " + searcher.data.lastName, usr.data.email, applications[i].status)
+                    axios.post(`${process.env.REACT_APP_BACKEND_URL}api/user/typeid`, searcherID).then(usr => {
+                        setApplicants( current => [...current, <ApplicantCard id={applications[i].id} pfpUrl={usr.data.pfpUrl} name={searcher.data.firstName + " " + searcher.data.lastName} email={usr.data.email} status={applications[i].status}/>]);
+                        setLoading(false);
                     })
                 })
             }
         }).catch(error => {console.log(error)})
+        setLoading(false);
+    }
+
+    function changeFilter(type){
+        setFilter(type);
     }
 
     return (
@@ -57,13 +68,17 @@ export default function Applicants() {
                 <div className='bg-white mt-24 rounded-md px-12 py-7 space-y-3 min-w-[45%]'>
                     <button onClick={() => {navigate(-1)}} className={"float-left mb-5 text-3xl text-red"}><i className="fa-regular fa-circle-xmark"></i></button>
                     <p className='font-bold text-3xl flex justify-center'>Applicants</p>
-                        <div>
-                            <div className={"border-b-2 border-grey flex relative"}/>
-                        </div>
+                    <ul className={"border-b-2 border-grey flex relative"}>
+                        <li className={"filterJobs"}><button id={"Applied"} className={"filters"} onClick={() => changeFilter("Applied")} disabled={filter==="Applied"}>Applied</button></li>
+                        <li className={"filterJobs"}><button id={"Interview"} className={"filters"} onClick={() => changeFilter("Interview")} disabled={filter==="Interview"}>Interviews</button></li>
+                        <li className={"filterJobs"}><button id={"Rejected"} className={"filters"} onClick={() => changeFilter("Rejected")} disabled={filter==="Rejected"}>Rejected</button></li>
+                        <li className={"filterJobs"}><button id={"Rejected"} className={"filters"} onClick={() => changeFilter("Hired")} disabled={filter==="Hired"}>Hired</button></li>
+                    </ul>
                     <div className='items-center justify-center flex relative w-full'>
-                        <div className={"display-block w-full"}>
+                        {!loading ? <div className={"display-block w-full"}>
                             {applicants}
                         </div>
+                            : <Loading className={"h-10 w-10 border-[3px] border-dark-theme-grey"}/>}
                     </div>
                 </div>
             </div>

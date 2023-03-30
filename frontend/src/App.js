@@ -9,10 +9,11 @@ import ForgotPassword from './Components/ForgotPassword/ForgotPassword';
 import ResetPassword from './Components/ResetPassword/ResetPassword';
 import EditJob from "./Components/MyJobs/EditJob";
 import Applicants from "./Components/Applicants/Applicants";
-import ViewJob from "./Components/ViewJobs/ViewJob";
 import CompanyRoute from "./Auth/CompanyRoute";
 import ResetPassword from './Components/ResetPassword/ResetPassword';
 import ApplyPage from "./Components/ApplyPage/ApplyPage";
+import ViewApplicationPage from "./Components/Applicants/ViewApplicationPage";
+import JobPage from "./Components/JobPage/JobPage";
 
 export default function App() {
     return (
@@ -29,6 +30,9 @@ export default function App() {
                   </Route>
                   <Route path="/profile/:id" element={ <UserProfilePage/> }/>
                   <Route path="/apply/:id" element={ <ApplyPage/> }/>
+                  <Route element={<CompanyRoute/>}>
+                      <Route path="/application/:id" element={ <ViewApplicationPage/> }/>
+                  </Route>
               </Route>
               <Route path="/" element={ <SearchPage/> }/>
               <Route path="/login" element={ <LoginPage/> }/>
@@ -38,6 +42,7 @@ export default function App() {
               <Route path="/forgot" element={ <ForgotPassword/> }/>
               <Route path="/reset" element={ <ResetPassword/> }/>
               <Route path="/viewjob/:id" element={ <ViewJob/> }/>
+              <Route path="/viewjob/:id" element={ <JobPage/> }/>
           </Routes>
       </BrowserRouter>
   );

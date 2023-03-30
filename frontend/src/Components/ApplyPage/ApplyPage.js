@@ -3,9 +3,10 @@ import Navbar from "../Navbar/Navbar";
 import { Document, Page } from 'react-pdf/dist/esm/entry.webpack';
 import "react-pdf/dist/esm/Page/TextLayer.css";
 import "react-pdf/dist/esm/Page/AnnotationLayer.css";
-import {useParams} from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
 import axios from "axios";
 import {GetData} from "../../Auth/GetUser";
+import Loading from "../Loading/Loading";
 
 export default function ApplyPage() {
     const {id} = useParams();
@@ -13,6 +14,8 @@ export default function ApplyPage() {
     const [searcherID, setSearcherID] = useState('');
     const [job, setJob] = useState({});
     const newCVId = crypto.randomUUID();
+    const [loading, setLoading] = useState(true)
+    const navigate = useNavigate();
 
     const getUser = async () => {
         return await GetData();
@@ -20,7 +23,7 @@ export default function ApplyPage() {
 
     const getJob = async () => {
         return new Promise (async (resolve, reject) => {
-            await axios.get(`http://localhost:8000/api/jobs/${ID}`)
+            await axios.get(`${process.env.REACT_APP_BACKEND_URL}api/jobs/${ID}`)
                 .then(response => {
                     resolve(response.data);
                 })
@@ -33,7 +36,7 @@ export default function ApplyPage() {
 
     const getCompany = async (companyID) => {
         return new Promise (async (resolve, reject) => {
-            await axios.get(`http://localhost:8000/api/company/${companyID}`)
+            await axios.get(`${process.env.REACT_APP_BACKEND_URL}api/company/${companyID}`)
                 .then(response => {
                     resolve(response.data);
                 })
@@ -43,7 +46,7 @@ export default function ApplyPage() {
 
     const getSearcher = async (searcherID) => {
         return new Promise (async (resolve, reject) => {
-            await axios.get(`http://localhost:8000/api/searcher/${searcherID}`)
+            await axios.get(`${process.env.REACT_APP_BACKEND_URL}api/searcher/${searcherID}`)
                 .then(response => {
                     resolve(response.data);
                 })
@@ -59,9 +62,11 @@ export default function ApplyPage() {
         const company = await getCompany(job.companyID);
         const searcher = await getSearcher(user.searcherID);
         setJob({...job, company: company.companyName, cv: searcher.cv});
+        setLoading(false);
     }
 
     useEffect(() => {
+        setLoading(true);
         getApplication().catch(err => console.log(err));
     }, []); // eslint-disable-line
 
@@ -103,6 +108,9 @@ export default function ApplyPage() {
         if (valid) {
             await submitApplication();
         }
+        else{
+            console.log("error")
+        }
     }
 
     function submitApplication() {
@@ -122,8 +130,9 @@ export default function ApplyPage() {
         formData.append('QnAs', JSON.stringify(QnAs));
         formData.append('coverLetter', coverLetter);
 
-        axios.post(`http://localhost:8000/api/applications/add`, formData)
+        axios.post(`${process.env.REACT_APP_BACKEND_URL}api/applications/add`, formData)
             .catch(err => console.log(err));
+        navigate("/");
     }
 
     function uploadFile(e) {
@@ -131,7 +140,7 @@ export default function ApplyPage() {
         const file = e.target.files[0];
         formData.append('file', file);
         if (file) {
-            axios.post(`http://localhost:8000/api/storage/cv/${newCVId}`, formData)
+            axios.post(`${process.env.REACT_APP_BACKEND_URL}api/storage/cv/${newCVId}`, formData)
                 .then(response => {
                     setJob({...job, cv: [file.name, response.data.URL]});
                 });
@@ -140,7 +149,7 @@ export default function ApplyPage() {
 
     return (
         <div>
-            { ID ?
+            {!loading ?  (ID ?
                 <div>
                     <Navbar/>
                     <div className='mt-36 flex flex-col items-center'>
@@ -153,7 +162,7 @@ export default function ApplyPage() {
                                 {job.compensation &&
                                     <p className='text-xl'>{`£${job.compensation[0]}/${job.compensation[1]}`}</p>
                                 }
-                                <button className='text-xl pt-3'><a className='underline' href={`/job/${ID}`} target='_blank' rel='noreferrer'>View job</a></button>
+                                <button className='text-xl pt-3'><a className='underline' href={`/viewjob/${ID}`} target='_blank' rel='noreferrer'>View job</a></button>
                             </div>
                             <div className='bg-darker-grey h-[0.1px] my-5'></div>
                             <div className='pt-6'>
@@ -226,7 +235,7 @@ export default function ApplyPage() {
                         <p className='text-3xl'>Job not found</p>
                     </div>
                 </div>
-            }
+            ) : <div className='mt-36 flex flex-col items-center'><Loading/></div>}
         </div>
     );
 }
