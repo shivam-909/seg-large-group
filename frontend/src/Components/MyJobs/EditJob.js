@@ -187,7 +187,7 @@ export default function EditJob() {
         formData.append('compensation', compensationRate);
         formData.append('description', description);
 
-        isEdit ? await axios.patch(`${process.env.REACT_APP_BACKEND_URL}api/jobs/${id}`, formData).then(navigate(-1)) : await axios.post(`${process.env.REACT_APP_BACKEND_URL}api/jobs/add/`, formData).then(navigate(-1));
+        isEdit ? await axios.patch(`${process.env.REACT_APP_BACKEND_URL}api/jobs/${id}`, formData).then(navigate(-1)) : await axios.post(`${process.env.REACT_APP_BACKEND_URL}api/jobs/`, formData).then(navigate(-1));
     }
 
     function addRequirement(defaultVal, i){
