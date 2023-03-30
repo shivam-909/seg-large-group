@@ -18,7 +18,7 @@ export default function ViewApplicationPage() {
 
     const getApplicationValues = async () => {
         return new Promise (async (resolve, reject) => {
-            await axios.get(`http://localhost:8000/api/applications/${ID}`)
+            await axios.get(`${process.env.REACT_APP_BACKEND_URL}api/applications/${ID}`)
                 .then(response => {
                     resolve(response.data);
                 })
@@ -33,7 +33,7 @@ export default function ViewApplicationPage() {
         return new Promise (async (resolve, reject) => {
             const formData = new FormData();
             formData.append("searcherID", searcherID);
-            await axios.post(`http://localhost:8000/api/user/typeid`,formData)
+            await axios.post(`${process.env.REACT_APP_BACKEND_URL}api/user/typeid`,formData)
                 .then(response => {
                     resolve(response.data);
                 })
@@ -43,7 +43,7 @@ export default function ViewApplicationPage() {
 
     const getSearcher = async (searcherID) => {
         return new Promise (async (resolve, reject) => {
-            await axios.get(`http://localhost:8000/api/searcher/${searcherID}`)
+            await axios.get(`${process.env.REACT_APP_BACKEND_URL}api/searcher/${searcherID}`)
                 .then(response => {
                     resolve(response.data);
                 })

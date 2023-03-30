@@ -39,14 +39,14 @@ export default function Applicants() {
         const formData = new FormData();
         formData.append('jobListing', id);
         formData.append("status", filter)
-        axios.post("http://localhost:8000/api/application/filter", formData).then(res => {
+        axios.post(`${process.env.REACT_APP_BACKEND_URL}api/application/filter`, formData).then(res => {
             let applications = res.data.applications;
             setApplicants([]);
             for (let i = 0; i < applications.length; i++) {
-                axios.get("http://localhost:8000/api/searcher/" + applications[i].searcher).then(searcher => {
+                axios.get(`${process.env.REACT_APP_BACKEND_URL}api/searcher/${applications[i].searcher}`).then(searcher => {
                     const searcherID = new FormData();
                     searcherID.append("searcherID",searcher.data.searcherID)
-                    axios.post("http://localhost:8000/api/user/typeid", searcherID).then(usr => {
+                    axios.post(`${process.env.REACT_APP_BACKEND_URL}api/user/typeid`, searcherID).then(usr => {
                         setApplicants( current => [...current, <ApplicantCard id={applications[i].id} pfpUrl={usr.data.pfpUrl} name={searcher.data.firstName + " " + searcher.data.lastName} email={usr.data.email} status={applications[i].status}/>]);
                         setLoading(false);
                     })

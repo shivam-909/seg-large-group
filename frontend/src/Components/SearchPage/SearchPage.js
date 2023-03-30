@@ -22,34 +22,45 @@ function SearchPage() {
             setLoading(true);
             const formData = new FormData();
             formData.append('term', document.getElementById('jobTitleInput').value);
-            axios.post('http://localhost:8000/api/jobs/search', formData)
+            axios.post(`${process.env.REACT_APP_BACKEND_URL}api/jobs/search`, formData)
                 .then(async response => {
                     if (response.data.results.length === 0) {
                         setNoJobsFound(true);
                     }
 
                     const locationInput = document.getElementById("locationInput").value;
-                    const locInput = await Geocode.fromAddress(locationInput).then(response => {
-                        return {lat: response.results[0].geometry.location.lat, lon: response.results[0].geometry.location.lng};
-                    });
+                    let locInput;
+                    try {
+                        locInput = await Geocode.fromAddress(locationInput).then(response => {
+                            return {lat: response.results[0].geometry.location.lat, lon: response.results[0].geometry.location.lng};
+                        });
+                    }
+                    catch (err){
+                        console.log(err)
+                    }
 
                     for (const job of response.data.results) {
                         job.age = Math.floor(((Date.now() / 1000) - job.datePosted._seconds) / 86400);
 
                         job.compensation[0] = job.compensation[0].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-                        await axios.get(`http://localhost:8000/api/company/${job.companyID}`).then(company => {
+                        await axios.get(`${process.env.REACT_APP_BACKEND_URL}api/company/${job.companyID}`).then(company => {
                             job.companyName = company.data.companyName;
                         });
 
-                        const jobLoc = await Geocode.fromAddress(job.location)
-                            .then(res => {
-                                return {
-                                    lat: res.results[0].geometry.location.lat,
-                                    lon: res.results[0].geometry.location.lng
-                                };
-                            })
-                            .catch(err => console.log(err));
-                        job.distance = distanceTo(locInput, jobLoc) * 0.000621371;
+                        try {
+                            const jobLoc = await Geocode.fromAddress(job.location)
+                                .then(res => {
+                                    return {
+                                        lat: res.results[0].geometry.location.lat,
+                                        lon: res.results[0].geometry.location.lng
+                                    };
+                                })
+                                .catch(err => console.log(err));
+                            job.distance = distanceTo(locInput, jobLoc) * 0.000621371;
+                        }
+                        catch(err){
+                            job.distance=10000;
+                        }
                     }
                     setLoading(false);
                     setJobs(response.data.results);

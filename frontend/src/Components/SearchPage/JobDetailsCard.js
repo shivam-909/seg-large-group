@@ -39,14 +39,14 @@ function JobDetailsCard(props) {
             }
             const getCompanyUser = new FormData();
             getCompanyUser.append("companyID", props.companyID)
-            await axios.post("http://localhost:8000/api/user/typeid", getCompanyUser).then(async r => {
+            await axios.post(`${process.env.REACT_APP_BACKEND_URL}api/user/typeid`, getCompanyUser).then(async r => {
                 setCompany(r.data.userID);
                 if (!user.searcher?.searcherID){
                     return;
                 }
                 const userApplications = new FormData();
                 userApplications.append("searcher", user.searcher?.searcherID)
-                await axios.post("http://localhost:8000/api/application/filter", userApplications).then(res => {
+                await axios.post(`${process.env.REACT_APP_BACKEND_URL}api/application/filter`, userApplications).then(res => {
                     for (const appl of res.data.applications) {
                         if (appl.searcher === user.searcher?.searcherID) {
                             setHasApplied(true);
@@ -67,7 +67,7 @@ function JobDetailsCard(props) {
                 for (const job of savedJobs){
                     newUser.append("savedJobs[]", job)
                 }
-                await axios.patch("http://localhost:8000/api/users/"+user.userID,newUser)
+                await axios.patch(`${process.env.REACT_APP_BACKEND_URL}api/users/${user.userID}`,newUser)
             }
             else{
                 const savedJobs = user.searcher?.savedJobs;
@@ -78,7 +78,7 @@ function JobDetailsCard(props) {
                     for (const job of savedJobs){
                         newUser.append("savedJobs[]", job)
                     }
-                    await axios.patch("http://localhost:8000/api/users/"+user.userID,newUser)
+                    await axios.patch(`${process.env.REACT_APP_BACKEND_URL}api/users/${user.userID}`,newUser)
                 }
                 else{
                     console.log("job not saved")
@@ -92,7 +92,7 @@ function JobDetailsCard(props) {
     }
 
     return (
-        <div className={`px-5 py-8 border-2 border-darker-grey rounded-xl bg-white ${props.fullScreen ? 'max-w-[1200px]' : 'max-w-[800px] overflow-y-scroll max-h-screen sticky'}`}>
+        <div className={`px-5 py-8 border-2 border-darker-grey rounded-xl bg-white overflow-y-scroll max-h-[95vh] sticky top-12 ${props.fullScreen ? 'max-w-[1200px]' : 'max-w-[800px]'}`}>
             <p className='font-bold text-xl'>{props.title}</p>
             <a href={'/profile/'+companyUser} target='_blank' rel={"noreferrer"}>{props.companyName}</a>
             <p className='mb-5'>{companyUser.location}</p>

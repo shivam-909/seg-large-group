@@ -66,7 +66,7 @@ export default function RegisterPage() {
         formData.append('pfp_url', 'https://seg-joblink.s3.eu-west-2.amazonaws.com/pfp/blank-profile-picture.png');
         formData.append('location', '');
 
-        axios.post('http://localhost:8000/auth/register', formData)
+        axios.post(`${process.env.REACT_APP_BACKEND_URL}auth/register`, formData)
             .then(response => {
                 if (response.data.access !== undefined && response.data.refresh !== undefined) {
                     localStorage.setItem("access", response.data.access);
