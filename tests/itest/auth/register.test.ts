@@ -18,7 +18,7 @@ test('register user', async () => {
     formData.append('pfp_url', 'TestpfpUrl');
     formData.append('location', 'London');
 
-    const response = await fetch('https://seg-job-board.herokuapp.com/auth/register', {
+    const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}auth/register`, {
         method: 'POST',
         body: formData,
     });
