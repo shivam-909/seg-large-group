@@ -26,10 +26,10 @@ export default function JobPage() {
 
     useEffect(() => {
         const getJob = async () => {
-            await axios.get("http://localhost:8000/api/jobs/"+id)
+            await axios.get("https://seg-job-board.herokuapp.com/api/jobs/"+id)
                 .then(async response => {
                     setJob(response.data)
-                    setCompanyName(await axios.get("http://localhost:8000/api/company/" + response.data.companyID).then(company => company.data.companyName));
+                    setCompanyName(await axios.get("https://seg-job-board.herokuapp.com/api/company/" + response.data.companyID).then(company => company.data.companyName));
                     setLoading(false);
                 })
                 .catch(() => setLoading(false));

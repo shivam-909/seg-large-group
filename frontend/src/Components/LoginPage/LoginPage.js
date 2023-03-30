@@ -36,7 +36,7 @@ function LoginPage() {
     formData.append('email', email);
     formData.append('password', password);
 
-    axios.post('http://localhost:8000/auth/login', formData)
+    axios.post('https://seg-job-board.herokuapp.com/auth/login', formData)
         .then(response => {
           if (response.data.access !== undefined && response.data.refresh !== undefined) {
             localStorage.setItem("access", response.data.access);

@@ -22,7 +22,7 @@ function SearchPage() {
             setLoading(true);
             const formData = new FormData();
             formData.append('term', document.getElementById('jobTitleInput').value);
-            axios.post('http://localhost:8000/api/jobs/search', formData)
+            axios.post('https://seg-job-board.herokuapp.com/api/jobs/search', formData)
                 .then(async response => {
                     if (response.data.results.length === 0) {
                         setNoJobsFound(true);
@@ -43,7 +43,7 @@ function SearchPage() {
                         job.age = Math.floor(((Date.now() / 1000) - job.datePosted._seconds) / 86400);
 
                         job.compensation[0] = job.compensation[0].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-                        await axios.get(`http://localhost:8000/api/company/${job.companyID}`).then(company => {
+                        await axios.get(`https://seg-job-board.herokuapp.com/api/company/${job.companyID}`).then(company => {
                             job.companyName = company.data.companyName;
                         });
 

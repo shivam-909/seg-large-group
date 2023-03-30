@@ -23,7 +23,7 @@ export default function ApplyPage() {
 
     const getJob = async () => {
         return new Promise (async (resolve, reject) => {
-            await axios.get(`http://localhost:8000/api/jobs/${ID}`)
+            await axios.get(`https://seg-job-board.herokuapp.com/api/jobs/${ID}`)
                 .then(response => {
                     resolve(response.data);
                 })
@@ -36,7 +36,7 @@ export default function ApplyPage() {
 
     const getCompany = async (companyID) => {
         return new Promise (async (resolve, reject) => {
-            await axios.get(`http://localhost:8000/api/company/${companyID}`)
+            await axios.get(`https://seg-job-board.herokuapp.com/api/company/${companyID}`)
                 .then(response => {
                     resolve(response.data);
                 })
@@ -46,7 +46,7 @@ export default function ApplyPage() {
 
     const getSearcher = async (searcherID) => {
         return new Promise (async (resolve, reject) => {
-            await axios.get(`http://localhost:8000/api/searcher/${searcherID}`)
+            await axios.get(`https://seg-job-board.herokuapp.com/api/searcher/${searcherID}`)
                 .then(response => {
                     resolve(response.data);
                 })
@@ -130,7 +130,7 @@ export default function ApplyPage() {
         formData.append('QnAs', JSON.stringify(QnAs));
         formData.append('coverLetter', coverLetter);
 
-        axios.post(`http://localhost:8000/api/applications/add`, formData)
+        axios.post(`https://seg-job-board.herokuapp.com/api/applications/add`, formData)
             .catch(err => console.log(err));
         navigate("/");
     }
@@ -140,7 +140,7 @@ export default function ApplyPage() {
         const file = e.target.files[0];
         formData.append('file', file);
         if (file) {
-            axios.post(`http://localhost:8000/api/storage/cv/${newCVId}`, formData)
+            axios.post(`https://seg-job-board.herokuapp.com/api/storage/cv/${newCVId}`, formData)
                 .then(response => {
                     setJob({...job, cv: [file.name, response.data.URL]});
                 });

@@ -18,7 +18,7 @@ export default function ViewApplicationPage() {
 
     const getApplicationValues = async () => {
         return new Promise (async (resolve, reject) => {
-            await axios.get(`http://localhost:8000/api/applications/${ID}`)
+            await axios.get(`https://seg-job-board.herokuapp.com/api/applications/${ID}`)
                 .then(response => {
                     resolve(response.data);
                 })
@@ -33,7 +33,7 @@ export default function ViewApplicationPage() {
         return new Promise (async (resolve, reject) => {
             const formData = new FormData();
             formData.append("searcherID", searcherID);
-            await axios.post(`http://localhost:8000/api/user/typeid`,formData)
+            await axios.post(`https://seg-job-board.herokuapp.com/api/user/typeid`,formData)
                 .then(response => {
                     resolve(response.data);
                 })
@@ -43,7 +43,7 @@ export default function ViewApplicationPage() {
 
     const getSearcher = async (searcherID) => {
         return new Promise (async (resolve, reject) => {
-            await axios.get(`http://localhost:8000/api/searcher/${searcherID}`)
+            await axios.get(`https://seg-job-board.herokuapp.com/api/searcher/${searcherID}`)
                 .then(response => {
                     resolve(response.data);
                 })

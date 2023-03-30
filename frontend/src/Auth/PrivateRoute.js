@@ -8,7 +8,7 @@ export default function PrivateRoutes() {
     useEffect(() => {
         const token = localStorage.getItem("access");
         if (token) {
-            axios.post('http://localhost:8000/api/echo', {}, {headers: {Authorization: `Bearer ${token}`}})
+            axios.post('https://seg-job-board.herokuapp.com/api/echo', {}, {headers: {Authorization: `Bearer ${token}`}})
                 .then(() => setIsLoggedIn(true))
                 .catch(() => setIsLoggedIn(false));
         }

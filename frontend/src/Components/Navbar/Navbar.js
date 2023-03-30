@@ -10,7 +10,7 @@ export default function Navbar() {
     useEffect(() => {
         const token = localStorage.getItem("access");
         if (token) {
-            axios.post('http://localhost:8000/api/echo', {}, {headers: {Authorization: `Bearer ${token}`}})
+            axios.post('https://seg-job-board.herokuapp.com/api/echo', {}, {headers: {Authorization: `Bearer ${token}`}})
                 .then(res => {setIsLoggedIn(true); setUserID(res.data)})
                 .catch(() => setIsLoggedIn(false));
         }
@@ -45,7 +45,6 @@ export default function Navbar() {
         <div className="top-16" id="expandProfile">
             <a href={"/profile/" + userID}><i id="icon" className="fa-solid fa-id-card pr-2"></i> Profile</a>
             <a href="/jobs"><i id="icon" className="fa-solid fa-folder-open pr-2"></i>My Jobs</a>
-            <a href="#Settings"><i id="icon" className="fa-solid fa-gear pr-2"></i>Settings</a>
             <a href={'/login'} onClick={() => {localStorage.removeItem("access")}}><i
                 className="fa-solid fa-right-from-bracket pr-2"></i>Log Out</a>
         </div> 

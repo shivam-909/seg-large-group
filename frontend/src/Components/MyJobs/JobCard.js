@@ -46,7 +46,7 @@ export function UpdateJobStatus(props){
     async function archive(){
         const formData = new FormData();
         formData.append("status","Archived")
-        await axios.patch("http://localhost:8000/api/applications/"+props.id,formData).then(navigate(0))
+        await axios.patch("https://seg-job-board.herokuapp.com/api/applications/"+props.id,formData).then(navigate(0))
     }
     return (
         <div>

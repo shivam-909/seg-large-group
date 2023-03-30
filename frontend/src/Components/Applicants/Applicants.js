@@ -39,14 +39,14 @@ export default function Applicants() {
         const formData = new FormData();
         formData.append('jobListing', id);
         formData.append("status", filter)
-        axios.post("http://localhost:8000/api/application/filter", formData).then(res => {
+        axios.post("https://seg-job-board.herokuapp.com/api/application/filter", formData).then(res => {
             let applications = res.data.applications;
             setApplicants([]);
             for (let i = 0; i < applications.length; i++) {
-                axios.get("http://localhost:8000/api/searcher/" + applications[i].searcher).then(searcher => {
+                axios.get("https://seg-job-board.herokuapp.com/api/searcher/" + applications[i].searcher).then(searcher => {
                     const searcherID = new FormData();
                     searcherID.append("searcherID",searcher.data.searcherID)
-                    axios.post("http://localhost:8000/api/user/typeid", searcherID).then(usr => {
+                    axios.post("https://seg-job-board.herokuapp.com/api/user/typeid", searcherID).then(usr => {
                         setApplicants( current => [...current, <ApplicantCard id={applications[i].id} pfpUrl={usr.data.pfpUrl} name={searcher.data.firstName + " " + searcher.data.lastName} email={usr.data.email} status={applications[i].status}/>]);
                         setLoading(false);
                     })

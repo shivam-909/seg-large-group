@@ -46,14 +46,14 @@ export default function EditJob() {
 
     async function verifyCompany(){
         if (isEdit){
-            return await axios.get("http://localhost:8000/api/jobs/"+id).then(response => { return response.data.companyID === user.company?.companyID || !user.company?.companyID});
+            return await axios.get("https://seg-job-board.herokuapp.com/api/jobs/"+id).then(response => { return response.data.companyID === user.company?.companyID || !user.company?.companyID});
         }
         return true;
     }
 
     async function getDefaultValues() {
         if (isEdit) {
-            await axios.get("http://localhost:8000/api/jobs/" + id).then(async response => {
+            await axios.get("https://seg-job-board.herokuapp.com/api/jobs/" + id).then(async response => {
                 setJob(prevJob => ({
                     ...prevJob,
                     title: response.data.title,
@@ -187,7 +187,7 @@ export default function EditJob() {
         formData.append('compensation', compensationRate);
         formData.append('description', description);
 
-        isEdit ? await axios.patch("http://localhost:8000/api/jobs/"+id, formData).then(navigate(-1)) : await axios.post("http://localhost:8000/api/jobs/add/", formData).then(navigate(-1));
+        isEdit ? await axios.patch("https://seg-job-board.herokuapp.com/api/jobs/"+id, formData).then(navigate(-1)) : await axios.post("https://seg-job-board.herokuapp.com/api/jobs/add/", formData).then(navigate(-1));
     }
 
     function addRequirement(defaultVal, i){
