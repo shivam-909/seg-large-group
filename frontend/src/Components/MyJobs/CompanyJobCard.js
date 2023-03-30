@@ -45,7 +45,7 @@ export function ConfirmDeleteModal(props){
     };
 
     async function deleteJob(){
-        await axios.delete("https://seg-job-board.herokuapp.com/api/jobs/" + props.id);
+        await axios.delete(`${process.env.REACT_APP_BACKEND_URL}api/jobs/${props.id}`);
         window.location.reload(false)
     }
     return (

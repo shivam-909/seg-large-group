@@ -25,7 +25,7 @@ function UserProfilePage() {
     useEffect(() => {
         const getProfile = async () => {
             if (profile.length === 0){
-                await axios.get("https://seg-job-board.herokuapp.com/api/user/"+id).then(r => {
+                await axios.get(`${process.env.REACT_APP_BACKEND_URL}api/user/${id}`).then(r => {
                     setProfile(r.data)
                     setFile(r.data.searcher?.cv[0])
                 });
@@ -83,7 +83,7 @@ function UserProfilePage() {
             formData.append('companyName', companyName);
             formData.append('location', location);
 
-            await axios.patch("https://seg-job-board.herokuapp.com/api/users/" + id, formData).then(navigate(0))
+            await axios.patch(`${process.env.REACT_APP_BACKEND_URL}api/users/${id}`, formData).then(navigate(0))
         }
     }
 
@@ -105,7 +105,7 @@ function UserProfilePage() {
             formData.append('lastName', lastName);
             formData.append('location', location);
 
-            await axios.patch("https://seg-job-board.herokuapp.com/api/users/" + id, formData).then(navigate(0))
+            await axios.patch(`${process.env.REACT_APP_BACKEND_URL}api/users/${id}`, formData).then(navigate(0))
         }
     }
     function validateEducation(){
@@ -146,12 +146,12 @@ function UserProfilePage() {
             // TODO: Add Backend Update
             const formData = new FormData();
             formData.append("file", files[0])
-            await axios.post("https://seg-job-board.herokuapp.com/api/storage/cv/" + user.userID, formData).then(async res => {
+            await axios.post(`${process.env.REACT_APP_BACKEND_URL}api/storage/cv/${user.userID}`, formData).then(async res => {
                 const userPatch = new FormData();
                 console.log(file.name, res.data.URL)
                 userPatch.append("cv[]", file.name)
                 userPatch.append("cv[]", res.data.URL)
-                await axios.patch("https://seg-job-board.herokuapp.com/api/users/" + id, userPatch)
+                await axios.patch(`${process.env.REACT_APP_BACKEND_URL}api/users/${id}`, userPatch)
             })
         }
     }
@@ -165,10 +165,10 @@ function UserProfilePage() {
         else{
             const formData = new FormData();
             formData.append("file", files[0])
-            await axios.post("https://seg-job-board.herokuapp.com/api/storage/pfp/"+user.userID, formData).then(async res => {
+            await axios.post(`${process.env.REACT_APP_BACKEND_URL}api/storage/pfp/${user.userID}`, formData).then(async res => {
                 const userPatch = new FormData();
                 userPatch.append("pfpUrl", res.data.URL)
-                await axios.patch("https://seg-job-board.herokuapp.com/api/users/" + user.userID, userPatch);
+                await axios.patch(`${process.env.REACT_APP_BACKEND_URL}api/users/${user.userID}`, userPatch);
             })
         }
     }

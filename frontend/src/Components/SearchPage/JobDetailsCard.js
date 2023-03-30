@@ -39,14 +39,14 @@ function JobDetailsCard(props) {
             }
             const getCompanyUser = new FormData();
             getCompanyUser.append("companyID", props.companyID)
-            await axios.post("https://seg-job-board.herokuapp.com/api/user/typeid", getCompanyUser).then(async r => {
+            await axios.post(`${process.env.REACT_APP_BACKEND_URL}api/user/typeid`, getCompanyUser).then(async r => {
                 setCompany(r.data.userID);
                 if (!user.searcher?.searcherID){
                     return;
                 }
                 const userApplications = new FormData();
                 userApplications.append("searcher", user.searcher?.searcherID)
-                await axios.post("https://seg-job-board.herokuapp.com/api/application/filter", userApplications).then(res => {
+                await axios.post(`${process.env.REACT_APP_BACKEND_URL}api/application/filter`, userApplications).then(res => {
                     for (const appl of res.data.applications) {
                         if (appl.searcher === user.searcher?.searcherID) {
                             setHasApplied(true);
@@ -67,7 +67,7 @@ function JobDetailsCard(props) {
                 for (const job of savedJobs){
                     newUser.append("savedJobs[]", job)
                 }
-                await axios.patch("https://seg-job-board.herokuapp.com/api/users/"+user.userID,newUser)
+                await axios.patch(`${process.env.REACT_APP_BACKEND_URL}api/users/${user.userID}`,newUser)
             }
             else{
                 const savedJobs = user.searcher?.savedJobs;
@@ -78,7 +78,7 @@ function JobDetailsCard(props) {
                     for (const job of savedJobs){
                         newUser.append("savedJobs[]", job)
                     }
-                    await axios.patch("https://seg-job-board.herokuapp.com/api/users/"+user.userID,newUser)
+                    await axios.patch(`${process.env.REACT_APP_BACKEND_URL}api/users/${user.userID}`,newUser)
                 }
                 else{
                     console.log("job not saved")

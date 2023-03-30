@@ -41,7 +41,7 @@ export function UpdateApplicantStatus(props){
     async function changeStatus(newStatus){
         const formData = new FormData();
         formData.append("status",newStatus)
-        await axios.patch("https://seg-job-board.herokuapp.com/api/applications/"+props.id,formData).then(navigate(0))
+        await axios.patch(`${process.env.REACT_APP_BACKEND_URL}api/applications/${props.id}`,formData).then(navigate(0))
     }
     return (
         <div>

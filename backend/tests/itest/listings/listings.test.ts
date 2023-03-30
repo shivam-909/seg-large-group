@@ -25,7 +25,7 @@ it("create listing", async () => {
     formData.append("location", location);
 
     // Send POST request to register
-    const response = await fetch('https://seg-job-board.herokuapp.com/auth/register', {
+    const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}auth/register`, {
         method: 'POST',
         body: formData,
     });
@@ -82,7 +82,7 @@ it("create listing", async () => {
     listingFormData.append("skills", skills);
 
     // Send POST request to create listing
-    const listingResponse = await fetch('https://seg-job-board.herokuapp.com/api/jobs', {
+    const listingResponse = await fetch(`${process.env.REACT_APP_BACKEND_URL}api/jobs`, {
         method: 'POST',
         body: listingFormData,
         headers: {
@@ -101,7 +101,7 @@ it("create listing", async () => {
 
 
     // Retrieve the listing
-    const listingResponse2 = await fetch(`https://seg-job-board.herokuapp.com/api/jobs/${id}`, {
+    const listingResponse2 = await fetch(`${process.env.REACT_APP_BACKEND_URL}api/jobs/${id}`, {
         method: 'GET',
         headers: {
             'Authorization': `Bearer ${body.access}`
