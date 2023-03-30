@@ -181,6 +181,31 @@ function JobDetailsCard(props) {
             <Urgent urgent={props.urgent} icon={clockIcon}/>
 
             <JobPostAge age={props.age}/>
+
+            {openShareModal &&
+                <div>
+                    <div className='fixed h-screen w-screen top-0 left-0 bg-dim-background'/>
+                    <div className='fixed w-[300px] h-[300px] bg-white m-auto top-0 bottom-0 left-0 right-0 rounded-md'>
+                        <button className='absolute top-4 right-4 bg-lighter-grey rounded-md w-7 h-7' onClick={() => setOpenShareModal(false)}>X</button>
+
+                        <div className='inline'>
+                            <p className='mt-14 font-bold text-xl flex items-center justify-center'>Share this job post</p>
+
+                            <div className='grid items-center justify-center'>
+                                <div className='mt-10 bg-lighter-grey rounded inline-flex items-center text-lg space-x-3 px-2 py-1 cursor-pointer' onClick={copyJobPostLink}>
+                                    <img src={copyIcon} alt='copy icon'/>
+                                    <p>Copy link</p>
+                                </div>
+
+                                <div className='mt-7 bg-lighter-grey rounded inline-flex items-center text-lg space-x-3 px-2 py-1 cursor-pointer' onClick={emailJobPost}>
+                                    <img src={emailIcon} alt=''/>
+                                    <p>Email</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
         </div>
     );
 }
