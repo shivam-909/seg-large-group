@@ -20,9 +20,7 @@ function JobPostCard(props) {
                 ))}
             </div>
 
-            <div data-testid="urgent-status">
             <Urgent urgent={props.urgent} icon={clockIcon}/>
-            </div>
 
             {props.requirements.length > 0 &&
                 <div>
