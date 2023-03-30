@@ -36,7 +36,7 @@ function LoginPage() {
     formData.append('email', email);
     formData.append('password', password);
 
-    axios.post('http://localhost:8000/auth/login', formData)
+    axios.post(`${process.env.REACT_APP_BACKEND_URL}auth/login`, formData)
         .then(response => {
           if (response.data.access !== undefined && response.data.refresh !== undefined) {
             localStorage.setItem("access", response.data.access);
@@ -88,7 +88,7 @@ function LoginPage() {
             <div className='p-0.5'></div>
 
             <button className='bg-dark-theme-grey rounded-md text-white p-2.5 flex items-center justify-center space-x-2' onClick={loginButton} id={"loginButton"}>
-              {loading ? <Loading/> : <p id={"loadText"}>Sign In<i className="fa-solid fa-right-to-bracket pl-2"></i></p>}
+              {loading ? <Loading className={"h-10 w-10 border-[3px] border-dark-theme-grey"}/> : <p id={"loadText"}>Sign In<i className="fa-solid fa-right-to-bracket pl-2"></i></p>}
             </button>
 
             <p className='text-center pt-4'>New user? <a className='LoginPage-link' href='/signup'>Sign up.</a></p>
