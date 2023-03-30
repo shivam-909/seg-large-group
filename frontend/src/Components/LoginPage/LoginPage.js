@@ -73,27 +73,34 @@ function LoginPage() {
           <div className='bg-white rounded-md sm:min-w-1/6 inline-grid px-12 py-7 space-y-3'>
             <p className='mb-6 font-bold text-2xl flex justify-center'>Sign in to your account</p>
 
-            <div>
+            <div data-testid="email-input">
               <TextInputBox id='email' type='email'  data-testid="email-input" cache={localStorage.getItem("email")} className="w-full" onBlur={()=>{validateField("email",/^\w+(\.\w+)*@\w+(-?\w+)*(\.\w{2,10})+$/)}} placeholder='Email address'/>
-              <span id="emailError" data-testid="error" className={"invisible absolute top-0"}>Invalid Email</span>
+              <span id="emailError"  className={"invisible absolute top-0"}>Invalid Email</span>
             </div>
 
+            <div data-testid="password-input">
             <TextInputBoxWithIcon id='password' type='password' cache={localStorage.getItem("password")} placeholder='Password' icon={<img id='toggleEye' src={showIcon} alt='' onClick={togglePasswordVisibility} className='cursor-pointer'/>}/>
+            </div>
 
-            <div className='flex space-x-2 items-center'>
+            <div data-testid='rememberLogin' className='flex space-x-2 items-center'>
               <input id='rememberLogin' type='checkbox' className='w-4 h-4 inline-block accent-dark-theme-grey' defaultChecked={localStorage.getItem("rememberLogin")}/>
               <p>Keep me signed in</p>
             </div>
             <ErrorBox message={"Invalid Login Details"}/>
             <div className='p-0.5'></div>
+            
+            <div data-testid='signin-button'>
+              <button className='bg-dark-theme-grey rounded-md text-white p-2.5 flex items-center justify-center space-x-2' onClick={loginButton} id={"loginButton"}>
+                {loading ? <Loading/> : <p id={"loadText"}>Sign In<i className="fa-solid fa-right-to-bracket pl-2"></i></p>}
+              </button>
+            </div>
 
-            <button className='bg-dark-theme-grey rounded-md text-white p-2.5 flex items-center justify-center space-x-2' onClick={loginButton} id={"loginButton"}>
-              {loading ? <Loading/> : <p id={"loadText"}>Sign In<i className="fa-solid fa-right-to-bracket pl-2"></i></p>}
-            </button>
-
-            <p className='text-center pt-4'>New user? <a className='LoginPage-link' href='/signup'>Sign up.</a></p>
-
-            <p  className='text-center'> Forgot your password? <a className= "ForgotPasswordPage-link" href="/forgotPassword" >Reset password.</a></p>
+            <div data-testid='signup-link'>
+              <p className='text-center pt-4'>New user? <a className='LoginPage-link' href='/signup'>Sign up.</a></p>
+            </div>
+            <div data-testid='forgottenpw-link'>
+              <p  className='text-center'> Forgot your password? <a className= "ForgotPasswordPage-link" href="/forgotPassword" >Reset password.</a></p>
+            </div>
           </div>
       </div>
   );

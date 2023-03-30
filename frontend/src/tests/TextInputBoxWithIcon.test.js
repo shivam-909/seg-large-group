@@ -9,7 +9,10 @@ describe ('TextInputBox component', () => {
 
     it ('render icons on the screen', async () => {
 
-    })
+    });
+
+});
+
 
 
 
