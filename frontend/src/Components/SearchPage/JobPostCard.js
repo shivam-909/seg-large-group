@@ -20,15 +20,18 @@ function JobPostCard(props) {
                 ))}
             </div>
 
+            <div data-testid="urgent-status">
             <Urgent urgent={props.urgent} icon={clockIcon}/>
+            </div>
 
             {props.requirements.length > 0 &&
                 <div>
                     <p className='italic text-xs my-1'>Requirements</p>
                     <div className='space-x-1.5'>
-                        {props.requirements.map(requirement => (
-                            <PlaceholderCard content={requirement}/>
-                        ))}
+                        {props.requirements.map(requirement => {
+                            requirement = requirement.split(',');
+                            return <PlaceholderCard content={`${requirement[0]} (${requirement[1]} ${requirement[2]})`}/>;
+                        })}
                     </div>
                 </div>
             }
