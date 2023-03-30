@@ -2,7 +2,6 @@ import {useNavigate} from "react-router-dom";
 import React, {useState} from "react";
 import axios from "axios";
 import Modal from "react-modal";
-import {UpdateApplicantStatus} from "../Applicants/ApplicantCard";
 
 export default function CompanyJobCard(props) {
     const navigate = useNavigate();
@@ -29,7 +28,6 @@ export default function CompanyJobCard(props) {
 }
 
 export function ConfirmDeleteModal(props){
-    const navigate = useNavigate();
 
     const customStyles = {
         content: {
