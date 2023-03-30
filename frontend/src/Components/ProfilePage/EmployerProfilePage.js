@@ -62,7 +62,7 @@ function EmployerProfilePage() {
 
     return (
         <div>
-            <Navbar/>
+            <Navbar data-testid='navbar'/>
             <div className='bg-lighter-grey min-h-screen items-center justify-center flex'>
                 <div className='bg-white rounded-md sm:min-w-1/6 inline-grid px-12 py-7 space-y-3 mt-24 max-w-lg min-w-[40%]'>
                     <h1 className='mb-6 font-bold text-2xl flex justify-center'>Your Profile </h1>
