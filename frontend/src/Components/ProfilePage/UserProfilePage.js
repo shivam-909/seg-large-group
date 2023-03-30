@@ -151,7 +151,7 @@ function UserProfilePage() {
                 console.log(file.name, res.data.URL)
                 userPatch.append("cv[]", file.name)
                 userPatch.append("cv[]", res.data.URL)
-                await axios.patch(`${process.env.REACT_APP_BACKEND_URL}api/users/${id}`, userPatch)
+                await axios.patch(`${process.env.REACT_APP_BACKEND_URL}api/users/${id}`, userPatch).then(navigate(0))
             })
         }
     }
@@ -168,7 +168,7 @@ function UserProfilePage() {
             await axios.post(`${process.env.REACT_APP_BACKEND_URL}api/storage/pfp/${user.userID}`, formData).then(async res => {
                 const userPatch = new FormData();
                 userPatch.append("pfpUrl", res.data.URL)
-                await axios.patch(`${process.env.REACT_APP_BACKEND_URL}api/users/${user.userID}`, userPatch);
+                await axios.patch(`${process.env.REACT_APP_BACKEND_URL}api/users/${user.userID}`, userPatch).then(navigate(0));
             })
         }
     }
