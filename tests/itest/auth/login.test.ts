@@ -20,7 +20,7 @@ test('login user', async () => {
     formData.append('location', 'London');
     formData.append('user_type', 'searcher');
 
-    const regres = await fetch('http://localhost:8000/auth/register', {
+    const regres = await fetch('https://seg-job-board.herokuapp.com/auth/register', {
         method: 'POST',
         body: formData,
     });
@@ -31,7 +31,7 @@ test('login user', async () => {
     loginFormData.append('email', email);
     loginFormData.append('password', 'Password123!');
 
-    const loginResponse = await fetch('http://localhost:8000/auth/login', {
+    const loginResponse = await fetch('https://seg-job-board.herokuapp.com/auth/login', {
         method: 'POST',
         body: loginFormData,
     });

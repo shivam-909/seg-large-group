@@ -21,7 +21,7 @@ test("refresh token", async () => {
     formData.append('location', 'London');
     formData.append('user_type', 'searcher');
 
-    const regres = await fetch('http://localhost:8000/auth/register', {
+    const regres = await fetch('https://seg-job-board.herokuapp.com/auth/register', {
         method: 'POST',
         body: formData,
     });
@@ -40,7 +40,7 @@ test("refresh token", async () => {
     let refreshFormData = new FormData();
     refreshFormData.append('refresh_token', registrationBody.refresh);
 
-    const refreshResponse = await fetch('http://localhost:8000/auth/refresh', {
+    const refreshResponse = await fetch('https://seg-job-board.herokuapp.com/auth/refresh', {
         method: 'POST',
         body: refreshFormData,
     });
