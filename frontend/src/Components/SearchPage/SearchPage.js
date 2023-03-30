@@ -59,7 +59,6 @@ function SearchPage() {
                             job.distance = distanceTo(locInput, jobLoc) * 0.000621371;
                         }
                         catch(err){
-                            console.log(err)
                             job.distance=10000;
                         }
                     }

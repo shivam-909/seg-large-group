@@ -1,4 +1,4 @@
-import { useEffect, useState} from "react";
+import React, { useEffect, useState} from "react";
 import JobList from "./JobList";
 
 export default function Filters(props) {
@@ -231,47 +231,38 @@ export default function Filters(props) {
             {showFilters &&
                 <div>
                     <div className='flex border-x border-t rounded-t-md border-darker-grey space-x-8 pt-3 px-3 mx-4'>
-                        <div className='flex flex-col space-y-3'>
+                        <div className='flex flex-col space-y-3 min-w-fit'>
                             <p className='font-bold'>Date posted</p>
-                            <label onFocus={() => selectRadio('anyTime')}><input id='anyTime' type='radio' value=''
-                                                                                 name='age' checked/><span
-                                className='pl-2.5'>Any time</span></label>
-                            <label onFocus={() => selectRadio('past24Hours')}><input id='past24Hours' type='radio'
-                                                                                     value='1' name='age'/><span
-                                className='pl-2.5'>Past 24 hours</span></label>
-                            <label onFocus={() => selectRadio('pastWeek')}><input id='pastWeek' type='radio' value='7'
-                                                                                  name='age'/><span className='pl-2.5'>Past week</span></label>
-                            <label onFocus={() => selectRadio('pastMonth')}><input id='pastMonth' type='radio'
-                                                                                   value='30' name='age'/><span
-                                className='pl-2.5'>Past month</span></label>
+                            <label onFocus={() => selectRadio('anyTime')}><label><input type="radio" id={"anyTime"} name={'age'} value={""} className={"peer sr-only"} checked/><span className={"border-2 border-[#ccc] p-1 rounded-md select-none peer-checked:border-dark-theme-grey peer-checked:text-white font-bold peer-checked:bg-dark-theme-grey"}>Any time</span></label>
+                            </label>
+                            <label onFocus={() => selectRadio('past24Hours')}><label><input type="radio" id={"past24Hours"} name={'age'} value={"1"} className={"peer sr-only"}/><span className={"border-2 border-[#ccc] p-1 rounded-md select-none peer-checked:border-dark-theme-grey peer-checked:text-white font-bold peer-checked:bg-dark-theme-grey"}>Past 24 hours</span></label>
+                            </label>
+                            <label onFocus={() => selectRadio('pastWeek')}><label><input type="radio" id={"pastWeek"} name={'age'} value={"7"} className={"peer sr-only"}/><span className={"border-2 border-[#ccc] p-1 rounded-md select-none peer-checked:border-dark-theme-grey peer-checked:text-white font-bold peer-checked:bg-dark-theme-grey"}>Past week</span></label>
+                            </label>
+                            <label onFocus={() => selectRadio('pastMonth')}><label><input type="radio" id={"pastMonth"} name={'age'} value={"30"} className={"peer sr-only"}/><span className={"border-2 border-[#ccc] p-1 rounded-md select-none peer-checked:border-dark-theme-grey peer-checked:text-white font-bold peer-checked:bg-dark-theme-grey"}>Past month</span></label>
+                            </label>
                         </div>
 
-                        <div className='flex flex-col space-y-3'>
+                        <div className='flex flex-col space-y-3 min-w-fit'>
                             <p className='font-bold'>Distance</p>
-                            <label onFocus={() => selectRadio('anyDistance')}><input id='anyDistance' type='radio'
-                                                                                     value='' name='distance'
-                                                                                     checked/><span className='pl-2.5'>Any distance</span></label>
-                            <label onFocus={() => selectRadio('1mile')}><input id='1mile' type='radio' value='1'
-                                                                               name='distance'/><span
-                                className='pl-2.5'>1 mile</span></label>
-                            <label onFocus={() => selectRadio('5miles')}><input id='5miles' type='radio' value='5'
-                                                                                name='distance'/><span
-                                className='pl-2.5'>5 miles</span></label>
-                            <label onFocus={() => selectRadio('10miles')}><input id='10miles' type='radio' value='10'
-                                                                                 name='distance'/><span
-                                className='pl-2.5'>10 miles</span></label>
-                            <label onFocus={() => selectRadio('15miles')}><input id='15miles' type='radio' value='15'
-                                                                                 name='distance'/><span
-                                className='pl-2.5'>15 miles</span></label>
-                            <label onFocus={() => selectRadio('25miles')}><input id='25miles' type='radio' value='25'
-                                                                                 name='distance'/><span
-                                className='pl-2.5'>25 miles</span></label>
-                            <label onFocus={() => selectRadio('35miles')}><input id='35miles' type='radio' value='35'
-                                                                                 name='distance'/><span
-                                className='pl-2.5'>35 miles</span></label>
-                            <label onFocus={() => selectRadio('50miles')}><input id='50miles' type='radio' value='50'
-                                                                                 name='distance'/><span
-                                className='pl-2.5'>50 miles</span></label>
+                            <label onFocus={() => selectRadio('anyDistance')}><label><input type="radio" id={"anyDistance"} name={'distance'} value={"7"} className={"peer sr-only"} checked/><span className={"border-2 border-[#ccc] p-1 rounded-md select-none peer-checked:border-dark-theme-grey peer-checked:text-white font-bold peer-checked:bg-dark-theme-grey"}>Any distance</span></label>
+                            </label>
+                            <label onFocus={() => selectRadio('1mile')}><label><input type="radio" id={"1mile"} name={'distance'} value={"1"} className={"peer sr-only"}/><span className={"border-2 border-[#ccc] p-1 rounded-md select-none peer-checked:border-dark-theme-grey peer-checked:text-white font-bold peer-checked:bg-dark-theme-grey"}>1 mile</span></label>
+                            </label>
+                            <label onFocus={() => selectRadio('5miles')}><label><input type="radio" id={"5miles"} name={'distance'} value={"5"} className={"peer sr-only"}/><span className={"border-2 border-[#ccc] p-1 rounded-md select-none peer-checked:border-dark-theme-grey peer-checked:text-white font-bold peer-checked:bg-dark-theme-grey"}>5 miles</span></label>
+                            </label>
+                            <label onFocus={() => selectRadio('10miles')}><label><input type="radio" id={"10miles"} name={'distance'} value={"10"} className={"peer sr-only"}/><span className={"border-2 border-[#ccc] p-1 rounded-md select-none peer-checked:border-dark-theme-grey peer-checked:text-white font-bold peer-checked:bg-dark-theme-grey"}>10 miles</span></label>
+                            </label>
+                            <label onFocus={() => selectRadio('15miles')}><label><input type="radio" id={"15miles"} name={'distance'} value={"15"} className={"peer sr-only"}/><span className={"border-2 border-[#ccc] p-1 rounded-md select-none peer-checked:border-dark-theme-grey peer-checked:text-white font-bold peer-checked:bg-dark-theme-grey"}>15 miles</span></label>
+                            </label>
+                            <label onFocus={() => selectRadio('25miles')}><label><input type="radio" id={"25miles"} name={'distance'} value={"25"} className={"peer sr-only"}/><span className={"border-2 border-[#ccc] p-1 rounded-md select-none peer-checked:border-dark-theme-grey peer-checked:text-white font-bold peer-checked:bg-dark-theme-grey"}>25 miles</span></label>
+                            </label>
+                            <label onFocus={() => selectRadio('35miles')}><label><input type="radio" id={"35miles"} name={'distance'} value={"35"} className={"peer sr-only"}/><span className={"border-2 border-[#ccc] p-1 rounded-md select-none peer-checked:border-dark-theme-grey peer-checked:text-white font-bold peer-checked:bg-dark-theme-grey"}>35 miles</span></label>
+                            </label>
+                            <label onFocus={() => selectRadio('50miles')}><label><input type="radio" id={"50miles"} name={'distance'} value={"50"} className={"peer sr-only"}/><span className={"border-2 border-[#ccc] p-1 rounded-md select-none peer-checked:border-dark-theme-grey peer-checked:text-white font-bold peer-checked:bg-dark-theme-grey"}>50 miles</span></label>
+                            </label>
+                            <label onFocus={() => selectRadio('100miles')}><label><input type="radio" id={"100miles"} name={'distance'} value={"100"} className={"peer sr-only"}/><span className={"border-2 border-[#ccc] p-1 rounded-md select-none peer-checked:border-dark-theme-grey peer-checked:text-white font-bold peer-checked:bg-dark-theme-grey"}>100 miles</span></label>
+                            </label>
                         </div>
 
                         <div className='space-y-2'>
@@ -299,26 +290,32 @@ export default function Filters(props) {
                             {filters.schedule.length > 0 &&
                                 filters.schedule.map(schedule => {
                                     return (
-                                        <div className='space-x-2' onClick={updateJobResults}>
-                                            <input id={schedule} name='schedule' type='checkbox' value={schedule}/>
-                                            <label
-                                                onClick={() => document.getElementById(schedule).checked = !document.getElementById(schedule).checked}>{schedule}</label>
+                                        // <div className='space-x-2' onClick={updateJobResults}>
+                                        //     <input id={schedule} name='schedule' type='checkbox' value={schedule}/>
+                                        //     <label
+                                        //         onClick={() => document.getElementById(schedule).checked = !document.getElementById(schedule).checked}>{schedule}</label>
+                                        // </div>
+                                        <div className='space-x-2 space-y-5 mt-5' onClick={updateJobResults}>
+                                            <label><input type="checkbox" id={"schedule"} name={'schedule'} value={schedule} className={"peer sr-only"}/><span className={"border-2 border-[#ccc] p-1 rounded-md select-none peer-checked:border-dark-theme-grey peer-checked:text-white font-bold peer-checked:bg-dark-theme-grey"}>{schedule}</span></label>
                                         </div>
                                     );
                                 })
                             }
                         </div>
 
-                        <div>
-                            <p className='font-bold'>On-site/Remote</p>
+                        <div className={"min-w-fit"}>
+                            <p className='font-bold'>Workplace</p>
                             {filters.type.length > 0 &&
                                 filters.type.map(type => {
                                     return (
-                                        <div className='space-x-2' onClick={updateJobResults}>
-                                            <input id={type} name='type' type='checkbox' value={type}/>
-                                            <label
-                                                onClick={() => document.getElementById(type).checked = !document.getElementById(type).checked}>{type}</label>
-                                        </div>
+                                        // <div className='space-x-2' onClick={updateJobResults}>
+                                        //     <input id={type} name='type' type='checkbox' value={type}/>
+                                        //     <label
+                                        //         onClick={() => document.getElementById(type).checked = !document.getElementById(type).checked}>{type}</label>
+                                        // </div>
+                                    <div className='space-x-2 space-y-5 mt-5 w-auto' onClick={updateJobResults}>
+                                        <label><input type="checkbox" id={type} name={'type'} value={type} className={"peer sr-only"}/><span className={"border-2 border-[#ccc] p-1 rounded-md select-none peer-checked:border-dark-theme-grey peer-checked:text-white font-bold peer-checked:bg-dark-theme-grey"}>{type}</span></label>
+                                    </div>
                                     );
                                 })
                             }
@@ -329,11 +326,14 @@ export default function Filters(props) {
                             {filters.qualification.length > 0 &&
                                 filters.qualification.map(qualification => {
                                     return (
-                                        <div className='space-x-2' onClick={updateJobResults}>
-                                            <input id={qualification} name='qualification' type='checkbox'
-                                                   value={qualification}/>
-                                            <label
-                                                onClick={() => document.getElementById(qualification).checked = !document.getElementById(qualification).checked}>{qualification}</label>
+                                        // <div className='space-x-2' onClick={updateJobResults}>
+                                        //     <input id={qualification} name='qualification' type='checkbox'
+                                        //            value={qualification}/>
+                                        //     <label
+                                        //         onClick={() => document.getElementById(qualification).checked = !document.getElementById(qualification).checked}>{qualification}</label>
+                                        // </div>
+                                        <div className='space-x-2 space-y-5 mt-5 w-auto' onClick={updateJobResults}>
+                                            <label><input type="checkbox" id={qualification} name={'qualification'} value={qualification} className={"peer sr-only"}/><span className={"border-2 border-[#ccc] p-1 rounded-md select-none peer-checked:border-dark-theme-grey peer-checked:text-white font-bold peer-checked:bg-dark-theme-grey"}>{qualification}</span></label>
                                         </div>
                                     );
                                 })
@@ -345,40 +345,49 @@ export default function Filters(props) {
                             {filters.industry.length > 0 &&
                                 filters.industry.map(industry => {
                                     return (
-                                        <div className='space-x-2' onClick={updateJobResults}>
-                                            <input id={industry} name='industry' type='checkbox' value={industry}/>
-                                            <label
-                                                onClick={() => document.getElementById(industry).checked = !document.getElementById(industry).checked}>{industry}</label>
+                                        // <div className='space-x-2' onClick={updateJobResults}>
+                                        //     <input id={industry} name='industry' type='checkbox' value={industry}/>
+                                        //     <label
+                                        //         onClick={() => document.getElementById(industry).checked = !document.getElementById(industry).checked}>{industry}</label>
+                                        // </div>
+                                        <div className='space-x-2 space-y-5 mt-5 w-auto' onClick={updateJobResults}>
+                                            <label><input type="checkbox" id={industry} name={'industry'} value={industry} className={"peer sr-only"}/><span className={"border-2 border-[#ccc] p-1 rounded-md select-none peer-checked:border-dark-theme-grey peer-checked:text-white font-bold peer-checked:bg-dark-theme-grey"}>{industry}</span></label>
                                         </div>
                                     );
                                 })
                             }
                         </div>
 
-                        <div>
+                        <div className={"min-w-fit"}>
                             <p className='font-bold'>Location</p>
                             {filters.location.length > 0 &&
                                 filters.location.map(location => {
                                     return (
-                                        <div className='space-x-2' onClick={updateJobResults}>
-                                            <input id={location} name='location' type='checkbox' value={location}/>
-                                            <label
-                                                onClick={() => document.getElementById(location).checked = !document.getElementById(location).checked}>{location}</label>
+                                        // <div className='space-x-2' onClick={updateJobResults}>
+                                        //     <input id={location} name='location' type='checkbox' value={location}/>
+                                        //     <label
+                                        //         onClick={() => document.getElementById(location).checked = !document.getElementById(location).checked}>{location}</label>
+                                        // </div>
+                                        <div className='space-x-2 space-y-5 mt-5 w-auto' onClick={updateJobResults}>
+                                            <label><input type="checkbox" id={location} name={'location'} value={location} className={"peer sr-only"}/><span className={"border-2 border-[#ccc] p-1 rounded-md select-none peer-checked:border-dark-theme-grey peer-checked:text-white font-bold peer-checked:bg-dark-theme-grey"}>{location}</span></label>
                                         </div>
                                     );
                                 })
                             }
                         </div>
 
-                        <div>
+                        <div className={"min-w-fit"}>
                             <p className='font-bold'>Company</p>
                             {filters.company.length > 0 &&
                                 filters.company.map(company => {
                                     return (
-                                        <div className='space-x-2' onClick={updateJobResults}>
-                                            <input id={company} name='company' type='checkbox' value={company}/>
-                                            <label
-                                                onClick={() => document.getElementById(company).checked = !document.getElementById(company).checked}>{company}</label>
+                                        // <div className='space-x-2' onClick={updateJobResults}>
+                                        //     <input id={company} name='company' type='checkbox' value={company}/>
+                                        //     <label
+                                        //         onClick={() => document.getElementById(company).checked = !document.getElementById(company).checked}>{company}</label>
+                                        // </div>
+                                        <div className='space-x-2 space-y-5 mt-5 w-auto' onClick={updateJobResults}>
+                                            <label><input type="checkbox" id={company} name={'company'} value={company} className={"peer sr-only"}/><span className={"border-2 border-[#ccc] p-1 rounded-md select-none peer-checked:border-dark-theme-grey peer-checked:text-white font-bold peer-checked:bg-dark-theme-grey"}>{company}</span></label>
                                         </div>
                                     );
                                 })
@@ -388,11 +397,16 @@ export default function Filters(props) {
                     <div
                         className='flex items-center justify-end border-b border-x rounded-b-md border-darker-grey pb-2 pr-2 mx-4'>
                         <button className='rounded-md py-2.5 px-4 font-bold text-dark-theme-grey mr-2'
-                                onClick={clearFilters}>Clear
+                                onClick={() => {
+                                    clearFilters();
+                                    setShowFilters(false);
+                                }
+                                }>Clear
                         </button>
                         <button className='bg-dark-theme-grey rounded-md py-2.5 px-4 font-bold text-white'
                                 onClick={() => {
                                     setFilteredJobs(tempFilteredJobs);
+                                    setShowFilters(false);
                                 }}>Show results ({tempFilteredJobs.length})
                         </button>
                     </div>

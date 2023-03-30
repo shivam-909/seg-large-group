@@ -56,7 +56,6 @@ export default function JobList(props) {
         async function handleInfiniteScroll(){
             await throttle(async () => {
                 const endOfPage = window.innerHeight + window.scrollY >= document.body.offsetHeight - 10;
-                console.log(currentPage)
                 if (currentPage >= pageCount) {
                     window.removeEventListener("scroll", handleInfiniteScroll);
                 } else if (endOfPage) {

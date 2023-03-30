@@ -255,7 +255,7 @@ export default function EditJob() {
                         <p><strong>Requirements: </strong><button className={"float-right bg-dark-theme-grey rounded-md border-2 border-dark-theme-grey text-l text-white w-8 h-8"} onClick={() => {addRequirement("", reqID)}}><i className="fa-solid fa-plus"></i></button>
                             {requirements}
                         </p>
-                        <p><strong>Education: </strong><button className={"float-right bg-dark-theme-grey rounded-md border-2 border-dark-theme-grey text-l text-white w-8 h-8"} onClick={() => {addEducation("", eduID)}}><i className="fa-solid fa-plus"></i></button>
+                        <p><strong>Education: </strong><button className={"float-right bg-dark-theme-grey rounded-md border-2 border-dark-theme-grey text-l text-white w-8 h-8"} onClick={() => {addEducation(eduID, "", "", "")}}><i className="fa-solid fa-plus"></i></button>
                             {education}
                         </p>
                         <p><strong>Benefits: </strong><button className={"float-right bg-dark-theme-grey rounded-md border-2 border-dark-theme-grey text-l text-white w-8 h-8"} onClick={() => {addBenefit("", benefitID)}}><i className="fa-solid fa-plus"></i></button>

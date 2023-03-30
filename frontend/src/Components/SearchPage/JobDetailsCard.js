@@ -92,7 +92,7 @@ function JobDetailsCard(props) {
     }
 
     return (
-        <div className={`px-5 py-8 border-2 border-darker-grey rounded-xl bg-white ${props.fullScreen ? 'max-w-[1200px]' : 'max-w-[800px] overflow-y-scroll max-h-screen sticky'}`}>
+        <div className={`px-5 py-8 border-2 border-darker-grey rounded-xl bg-white overflow-y-scroll max-h-[95vh] sticky top-12 ${props.fullScreen ? 'max-w-[1200px]' : 'max-w-[800px]'}`}>
             <p className='font-bold text-xl'>{props.title}</p>
             <a href={'/profile/'+companyUser} target='_blank' rel={"noreferrer"}>{props.companyName}</a>
             <p className='mb-5'>{companyUser.location}</p>
