@@ -14,22 +14,6 @@ test('renders RegisterPage component without crashing', () => {
   );
 });
 
-//test('toggleRole function toggles visibility of Company-Fields and Seeker-Fields sections', () => {
-  // render(
-  //   <BrowserRouter>
-  //     <Routes>
-  //       <Route element={<RegisterPage />} />
-  //     </Routes>
-  //   </BrowserRouter>
-  // );
-  // const seekerFields = screen.getByRole('button', {name:'searcher', hidden: true});
-  // const companyFields = screen.getByRole('company', {hidden: true});
-  //
-  // expect(seekerFields).toHaveClass('hidden');
-  // expect(companyFields).not.toHaveClass('hidden');
-  // fireEvent.click(companyFields);
-  // expect(seekerFields).not.toHaveClass('hidden');
-  //expect(companyFields).toHaveClass('hidden');
   test('toggleRole function toggles visibility of Company-Fields and Seeker-Fields sections', () => {
     const { getByText, getByLabelText, queryByLabelText } = render(
       <BrowserRouter>
@@ -38,12 +22,11 @@ test('renders RegisterPage component without crashing', () => {
         </Routes>
       </BrowserRouter>
     );
-
     // Confirm that the Company-Fields section is not visible
     expect(queryByLabelText('Company name')).toBeNull();
 
     // Confirm that the Seeker-Fields section is visible
-    expect(screen.getByPlaceholderText('First name')).toBeInTheDocument();
+    expect(getByLabelText('First name')).toBeInTheDocument();
     expect(getByLabelText('Last name')).toBeInTheDocument();
 
     // Toggle role to Company
@@ -65,8 +48,8 @@ test('renders RegisterPage component without crashing', () => {
 
     // Confirm that the Company-Fields section is not visible
     expect(queryByLabelText('Company name')).toBeNull();
+  });
 
-});
 
 test('togglePasswordVisibility function toggles password visibility', () => {
   render(
@@ -102,7 +85,7 @@ test('checkPasswordMatch function validates passwords correctly', () => {
       </Routes>
     </BrowserRouter>
   );
-  const passwordField = screen.getByPlaceholder("Password");
+  const passwordField = screen.getByPlaceholderText("Password");
   expect(passwordField).toBeInTheDocument();
   const confirmPasswordField = screen.getByTestId('confirm-password');
   const errorText = screen.getByText('Passwords does not match');
