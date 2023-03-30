@@ -29,9 +29,15 @@ function SearchPage() {
                     }
 
                     const locationInput = document.getElementById("locationInput").value;
-                    const locInput = await Geocode.fromAddress(locationInput).then(response => {
-                        return {lat: response.results[0].geometry.location.lat, lon: response.results[0].geometry.location.lng};
-                    });
+                    let locInput;
+                    try {
+                        locInput = await Geocode.fromAddress(locationInput).then(response => {
+                            return {lat: response.results[0].geometry.location.lat, lon: response.results[0].geometry.location.lng};
+                        });
+                    }
+                    catch (err){
+                        console.log(err)
+                    }
 
                     for (const job of response.data.results) {
                         job.age = Math.floor(((Date.now() / 1000) - job.datePosted._seconds) / 86400);
@@ -41,15 +47,21 @@ function SearchPage() {
                             job.companyName = company.data.companyName;
                         });
 
-                        const jobLoc = await Geocode.fromAddress(job.location)
-                            .then(res => {
-                                return {
-                                    lat: res.results[0].geometry.location.lat,
-                                    lon: res.results[0].geometry.location.lng
-                                };
-                            })
-                            .catch(err => console.log(err));
-                        job.distance = distanceTo(locInput, jobLoc) * 0.000621371;
+                        try {
+                            const jobLoc = await Geocode.fromAddress(job.location)
+                                .then(res => {
+                                    return {
+                                        lat: res.results[0].geometry.location.lat,
+                                        lon: res.results[0].geometry.location.lng
+                                    };
+                                })
+                                .catch(err => console.log(err));
+                            job.distance = distanceTo(locInput, jobLoc) * 0.000621371;
+                        }
+                        catch(err){
+                            console.log(err)
+                            job.distance=10000;
+                        }
                     }
                     setLoading(false);
                     setJobs(response.data.results);

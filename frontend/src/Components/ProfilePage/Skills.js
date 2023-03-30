@@ -13,6 +13,7 @@ export default function Skills(props) {
                 return;
             }
             for (const skill of props.profile.searcher?.skills){
+                console.log(skill)
                 let skillVals = skill.split(",")
                 createSkill(skillVals[0], skillVals[1], skillVals[2])
             }
@@ -22,7 +23,7 @@ export default function Skills(props) {
     },[props.profile]) // eslint-disable-line
 
     function createSkill(skill, duration, interval){
-        setSkills( [...skills, <SkillCard id={count} skill={skill} val={duration} interval={interval} editable={props.isEditing}/>]);
+        setSkills( prevSkills => [...prevSkills, <SkillCard id={count} skill={skill} duration={duration} interval={interval} editable={props.isEditing}/>]);
         setCount(count + 1);
     }
     return (

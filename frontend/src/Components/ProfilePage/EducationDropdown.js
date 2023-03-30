@@ -23,13 +23,13 @@ export default function EducationDropdown(props) {
             <button className={"delete w-[15%]"} onClick={deleteEducation} editable={"true"}><i className="fa-solid fa-trash"></i></button>
             {!valid && <div className={"text-red"}>Please remove all commas</div>}
             <div className={"grid grid-cols-2 gap-2"}>
-                <input id={"grade"+props.id} onChange={validate} className={"grade w-full"} placeholder={"Grade"} editable={"true"} defaultValue={props.grade}/>
-                    <select id={"course"} defaultValue={props.type} className={"value w-full"} editable={"true"}>
-                        <option value={"GCSEs"}>GCSE</option>
-                        <option value={"A-Levels"}>A-levels</option>
-                        <option value={"Bachelor's"}>Bachelor's</option>
-                        <option value={"Master's"}>Master's</option>
-                        <option value={"PhD's"}>PhD</option>
+                <input id={"grade"+props.id} onChange={validate} className={"grade w-full"} placeholder={"Grade (optional)"} editable={"true"} defaultValue={props.grade}/>
+                    <select id={"course"} defaultValue={props.qualification} className={"value w-full"} editable={"true"}>
+                        <option value={"GCSE"}>GCSE</option>
+                        <option value={"A-Level"}>A-level</option>
+                        <option value={"Bachelors"}>Bachelor's</option>
+                        <option value={"Masters"}>Master's</option>
+                        <option value={"PhD"}>PhD</option>
                     </select>
             </div>
         </div>
