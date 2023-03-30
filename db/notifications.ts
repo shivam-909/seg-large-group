@@ -29,6 +29,7 @@ export async function CreateNotification(db: DB, notification: Notification): Pr
 export async function RetrieveNotification(db: DB, id: string): Promise<Notification | null> {
   const docRef = db.NotificationCollection().doc(id);
   const doc = await docRef.get();
+
   return doc.data() as Notification;
 }
 

@@ -51,8 +51,7 @@ export const run = () => {
     app.post('/auth/refresh', upload.none(), utils.Route(app, authroutes.Refresh));
 
     app.post('/api/notifications/add', upload.none(), utils.Route(app, notificationroutes.AddNotification));
-    app.get('/api/notifications/:id', utils.Route(app, notificationroutes.GetNotification));
-    app.get('/api/notifications/all/:id', upload.none(), utils.Route(app,notificationroutes.GetAllUserNotifs));
+    app.get('/api/notifications/:id', utils.Route(app, notificationroutes.GetAllUserNotifs));
     app.delete('/api/notifications/:id', upload.none(), utils.Route(app, notificationroutes.DeleteNotification));
 
     app.post('/api/jobs/search', upload.none(), utils.Route(app, searchroutes.SearchListings));
