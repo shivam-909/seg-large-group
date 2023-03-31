@@ -1,7 +1,7 @@
 import React from 'react';
 import { render, fireEvent, screen } from '@testing-library/react';
 import ApplicantCard from '../Components/Applicants/ApplicantCard';
-import {useNavigate} from "react-router-dom";
+import {BrowserRouter, Route, Routes, useNavigate} from "react-router-dom";
 
 
 describe('ApplicantsCard', () => {
@@ -9,24 +9,35 @@ describe('ApplicantsCard', () => {
         const props = {
             id: '1',
             name: 'Test1',
-            pfpUrl:'' ,
+            pfpUrl: '',
             email: 'test@gmail.com',
             status: 'Hired'
         };
-        render(<ApplicantCard {...props}/>);
+        render(
+            <BrowserRouter>
+                <Routes>
+                    <Route element={< ApplicantCard {...props}/>} />
+                </Routes>
+            </BrowserRouter>
+    );
     });
 
-    test ('render with props', () => {
-        const props = {
-            id: '1',
-            name: 'Test1',
-            email: 'test@gmail.com',
-            status: 'Hired'
-        };
-        const { getByLabelText, getByText } = render(<ApplicantCard {...props} />);
-        // const nameInput
-
-
-
-    });
 });
+//
+//     test ('render with props', () => {
+//         const props = {
+//             id: '1',
+//             name: 'Test1',
+//             email: 'test@gmail.com',
+//             status: 'Hired'
+//         };
+//         const  { getByLabelText, getByText } = render(<ApplicantCard {...props} />);
+//         const skillInput = getByLabelText('Skill');
+//         const durationInput = getByLabelText('Duration');
+//         const intervalSelect = getByLabelText('Interval');
+//         const deleteButton = getByText('Delete');
+//
+//
+//
+//     });
+// });

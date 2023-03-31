@@ -136,6 +136,7 @@ test('allows valid email input to pass', () => {
     waitFor(() => expect(rememberLogin).not.toBeChecked());
   });
 
+  //https://stackoverflow.com/questions/73184212/how-to-test-checkbox-checked-with-react-testing-library
   // test('toggles elememt when clicking the checkbox', () => {
   //    render(
   //     <BrowserRouter>
