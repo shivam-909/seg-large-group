@@ -160,7 +160,7 @@ export default function ApplyPage() {
                                 <p className='text-xl'>{job.company}</p>
                                 <p className='text-xl'>{job.location}</p>
                                 {job.compensation &&
-                                    <p className='text-xl'>{`£${job.compensation[0]}/${job.compensation[1]}`}</p>
+                                    <p className='text-xl'>{`£${job.compensation[0].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}/${job.compensation[1]}`}</p>
                                 }
                                 <button className='text-xl pt-3'><a className='underline' href={`/viewjob/${ID}`} target='_blank' rel='noreferrer'>View job</a></button>
                             </div>

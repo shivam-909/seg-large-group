@@ -215,15 +215,20 @@ export default function Filters(props) {
         updateJobResults();
     }
 
+    function toggleFilters() {
+        setShowFilters(!showFilters);
+        clearFilters();
+    }
+
     return (
         <div className='flex flex-col items-center justify-center'>
-            <button className='underline mb-3' onClick={() => setShowFilters(!showFilters)}>{showFilters ? 'Hide' : 'Show'} filters</button>
+            <button className='underline mb-3' onClick={toggleFilters}>{showFilters ? 'Hide' : 'Show'} filters</button>
             {showFilters &&
                 <div>
                     <div className='flex border-x border-t rounded-t-md border-darker-grey space-x-8 pt-3 px-3 mx-4'>
                         <div className='flex flex-col space-y-3 min-w-fit'>
                             <p className='font-bold'>Date posted</p>
-                            <label onFocus={() => selectRadio('anyTime')}><label><input type="radio" id={"anyTime"} name={'age'} value={""} className={"peer sr-only"} checked/><span className={"border-2 border-[#ccc] p-1 rounded-md select-none peer-checked:border-dark-theme-grey peer-checked:text-white font-bold peer-checked:bg-dark-theme-grey"}>Any time</span></label>
+                            <label onFocus={() => selectRadio('anyTime')}><label><input type="radio" id={"anyTime"} name={'age'} value={""} className={"peer sr-only"} defaultChecked={true}/><span className={"border-2 border-[#ccc] p-1 rounded-md select-none peer-checked:border-dark-theme-grey peer-checked:text-white font-bold peer-checked:bg-dark-theme-grey"}>Any time</span></label>
                             </label>
                             <label onFocus={() => selectRadio('past24Hours')}><label><input type="radio" id={"past24Hours"} name={'age'} value={"1"} className={"peer sr-only"}/><span className={"border-2 border-[#ccc] p-1 rounded-md select-none peer-checked:border-dark-theme-grey peer-checked:text-white font-bold peer-checked:bg-dark-theme-grey"}>Past 24 hours</span></label>
                             </label>
@@ -235,7 +240,7 @@ export default function Filters(props) {
 
                         <div className='flex flex-col space-y-3 min-w-fit'>
                             <p className='font-bold'>Distance</p>
-                            <label onFocus={() => selectRadio('anyDistance')}><label><input type="radio" id={"anyDistance"} name={'distance'} value={""} className={"peer sr-only"} checked/><span className={"border-2 border-[#ccc] p-1 rounded-md select-none peer-checked:border-dark-theme-grey peer-checked:text-white font-bold peer-checked:bg-dark-theme-grey"}>Any distance</span></label>
+                            <label onFocus={() => selectRadio('anyDistance')}><label><input type="radio" id={"anyDistance"} name={'distance'} value={""} className={"peer sr-only"} defaultChecked={true}/><span className={"border-2 border-[#ccc] p-1 rounded-md select-none peer-checked:border-dark-theme-grey peer-checked:text-white font-bold peer-checked:bg-dark-theme-grey"}>Any distance</span></label>
                             </label>
                             <label onFocus={() => selectRadio('1mile')}><label><input type="radio" id={"1mile"} name={'distance'} value={"1"} className={"peer sr-only"}/><span className={"border-2 border-[#ccc] p-1 rounded-md select-none peer-checked:border-dark-theme-grey peer-checked:text-white font-bold peer-checked:bg-dark-theme-grey"}>1 mile</span></label>
                             </label>
@@ -280,11 +285,6 @@ export default function Filters(props) {
                             {filters.schedule.length > 0 &&
                                 filters.schedule.map(schedule => {
                                     return (
-                                        // <div className='space-x-2' onClick={updateJobResults}>
-                                        //     <input id={schedule} name='schedule' type='checkbox' value={schedule}/>
-                                        //     <label
-                                        //         onClick={() => document.getElementById(schedule).checked = !document.getElementById(schedule).checked}>{schedule}</label>
-                                        // </div>
                                         <div className='space-x-2 space-y-5 mt-5' onClick={updateJobResults}>
                                             <label><input type="checkbox" id={schedule} name={'schedule'} value={schedule} className={"peer sr-only"}/><span className={"border-2 border-[#ccc] p-1 rounded-md select-none peer-checked:border-dark-theme-grey peer-checked:text-white font-bold peer-checked:bg-dark-theme-grey"}>{schedule}</span></label>
                                         </div>
@@ -298,11 +298,6 @@ export default function Filters(props) {
                             {filters.type.length > 0 &&
                                 filters.type.map(type => {
                                     return (
-                                        // <div className='space-x-2' onClick={updateJobResults}>
-                                        //     <input id={type} name='type' type='checkbox' value={type}/>
-                                        //     <label
-                                        //         onClick={() => document.getElementById(type).checked = !document.getElementById(type).checked}>{type}</label>
-                                        // </div>
                                     <div className='space-x-2 space-y-5 mt-5 w-auto' onClick={updateJobResults}>
                                         <label><input type="checkbox" id={type} name={'type'} value={type} className={"peer sr-only"}/><span className={"border-2 border-[#ccc] p-1 rounded-md select-none peer-checked:border-dark-theme-grey peer-checked:text-white font-bold peer-checked:bg-dark-theme-grey"}>{type}</span></label>
                                     </div>
@@ -316,11 +311,6 @@ export default function Filters(props) {
                             {filters.industry.length > 0 &&
                                 filters.industry.map(industry => {
                                     return (
-                                        // <div className='space-x-2' onClick={updateJobResults}>
-                                        //     <input id={industry} name='industry' type='checkbox' value={industry}/>
-                                        //     <label
-                                        //         onClick={() => document.getElementById(industry).checked = !document.getElementById(industry).checked}>{industry}</label>
-                                        // </div>
                                         <div className='space-x-2 space-y-5 mt-5 w-auto' onClick={updateJobResults}>
                                             <label><input type="checkbox" id={industry} name={'industry'} value={industry} className={"peer sr-only"}/><span className={"border-2 border-[#ccc] p-1 rounded-md select-none peer-checked:border-dark-theme-grey peer-checked:text-white font-bold peer-checked:bg-dark-theme-grey"}>{industry}</span></label>
                                         </div>
@@ -334,11 +324,6 @@ export default function Filters(props) {
                             {filters.location.length > 0 &&
                                 filters.location.map(location => {
                                     return (
-                                        // <div className='space-x-2' onClick={updateJobResults}>
-                                        //     <input id={location} name='location' type='checkbox' value={location}/>
-                                        //     <label
-                                        //         onClick={() => document.getElementById(location).checked = !document.getElementById(location).checked}>{location}</label>
-                                        // </div>
                                         <div className='space-x-2 space-y-5 mt-5 w-auto' onClick={updateJobResults}>
                                             <label><input type="checkbox" id={location} name={'location'} value={location} className={"peer sr-only"}/><span className={"border-2 border-[#ccc] p-1 rounded-md select-none peer-checked:border-dark-theme-grey peer-checked:text-white font-bold peer-checked:bg-dark-theme-grey"}>{location}</span></label>
                                         </div>
@@ -352,11 +337,6 @@ export default function Filters(props) {
                             {filters.company.length > 0 &&
                                 filters.company.map(company => {
                                     return (
-                                        // <div className='space-x-2' onClick={updateJobResults}>
-                                        //     <input id={company} name='company' type='checkbox' value={company}/>
-                                        //     <label
-                                        //         onClick={() => document.getElementById(company).checked = !document.getElementById(company).checked}>{company}</label>
-                                        // </div>
                                         <div className='space-x-2 space-y-5 mt-5 w-auto' onClick={updateJobResults}>
                                             <label><input type="checkbox" id={company} name={'company'} value={company} className={"peer sr-only"}/><span className={"border-2 border-[#ccc] p-1 rounded-md select-none peer-checked:border-dark-theme-grey peer-checked:text-white font-bold peer-checked:bg-dark-theme-grey"}>{company}</span></label>
                                         </div>
@@ -365,25 +345,19 @@ export default function Filters(props) {
                             }
                         </div>
                     </div>
-                    <div
-                        className='flex items-center justify-end border-b border-x rounded-b-md border-darker-grey pb-2 pr-2 mx-4'>
+                    <div className='flex items-center justify-end border-b border-x rounded-b-md border-darker-grey pb-2 pr-2 mx-4 pt-8'>
                         <button className='rounded-md py-2.5 px-4 font-bold text-dark-theme-grey mr-2'
-                                onClick={() => {
-                                    clearFilters();
-                                    setShowFilters(false);
-                                }
-                                }>Clear
+                                onClick={clearFilters}>Clear
                         </button>
                         <button className='bg-dark-theme-grey rounded-md py-2.5 px-4 font-bold text-white'
-                                onClick={() => {
-                                    setFilteredJobs(tempFilteredJobs);
-                                    setShowFilters(false);
-                                }}>Show results ({tempFilteredJobs.length})
+                                onClick={() => setFilteredJobs(tempFilteredJobs)}>Show results ({tempFilteredJobs.length})
                         </button>
                     </div>
                 </div>
             }
-            <JobList jobs={filteredJobs}/>
+            <div className='mt-12'>
+                <JobList jobs={filteredJobs}/>
+            </div>
         </div>
     );
 }

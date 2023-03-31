@@ -92,8 +92,6 @@ function LoginPage() {
             </button>
 
             <p className='text-center pt-4'>New user? <a className='LoginPage-link' href='/signup'>Sign up.</a></p>
-
-            <a className='text-center' href='/#'>Forgot your password?</a>
           </div>
       </div>
   );
