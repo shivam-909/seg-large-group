@@ -398,13 +398,16 @@ async function GenerateSearcherNotification(db: DB){
     for(let i=0; i< applications.length; i++){
         let application = applications[i];
 
-        if(application.status == Status.Interview.toString()){
+        if(application.status == 'Interview'){
+            console.log('Interview');
             content = searcherNotification.Interview.toString();
         }
-        else if(application.status == Status.Accepted.toString()){
+        else if(application.status == 'Accepted'){
+            console.log('Accepted');
             content = searcherNotification.Accepted.toString();
         }
-        else if(application.status == Status.Rejected.toString()){
+        else if(application.status == 'Rejected'){
+            console.log('Rejected');
             content = searcherNotification.Rejection.toString();
         }
         else{
@@ -437,10 +440,12 @@ async function GenerateCompanyNotification(db: DB){
     for(let i=0; i< applications.length; i++){
         let application = applications[i];
 
-        if(application.status == Status.Applied.toString()){
+        if(application.status == 'Applied'){
+            console.log('Applied');
             content = companyNotification.NewApplicant.toString();
         }
-        else if(application.status == Status.Archived.toString()){
+        else if(application.status == 'Archived'){
+            console.log('Archived');
             content = companyNotification.Withdrawal.toString();
         }
         else{
@@ -474,6 +479,7 @@ export async function SeedAllNotifications(db: DB): Promise<void> {
 
     await GenerateSearcherNotification(db);
     await GenerateCompanyNotification(db);
+    console.log('seeded notifications');
 
 }
 
