@@ -23,14 +23,23 @@ export function StringFromCommaSeparatedList(str: string): string[] {
 }
 
 export function ParseScreeningQuestions(str: string): Record<string, boolean> {
+    if(!str || str === ""){
+        return {};
+    }
     str = Buffer.from(str, 'base64').toString('ascii');
     const questions = JSON.parse(str);
     const parsedQuestions: Record<string, boolean> = {};
+    // Convert questions to a map of question -> true.
     for (const question of questions) {
-        parsedQuestions[question.question] = question.answer;
+        parsedQuestions[Object.keys(question)[0]] = Object.values(question)[0] as boolean;
     }
     return parsedQuestions;
 }
+
+export function ParseRequireCoverLetter(str: string): boolean {
+    return str === "true";
+}
+
 
 async function throwsError() {
     throw new Error(TestError);

@@ -25,7 +25,7 @@ it("create listing", async () => {
     formData.append("location", location);
 
     // Send POST request to register
-    const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}auth/register`, {
+    const response = await fetch(`http://localhost:8000/auth/register`, {
         method: 'POST',
         body: formData,
     });
@@ -47,15 +47,14 @@ it("create listing", async () => {
 
     // Create a listing
     const title = "Test Listing";
-    const compensation = "80000, 100000";
+    const compensation = "80000,year";
     const description = "Test Description";
     const job_location = "London";
-    const qualifications = "GCSE, A-Level";
-    const skills = "C++, Java, Python";
-    const job_type = "Full Time";
+    const qualifications = "French,Masters,Distinction";
+    const job_type = "Remote";
     const benefits = "Free Lunch, Free Snacks";
-    const requirements = "2 days in the office";
-    const schedule = "9-5, Mon-Fri";
+    const requirements = "C++,2,years";
+    const schedule = "Full-time";
     const screeningQuestions = JSON.stringify(
         [
             { "Do you have a degree?": true },
@@ -64,7 +63,6 @@ it("create listing", async () => {
 
     // Base 64 encode the screening questions
     const screeningQuestionsEscaped = Buffer.from(screeningQuestions).toString('base64');
-
 
     let listingFormData = new FormData();
 
@@ -78,10 +76,9 @@ it("create listing", async () => {
     listingFormData.append("requirements", requirements);
     listingFormData.append("schedule", schedule);
     listingFormData.append("screening_questions", screeningQuestionsEscaped);
-    listingFormData.append("skills", skills);
 
     // Send POST request to create listing
-    const listingResponse = await fetch(`${process.env.REACT_APP_BACKEND_URL}api/jobs`, {
+    const listingResponse = await fetch(`http://localhost:8000/api/jobs`, {
         method: 'POST',
         body: listingFormData,
         headers: {
@@ -100,16 +97,18 @@ it("create listing", async () => {
 
 
     // Retrieve the listing
-    const listingResponse2 = await fetch(`${process.env.REACT_APP_BACKEND_URL}api/jobs/${id}`, {
+    const listingResponse2 = await fetch(`http://localhost:8000/api/jobs/${id}`, {
         method: 'GET',
         headers: {
             'Authorization': `Bearer ${body.access}`
         }
     });
 
+
     // Expect 200 with listing in body. If its not 200, print the body.
     expect(listingResponse2.status).toEqual(200);
     const listingBody2 = await listingResponse2.json() as any;
+    console.log(listingBody2)
     expect(listingBody2).not.toBeNull();
     expect(listingBody2.listing).not.toBeNull();
 

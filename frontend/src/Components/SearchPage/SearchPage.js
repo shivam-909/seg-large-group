@@ -9,7 +9,7 @@ import Geocode from "react-geocode";
 
 Geocode.setApiKey("AIzaSyC0FpC_LZEQb2iyXwOEcyM57llwjE9hBOQ");
 
-function SearchPage() {
+export default function SearchPage() {
     const [isLoading, setLoading] = useState(false);
     const [jobs, setJobs] = useState([]);
     const [showJobTitleInputErrorMessage, setShowJobTitleInputErrorMessage] = useState(false);
@@ -40,10 +40,12 @@ function SearchPage() {
                     }
 
                     for (const job of response.data.results) {
+                        console.log(job)
                         job.age = Math.floor(((Date.now() / 1000) - job.datePosted._seconds) / 86400);
 
                         job.compensation[0] = job.compensation[0].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
                         await axios.get(`${process.env.REACT_APP_BACKEND_URL}api/company/${job.companyID}`).then(company => {
+                            console.log(company.data)
                             job.companyName = company.data.companyName;
                         });
 
@@ -120,5 +122,3 @@ function SearchPage() {
         </div>
     );
 }
-
-export default SearchPage;

@@ -31,7 +31,9 @@ function JobDetailsCard(props) {
         getUser()
         setSavedJopPost(user.searcher?.savedJobs.includes(props.id))
     },[user]) // eslint-disable-line
-
+    useEffect(() => {
+        setSavedJopPost(user.searcher?.savedJobs.includes(props.id))
+    },[props.id]) // eslint-disable-line
     useEffect(()=> {
         async function getCompany(){
             if(!props.companyID){
@@ -92,7 +94,7 @@ function JobDetailsCard(props) {
     }
 
     return (
-        <div className={`px-5 py-8 border-2 border-darker-grey rounded-xl bg-white overflow-y-scroll max-h-[95vh] sticky top-12 ${props.fullScreen ? 'max-w-[1200px]' : 'max-w-[800px]'}`}>
+        <div className={`px-5 py-8 border-2 border-darker-grey rounded-xl bg-white overflow-y-scroll max-h-[95vh] sticky top-14 ${props.fullScreen ? 'max-w-[1200px]' : 'max-w-[800px]'}`}>
             <p className='font-bold text-xl'>{props.title}</p>
             <a href={'/profile/'+companyUser} target='_blank' rel={"noreferrer"}>{props.companyName}</a>
             <p className='mb-5'>{companyUser.location}</p>
@@ -180,6 +182,7 @@ function JobDetailsCard(props) {
 
             <Urgent urgent={props.urgent} icon={clockIcon}/>
 
+            {props.age}
             <JobPostAge age={props.age}/>
         </div>
     );
