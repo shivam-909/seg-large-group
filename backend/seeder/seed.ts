@@ -27,7 +27,7 @@ import {
 //CONTROL
 const numCompanies = 15
 const numSearchers = 15
-const numJobListings = 20
+const numJobListings = 100
 const numApplications = 50
 
 //=====================================================USERS=====================================================
@@ -83,8 +83,6 @@ async function GenerateSearcher(db: DB): Promise<Searcher> {
     const savedJobs = await RetrieveRandomJobIDArr(db);
     const firstName = faker.name.firstName();
     const lastName = faker.name.lastName();
-    const skill = [faker.company.bsNoun() + "," + faker.datatype.number({'min': 1,'max': 10}).toString() + "," + faker.helpers.arrayElement(["weeks", "months", "years"])];
-    // const qualification = faker.helpers.arrayElements([faker.helpers.arrayElement(["Engineering", "Sales", "Marketing", "Finance"]) + "," + faker.helpers.arrayElement(["GCSEs", "Bachelors", "Masters", "PhD", "High School Diploma", "International Baccalaureate"]) + "," + faker.datatype.number({'min': 1,'max': 10}) + "," + faker.datatype.number({'min': 1,'max': 10}) + "," + faker.helpers.arrayElement(["weeks", "months", "years"])]);
     const cv = [firstName + " " + lastName + "'s CV", "https://seg-joblink.s3.eu-west-2.amazonaws.com/cv/1047a922-d91f-43dc-80f2-7273ee90acaa.png.pdf"]
 
     return new Searcher(
@@ -92,7 +90,7 @@ async function GenerateSearcher(db: DB): Promise<Searcher> {
         lastName,
         savedJobs,
         id,
-        skill,
+        GenerateSkills(),
         GenerateEducation(),
         cv,
     );
@@ -269,7 +267,7 @@ async function GenerateJobListing(db: DB): Promise<JobListing> {
     }
 
     const id = randomUUID();
-    const skill = faker.company.bsNoun() + "," + faker.datatype.number({'min': 1,'max': 10}).toString() + "," + faker.helpers.arrayElement(["weeks", "months", "years"]);
+
     return new JobListing(
         id,
         faker.name.jobTitle(),
@@ -286,9 +284,18 @@ async function GenerateJobListing(db: DB): Promise<JobListing> {
         GenerateEducation(),
         faker.date.past(),
         [faker.lorem.words(), faker.lorem.words(), faker.lorem.words()],
-    [skill, skill, skill],
+        GenerateSkills(),
         GetRandomQuestions()
 );
+}
+
+function GenerateSkills(): string[] {
+    const numSkills = Math.floor(Math.random() * 5) + 1;
+    const skills: string[] = [];
+    for (let i = 0; i < numSkills; i++) {
+        skills.push(faker.company.bsNoun() + ", " + faker.datatype.number({'min': 1,'max': 10}).toString() + ", " + "years");
+    }
+    return skills;
 }
 
 export async function SeedJobListings(db: DB): Promise<void> {

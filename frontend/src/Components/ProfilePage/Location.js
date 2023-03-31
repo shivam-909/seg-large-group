@@ -9,6 +9,9 @@ export class Location extends React.Component {
     }
 
     handleChange = address => {
+        if(this.props.onChange){
+            this.props.onChange();
+        }
         this.setState({ address: address });
     };
 
@@ -28,10 +31,10 @@ export class Location extends React.Component {
             >
                 {({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
                     <div>
-                        <input id={"location"}
+                        <input id={"locationInput"}
                             {...getInputProps({
                                 placeholder: 'Search City ...',
-                                className: 'location-search-input',
+                                className: 'location-search-input w-full border-[1px] border-dark-theme-grey p-2 rounded-md',
                             })}
                             disabled={this.props.disabled}
                         />
