@@ -1,6 +1,7 @@
 import {validateField} from "../Validation/validate";
 import showIcon from "../../icons/showIcon.png";
 import hideIcon from "../../icons/hideIcon.png";
+import TextInputBox from "../LoginPage/TextInputBox";
 import TextInputBoxWithIcon from "../LoginPage/TextInputBoxWithIcon";
 import {useNavigate} from 'react-router-dom';
 import {useState} from "react";
@@ -56,6 +57,12 @@ function ResetPassword(){
             <div data-testid="pw-input">
                 <TextInputBoxWithIcon id='password' type='password' value= {password} onChange ={event => setPassword(event.target.value)} onBlur={()=>{validateField("password",/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{8,20})/)}} placeholder='New Password' icon={<img id='toggleEye' src={showIcon} alt='' onClick={togglePasswordVisibility} className='cursor-pointer'/>}/>
                 <span id="passwordError" className='invisible absolute top-0'>Invalid password</span>
+                  <div className={"text-black rounded-md border-2 border-dark-theme-grey px-2 pb-2 mt-2"}>Please include:
+                    <div>• 8-20 Characters.</div>
+                    <div>• 1 Capital Letter.</div>
+                    <div>• 1 Number.</div>
+                    <div>• 1 Special Character: (.!@#$%^&*)</div>
+                  </div>
               </div>
 
               <div data-testid="confirmpw-input">

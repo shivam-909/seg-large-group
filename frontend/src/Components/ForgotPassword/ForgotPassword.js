@@ -1,5 +1,7 @@
 import TextInputBox from "../LoginPage/TextInputBox";
 import {validateField} from "../Validation/validate";
+import React from 'react';
+
 
 function ForgotPassword(){
   function submitButton(){

@@ -30,4 +30,6 @@ test('renders forgot password page', () => {
 
     waitFor(() => expect(button).toBeInTheDocument());
     waitFor(() => expect(button).toHaveAttribute('type', 'button'));
+
+
   });

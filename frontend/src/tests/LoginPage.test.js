@@ -134,10 +134,10 @@ test('allows valid email input to pass', () => {
     const rememberLogin = screen.queryByTestId('rememberLogin');
     waitFor(() => expect(rememberLogin).toBeInTheDocument());
     waitFor(() => expect(rememberLogin).not.toBeChecked());
-  })
+  });
 
   // test('toggles elememt when clicking the checkbox', () => {
-  //   render(
+  //    render(
   //     <BrowserRouter>
   //       <Routes>
   //         <Route element={<LoginPage />} />
@@ -145,11 +145,13 @@ test('allows valid email input to pass', () => {
   //     </BrowserRouter>
   //   );
 
-  // //   const rememberLogin = screen.queryByTestId('rememberLogin');
-  // //   // fireEvent.change{ target: { value: 'checked' } };
-  // //   fireEvent.click(rememberLogin);
-  // //   waitFor(() => expect(rememberLogin).toBeChecked());
-  // // })
+  //   const rememberLogin = screen.queryByTestId('rememberLogin');
+
+  //   fireEvent.click(rememberLogin);
+    
+  //   waitFor(() => expect(screen.queryByTestId('rememberLogin')).toBeInTheDocument());
+  //   waitFor(() => expect(rememberLogin).toBeChecked());
+  // });
 
 
 // test('togglePasswordVisibility function toggles password visibility', () => {

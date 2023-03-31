@@ -14,6 +14,7 @@ import ApplyPage from "./Components/ApplyPage/ApplyPage";
 import ViewApplicationPage from "./Components/Applicants/ViewApplicationPage";
 import JobPage from "./Components/JobPage/JobPage";
 
+
 export default function App() {
     return (
       <BrowserRouter>
@@ -38,9 +39,8 @@ export default function App() {
               <Route path="/signup" element={ <RegisterPage/> }/>
               <Route path="/saved" element={ <MyJobs/> }/>
               <Route path="/profile" element={ <UserProfilePage/> }/>
-              <Route path="/forgot" element={ <ForgotPassword/> }/>
+              <Route path="/forgotPassword" element={ <ForgotPassword/> }/>
               <Route path="/reset" element={ <ResetPassword/> }/>
-              <Route path="/viewjob/:id" element={ <ViewJob/> }/>
               <Route path="/viewjob/:id" element={ <JobPage/> }/>
           </Routes>
       </BrowserRouter>
