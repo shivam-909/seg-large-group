@@ -12,12 +12,19 @@ export async function getJobListingsForSearcher(db: DB, searcherId: string): Pro
     return jobListingsQuery.docs
         .map((doc) => doc.data() as JobListing)
         .filter((jobListing) => {
-            return jobListing.qualifications.some((jobListingQualification) => {
+            const hasQualification = jobListing.qualifications.some((jobListingQualification) => {
                 return searcher.qualifications.some((userQualification) => {
                     return isQualified(jobListingQualification, userQualification);
                 });
             });
+
+            const matchingSkill = jobListing.requirements && jobListing.requirements.some((requirement) => {
+                return hasMatchingSkill(searcher.skills, requirement);
+            });
+
+            return hasQualification || matchingSkill;
         })
+
         .sort((jobListingA, jobListingB) => {
             const jobListingAMatches = jobListingA.qualifications.filter((jobListingQualification: string) => searcher.qualifications.includes(jobListingQualification)).length;
             const jobListingBMatches = jobListingB.qualifications.filter((jobListingQualification: string) => searcher.qualifications.includes(jobListingQualification)).length;
@@ -25,12 +32,22 @@ export async function getJobListingsForSearcher(db: DB, searcherId: string): Pro
         });
 }
 
+function hasMatchingSkill(skills: string[], requirement: string): boolean {
+    const [requirementSkill, requirementDuration, requirementUnit] = requirement.split(", ");
+    return skills.some((skill) => {
+        const [skillName, skillDuration, skillUnit] = skill.split(", ");
+        return requirementSkill.toLowerCase() === skillName.toLowerCase() &&
+            requirementUnit === skillUnit &&
+            parseFloat(skillDuration) >= parseFloat(requirementDuration);
+    });
+}
+
 
 function isQualified(jobListingQual: string, userQual: string): boolean {
     const [jobSubject, jobLevel, jobGrade] = jobListingQual.split(", ");
     const [userSubject, userLevel, userGrade] = userQual.split(", ");
 
-    if (jobSubject !== userSubject || jobLevel !== userLevel) {
+    if (jobSubject.toLowerCase() !== userSubject.toLowerCase() || jobLevel !== userLevel) {
         return false;
     }
 
