@@ -6,6 +6,7 @@ export default function SkillCard(props) {
 
     function deleteSkill(){
         document.getElementById("Skill" + props.id).remove();
+
     }
     const validate = function(field, regex){
         let obj = document.getElementById(field);
@@ -33,7 +34,10 @@ export default function SkillCard(props) {
             </div>
             <button className={"delete w-[24%]"} onClick={deleteSkill} editable={"true"}><i className="fa-solid fa-trash"></i>Delete</button>
             </div>
-            {!valid && <div className={"text-red"} data-testid='Error'>Please remove all commas</div>}
+
+            {!valid && <div className={"text-red"} data-testid='Error'>
+            Please remove all commas
+            </div>}
         </div>
     );
 }
