@@ -100,19 +100,33 @@ function UserProfilePage() {
             toggleKeys(false);
             setVisible("errorBox", false);
 
-            const formData = new FormData();
-            formData.append('firstName', firstName);
-            formData.append('lastName', lastName);
-            formData.append('location', location);
+            const newUserData = new FormData();
+            newUserData.append('firstName', firstName);
+            newUserData.append('lastName', lastName);
+            newUserData.append('location', location);
 
-            await axios.patch(`${process.env.REACT_APP_BACKEND_URL}api/users/${id}`, formData).then(navigate(0))
+            let keyInputs = document.querySelectorAll("[id^=skillInput]");
+            let durationsInputs = document.querySelectorAll("[id=skillDuration]");
+            let intervalInputs = document.querySelectorAll("[id=skillInterval]");
+            for(let i = 0; i < keyInputs.length; i++) {
+                newUserData.append("skills[]",keyInputs[i].value+","+durationsInputs[i].value+","+intervalInputs[i].value)
+            }
+
+            let subjects = document.querySelectorAll("[id^=subject]");
+            let grades = document.querySelectorAll("[id^=grade]");
+            let courses = document.querySelectorAll("[id=course]");
+            for(let i = 0; i < subjects.length; i++) {
+                newUserData.append("qualifications[]",subjects[i].value+","+courses[i].value+","+grades[i].value)
+            }
+
+            await axios.patch(`${process.env.REACT_APP_BACKEND_URL}api/users/${id}`, newUserData).then(navigate(0))
         }
     }
     function validateEducation(){
         let subjects = document.querySelectorAll("[id^=subject]");
         let grades = document.querySelectorAll("[id^=grade]");
         for(let i = 0; i < subjects.length; i++) {
-            if (subjects[i].value === "" || grades[i].value === "" || subjects[i].value.includes(",") || grades[i].value.includes(",")){
+            if (subjects[i].value === "" || subjects[i].value.includes(",") || grades[i].value.includes(",")){
                 return false;
             }
         }
@@ -148,7 +162,6 @@ function UserProfilePage() {
             formData.append("file", files[0])
             await axios.post(`${process.env.REACT_APP_BACKEND_URL}api/storage/cv/${user.userID}`, formData).then(async res => {
                 const userPatch = new FormData();
-                console.log(file.name, res.data.URL)
                 userPatch.append("cv[]", file.name)
                 userPatch.append("cv[]", res.data.URL)
                 await axios.patch(`${process.env.REACT_APP_BACKEND_URL}api/users/${id}`, userPatch).then(navigate(0))
