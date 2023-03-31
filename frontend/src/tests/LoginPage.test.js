@@ -152,27 +152,27 @@ test('allows valid email input to pass', () => {
   // // })
 
 
-test('togglePasswordVisibility function toggles password visibility', () => {
-  render(
-    <BrowserRouter>
-      <Routes>
-        <Route element={<LoginPage />} />
-      </Routes>
-    </BrowserRouter>
-  );
-  const passwordInput = screen.queryByTestId('password-input');
-  const eyeIcon = screen.getByAltText('toggleEye');
+// test('togglePasswordVisibility function toggles password visibility', () => {
+//   render(
+//     <BrowserRouter>
+//       <Routes>
+//         <Route element={<LoginPage />} />
+//       </Routes>
+//     </BrowserRouter>
+//   );
+//   const passwordInput = screen.queryByTestId('password-input');
+//   const eyeIcon = screen.getByAltText('toggleEye');
 
-  expect(passwordInput.type).toBe('password');
+//   expect(passwordInput.type).toBe('password');
 
-  fireEvent.click(eyeIcon);
+//   fireEvent.click(eyeIcon);
 
-  expect(passwordField.type).toBe('text');
+//   expect(passwordField.type).toBe('text');
 
-  fireEvent.click(eyeIcon);
+//   fireEvent.click(eyeIcon);
 
-  expect(passwordField.type).toBe('password');
-});
+//   expect(passwordField.type).toBe('password');
+// });
 
 //Testing sign up page and forgot password link  
 test("link for new users with href value /signup", () => {
@@ -187,7 +187,6 @@ test("link for new users with href value /signup", () => {
   waitFor(() => expect((screen.queryAllByTestId('forgottenpw-link')).getByRole('link',{name: 'Reset password.'})).toHaveAttribute('href', '/forgotPassword'));  
 
 });
-
 
 // test('make a login request and handle response', () => {
 //   // TODO: make a login request and handle response

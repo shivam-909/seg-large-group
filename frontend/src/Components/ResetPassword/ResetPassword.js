@@ -63,7 +63,7 @@ function ResetPassword(){
                   <span id="passwordMismatchError" className='invisible absolute top-0'>Passwords do not match</span>
               </div>  
 
-            <button className="bg-dark-theme-grey rounded-md text-white p-2.5 flex items-center justify-center space-x-2" disabled={!password} onClick={submitNewPassword} id={"submitNewPassword"}>Submit</button>
+            <button className="bg-dark-theme-grey rounded-md text-white p-2.5 flex items-center justify-center space-x-2" disabled={!password} onClick={submitNewPassword} id={"submitNewPassword"}><a className='LoginPage-link' href='/login'>Submit</a></button>
           </div>
       </div>
     )

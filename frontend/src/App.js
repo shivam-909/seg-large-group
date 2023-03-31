@@ -10,7 +10,6 @@ import ResetPassword from './Components/ResetPassword/ResetPassword';
 import EditJob from "./Components/MyJobs/EditJob";
 import Applicants from "./Components/Applicants/Applicants";
 import CompanyRoute from "./Auth/CompanyRoute";
-import ResetPassword from './Components/ResetPassword/ResetPassword';
 import ApplyPage from "./Components/ApplyPage/ApplyPage";
 import ViewApplicationPage from "./Components/Applicants/ViewApplicationPage";
 import JobPage from "./Components/JobPage/JobPage";

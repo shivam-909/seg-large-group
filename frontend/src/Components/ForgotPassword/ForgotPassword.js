@@ -15,8 +15,10 @@ function ForgotPassword(){
           <div className='bg-white rounded-md sm:min-w-1/6 inline-grid px-12 py-7 space-y-3'>
             <p className=' font-bold text-2xl flex justify-center'>Forgot Your Password</p>
             <p className='justify-center flex text-2s'>Verify your email address</p>
-
-            <TextInputBox id='email' cache={localStorage.getItem("email")} className="w-full" onBlur={()=>{validateField("email",/^\w+(-?\w+)*@\w+(-?\w+)*(\.\w{2,10})+$/)}} placeholder='Email address'/>
+            
+            <div data-testid="email-input">
+              <TextInputBox id='email' cache={localStorage.getItem("email")} className="w-full" onBlur={()=>{validateField("email",/^\w+(-?\w+)*@\w+(-?\w+)*(\.\w{2,10})+$/)}} placeholder='Email address'/>
+            </div>
            
             <button className='bg-dark-theme-grey rounded-md text-white p-2.5 flex items-center justify-center space-x-2' onClick={submitButton} id={"submitButton"}>Submit</button>
           </div>
