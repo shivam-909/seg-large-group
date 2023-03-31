@@ -25,7 +25,7 @@ it("create listing", async () => {
     formData.append("location", location);
 
     // Send POST request to register
-    const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}auth/register`, {
+    const response = await fetch(`http://localhost:8000/auth/register`, {
         method: 'POST',
         body: formData,
     });
@@ -81,7 +81,7 @@ it("create listing", async () => {
     listingFormData.append("skills", skills);
 
     // Send POST request to create listing
-    const listingResponse = await fetch(`${process.env.REACT_APP_BACKEND_URL}api/jobs`, {
+    const listingResponse = await fetch(`http://localhost:8000/api/jobs`, {
         method: 'POST',
         body: listingFormData,
         headers: {
@@ -100,16 +100,18 @@ it("create listing", async () => {
 
 
     // Retrieve the listing
-    const listingResponse2 = await fetch(`${process.env.REACT_APP_BACKEND_URL}api/jobs/${id}`, {
+    const listingResponse2 = await fetch(`http://localhost:8000/api/jobs/${id}`, {
         method: 'GET',
         headers: {
             'Authorization': `Bearer ${body.access}`
         }
     });
 
+
     // Expect 200 with listing in body. If its not 200, print the body.
     expect(listingResponse2.status).toEqual(200);
     const listingBody2 = await listingResponse2.json() as any;
+    console.log(listingBody2)
     expect(listingBody2).not.toBeNull();
     expect(listingBody2.listing).not.toBeNull();
 
