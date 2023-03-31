@@ -214,8 +214,8 @@ export default function EditJob() {
         jobListing.append('coverLetterRequired', coverLetterRequired);
 
 
-        isEdit ? await axios.patch(`http://localhost:8000/api/jobs/${id}`, jobListing).then(navigate(-1)) :
-            await axios.post(`http://localhost:8000/api/jobs/`, jobListing, {headers: {
+        isEdit ? await axios.patch(`${process.env.REACT_APP_BACKEND_URL}api/jobs/${id}`, jobListing).then(navigate(-1)) :
+            await axios.post(`${process.env.REACT_APP_BACKEND_URL}api/jobs/`, jobListing, {headers: {
                 Authorization: `Bearer ${localStorage.getItem("access")}`}}).then(navigate(-1));
     }
 
