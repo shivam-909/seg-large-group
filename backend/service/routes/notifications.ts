@@ -12,9 +12,10 @@ import Notification from "../../models/notification";
 import { RetrieveApplication } from "../../db/applications";
 import { RetrieveJobListing } from "../../db/jobs";
 import { RetrieveCompanyByID } from "../../db/companies";
-import { RetrieveFullUserByID } from "../../db/users";
+import {RetrieveFullUserByID, RetrieveUserBySearcherID} from "../../db/users";
 import *  as validate from "../routes/validation/notifications";
 import notification from "../../models/notification";
+import {RetrieveSearcherByID} from "../../db/searchers";
 
 export function AddNotification(db: DB): Handler {
   return async (req: Request, res: Response, next: NextFunction) => {
@@ -67,11 +68,17 @@ export function GetAllUserNotifs(db: DB): Handler {
       }
 
       if (user?.company) {
-
-        const searcher = await RetrieveFullUserByID(db, application.searcher);
-        firstName = searcher?.searcher?.firstName;
-        lastName = searcher?.searcher?.lastName;
-        applyingUserID = searcher?.userID;
+        const searcher = await RetrieveSearcherByID(db, application.searcher);
+        const searchUser = await RetrieveUserBySearcherID(db, application.searcher)
+        if(!searcher){
+          throw new Error(errors.ErrorSearcherNotFound);
+        }
+        if(!user){
+          throw new Error(errors.ErrorUserNotFound);
+        }
+        firstName = searcher.firstName;
+        lastName = searcher.lastName;
+        applyingUserID = searchUser?.userID;
 
       }
 
