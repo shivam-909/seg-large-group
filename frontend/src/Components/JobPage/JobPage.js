@@ -60,7 +60,6 @@ export default function JobPage() {
                                 requirements={job.requirements}
                                 benefits={job.benefits}
                                 description={job.description}
-                                age={job.age}
                                 fullScreen={true}
                             />
                         </div>

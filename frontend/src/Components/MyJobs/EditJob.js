@@ -12,6 +12,8 @@ import SkillCard from "../ProfilePage/SkillCard";
 import Loading from "../Loading/Loading";
 import {Location} from "../ProfilePage/Location";
 import EducationDropdown from "../ProfilePage/EducationDropdown";
+import QuestionCard from "./QuestionCard";
+window.Buffer = window.Buffer || require("buffer").Buffer;
 
 export default function EditJob() {
     const navigate = useNavigate();
@@ -28,7 +30,6 @@ export default function EditJob() {
     const [reqID, setReqID] = useState(0);
     const [benefitID, setBenefitID] = useState(0);
     const [questionID, setQuestionID] = useState(0);
-
     const [loading, setLoading] = useState(false);
 
     useEffect(() => {
@@ -43,7 +44,8 @@ export default function EditJob() {
     },[user])
 
     useEffect(() => {
-        validate()
+        setLoading(true);
+        validate().then(() => {setLoading(false)})
     }, []) // eslint-disable-line
 
     async function verifyCompany(){
@@ -80,18 +82,14 @@ export default function EditJob() {
                     let qual = response.data.qualifications[i].split(",")
                     addEducation(i,qual[0], qual[1], qual[2]);
                 }
-                for (let i = 0; i < response.data.screeningQuestions?.length; i++) {
-                    let question = response.data.screeningQuestions[i][0]
-                    addQuestion(question, i)
+                let x = 0;
+                for (const question in response.data.screeningQuestions){
+                    addQuestion(question, response.data.screeningQuestions[question],x)
+                    setQuestionID(x);
+                    x++;
                 }
-                setLoading(false);
             })
-            setLoading(false);
         }
-        else{
-            setLoading(false);
-        }
-        setLoading(false);
     }
 
 
@@ -100,7 +98,6 @@ export default function EditJob() {
         if (await verifyCompany()) {
             if(job.length === 0){
                 await getDefaultValues(); // eslint-disable-line
-                setLoading(false);
             }
         } else {
             navigate(-1);
@@ -114,7 +111,7 @@ export default function EditJob() {
         let description = document.getElementById("description").value;
         let compensation = document.getElementById("compensation").value;
         let compensationRate = document.getElementById("compensationRate").value;
-        let coverLetterRequired = document.querySelector('input[name="coverLetterRequired"]:checked').value;
+        let coverLetterRequired = document.querySelector('input[name="requireCoverLetter"]:checked').value;
         let fullTime = document.getElementById("fullTime").checked;
         let partTime = document.getElementById("partTime").checked;
         let internship = document.getElementById("internship").checked;
@@ -176,6 +173,27 @@ export default function EditJob() {
             jobListing.append("requirements","")
         }
 
+        let questions = document.querySelectorAll("[id=Question]")
+        let required = document.querySelectorAll("[id=QuestionRequired]")
+        let screeningQuestions = []
+        if (questions.length > 0) {
+            for(let i = 0; i < questions.length; i++){
+                if (questions[i].value === ""){
+                    setVisible("errorBox", true);
+                    return;
+                }
+                const screeningQuestion = {
+                        [questions[i].value]: required[i].checked
+                    }
+                screeningQuestions.push(screeningQuestion)
+            }
+            let encoded = Buffer.from(JSON.stringify(screeningQuestions)).toString('base64');
+            jobListing.append("screeningQuestions",encoded)
+        }
+        else{
+            jobListing.append("screeningQuestions","")
+        }
+
         fullTime && jobListing.append("schedule[]","Full-time")
         partTime && jobListing.append("schedule[]","Part-time")
         internship && jobListing.append("schedule[]","Internship")
@@ -193,11 +211,12 @@ export default function EditJob() {
         jobListing.append('compensation', compensation);
         jobListing.append('compensation', compensationRate);
         jobListing.append('description', description);
-        jobListing.append('requireCoverLetter', coverLetterRequired);
+        jobListing.append('coverLetterRequired', coverLetterRequired);
 
 
-        isEdit ? await axios.patch(`${process.env.REACT_APP_BACKEND_URL}api/jobs/${id}`, jobListing).then(navigate(-1)) : await axios.post(`${process.env.REACT_APP_BACKEND_URL}api/jobs/`, jobListing, {headers: {
-                'Authorization': `Bearer ${localStorage.access}`}}).then(navigate(-1));
+        isEdit ? await axios.patch(`http://localhost:8000/api/jobs/${id}`, jobListing).then(navigate(-1)) :
+            await axios.post(`http://localhost:8000/api/jobs/`, jobListing, {headers: {
+                Authorization: `Bearer ${localStorage.getItem("access")}`}}).then(navigate(-1));
     }
 
     function addRequirement(defaultVal, i){
@@ -215,9 +234,9 @@ export default function EditJob() {
         setBenefitID(cur => cur+1);
         setBenefits( current => [...current, <Card id={i} defaultVal={defaultVal} name={"Benefit"}/>]);
     }
-    function addQuestion(defaultVal, i){
+    function addQuestion(defaultVal, defaultChecked , i){
         setQuestionID(cur => cur+1);
-        setQuestions( current => [...current, <Card id={i} defaultVal={defaultVal} name={"Question"}/>]);
+        setQuestions( current => [...current, <QuestionCard id={i} defaultVal={defaultVal} defaultChecked={defaultChecked} name={"Question"}/>]);
     }
 
     function validateDescription(){
@@ -258,7 +277,7 @@ export default function EditJob() {
                             <label><input type="checkbox" id={"apprenticeship"} defaultChecked={job.schedule?.includes("Apprenticeship")} value={"Apprenticeship"} className={"peer sr-only"}/><span className={"border-2 border-[#ccc] p-1 rounded-md m-2 select-none w-full peer-checked:border-dark-theme-grey peer-checked:text-white font-bold peer-checked:bg-dark-theme-grey"}>Apprenticeship</span></label>
                             <label><input type="checkbox" id={"contract"} defaultChecked={job.schedule?.includes("Contract")} value={"Contract"} className={"peer sr-only"}/><span className={"border-2 border-[#ccc] p-1 rounded-md m-2 select-none w-full peer-checked:border-dark-theme-grey peer-checked:text-white font-bold peer-checked:bg-dark-theme-grey"}>Contract</span></label>
                         </div>
-                        <p><strong>Destination: <span className={"text-red"}>&#42;</span></strong></p>
+                        <p><strong>Workplace: <span className={"text-red"}>&#42;</span></strong></p>
                         <div>
                             <label><input type="checkbox" id={"inoffice"} defaultChecked={job.type?.includes("In-Office")} value={"In-Office"} className={"peer sr-only"}/><span className={"border-2 border-[#ccc] p-1 rounded-md m-2 select-none peer-checked:border-dark-theme-grey peer-checked:text-white font-bold peer-checked:bg-dark-theme-grey"}>In-Office</span></label>
                             <label><input type="checkbox" id={"hybrid"} defaultChecked={job.type?.includes("Hybrid")} value={"Hybrid"} className={"peer sr-only"}/><span className={"border-2 border-[#ccc] p-1 rounded-md m-2 select-none peer-checked:border-dark-theme-grey peer-checked:text-white font-bold peer-checked:bg-dark-theme-grey"}>Hybrid</span></label>
@@ -269,16 +288,16 @@ export default function EditJob() {
                         <p><strong>Requirements: </strong><button className={"float-right bg-dark-theme-grey rounded-md border-2 border-dark-theme-grey text-l text-white w-8 h-8"} onClick={() => {addRequirement("", reqID)}}><i className="fa-solid fa-plus"></i></button>
                             {requirements}
                         </p>
-                        <p><strong>Education: </strong><button className={"float-right bg-dark-theme-grey rounded-md border-2 border-dark-theme-grey text-l text-white w-8 h-8"} onClick={() => {addEducation(eduID, "", "", "")}}><i className="fa-solid fa-plus"></i></button>
+                        <p><strong>Education: </strong><button className={"float-right bg-dark-theme-grey rounded-md border-2 border-dark-theme-grey text-lg text-white w-8 h-8"} onClick={() => {addEducation(eduID, "", "", "")}}><i className="fa-solid fa-plus"></i></button>
                             {education}
                         </p>
-                        <p><strong>Benefits: </strong><button className={"float-right bg-dark-theme-grey rounded-md border-2 border-dark-theme-grey text-l text-white w-8 h-8"} onClick={() => {addBenefit("", benefitID)}}><i className="fa-solid fa-plus"></i></button>
+                        <p><strong>Benefits: </strong><button className={"float-right bg-dark-theme-grey rounded-md border-2 border-dark-theme-grey text-lg text-white w-8 h-8"} onClick={() => {addBenefit("", benefitID)}}><i className="fa-solid fa-plus"></i></button>
                             {benefits}
                         </p>
-                        <p><strong>Screening Questions: </strong><button className={"float-right bg-dark-theme-grey rounded-md border-2 border-dark-theme-grey text-l text-white w-8 h-8"} onClick={() => {addQuestion("", questionID)}}><i className="fa-solid fa-plus"></i></button>
+                        <p><strong>Screening Questions: </strong><button className={"float-right bg-dark-theme-grey rounded-md border-2 border-dark-theme-grey text-lg text-white w-8 h-8"} onClick={() => {addQuestion("",false, questionID)}}><i className="fa-solid fa-plus"></i></button>
                             {questions}
                         </p>
-                        <p><strong>Require Cover Letter?: </strong><div className='float-right min-w-fit mt-2'>
+                        <p><strong className={"pr-2"}>Require Cover Letter?: </strong><div className='float-right min-w-fit mt-4'>
                             <label><input type="radio" name={'requireCoverLetter'} value={false} className={"peer sr-only"} defaultChecked={!job.requireCoverLetter}/><span className={"border-2 border-[#ccc] px-4 py-1 rounded-md select-none peer-checked:border-dark-theme-grey peer-checked:text-white font-bold peer-checked:bg-dark-theme-grey"}>No</span></label>
                             <label><input type="radio" name={'requireCoverLetter'} value={true} className={"peer sr-only"} defaultChecked={job.requireCoverLetter}/><span className={"border-2 border-[#ccc] px-4 py-1 rounded-md select-none peer-checked:border-dark-theme-grey peer-checked:text-white font-bold peer-checked:bg-dark-theme-grey"}>Yes</span></label>
                         </div></p>
