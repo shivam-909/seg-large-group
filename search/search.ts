@@ -1,4 +1,6 @@
 import DB from "../db/db";
+import JobListing from "../models/job";
+import {FindMatchesFromJLArray} from "../matchmaking/matchmaking";
 
 function boyerMoore(term: string, query: string): number {
     const m = query.length;
@@ -36,7 +38,7 @@ function boyerMoore(term: string, query: string): number {
     return -1;
 }
 
-export async function findJobListingsByQuery(db: DB, query: string) {
+export async function findJobListingsByQuery(db: DB, query: string, searcherID: string): Promise<JobListing[]> {
     const jobListingsRef = db.JobListingCollection();
     const jobListingsSnapshot = await jobListingsRef.get();
     const results: any[] = [];
@@ -60,7 +62,7 @@ export async function findJobListingsByQuery(db: DB, query: string) {
         });
     });
 
-    return results;
+    return FindMatchesFromJLArray(db, searcherID, results, true);
 }
 
 

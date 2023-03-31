@@ -8,8 +8,9 @@ import { findJobListingsByQuery } from "../../search/search";
 export function SearchListings(db: DB): Handler {
     return async (req: Request, res: Response, next: NextFunction) => {
         const query = req.body.term.toString().toLowerCase();
+        const searcherID = req.body.searcherID;
         await validate.isQuery(db,req.body);
-        const results = await findJobListingsByQuery(db, query);
+        const results = await findJobListingsByQuery(db, query, searcherID);
         res.status(200).json({ results });
     };
 }
