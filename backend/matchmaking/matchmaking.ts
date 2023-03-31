@@ -2,17 +2,17 @@ import JobListing from "../models/job";
 import {Searcher} from "../models/user";
 import DB from "../db/db";
 
-export async function FindMatchesFromAllJobs(db: DB, searcherID: string): Promise<void> {
+export async function FindMatchesFromAllJobs(db: DB, searcherID: string): Promise<JobListing[]> {
     const jobListingsQuery = await db.JobListingCollection().get();
     const jobListings = jobListingsQuery.docs.map((doc) => doc.data() as JobListing);
 
-    await FindMatchesFromJLArray(db, searcherID, jobListings);
+    return await FindMatchesFromJLArray(db, searcherID, jobListings);
 }
 
-export async function FindMatchesFromJLArray(db: DB, searcherID: string, jobListings: JobListing[]): Promise<JobListing[]> {
+export async function FindMatchesFromJLArray(db: DB, searcherID: string, jobListings: JobListing[], includeNonMatches: boolean = false): Promise<JobListing[]> {
     const searcherDoc = await db.SearcherCollection().doc(searcherID).get();
     const searcher = searcherDoc.data() as Searcher;
-    return jobListings
+    const matchingJobListings = jobListings
         .filter((jobListing) => {
             const hasQualification = jobListing.qualifications.some((jobListingQualification) => {
                 return searcher.qualifications.some((userQualification) => {
@@ -39,16 +39,28 @@ export async function FindMatchesFromJLArray(db: DB, searcherID: string, jobList
             const jobListingBTotalMatches = jobListingBRequirementMatches + jobListingBSkillMatches;
             return jobListingBTotalMatches - jobListingATotalMatches;
         });
+
+    if (includeNonMatches) {
+        const nonMatchingJobListings = jobListings.filter((jobListing) => !matchingJobListings.includes(jobListing));
+        return [...matchingJobListings, ...nonMatchingJobListings];
+    } else {
+        return matchingJobListings;
+    }
 }
 
 
 
 function HasMatchingSkill(skills: string[], requirement: string): boolean {
-    const [requirementSkill, requirementDuration, requirementUnit] = requirement.split(", ");
+    const [requirementSkill, requirementDuration, requirementUnit] = requirement.split(",");
     const requirementDurationInYears = ConvertDurationToYears(parseFloat(requirementDuration), requirementUnit);
     return skills.some((skill) => {
-        const [skillName, skillDuration, skillUnit] = skill.split(", ");
+        const [skillName, skillDuration, skillUnit] = skill.split(",");
         const skillDurationInYears = ConvertDurationToYears(parseFloat(skillDuration), skillUnit);
+
+        if (requirementSkill.toLowerCase() === skillName.toLowerCase() &&
+            skillDurationInYears >= requirementDurationInYears) {
+            console.log("Matched skill: " + skillName + " with duration: " + skillDurationInYears + " years")
+        }
         return requirementSkill.toLowerCase() === skillName.toLowerCase() &&
             skillDurationInYears >= requirementDurationInYears;
     });
@@ -72,11 +84,9 @@ function ConvertDurationToYears(duration: number, unit: string): number {
 }
 
 
-
-
 function IsQualified(jobListingQual: string, userQual: string): boolean {
-    const [jobSubject, jobLevel, jobGrade] = jobListingQual.split(", ");
-    const [userSubject, userLevel, userGrade] = userQual.split(", ");
+    const [jobSubject, jobLevel, jobGrade] = jobListingQual.split(",");
+    const [userSubject, userLevel, userGrade] = userQual.split(",");
 
     if (jobSubject.toLowerCase() !== userSubject.toLowerCase() || jobLevel !== userLevel) {
         return false;
