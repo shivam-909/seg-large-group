@@ -13,7 +13,6 @@ export default function Skills(props) {
                 return;
             }
             for (const skill of props.profile.searcher?.skills){
-                console.log(skill)
                 let skillVals = skill.split(",")
                 createSkill(skillVals[0], skillVals[1], skillVals[2])
             }
