@@ -1,4 +1,6 @@
 import DB from "../db/db";
+import JobListing from "../models/job";
+import {FindMatchesFromJLArray} from "../matchmaking/matchmaking";
 
 function boyerMoore(term: string, query: string): number {
     const m = query.length;
@@ -36,7 +38,7 @@ function boyerMoore(term: string, query: string): number {
     return -1;
 }
 
-export async function findJobListingsByQuery(db: DB, query:string) {
+export async function findJobListingsByQuery(db: DB, query: string, searcherID: string): Promise<JobListing[]> {
     const jobListingsRef = db.JobListingCollection();
     const jobListingsSnapshot = await jobListingsRef.get();
     const results: any[] = [];
@@ -44,15 +46,24 @@ export async function findJobListingsByQuery(db: DB, query:string) {
     jobListingsSnapshot.forEach((doc) => {
         const jobListing = doc.data();
         const title = jobListing.title.toLowerCase();
-        const titleLength = title.length;
+        const description = jobListing.description.toLowerCase();
+        const industry = jobListing.industry.toLowerCase();
+        const requirements = jobListing.requirements!.map((r) => r.split(",")[0].toLowerCase());
         const queryLength = query.length;
-        if (titleLength >= queryLength) {
-            const index = boyerMoore(title, query);
-            if (index >= 0) {
-                results.push(jobListing);
+
+        [title, description, industry, ...requirements].forEach((textToSearch) => {
+            const textLength = textToSearch.length;
+            if (textLength >= queryLength) {
+                const index = boyerMoore(textToSearch, query);
+                if (index >= 0) {
+                    results.push(jobListing);
+                }
             }
-        }
+        });
     });
 
-    return results;
+    return FindMatchesFromJLArray(db, searcherID, results, true);
 }
+
+
+
