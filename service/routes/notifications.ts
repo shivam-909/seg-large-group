@@ -32,7 +32,6 @@ export function GetAllUserNotifs(db: DB): Handler {
   return async (req: Request, res: Response, next: NextFunction) => {
 
     const id = req.params.id;
-    await validate.GetAllUserNotifs(db, id, req.body);
     const notifications = await notificationsdb.GetAllUserNotifs(db, id);
     let finalNotifs: any[] = [];
 
@@ -50,23 +49,30 @@ export function GetAllUserNotifs(db: DB): Handler {
       let lastName = null;
       let applyingUserID = null;
 
-      if(user) {
-        if (user?.searcher) {
-          if (application) jobListing = await RetrieveJobListing(db, application.jobListing);
-          if (jobListing) {
-            title = jobListing.title;
-            company = await RetrieveCompanyByID(db, jobListing.companyID);
-          }
-          if (company) companyName = company.companyName;
-        }
-        if (user?.company) {
-          if(application){
-            const searcher = await RetrieveFullUserByID(db, application.searcher);
-            firstName = searcher?.searcher?.firstName;
-            lastName = searcher?.searcher?.lastName;
-            applyingUserID = searcher?.userID;
-          }
-        }
+      if(!user){
+        throw new Error(errors.ErrorUserNotFound);
+      }
+
+      if(!application){
+        throw new Error(errors.ErrorApplicationNotFound);
+      }
+
+      if (user?.searcher) {
+        jobListing = await RetrieveJobListing(db, application.jobListing);
+        if (!jobListing) throw new Error(errors.ErrorJobListingNotFound);
+        title = jobListing.title;
+        company = await RetrieveCompanyByID(db, jobListing.companyID);
+        if(!company) throw new Error(errors.ErrorCompanyNotFound);
+        companyName = company.companyName;
+      }
+
+      if (user?.company) {
+
+        const searcher = await RetrieveFullUserByID(db, application.searcher);
+        firstName = searcher?.searcher?.firstName;
+        lastName = searcher?.searcher?.lastName;
+        applyingUserID = searcher?.userID;
+
       }
 
       const newNotification = {
@@ -81,8 +87,8 @@ export function GetAllUserNotifs(db: DB): Handler {
     }
 
     res.status(200).json({finalNotifs});
-
   }
+
 }
 
 
