@@ -1,9 +1,25 @@
 import {Location} from "../ProfilePage/Location";
 import React from "react";
+import { GooglePlacesAutocomplete } from '@react-google-maps/api';
+
 
 function SearchBar(props) {
     return (
       <div>
+      <GooglePlacesAutocomplete
+      apiKey="AIzaSyC0FpC_LZEQb2iyXwOEcyM57llwjE9hBOQ"
+      onLoad={(autocompleteService) => {
+        console.log('Autocomplete service loaded:', autocompleteService);
+      }}
+      onPlaceChanged={(place) => {
+        console.log('Place changed:', place);
+        // handle the selected place
+      }}
+      options={{
+        types: ['geocode'],
+        componentRestrictions: { country: 'uk' },
+      }}
+    />
         <div className='flex items-start justify-center space-x-4'>
             <div className='w-1/4'>
                 <input id='jobTitleInput' className="p-2 border rounded-md border-dark-theme-grey min-w-full" placeholder='Job title' onChange={props.onJobTitleInputChange}/>
