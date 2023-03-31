@@ -23,12 +23,15 @@ import {
     ErrorSearcherNotFound,
     ErrorUserNotFound
 } from "../service/public";
+import {RetrieveUserByCompanyID, RetrieveUserBySearcherID} from "../db/users";
+import {RetrieveJobListing} from "../db/jobs";
+import application from "../models/application";
 
 //CONTROL
 const numCompanies = 15
 const numSearchers = 15
 const numJobListings = 100
-const numApplications = 50
+const numApplications = 10
 
 //=====================================================USERS=====================================================
 
@@ -397,102 +400,118 @@ function GetRandomStatus(): string {
 //=====================================================NOTIFICATIONS=====================================================
 
 
-
-async function GenerateSearcherNotification(db: DB, searcherID: string, applicationID: string): Promise<Notification | undefined> {
-    const user = await usersdb.RetrieveUserBySearcherID(db, searcherID);
-
-    if (!user) {
-        console.log("user not found for " + searcherID)
-        throw new Error(ErrorUserNotFound)
-    }
-
-    const content = GetRandomNotificationEnum("searcher");
-
-    return {
-        id: randomUUID(),
-        content,
-        applicationID: applicationID,
-        created: faker.date.past(),
-        userID: user.userID,
-    };
+async function getApplications(db:DB): Promise<Application[]>{
+    const applicationSnapshot = await db.ApplicationCollection().get();
+    const applications: Application[] = [];
+    applicationSnapshot.forEach(application => {
+        applications.push(application.data());
+    });
+    return applications;
 }
 
-async function GenerateCompanyNotification(db: DB, companyID: string, applicationID: string): Promise<Notification | undefined> {
-    const user = await usersdb.RetrieveUserByCompanyID(db, companyID);
 
-    if (!user) {
-        console.log("user not found for " + companyID)
-        throw new Error(ErrorUserNotFound)
+async function GenerateSearcherNotification(db: DB, application: Application){
+
+    // const applications = await getApplications(db);
+    let content = "";
+
+    if(application.status == 'Interview'){
+        console.log('Interview: ');
+        console.log(application.id);
+        content = searcherNotification.Interview.toString();
+    }
+    else if(application.status == 'Accepted'){
+        console.log('Accepted: ');
+        console.log(application.id);
+
+        content = searcherNotification.Accepted.toString();
+    }
+    else if(application.status == 'Rejected'){
+        console.log('Rejected: ');
+        console.log(application.id);
+        content = searcherNotification.Rejection.toString();
     }
 
-    const content = GetRandomNotificationEnum("company");
-
-    return {
+    let searcher = await RetrieveUserBySearcherID(db, application.searcher);
+    if(!searcher){
+        throw new Error('searcher not found');
+    }
+    let searcherNotif = {
         id: randomUUID(),
         content,
-        applicationID: applicationID,
+        applicationID: application.id,
         created: faker.date.past(),
-        userID: user.userID,
-    };
+        userID: searcher.userID,
+    }
+    await notificationsdb.CreateNotification(db, searcherNotif);
+
+
+
+
+}
+
+async function GenerateCompanyNotification(db: DB, application: Application){
+
+    let content = '';
+    // const applications = await getApplications(db);
+    let companyNotifs : any[] = [];
+
+    if(application.status == 'Applied'){
+        console.log('Applied');
+        console.log(application.id);
+        content = companyNotification.NewApplicant.toString();
+    }
+    else if(application.status == 'Archived'){
+        console.log('Archived');
+        console.log(application.id);
+
+        content = companyNotification.Withdrawal.toString();
+    }
+
+
+    let jobListing = await RetrieveJobListing(db, application.jobListing);
+    if(!jobListing){
+        throw new Error('job listing not found');
+    }
+    let company = await RetrieveUserByCompanyID(db, jobListing.companyID);
+    if(!company){
+        throw new Error('company not found');
+    }
+    let companyNotif = {
+        id: randomUUID(),
+        content,
+        applicationID: application.id,
+        created: faker.date.past(),
+        userID: company.userID,
+    }
+    await notificationsdb.CreateNotification(db, companyNotif);
+
+
+
+
 }
 
 
 export async function SeedAllNotifications(db: DB): Promise<void> {
-    const applicationsRef = db.ApplicationCollection();
-    const applicationsSnapshot = await applicationsRef.get();
+    const applications = await getApplications(db)
+    for(let i=0; i<applications.length; i++){
 
-    for (const doc of applicationsSnapshot.docs) {
-        const searcherNotif = await GenerateSearcherNotification(
-            db,
-            doc.data().searcher,
-            doc.data().id
-        );
-
-        if (!searcherNotif) {
-            console.log("searcher notif not found for " + doc.data().searcher);
-            throw new Error(ErrorSearcherNotFound);
+        const application = applications[i];
+        if(application.status == 'Accepted' || application.status == 'Rejected' || application.status == 'Interview'){
+            await GenerateSearcherNotification(db, application);
         }
 
-        const jobListing = await jobsdb.RetrieveJobListing(
-            db,
-            doc.data().jobListing
-        );
-
-        if (!jobListing) {
-            console.log("job listing not found for " + doc.data().jobListing);
-            throw new Error(ErrorJobListingNotFound);
+        else{
+            await GenerateCompanyNotification(db, application);
         }
 
-        const companyNotif = await GenerateCompanyNotification(
-            db,
-            jobListing.companyID,
-            doc.data().id
-        );
-
-        if (!companyNotif) {
-            console.log("company notif not found for " + jobListing.companyID);
-            throw new Error(ErrorCompanyNotFound);
-        }
-
-        await notificationsdb.CreateNotification(db, searcherNotif);
-        await notificationsdb.CreateNotification(db, companyNotif);
     }
-    console.log(`Seeded notifications`);
+
+    console.log('seeded notifications');
+
 }
 
 
-function GetRandomNotificationEnum(type: "company" | "searcher"): string {
-    let enums: Record<string, string>;
-    if (type == "searcher")
-        enums = searcherNotification as unknown as Record<string, string>;
-    else {
-        enums = companyNotification as unknown as Record<string, string>;
-    }
-
-    const statusValues = Object.values(enums).filter((value) => typeof value === 'string');
-    const randomIndex = Math.floor(Math.random() * statusValues.length);
-    return statusValues[randomIndex] as string;
-}
 function GetRandomCity(): string {
     const cities = [
         "Bath",
