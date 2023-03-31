@@ -15,7 +15,8 @@ export function AddListing(db: DB): Handler {
   return async (req: Request, res: Response, next: NextFunction) => {
     const { title, compensation, description, location, type, schedule, industry, cover_letter_required, urgent, qualifications, benefits, requirements, screening_questions } = req.body;
     const newID = randomUUID();
-    console.log("RECEIVED CREATE JOB LISTING REQUEST")
+
+    console.log(screening_questions)
 
     // Get auth_username from headers.
     const companyID = req.headers.auth_username as string;
@@ -27,6 +28,8 @@ export function AddListing(db: DB): Handler {
     const parsedSchedule = StringFromCommaSeparatedList(schedule);
     const parsedScreeningQuestions = ParseScreeningQuestions(screening_questions);
     const datePosted = new Date();
+
+    console.log(parsedScreeningQuestions);
 
     const newJobListing = new JobListing(
       newID,
@@ -74,7 +77,7 @@ export function UpdateListing(db: DB): Handler {
   return async (req: Request, res: Response, next: NextFunction) => {
     const id = req.params.id;
     const listingData = req.body;
-    await validate.UpdateListing(db, id ,req.body);
+    await validate.UpdateListing(db, id, req.body);
     const listing = await jobsdb.RetrieveJobListing(db, id);
     const updatedJobListing = { ...listing, ...listingData };
 
