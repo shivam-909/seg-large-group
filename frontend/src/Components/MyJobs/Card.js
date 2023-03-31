@@ -7,9 +7,9 @@ export default function Card(props) {
     }
     return (
         <div id={props.name + props.id} tag={props.name} className={"my-2"}>
-            <input id={props.name} className={"key w-[72%]"} placeholder={props.name} editable={"true"} defaultValue={props.defaultVal}/>
+            <input id={props.name} className={"key w-[85%]"} placeholder={props.name} editable={"true"} defaultValue={props.defaultVal}/>
             <div>
-                <button className={"delete"} onClick={deleteSkill} editable={"true"}><i className="fa-solid fa-trash"></i></button>
+                <button className={"delete w-[12%]"} onClick={deleteSkill} editable={"true"}><i className="fa-solid fa-trash"></i></button>
             </div>
         </div>
     );

@@ -46,7 +46,7 @@ export default function Category(props) {
         const companyID = user.companyID;
         const formData = new FormData();
         formData.append('companyID', companyID); // eslint-disable-line
-        axios.post('http://localhost:8000/api/jobs/filter', formData)
+        axios.post(`${process.env.REACT_APP_BACKEND_URL}api/jobs/filter`, formData)
             .then(async response => {
                 if (response.data !== undefined) {
                     let filterJobs = response.data;
@@ -70,15 +70,15 @@ export default function Category(props) {
         const formData = new FormData();
         formData.append('status', filter);
         formData.append('searcher', user.searcherID); // eslint-disable-line
-        axios.post('http://localhost:8000/api/application/filter', formData)
+        axios.post(`${process.env.REACT_APP_BACKEND_URL}api/application/filter`, formData)
             .then(response => {
                 if (response.data !== undefined) {
                     let filterJobs = response.data.applications
                     setJobsList([])
                     for (let i = 0; i < filterJobs.length; i++) {
-                        axios.get("http://localhost:8000/api/jobs/" + filterJobs[i].jobListing)
+                        axios.get(`${process.env.REACT_APP_BACKEND_URL}api/jobs/${filterJobs[i].jobListing}`)
                             .then(async job => {
-                                const companyName = await axios.get("http://localhost:8000/api/company/"+job.data.companyID).then(company => {return company.data.companyName})
+                                const companyName = await axios.get(`${process.env.REACT_APP_BACKEND_URL}api/company/${job.data.companyID}`).then(company => {return company.data.companyName})
                                 await addCard(filterJobs[i].id, job.data.id, job.data.title, companyName, job.data.location, filterJobs[i].status);
                             })
                     }
@@ -98,15 +98,15 @@ export default function Category(props) {
         if (!user.userID){
             return;
         }
-        axios.get('http://localhost:8000/api/user/' + user.userID)
+        axios.get(`${process.env.REACT_APP_BACKEND_URL}api/user/${user.userID}`)
             .then(response => {
                 if (response.data.searcher?.savedJobs !== undefined) {
                     let savedJobs = response.data.searcher?.savedJobs
                     setJobsList([])
                     for (let i = 0; i < savedJobs.length; i++) {
-                        axios.get("http://localhost:8000/api/jobs/" + savedJobs[i])
+                        axios.get(`${process.env.REACT_APP_BACKEND_URL}api/jobs/${savedJobs[i]}`)
                             .then(async job => {
-                                const companyName = await axios.get("http://localhost:8000/api/company/"+job.data.companyID).then(company => {return company.data.companyName})
+                                const companyName = await axios.get(`${process.env.REACT_APP_BACKEND_URL}api/company/${job.data.companyID}`).then(company => {return company.data.companyName})
                                 await addCard("",job.data.id, job.data.title, companyName, job.data.location, "Saved");
                             })
                     }
@@ -128,7 +128,7 @@ export default function Category(props) {
             <div className={"display-block w-full"}>
                 {jobsList}
             </div>
-                : <div><Loading/></div>}
+                : <div><Loading className={"h-10 w-10 border-[3px] border-dark-theme-grey"}/></div>}
         </div>
     );
 }

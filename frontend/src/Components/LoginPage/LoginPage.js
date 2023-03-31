@@ -36,7 +36,7 @@ function LoginPage() {
     formData.append('email', email);
     formData.append('password', password);
 
-    axios.post('http://localhost:8000/auth/login', formData)
+    axios.post(`${process.env.REACT_APP_BACKEND_URL}auth/login`, formData)
         .then(response => {
           if (response.data.access !== undefined && response.data.refresh !== undefined) {
             localStorage.setItem("access", response.data.access);

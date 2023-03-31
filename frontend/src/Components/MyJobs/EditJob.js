@@ -10,6 +10,8 @@ import {setVisible} from "../Validation/validate";
 import ErrorBox from "../ErrorBox/ErrorBox";
 import SkillCard from "../ProfilePage/SkillCard";
 import Loading from "../Loading/Loading";
+import {Location} from "../ProfilePage/Location";
+import EducationDropdown from "../ProfilePage/EducationDropdown";
 
 export default function EditJob() {
     const navigate = useNavigate();
@@ -44,14 +46,14 @@ export default function EditJob() {
 
     async function verifyCompany(){
         if (isEdit){
-            return await axios.get("http://localhost:8000/api/jobs/"+id).then(response => { return response.data.companyID === user.company?.companyID || !user.company?.companyID});
+            return await axios.get(`${process.env.REACT_APP_BACKEND_URL}api/jobs/${id}`).then(response => { return response.data.companyID === user.company?.companyID || !user.company?.companyID});
         }
         return true;
     }
 
     async function getDefaultValues() {
         if (isEdit) {
-            await axios.get("http://localhost:8000/api/jobs/" + id).then(async response => {
+            await axios.get(`${process.env.REACT_APP_BACKEND_URL}api/jobs/${id}`).then(async response => {
                 setJob(prevJob => ({
                     ...prevJob,
                     title: response.data.title,
@@ -71,7 +73,8 @@ export default function EditJob() {
                     addBenefit(response.data.benefits[i], i);
                 }
                 for (let i = 0; i < response.data.qualifications?.length; i++) {
-                    addEducation(response.data.qualifications[i], i);
+                    let qual = response.data.qualifications[i].split(",")
+                    addEducation(i,qual[0], qual[1], qual[2]);
                 }
             })
             setLoading(false);
@@ -79,6 +82,7 @@ export default function EditJob() {
         else{
             setLoading(false);
         }
+        setLoading(false);
     }
 
 
@@ -87,6 +91,7 @@ export default function EditJob() {
         if (await verifyCompany()) {
             if(job.length === 0){
                 await getDefaultValues(); // eslint-disable-line
+                setLoading(false);
             }
         } else {
             navigate(-1);
@@ -95,7 +100,7 @@ export default function EditJob() {
 
     async function handleSubmit() {
         let title = document.getElementById("title").value;
-        let location = document.getElementById("location").value;
+        let location = document.getElementById("locationInput").value;
         let industry = document.getElementById("industry").value;
         let description = document.getElementById("description").value;
         let compensation = document.getElementById("compensation").value;
@@ -114,14 +119,17 @@ export default function EditJob() {
             return;
         }
         const formData = new FormData();
-        let qualifications = document.querySelectorAll("[id=Qualification]")
+        let subjects = document.querySelectorAll("[id^=subject]")
+        let qualifications = document.querySelectorAll("[id^=course]")
+        let grades = document.querySelectorAll("[id^=grade]")
+
         if(qualifications.length > 0){
-            for(const qual of qualifications){
-                if (qual.value === ""){
+            for(let i = 0; i < subjects.length; i++){
+                if (subjects[i].value === ""){
                     setVisible("errorBox", true)
                     return;
                 }
-                formData.append('qualifications[]', qual.value);
+                formData.append('qualifications[]', subjects[i].value + "," + qualifications[i].value + (grades[i] && "," + grades[i].value));
             }
         }
         else{
@@ -179,18 +187,18 @@ export default function EditJob() {
         formData.append('compensation', compensationRate);
         formData.append('description', description);
 
-        isEdit ? await axios.patch("http://localhost:8000/api/jobs/"+id, formData).then(navigate(-1)) : await axios.post("http://localhost:8000/api/jobs/add/", formData).then(navigate(-1));
+        isEdit ? await axios.patch(`${process.env.REACT_APP_BACKEND_URL}api/jobs/${id}`, formData).then(navigate(-1)) : await axios.post(`${process.env.REACT_APP_BACKEND_URL}api/jobs/`, formData).then(navigate(-1));
     }
 
     function addRequirement(defaultVal, i){
         let vals = defaultVal.split(",")
         setReqID(prev => prev+1)
-        setRequirements(current => [...current, <SkillCard id={i} skill={vals[0]} val={vals[1]} interval={vals[2]}/>]);
+        setRequirements(current => [...current, <SkillCard id={i} skill={vals[0]} duration={vals[1]} interval={vals[2]}/>]);
     }
 
-    function addEducation(defaultVal, i){
+    function addEducation(i, subject, qualification, grade){
         setEduID(prev => prev+1)
-        setEducation( current => [...current, <Card id={i} defaultVal={defaultVal} name={"Qualification"}/>]);
+        setEducation( current => [...current, <EducationDropdown id={i} subject={subject} qualification={qualification} grade={grade}/> ]);
     }
 
     function addBenefit(defaultVal, i){
@@ -230,32 +238,33 @@ export default function EditJob() {
                         </div>
                         <p><strong>Schedule: <span className={"text-red"}>&#42;</span></strong></p>
                         <div>
-                            <label><input type="checkbox" id={"fullTime"} defaultChecked={job.schedule?.includes("Full-time")} value={"Full-time"} className={"peer sr-only"}/><span className={"border-2 border-[#ccc] p-1 rounded-md m-2 peer-checked:bg-[#2196F3] select-none peer-checked:border-dark-theme-grey"}>Full-time</span></label>
-                            <label><input type="checkbox" id={"partTime"} defaultChecked={job.schedule?.includes("Part-time")} value={"Part-time"} className={"peer sr-only"}/><span className={"border-2 border-[#ccc] p-1 rounded-md m-2 peer-checked:bg-[#2196F3] select-none peer-checked:border-dark-theme-grey"}>Part-time</span></label>
-                            <label><input type="checkbox" id={"internship"} defaultChecked={job.schedule?.includes("Internship")} value={"Internship"} className={"peer sr-only"}/><span className={"border-2 border-[#ccc] p-1 rounded-md m-2 peer-checked:bg-[#2196F3] select-none peer-checked:border-dark-theme-grey"}>Internship</span></label>
-                            <label><input type="checkbox" id={"apprenticeship"} defaultChecked={job.schedule?.includes("Apprenticeship")} value={"Apprenticeship"} className={"peer sr-only"}/><span className={"border-2 border-[#ccc] p-1 rounded-md m-2 peer-checked:bg-[#2196F3] select-none w-full peer-checked:border-dark-theme-grey"}>Apprenticeship</span></label>
-                            <label><input type="checkbox" id={"contract"} defaultChecked={job.schedule?.includes("Contract")} value={"Contract"} className={"peer sr-only"}/><span className={"border-2 border-[#ccc] p-1 rounded-md m-2 peer-checked:bg-[#2196F3] select-none w-full peer-checked:border-dark-theme-grey"}>Contract</span></label>
+                            <label><input type="checkbox" id={"fullTime"} defaultChecked={job.schedule?.includes("Full-time")} value={"Full-time"} className={"peer sr-only"}/><span className={"border-2 border-[#ccc] p-1 rounded-md m-2 select-none peer-checked:border-dark-theme-grey peer-checked:text-white font-bold peer-checked:bg-dark-theme-grey"}>Full-time</span></label>
+                            <label><input type="checkbox" id={"partTime"} defaultChecked={job.schedule?.includes("Part-time")} value={"Part-time"} className={"peer sr-only"}/><span className={"border-2 border-[#ccc] p-1 rounded-md m-2 select-none peer-checked:border-dark-theme-grey peer-checked:text-white font-bold peer-checked:bg-dark-theme-grey"}>Part-time</span></label>
+                            <label><input type="checkbox" id={"internship"} defaultChecked={job.schedule?.includes("Internship")} value={"Internship"} className={"peer sr-only"}/><span className={"border-2 border-[#ccc] p-1 rounded-md m-2 select-none peer-checked:border-dark-theme-grey peer-checked:text-white font-bold peer-checked:bg-dark-theme-grey"}>Internship</span></label>
+                            <label><input type="checkbox" id={"apprenticeship"} defaultChecked={job.schedule?.includes("Apprenticeship")} value={"Apprenticeship"} className={"peer sr-only"}/><span className={"border-2 border-[#ccc] p-1 rounded-md m-2 select-none w-full peer-checked:border-dark-theme-grey peer-checked:text-white font-bold peer-checked:bg-dark-theme-grey"}>Apprenticeship</span></label>
+                            <label><input type="checkbox" id={"contract"} defaultChecked={job.schedule?.includes("Contract")} value={"Contract"} className={"peer sr-only"}/><span className={"border-2 border-[#ccc] p-1 rounded-md m-2 select-none w-full peer-checked:border-dark-theme-grey peer-checked:text-white font-bold peer-checked:bg-dark-theme-grey"}>Contract</span></label>
                         </div>
                         <p><strong>Destination: <span className={"text-red"}>&#42;</span></strong></p>
                         <div>
-                            <label><input type="checkbox" id={"inoffice"} defaultChecked={job.type?.includes("In-Office")} value={"In-Office"} className={"peer sr-only"}/><span className={"border-2 border-[#ccc] p-1 rounded-md m-2 peer-checked:bg-[#2196F3] select-none peer-checked:border-dark-theme-grey"}>In-Office</span></label>
-                            <label><input type="checkbox" id={"hybrid"} defaultChecked={job.type?.includes("Hybrid")} value={"Hybrid"} className={"peer sr-only"}/><span className={"border-2 border-[#ccc] p-1 rounded-md m-2 peer-checked:bg-[#2196F3] select-none peer-checked:border-dark-theme-grey"}>Hybrid</span></label>
-                            <label><input type="checkbox" id={"remote"} defaultChecked={job.type?.includes("Remote")} value={"Remote"} className={"peer sr-only"}/><span className={"border-2 border-[#ccc] p-1 rounded-md m-2 peer-checked:bg-[#2196F3] select-none peer-checked:border-dark-theme-grey"}>Remote</span></label>
+                            <label><input type="checkbox" id={"inoffice"} defaultChecked={job.type?.includes("In-Office")} value={"In-Office"} className={"peer sr-only"}/><span className={"border-2 border-[#ccc] p-1 rounded-md m-2 select-none peer-checked:border-dark-theme-grey peer-checked:text-white font-bold peer-checked:bg-dark-theme-grey"}>In-Office</span></label>
+                            <label><input type="checkbox" id={"hybrid"} defaultChecked={job.type?.includes("Hybrid")} value={"Hybrid"} className={"peer sr-only"}/><span className={"border-2 border-[#ccc] p-1 rounded-md m-2 select-none peer-checked:border-dark-theme-grey peer-checked:text-white font-bold peer-checked:bg-dark-theme-grey"}>Hybrid</span></label>
+                            <label><input type="checkbox" id={"remote"} defaultChecked={job.type?.includes("Remote")} value={"Remote"} className={"peer sr-only"}/><span className={"border-2 border-[#ccc] p-1 rounded-md m-2 select-none peer-checked:border-dark-theme-grey peer-checked:text-white font-bold peer-checked:bg-dark-theme-grey"}>Remote</span></label>
                         </div>
-                        <p><strong>Location: <span className={"text-red"}>&#42;</span> </strong> <input type="text" id="location" placeholder = "Please enter the Job Location" defaultValue={job.location}/></p>
+                        <p><strong>Location: <span className={"text-red"}>&#42;</span> </strong><Location defaultLocation={job.location} disabled={false}/></p>
                         <p><strong className={"float-left"}>Description: <span className={"text-red"}>&#42;</span></strong><textarea onChange={() => {validateDescription()}} id={"description"} defaultValue={job.description} className={"border-2 border-[#ccc] rounded-md p-2 w-full h-48"}/><div id={"descError"} className={"invisible top-0 absolute"}><div className={"text-red"}>Description too long.</div></div></p>
-                        <p><strong>Requirements: </strong><button className={"float-right bg-[#4b6df2] rounded-md border-2 border-dark-theme-grey text-l text-white w-8 h-8"} onClick={() => {addRequirement("", reqID)}}><i className="fa-solid fa-plus"></i></button>
+                        <p><strong>Requirements: </strong><button className={"float-right bg-dark-theme-grey rounded-md border-2 border-dark-theme-grey text-l text-white w-8 h-8"} onClick={() => {addRequirement("", reqID)}}><i className="fa-solid fa-plus"></i></button>
                             {requirements}
                         </p>
-                        <p><strong>Education: </strong><button className={"float-right bg-[#4b6df2] rounded-md border-2 border-dark-theme-grey text-l text-white w-8 h-8"} onClick={() => {addEducation("", eduID)}}><i className="fa-solid fa-plus"></i></button>
+                        <p><strong>Education: </strong><button className={"float-right bg-dark-theme-grey rounded-md border-2 border-dark-theme-grey text-l text-white w-8 h-8"} onClick={() => {addEducation(eduID, "", "", "")}}><i className="fa-solid fa-plus"></i></button>
                             {education}
                         </p>
-                        <p><strong>Benefits: </strong><button className={"float-right bg-[#4b6df2] rounded-md border-2 border-dark-theme-grey text-l text-white w-8 h-8"} onClick={() => {addBenefit("", benefitID)}}><i className="fa-solid fa-plus"></i></button>
+                        <p><strong>Benefits: </strong><button className={"float-right bg-dark-theme-grey rounded-md border-2 border-dark-theme-grey text-l text-white w-8 h-8"} onClick={() => {addBenefit("", benefitID)}}><i className="fa-solid fa-plus"></i></button>
                             {benefits}
                         </p>
+                        {/*<button className={"w-full border-2 border-dark-theme-grey rounded-md p-2 bg-dark-theme-grey text-white font-bold"}>Add Screening Questions</button>*/}
                         <ErrorBox message={"Please complete all fields"}/>
                         <button onClick={handleSubmit} className={"w-full border-2 border-dark-theme-grey rounded-md p-2 bg-blue text-white"}>Submit</button>
-                    </div> : <div className={"justify-center flex"}><Loading/></div>}
+                    </div> : <div className={"justify-center flex"}><Loading className={"h-10 w-10 border-[3px] border-dark-theme-grey"}/></div>}
                 </div>
             </div>
         </div>

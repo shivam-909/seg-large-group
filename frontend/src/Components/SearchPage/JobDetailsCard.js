@@ -4,33 +4,104 @@ import salaryIcon from "../../icons/salaryIcon.png";
 import PlaceholderCard from "./PlaceholderCard";
 import suitcaseIcon2 from "../../icons/suitcaseIcon2.png";
 import calendarIcon from "../../icons/calendarIcon.png";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import clockIcon from "../../icons/clockIcon.png";
 import Urgent from "./Urgent";
 import JobPostAge from "./JobPostAge";
 import openInNewTabIcon from "../../icons/openInNewTabIcon.png";
+import {useNavigate} from "react-router-dom";
+import axios from "axios";
+import {GetData} from "../../Auth/GetUser";
 
 function JobDetailsCard(props) {
-    console.log('props')
-    console.log(props)
+    const navigate = useNavigate()
     const [savedJobPost, setSavedJopPost] = useState(false);
+    const [user, setUser] = useState([])
+    const [companyUser, setCompany] = useState([])
+    const [hasApplied, setHasApplied] = useState(false);
 
-    function saveJobPost() {
-        // TODO: implement
-        setSavedJopPost(!savedJobPost);
+    useEffect(() => {
+        const getUser = async () => {
+            if (user.length === 0){
+                await GetData().then(r => {
+                    setUser(r)
+                });
+            }
+        };
+        getUser()
+        setSavedJopPost(user.searcher?.savedJobs.includes(props.id))
+    },[user]) // eslint-disable-line
+
+    useEffect(()=> {
+        async function getCompany(){
+            if(!props.companyID){
+                return;
+            }
+            const getCompanyUser = new FormData();
+            getCompanyUser.append("companyID", props.companyID)
+            await axios.post(`${process.env.REACT_APP_BACKEND_URL}api/user/typeid`, getCompanyUser).then(async r => {
+                setCompany(r.data.userID);
+                if (!user.searcher?.searcherID){
+                    return;
+                }
+                const userApplications = new FormData();
+                userApplications.append("searcher", user.searcher?.searcherID)
+                await axios.post(`${process.env.REACT_APP_BACKEND_URL}api/application/filter`, userApplications).then(res => {
+                    for (const appl of res.data.applications) {
+                        if (appl.searcher === user.searcher?.searcherID) {
+                            setHasApplied(true);
+                        }
+                    }
+                });
+            })
+        }
+        getCompany();
+    },[props.companyID, user]) // eslint-disable-line
+
+    async function saveJobPost() {
+        if (user.userID){
+            if(!savedJobPost){
+                const savedJobs = user.searcher?.savedJobs;
+                savedJobs.push(props.id)
+                const newUser = new FormData()
+                for (const job of savedJobs){
+                    newUser.append("savedJobs[]", job)
+                }
+                await axios.patch(`${process.env.REACT_APP_BACKEND_URL}api/users/${user.userID}`,newUser)
+            }
+            else{
+                const savedJobs = user.searcher?.savedJobs;
+                const index = savedJobs.indexOf(props.id)
+                if(index > -1){
+                    savedJobs.splice(index,1)
+                    const newUser = new FormData()
+                    for (const job of savedJobs){
+                        newUser.append("savedJobs[]", job)
+                    }
+                    await axios.patch(`${process.env.REACT_APP_BACKEND_URL}api/users/${user.userID}`,newUser)
+                }
+                else{
+                    console.log("job not saved")
+                }
+            }
+            setSavedJopPost(!savedJobPost);
+        }
+        else{
+            navigate("/login")
+        }
     }
 
     return (
-        <div className={`px-5 py-8 border-2 border-darker-grey rounded-xl bg-white ${props.fullScreen ? 'max-w-[1200px]' : 'max-w-[800px] overflow-y-scroll max-h-screen sticky'}`}>
+        <div className={`px-5 py-8 border-2 border-darker-grey rounded-xl bg-white overflow-y-scroll max-h-[95vh] sticky top-12 ${props.fullScreen ? 'max-w-[1200px]' : 'max-w-[800px]'}`}>
             <p className='font-bold text-xl'>{props.title}</p>
-            <a href='/' target='_blank'>{props.companyName}</a>
-            <p className='mb-5'>{props.location}</p>
+            <a href={'/profile/'+companyUser} target='_blank' rel={"noreferrer"}>{props.companyName}</a>
+            <p className='mb-5'>{companyUser.location}</p>
 
             <div className='flex space-x-5'>
-                <button className='bg-dark-theme-grey rounded-md py-2.5 px-4 font-bold text-white'><a href={`/apply/${props.id}`} target='_blank' rel='noreferrer'>Apply Now</a></button>
-                <button className='bg-darker-grey rounded-md w-11 flex items-center justify-center' onClick={saveJobPost}><img src={savedJobPost ? savedIcon : saveIcon} alt=''/></button>
+                <button className='bg-dark-theme-grey rounded-md py-2.5 px-4 font-bold text-white' onClick={() => {navigate(`/apply/${props.id}`)}} disabled={hasApplied}>{hasApplied ? "Applied" : "Apply Now"}</button>
+                { user.searcher && <button className='bg-darker-grey rounded-md w-11 flex items-center justify-center' onClick={saveJobPost}><img src={savedJobPost ? savedIcon : saveIcon} alt=''/></button>}
                 {!props.fullScreen &&
-                    <button className='bg-darker-grey rounded-md w-11 flex items-center justify-center'><a href={`/job/${props.id}`} target='_blank' rel='noreferrer'><img src={openInNewTabIcon} alt=''/></a></button>
+                    <button className='bg-darker-grey rounded-md w-11 flex items-center justify-center'><a href={`/viewjob/${props.id}`} target='_blank' rel='noreferrer'><img src={openInNewTabIcon} alt=''/></a></button>
                 }
             </div>
 
