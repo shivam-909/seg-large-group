@@ -2,57 +2,59 @@ import JobListing from "../models/job";
 import {Searcher} from "../models/user";
 import DB from "../db/db";
 
-export async function getJobListingsForSearcher(db: DB, searcherId: string): Promise<JobListing[]> {
-    const searcherDoc = await db.SearcherCollection().doc(searcherId).get();
-
-    const searcher = searcherDoc.data() as Searcher;
-
+export async function FindMatchesFromAllJobs(db: DB, searcherID: string): Promise<void> {
     const jobListingsQuery = await db.JobListingCollection().get();
+    const jobListings = jobListingsQuery.docs.map((doc) => doc.data() as JobListing);
 
-    return jobListingsQuery.docs
-        .map((doc) => doc.data() as JobListing)
+    await FindMatchesFromJLArray(db, searcherID, jobListings);
+}
+
+export async function FindMatchesFromJLArray(db: DB, searcherID: string, jobListings: JobListing[]): Promise<JobListing[]> {
+    const searcherDoc = await db.SearcherCollection().doc(searcherID).get();
+    const searcher = searcherDoc.data() as Searcher;
+    return jobListings
         .filter((jobListing) => {
             const hasQualification = jobListing.qualifications.some((jobListingQualification) => {
                 return searcher.qualifications.some((userQualification) => {
-                    return isQualified(jobListingQualification, userQualification);
+                    return IsQualified(jobListingQualification, userQualification);
                 });
             });
 
             const matchingSkill = jobListing.requirements && jobListing.requirements.some((requirement) => {
-                return hasMatchingSkill(searcher.skills, requirement);
+                return HasMatchingSkill(searcher.skills, requirement);
             });
 
             return hasQualification || matchingSkill;
         })
-
         .sort((jobListingA, jobListingB) => {
             const jobListingARequirementMatches = jobListingA.qualifications.filter((jobListingQualification: string) => searcher.qualifications.includes(jobListingQualification)).length;
             const jobListingBRequirementMatches = jobListingB.qualifications.filter((jobListingQualification: string) => searcher.qualifications.includes(jobListingQualification)).length;
             const jobListingASkillMatches = jobListingA.requirements ? jobListingA.requirements.reduce((totalMatches: number, requirement: string) => {
-                return totalMatches + (hasMatchingSkill(searcher.skills, requirement) ? 1 : 0);
+                return totalMatches + (HasMatchingSkill(searcher.skills, requirement) ? 1 : 0);
             }, 0) : 0;
             const jobListingBSkillMatches = jobListingB.requirements ? jobListingB.requirements.reduce((totalMatches: number, requirement: string) => {
-                return totalMatches + (hasMatchingSkill(searcher.skills, requirement) ? 1 : 0);
+                return totalMatches + (HasMatchingSkill(searcher.skills, requirement) ? 1 : 0);
             }, 0) : 0;
             const jobListingATotalMatches = jobListingARequirementMatches + jobListingASkillMatches;
             const jobListingBTotalMatches = jobListingBRequirementMatches + jobListingBSkillMatches;
             return jobListingBTotalMatches - jobListingATotalMatches;
         });
-
 }
 
-function hasMatchingSkill(skills: string[], requirement: string): boolean {
+
+
+function HasMatchingSkill(skills: string[], requirement: string): boolean {
     const [requirementSkill, requirementDuration, requirementUnit] = requirement.split(", ");
-    const requirementDurationInYears = convertDurationToYears(parseFloat(requirementDuration), requirementUnit);
+    const requirementDurationInYears = ConvertDurationToYears(parseFloat(requirementDuration), requirementUnit);
     return skills.some((skill) => {
         const [skillName, skillDuration, skillUnit] = skill.split(", ");
-        const skillDurationInYears = convertDurationToYears(parseFloat(skillDuration), skillUnit);
+        const skillDurationInYears = ConvertDurationToYears(parseFloat(skillDuration), skillUnit);
         return requirementSkill.toLowerCase() === skillName.toLowerCase() &&
             skillDurationInYears >= requirementDurationInYears;
     });
 }
 
-function convertDurationToYears(duration: number, unit: string): number {
+function ConvertDurationToYears(duration: number, unit: string): number {
     let convertedDuration: number;
 
     switch (unit) {
@@ -72,7 +74,7 @@ function convertDurationToYears(duration: number, unit: string): number {
 
 
 
-function isQualified(jobListingQual: string, userQual: string): boolean {
+function IsQualified(jobListingQual: string, userQual: string): boolean {
     const [jobSubject, jobLevel, jobGrade] = jobListingQual.split(", ");
     const [userSubject, userLevel, userGrade] = userQual.split(", ");
 
@@ -84,12 +86,12 @@ function isQualified(jobListingQual: string, userQual: string): boolean {
         return true;
     }
 
-    const gradePriority = getGradePriority(userLevel);
+    const gradePriority = GetGradePriority(userLevel);
     return gradePriority.indexOf(userGrade) <= gradePriority.indexOf(jobGrade);
 }
 
 
-function getGradePriority(level: string): string[] {
+function GetGradePriority(level: string): string[] {
     switch (level) {
         case "Bachelors":
             return ["1st", "2:1", "2:2", "3rd"];
