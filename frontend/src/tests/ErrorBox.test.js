@@ -3,14 +3,13 @@ import { render} from '@testing-library/react';
 import ErrorBox from '../Components/ErrorBox/ErrorBox';
 
 describe ('ErrorBox component', () => {
+const errorMessage ={
+    message: 'Error'
+};
+
     it ('should render component on the screen', () => {
-        render (<ErrorBox/>);
+        render (<ErrorBox error={errorMessage}/>);
         expect(true).toBeTruthy();
     });
-
-    // it ('renders message on the screen', () => {
-    //     render (<ErrorBox/>);
-    //     expect(message).toBeInTheDocument();
-    // });
 });
 

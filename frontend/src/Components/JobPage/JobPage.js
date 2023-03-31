@@ -38,7 +38,7 @@ export default function JobPage() {
     },[user]) // eslint-disable-line
 
     return (
-        <div>
+        <div data-testid='navbar'>
             <Navbar/>
             {isLoading ?
                 <div className='flex items-center justify-center mt-48'>

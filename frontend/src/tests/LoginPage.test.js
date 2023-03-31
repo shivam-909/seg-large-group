@@ -177,7 +177,7 @@ test('allows valid email input to pass', () => {
 // });
 
 //Testing sign up page and forgot password link  
-test("link for new users with href value /signup", () => {
+test("links with href value /signup and /forgotPassword", () => {
   render(
     <BrowserRouter>
       <Routes>
