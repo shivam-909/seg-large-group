@@ -3,7 +3,7 @@ import DB from "../../../db/db";
 import * as usersdb from "../../../db/users";
 import * as errors from "../../public";
 import { ValidEmail, ValidPassword } from "../auth";
-import {ValidateCompanyId, ValidateSearcherId} from "./checks";
+import {ValidateCompanyId, ValidateSearcherId, ValidateUserID} from "./checks";
 import {ErrorMissingProperty} from "../../public";
 
 
@@ -63,8 +63,5 @@ export async function GetUserByType(db:DB, req:any): Promise<void>{
 }
 
 export async function UserExists(db: DB, id: string): Promise<void> {
-    const user = await usersdb.RetrieveFullUserByID(db, id);
-    if (!user) {
-        throw new Error(errors.ErrorUserNotFound);
-    }
+    await ValidateUserID(db, id);
 }
