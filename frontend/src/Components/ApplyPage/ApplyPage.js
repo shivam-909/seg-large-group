@@ -3,7 +3,7 @@ import Navbar from "../Navbar/Navbar";
 import { Document, Page } from 'react-pdf/dist/esm/entry.webpack';
 import "react-pdf/dist/esm/Page/TextLayer.css";
 import "react-pdf/dist/esm/Page/AnnotationLayer.css";
-import {useParams} from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
 import axios from "axios";
 import {GetData} from "../../Auth/GetUser";
 import Loading from "../Loading/Loading";
@@ -15,6 +15,7 @@ export default function ApplyPage() {
     const [job, setJob] = useState({});
     const newCVId = crypto.randomUUID();
     const [loading, setLoading] = useState(true)
+    const navigate = useNavigate();
 
     const getUser = async () => {
         return await GetData();
@@ -22,7 +23,7 @@ export default function ApplyPage() {
 
     const getJob = async () => {
         return new Promise (async (resolve, reject) => {
-            await axios.get(`http://localhost:8000/api/jobs/${ID}`)
+            await axios.get(`${process.env.REACT_APP_BACKEND_URL}api/jobs/${ID}`)
                 .then(response => {
                     resolve(response.data);
                 })
@@ -35,7 +36,7 @@ export default function ApplyPage() {
 
     const getCompany = async (companyID) => {
         return new Promise (async (resolve, reject) => {
-            await axios.get(`http://localhost:8000/api/company/${companyID}`)
+            await axios.get(`${process.env.REACT_APP_BACKEND_URL}api/company/${companyID}`)
                 .then(response => {
                     resolve(response.data);
                 })
@@ -45,7 +46,7 @@ export default function ApplyPage() {
 
     const getSearcher = async (searcherID) => {
         return new Promise (async (resolve, reject) => {
-            await axios.get(`http://localhost:8000/api/searcher/${searcherID}`)
+            await axios.get(`${process.env.REACT_APP_BACKEND_URL}api/searcher/${searcherID}`)
                 .then(response => {
                     resolve(response.data);
                 })
@@ -107,6 +108,9 @@ export default function ApplyPage() {
         if (valid) {
             await submitApplication();
         }
+        else{
+            console.log("error")
+        }
     }
 
     function submitApplication() {
@@ -126,8 +130,9 @@ export default function ApplyPage() {
         formData.append('QnAs', JSON.stringify(QnAs));
         formData.append('coverLetter', coverLetter);
 
-        axios.post(`http://localhost:8000/api/applications/add`, formData)
+        axios.post(`${process.env.REACT_APP_BACKEND_URL}api/applications/add`, formData)
             .catch(err => console.log(err));
+        navigate("/");
     }
 
     function uploadFile(e) {
@@ -135,7 +140,7 @@ export default function ApplyPage() {
         const file = e.target.files[0];
         formData.append('file', file);
         if (file) {
-            axios.post(`http://localhost:8000/api/storage/cv/${newCVId}`, formData)
+            axios.post(`${process.env.REACT_APP_BACKEND_URL}api/storage/cv/${newCVId}`, formData)
                 .then(response => {
                     setJob({...job, cv: [file.name, response.data.URL]});
                 });

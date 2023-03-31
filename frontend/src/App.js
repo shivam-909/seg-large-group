@@ -7,10 +7,10 @@ import MyJobs from "./Components/MyJobs/MyJobs";
 import UserProfilePage from "./Components/ProfilePage/UserProfilePage";
 import EditJob from "./Components/MyJobs/EditJob";
 import Applicants from "./Components/Applicants/Applicants";
-import ViewJob from "./Components/ViewJobs/ViewJob";
 import CompanyRoute from "./Auth/CompanyRoute";
 import ApplyPage from "./Components/ApplyPage/ApplyPage";
 import ViewApplicationPage from "./Components/Applicants/ViewApplicationPage";
+import JobPage from "./Components/JobPage/JobPage";
 
 export default function App() {
     return (
@@ -34,7 +34,7 @@ export default function App() {
               <Route path="/" element={ <SearchPage/> }/>
               <Route path="/login" element={ <LoginPage/> }/>
               <Route path="/signup" element={ <RegisterPage/> }/>
-              <Route path="/viewjob/:id" element={ <ViewJob/> }/>
+              <Route path="/viewjob/:id" element={ <JobPage/> }/>
           </Routes>
       </BrowserRouter>
   );

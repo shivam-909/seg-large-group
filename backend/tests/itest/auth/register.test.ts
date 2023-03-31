@@ -18,7 +18,7 @@ test('register user', async () => {
     formData.append('pfp_url', 'TestpfpUrl');
     formData.append('location', 'London');
 
-    const response = await fetch('http://localhost:8000/auth/register', {
+    const response = await fetch(`http://localhost:8000/auth/register`, {
         method: 'POST',
         body: formData,
     });

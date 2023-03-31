@@ -7,7 +7,7 @@ export default function ApplicantCard(props) {
     const navigate = useNavigate();
     const [modalIsOpen, setIsOpen] = useState(false);
     return (
-        <div className='border-2 border-darker-grey rounded-xl w-full p-4 m-2'>
+        <div className='border-2 border-darker-grey rounded-xl w-full p-4 m-2 shadow-md'>
             <div className={"float-right"}>
                 <button onClick={() => {setIsOpen(true)}} className={"px-5 pb-2"}><i className="fa-solid fa-ellipsis-vertical text-2xl"></i></button>
                 <UpdateApplicantStatus modalIsOpen={modalIsOpen} closeModal={() => {setIsOpen(false)}} id={props.id} status={props.status}/> </div>
@@ -41,7 +41,7 @@ export function UpdateApplicantStatus(props){
     async function changeStatus(newStatus){
         const formData = new FormData();
         formData.append("status",newStatus)
-        await axios.patch("http://localhost:8000/api/applications/"+props.id,formData).then(navigate(0))
+        await axios.patch(`${process.env.REACT_APP_BACKEND_URL}api/applications/${props.id}`,formData).then(navigate(0))
     }
     return (
         <div>
