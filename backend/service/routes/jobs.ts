@@ -3,7 +3,7 @@ import { NextFunction, Request, Response } from "express";
 import DB from "../../db/db";
 import JobListing from "../../models/job";
 import * as jobsdb from "../../db/jobs";
-import { ErrorFailedToCreateListing, ErrorJobListingNotFound, ErrorNoMatchingListings, Handler } from "../public";
+import { ErrorFailedToCreateListing, Handler } from "../public";
 import { randomUUID } from "crypto";
 import { ParseScreeningQuestions, StringFromCommaSeparatedList } from './routes';
 import * as validate from "../routes/validation/jobs";
@@ -15,7 +15,6 @@ export function AddListing(db: DB): Handler {
   return async (req: Request, res: Response, next: NextFunction) => {
     const { title, compensation, description, location, type, schedule, industry, cover_letter_required, urgent, qualifications, benefits, requirements, screening_questions } = req.body;
     const newID = randomUUID();
-    console.log("RECEIVED CREATE JOB LISTING REQUEST")
 
     // Get auth_username from headers.
     const companyID = req.headers.auth_username as string;
