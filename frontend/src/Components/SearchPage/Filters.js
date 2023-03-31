@@ -347,10 +347,10 @@ export default function Filters(props) {
                     </div>
                     <div className='flex items-center justify-end border-b border-x rounded-b-md border-darker-grey pb-2 pr-2 mx-4 pt-8'>
                         <button className='rounded-md py-2.5 px-4 font-bold text-dark-theme-grey mr-2'
-                                onClick={clearFilters}>Clear
+                                onClick={() => {clearFilters(); setShowFilters(false)}}>Clear
                         </button>
                         <button className='bg-dark-theme-grey rounded-md py-2.5 px-4 font-bold text-white'
-                                onClick={() => setFilteredJobs(tempFilteredJobs)}>Show results ({tempFilteredJobs.length})
+                                onClick={() => {setFilteredJobs(tempFilteredJobs); setShowFilters(false)}}>Show results ({tempFilteredJobs.length})
                         </button>
                     </div>
                 </div>
