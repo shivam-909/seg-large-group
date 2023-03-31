@@ -3,14 +3,22 @@ import 'express-async-errors';
 import *  as validate from "../routes/validation/search";
 import DB from "../../db/db";
 import {Handler} from "../public";
-import { findJobListingsByQuery } from "../../search/search";
+import {FindJobListingsByQuery, MatchmadeSearch} from "../../search/search";
 
 export function SearchListings(db: DB): Handler {
     return async (req: Request, res: Response, next: NextFunction) => {
-        const query = req.body.term.toString().toLowerCase();
-        const searcherID = req.body.searcherID;
+        const term = req.body.term.toString().toLowerCase();
         await validate.isQuery(db,req.body);
-        const results = await findJobListingsByQuery(db, query, searcherID);
-        res.status(200).json({ results });
+        if (req.body.searcherID) {
+            const searcherID = req.body.searcherID;
+            const results = await MatchmadeSearch(db, term, searcherID);
+            res.status(200).json({ results });
+            return;
+        }
+        else {
+            const results = await FindJobListingsByQuery(db, term);
+            res.status(200).json({ results });
+            return;
+        }
     };
 }
