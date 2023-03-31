@@ -26,21 +26,50 @@ export async function getJobListingsForSearcher(db: DB, searcherId: string): Pro
         })
 
         .sort((jobListingA, jobListingB) => {
-            const jobListingAMatches = jobListingA.qualifications.filter((jobListingQualification: string) => searcher.qualifications.includes(jobListingQualification)).length;
-            const jobListingBMatches = jobListingB.qualifications.filter((jobListingQualification: string) => searcher.qualifications.includes(jobListingQualification)).length;
-            return jobListingBMatches - jobListingAMatches;
+            const jobListingARequirementMatches = jobListingA.qualifications.filter((jobListingQualification: string) => searcher.qualifications.includes(jobListingQualification)).length;
+            const jobListingBRequirementMatches = jobListingB.qualifications.filter((jobListingQualification: string) => searcher.qualifications.includes(jobListingQualification)).length;
+            const jobListingASkillMatches = jobListingA.requirements ? jobListingA.requirements.reduce((totalMatches: number, requirement: string) => {
+                return totalMatches + (hasMatchingSkill(searcher.skills, requirement) ? 1 : 0);
+            }, 0) : 0;
+            const jobListingBSkillMatches = jobListingB.requirements ? jobListingB.requirements.reduce((totalMatches: number, requirement: string) => {
+                return totalMatches + (hasMatchingSkill(searcher.skills, requirement) ? 1 : 0);
+            }, 0) : 0;
+            const jobListingATotalMatches = jobListingARequirementMatches + jobListingASkillMatches;
+            const jobListingBTotalMatches = jobListingBRequirementMatches + jobListingBSkillMatches;
+            return jobListingBTotalMatches - jobListingATotalMatches;
         });
+
 }
 
 function hasMatchingSkill(skills: string[], requirement: string): boolean {
     const [requirementSkill, requirementDuration, requirementUnit] = requirement.split(", ");
+    const requirementDurationInYears = convertDurationToYears(parseFloat(requirementDuration), requirementUnit);
     return skills.some((skill) => {
         const [skillName, skillDuration, skillUnit] = skill.split(", ");
+        const skillDurationInYears = convertDurationToYears(parseFloat(skillDuration), skillUnit);
         return requirementSkill.toLowerCase() === skillName.toLowerCase() &&
-            requirementUnit === skillUnit &&
-            parseFloat(skillDuration) >= parseFloat(requirementDuration);
+            skillDurationInYears >= requirementDurationInYears;
     });
 }
+
+function convertDurationToYears(duration: number, unit: string): number {
+    let convertedDuration: number;
+
+    switch (unit) {
+        case "weeks":
+            convertedDuration = duration / 52;
+            break;
+        case "months":
+            convertedDuration = duration / 12;
+            break;
+        default:
+            convertedDuration = duration;
+            break;
+    }
+    return convertedDuration;
+}
+
+
 
 
 function isQualified(jobListingQual: string, userQual: string): boolean {
