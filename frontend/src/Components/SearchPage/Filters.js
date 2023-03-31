@@ -7,10 +7,6 @@ export default function Filters(props) {
     const [filteredJobs, setFilteredJobs] = useState(props.jobs);
     const [showFilters, setShowFilters] = useState(false);
     const [filters, setFilters] = useState({});
-    const [currentFilterState, setCurrentFilterState] = useState({
-        age: 'anyTime',
-        distance: 'anyDistance'
-    });
 
     useEffect(() => {
         async function addFilters() {
@@ -222,21 +218,8 @@ export default function Filters(props) {
     }
 
     function toggleFilters() {
-        if (showFilters) {
-            const age = document.querySelector('input[name="age"]:checked');
-            console.log(age)
-            const distance = document.querySelector('input[name="distance"]:checked');
-            console.log(distance)
-            // set state of all filters
-            setCurrentFilterState(...prevState => {
-                return {
-                    ...prevState,
-                    age: age,
-                    distance: distance,
-                }
-            })
-        }
         setShowFilters(!showFilters);
+        clearFilters();
     }
 
     return (
@@ -247,7 +230,7 @@ export default function Filters(props) {
                     <div className='flex border-x border-t rounded-t-md border-darker-grey space-x-8 pt-3 px-3 mx-4'>
                         <div className='flex flex-col space-y-3 min-w-fit'>
                             <p className='font-bold'>Date posted</p>
-                            <label onFocus={() => selectRadio('anyTime')}><label><input type="radio" id={"anyTime"} name={'age'} value={""} className={"peer sr-only"} checked/><span className={"border-2 border-[#ccc] p-1 rounded-md select-none peer-checked:border-dark-theme-grey peer-checked:text-white font-bold peer-checked:bg-dark-theme-grey"}>Any time</span></label>
+                            <label onFocus={() => selectRadio('anyTime')}><label><input type="radio" id={"anyTime"} name={'age'} value={""} className={"peer sr-only"} defaultChecked={true}/><span className={"border-2 border-[#ccc] p-1 rounded-md select-none peer-checked:border-dark-theme-grey peer-checked:text-white font-bold peer-checked:bg-dark-theme-grey"}>Any time</span></label>
                             </label>
                             <label onFocus={() => selectRadio('past24Hours')}><label><input type="radio" id={"past24Hours"} name={'age'} value={"1"} className={"peer sr-only"}/><span className={"border-2 border-[#ccc] p-1 rounded-md select-none peer-checked:border-dark-theme-grey peer-checked:text-white font-bold peer-checked:bg-dark-theme-grey"}>Past 24 hours</span></label>
                             </label>
@@ -259,7 +242,7 @@ export default function Filters(props) {
 
                         <div className='flex flex-col space-y-3 min-w-fit'>
                             <p className='font-bold'>Distance</p>
-                            <label onFocus={() => selectRadio('anyDistance')}><label><input type="radio" id={"anyDistance"} name={'distance'} value={""} className={"peer sr-only"} checked/><span className={"border-2 border-[#ccc] p-1 rounded-md select-none peer-checked:border-dark-theme-grey peer-checked:text-white font-bold peer-checked:bg-dark-theme-grey"}>Any distance</span></label>
+                            <label onFocus={() => selectRadio('anyDistance')}><label><input type="radio" id={"anyDistance"} name={'distance'} value={""} className={"peer sr-only"} defaultChecked={true}/><span className={"border-2 border-[#ccc] p-1 rounded-md select-none peer-checked:border-dark-theme-grey peer-checked:text-white font-bold peer-checked:bg-dark-theme-grey"}>Any distance</span></label>
                             </label>
                             <label onFocus={() => selectRadio('1mile')}><label><input type="radio" id={"1mile"} name={'distance'} value={"1"} className={"peer sr-only"}/><span className={"border-2 border-[#ccc] p-1 rounded-md select-none peer-checked:border-dark-theme-grey peer-checked:text-white font-bold peer-checked:bg-dark-theme-grey"}>1 mile</span></label>
                             </label>
