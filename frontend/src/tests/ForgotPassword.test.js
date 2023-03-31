@@ -23,6 +23,11 @@ test('renders forgot password page', () => {
     );
   
     const emailInput = screen.queryByTestId('email-input');
+    const button = screen.queryByTitle('submit-button');
+
     waitFor(() => expect(emailInput).toBeInTheDocument());
     waitFor(() => expect(emailInput).toHaveAttribute('type', 'email'));
+
+    waitFor(() => expect(button).toBeInTheDocument());
+    waitFor(() => expect(button).toHaveAttribute('type', 'button'));
   });

@@ -1,9 +1,7 @@
 import TextInputBox from "../LoginPage/TextInputBox";
 import {validateField} from "../Validation/validate";
-import Loading from "../Loading/Loading";
 
 function ForgotPassword(){
-   
   function submitButton(){
     let email = document.getElementById("email").value;
     
@@ -20,7 +18,9 @@ function ForgotPassword(){
               <TextInputBox id='email' cache={localStorage.getItem("email")} className="w-full" onBlur={()=>{validateField("email",/^\w+(-?\w+)*@\w+(-?\w+)*(\.\w{2,10})+$/)}} placeholder='Email address'/>
             </div>
            
-            <button className='bg-dark-theme-grey rounded-md text-white p-2.5 flex items-center justify-center space-x-2' onClick={submitButton} id={"submitButton"}>Submit</button>
+            <div data-testid="submit-button">
+              <button className='bg-dark-theme-grey rounded-md text-white p-2.5 flex items-center justify-center space-x-2' onClick={submitButton} id={"submitButton"}>Submit</button>
+              </div>
           </div>
       </div>
     )
