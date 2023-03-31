@@ -91,7 +91,6 @@ export function GetAllUserNotifs(db: DB): Handler {
 
 }
 
-
   export function DeleteNotification(db: DB): Handler {
     return async (req: Request, res: Response, next: NextFunction) => {
       const id = req.params.id;
