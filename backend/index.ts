@@ -55,7 +55,7 @@ export const run = () => {
     app.get('/api/notifications/:id', utils.Route(app, notificationroutes.GetNotification));
     app.delete('/api/notifications/:id', upload.none(), utils.Route(app, notificationroutes.DeleteNotification));
 
-    app.get('/api/match/:id', upload.none(), utils.Route(app, matchmakeroutes.getJobListingsForSearcherRoute));
+    app.get('/api/match/:id', upload.none(), utils.Route(app, matchmakeroutes.FindMatchingJobs));
 
     app.get('/api/user/:id', upload.none(), utils.Route(app, userroutes.GetUser));
 
