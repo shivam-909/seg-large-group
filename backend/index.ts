@@ -45,6 +45,9 @@ export const run = () => {
     app.set('db', db);
     app.use(cors());
 
+    // Authentication middleware
+    app.use("/api/*", middleware.AuthMW);
+
     app.get('/error', util.ErrorTest)
 
     app.post('/auth/login', upload.none(), utils.Route(app, authroutes.Login));
@@ -91,9 +94,6 @@ export const run = () => {
 
     // Error handling middleware
     app.use(middleware.ErrorMW);
-
-    // Authentication middleware
-    app.use("/api/*", middleware.AuthMW);
 
     app.post("/api/echo", util.Echo);
 
