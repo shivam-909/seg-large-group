@@ -14,8 +14,6 @@ import { RetrieveJobListing } from "../../db/jobs";
 import { RetrieveCompanyByID } from "../../db/companies";
 import { RetrieveFullUserByID } from "../../db/users";
 import *  as validate from "../routes/validation/notifications";
-import {ValidateUserID} from "./validation/checks";
-import {GetUser} from "./users";
 import notification from "../../models/notification";
 
 export function AddNotification(db: DB): Handler {
@@ -44,7 +42,6 @@ export function GetAllUserNotifs(db: DB): Handler {
       const user = await RetrieveFullUserByID(db, notification.userID);
       const application = await RetrieveApplication(db, notification.applicationID);
 
-
       let jobListing = null;
       let title = null;
       let company = null;
@@ -71,6 +68,7 @@ export function GetAllUserNotifs(db: DB): Handler {
           }
         }
       }
+
       const newNotification = {
         ...notification,
         companyName,
