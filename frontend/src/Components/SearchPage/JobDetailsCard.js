@@ -31,7 +31,9 @@ function JobDetailsCard(props) {
         getUser()
         setSavedJopPost(user.searcher?.savedJobs.includes(props.id))
     },[user]) // eslint-disable-line
-
+    useEffect(() => {
+        setSavedJopPost(user.searcher?.savedJobs.includes(props.id))
+    },[props.id]) // eslint-disable-line
     useEffect(()=> {
         async function getCompany(){
             if(!props.companyID){

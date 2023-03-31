@@ -23,9 +23,12 @@ export default function EditJob() {
     const [requirements, setRequirements] = useState([]);
     const [education, setEducation] = useState([]);
     const [benefits, setBenefits] = useState([]);
+    const [questions, setQuestions] = useState([]);
     const [eduID, setEduID] = useState(0);
     const [reqID, setReqID] = useState(0);
     const [benefitID, setBenefitID] = useState(0);
+    const [questionID, setQuestionID] = useState(0);
+
     const [loading, setLoading] = useState(false);
 
     useEffect(() => {
@@ -40,7 +43,6 @@ export default function EditJob() {
     },[user])
 
     useEffect(() => {
-        setLoading(true);
         validate()
     }, []) // eslint-disable-line
 
@@ -64,7 +66,9 @@ export default function EditJob() {
                     description: response.data.description,
                     requirements: response.data.requirements,
                     benefits: response.data.benefits,
+                    questions: response.data.screeningQuestions,
                     type: response.data.type,
+                    requireCoverLetter: response.data.coverLetterRequired,
                 }));
                 for (let i = 0; i < response.data.requirements?.length; i++) {
                     addRequirement(response.data.requirements[i], i);
@@ -76,6 +80,11 @@ export default function EditJob() {
                     let qual = response.data.qualifications[i].split(",")
                     addEducation(i,qual[0], qual[1], qual[2]);
                 }
+                for (let i = 0; i < response.data.screeningQuestions?.length; i++) {
+                    let question = response.data.screeningQuestions[i][0]
+                    addQuestion(question, i)
+                }
+                setLoading(false);
             })
             setLoading(false);
         }
@@ -105,6 +114,7 @@ export default function EditJob() {
         let description = document.getElementById("description").value;
         let compensation = document.getElementById("compensation").value;
         let compensationRate = document.getElementById("compensationRate").value;
+        let coverLetterRequired = document.querySelector('input[name="coverLetterRequired"]:checked').value;
         let fullTime = document.getElementById("fullTime").checked;
         let partTime = document.getElementById("partTime").checked;
         let internship = document.getElementById("internship").checked;
@@ -118,7 +128,7 @@ export default function EditJob() {
             setVisible("errorBox", true);
             return;
         }
-        const formData = new FormData();
+        const jobListing = new FormData();
         let subjects = document.querySelectorAll("[id^=subject]")
         let qualifications = document.querySelectorAll("[id^=course]")
         let grades = document.querySelectorAll("[id^=grade]")
@@ -129,11 +139,11 @@ export default function EditJob() {
                     setVisible("errorBox", true)
                     return;
                 }
-                formData.append('qualifications[]', subjects[i].value + "," + qualifications[i].value + (grades[i] && "," + grades[i].value));
+                jobListing.append('qualifications[]', subjects[i].value + "," + qualifications[i].value + (grades[i] && "," + grades[i].value));
             }
         }
         else{
-            formData.append("qualifications","")
+            jobListing.append("qualifications","")
         }
 
         let benefits = document.querySelectorAll("[id=Benefit]")
@@ -143,11 +153,11 @@ export default function EditJob() {
                     setVisible("errorBox", true);
                     return;
                 }
-                formData.append('benefits[]', benefit.value);
+                jobListing.append('benefits[]', benefit.value);
             }
         }
         else{
-            formData.append("benefits","")
+            jobListing.append("benefits","")
         }
 
         let skills = document.querySelectorAll("[id^=skillInput]")
@@ -159,35 +169,35 @@ export default function EditJob() {
                     setVisible("errorBox", true);
                     return;
                 }
-                formData.append('requirements[]', skills[i].value.toString()+","+skillDurations[i].value.toString()+","+skillInterval[i].value.toString());
+                jobListing.append('requirements[]', skills[i].value.toString()+","+skillDurations[i].value.toString()+","+skillInterval[i].value.toString());
             }
         }
         else{
-            formData.append("requirements","")
+            jobListing.append("requirements","")
         }
 
-        fullTime && formData.append("schedule[]","Full-time")
-        partTime && formData.append("schedule[]","Part-time")
-        internship && formData.append("schedule[]","Internship")
-        contract && formData.append("schedule[]","Contract")
-        apprenticeship && formData.append("schedule[]","Apprenticeship")
+        fullTime && jobListing.append("schedule[]","Full-time")
+        partTime && jobListing.append("schedule[]","Part-time")
+        internship && jobListing.append("schedule[]","Internship")
+        contract && jobListing.append("schedule[]","Contract")
+        apprenticeship && jobListing.append("schedule[]","Apprenticeship")
 
-        inoffice && formData.append("type[]","In-Office")
-        hybrid && formData.append("type[]","Hybrid")
-        remote && formData.append("type[]","Remote")
+        inoffice && jobListing.append("type[]","In-Office")
+        hybrid && jobListing.append("type[]","Hybrid")
+        remote && jobListing.append("type[]","Remote")
 
 
-        formData.append('title', title);
-        formData.append('location', location);
-        formData.append('industry', industry);
-        if(!isEdit){
-            formData.append('companyID', user.companyID);
-        }
-        formData.append('compensation', compensation);
-        formData.append('compensation', compensationRate);
-        formData.append('description', description);
+        jobListing.append('title', title);
+        jobListing.append('location', location);
+        jobListing.append('industry', industry);
+        jobListing.append('compensation', compensation);
+        jobListing.append('compensation', compensationRate);
+        jobListing.append('description', description);
+        jobListing.append('requireCoverLetter', coverLetterRequired);
 
-        isEdit ? await axios.patch(`${process.env.REACT_APP_BACKEND_URL}api/jobs/${id}`, formData).then(navigate(-1)) : await axios.post(`${process.env.REACT_APP_BACKEND_URL}api/jobs/`, formData).then(navigate(-1));
+
+        isEdit ? await axios.patch(`${process.env.REACT_APP_BACKEND_URL}api/jobs/${id}`, jobListing).then(navigate(-1)) : await axios.post(`${process.env.REACT_APP_BACKEND_URL}api/jobs/`, jobListing, {headers: {
+                'Authorization': `Bearer ${localStorage.access}`}}).then(navigate(-1));
     }
 
     function addRequirement(defaultVal, i){
@@ -204,6 +214,10 @@ export default function EditJob() {
     function addBenefit(defaultVal, i){
         setBenefitID(cur => cur+1);
         setBenefits( current => [...current, <Card id={i} defaultVal={defaultVal} name={"Benefit"}/>]);
+    }
+    function addQuestion(defaultVal, i){
+        setQuestionID(cur => cur+1);
+        setQuestions( current => [...current, <Card id={i} defaultVal={defaultVal} name={"Question"}/>]);
     }
 
     function validateDescription(){
@@ -261,9 +275,16 @@ export default function EditJob() {
                         <p><strong>Benefits: </strong><button className={"float-right bg-dark-theme-grey rounded-md border-2 border-dark-theme-grey text-l text-white w-8 h-8"} onClick={() => {addBenefit("", benefitID)}}><i className="fa-solid fa-plus"></i></button>
                             {benefits}
                         </p>
+                        <p><strong>Screening Questions: </strong><button className={"float-right bg-dark-theme-grey rounded-md border-2 border-dark-theme-grey text-l text-white w-8 h-8"} onClick={() => {addQuestion("", questionID)}}><i className="fa-solid fa-plus"></i></button>
+                            {questions}
+                        </p>
+                        <p><strong>Require Cover Letter?: </strong><div className='float-right min-w-fit mt-2'>
+                            <label><input type="radio" name={'requireCoverLetter'} value={false} className={"peer sr-only"} defaultChecked={!job.requireCoverLetter}/><span className={"border-2 border-[#ccc] px-4 py-1 rounded-md select-none peer-checked:border-dark-theme-grey peer-checked:text-white font-bold peer-checked:bg-dark-theme-grey"}>No</span></label>
+                            <label><input type="radio" name={'requireCoverLetter'} value={true} className={"peer sr-only"} defaultChecked={job.requireCoverLetter}/><span className={"border-2 border-[#ccc] px-4 py-1 rounded-md select-none peer-checked:border-dark-theme-grey peer-checked:text-white font-bold peer-checked:bg-dark-theme-grey"}>Yes</span></label>
+                        </div></p>
                         {/*<button className={"w-full border-2 border-dark-theme-grey rounded-md p-2 bg-dark-theme-grey text-white font-bold"}>Add Screening Questions</button>*/}
                         <ErrorBox message={"Please complete all fields"}/>
-                        <button onClick={handleSubmit} className={"w-full border-2 border-dark-theme-grey rounded-md p-2 bg-blue text-white"}>Submit</button>
+                        <button onClick={handleSubmit} className={"w-full border-2 border-dark-theme-grey rounded-md p-2 bg-dark-theme-grey text-white"}>Submit</button>
                     </div> : <div className={"justify-center flex"}><Loading className={"h-10 w-10 border-[3px] border-dark-theme-grey"}/></div>}
                 </div>
             </div>

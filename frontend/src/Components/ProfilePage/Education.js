@@ -18,7 +18,7 @@ export default function Education(props) {
     },[props.profile]) // eslint-disable-line
 
     function createSkill(subject, type, grade){
-        setEducation( [...education, <EducationDropdown name={"Education"} id={count} editing={props.isEditing} subject={subject} type={type} grade={grade}/>]);
+        setEducation( prevEducation => [...prevEducation, <EducationDropdown name={"Education"} id={count} editing={props.isEditing} subject={subject} type={type} grade={grade}/>]);
         setCount(count + 1);
     }
     return (

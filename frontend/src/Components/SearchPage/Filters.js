@@ -77,7 +77,6 @@ export default function Filters(props) {
 
             const types = Array.from(new Set(allFilters.type.toString().split(',')));
             const schedules = Array.from(new Set(allFilters.schedule.toString().split(',')));
-            const qualifications = Array.from(new Set(allFilters.qualification.toString().split(',')));
             const industry = Array.from(new Set(allFilters.industry.toString().split(',')));
             const locations = Array.from(new Set(allFilters.location));
             const companies = Array.from(new Set(allFilters.company));
@@ -88,7 +87,6 @@ export default function Filters(props) {
                     salary: allSalaries,
                     type: types,
                     schedule: schedules,
-                    qualification: qualifications,
                     industry: industry,
                     location: locations,
                     company: companies,
@@ -115,7 +113,6 @@ export default function Filters(props) {
         const salaries = document.getElementsByName('salary');
         const schedules = document.querySelectorAll('input[name="schedule"]:checked');
         const types = document.querySelectorAll('input[name="type"]:checked');
-        const qualifications = document.querySelectorAll('input[name="qualification"]:checked');
         const industries = document.querySelectorAll('input[name="industry"]:checked');
         const locations = document.querySelectorAll('input[name="location"]:checked');
         const companies = document.querySelectorAll('input[name="company"]:checked');
@@ -155,13 +152,6 @@ export default function Filters(props) {
             const allTypes = [];
             types.forEach(type => allTypes.push(type.value));
             allFilteredJobs = allFilteredJobs.filter(job => job.type.some(type => allTypes.includes(type)));
-        }
-
-        // Job qualification filter
-        if (qualifications.length > 0) {
-            const allQualifications = [];
-            qualifications.forEach(qualification => allQualifications.push(qualification.value));
-            allFilteredJobs = allFilteredJobs.filter(job => job.qualifications.some(qualification => allQualifications.includes(qualification)));
         }
 
         // Industry filter
@@ -245,7 +235,7 @@ export default function Filters(props) {
 
                         <div className='flex flex-col space-y-3 min-w-fit'>
                             <p className='font-bold'>Distance</p>
-                            <label onFocus={() => selectRadio('anyDistance')}><label><input type="radio" id={"anyDistance"} name={'distance'} value={"7"} className={"peer sr-only"} checked/><span className={"border-2 border-[#ccc] p-1 rounded-md select-none peer-checked:border-dark-theme-grey peer-checked:text-white font-bold peer-checked:bg-dark-theme-grey"}>Any distance</span></label>
+                            <label onFocus={() => selectRadio('anyDistance')}><label><input type="radio" id={"anyDistance"} name={'distance'} value={""} className={"peer sr-only"} checked/><span className={"border-2 border-[#ccc] p-1 rounded-md select-none peer-checked:border-dark-theme-grey peer-checked:text-white font-bold peer-checked:bg-dark-theme-grey"}>Any distance</span></label>
                             </label>
                             <label onFocus={() => selectRadio('1mile')}><label><input type="radio" id={"1mile"} name={'distance'} value={"1"} className={"peer sr-only"}/><span className={"border-2 border-[#ccc] p-1 rounded-md select-none peer-checked:border-dark-theme-grey peer-checked:text-white font-bold peer-checked:bg-dark-theme-grey"}>1 mile</span></label>
                             </label>
@@ -296,7 +286,7 @@ export default function Filters(props) {
                                         //         onClick={() => document.getElementById(schedule).checked = !document.getElementById(schedule).checked}>{schedule}</label>
                                         // </div>
                                         <div className='space-x-2 space-y-5 mt-5' onClick={updateJobResults}>
-                                            <label><input type="checkbox" id={"schedule"} name={'schedule'} value={schedule} className={"peer sr-only"}/><span className={"border-2 border-[#ccc] p-1 rounded-md select-none peer-checked:border-dark-theme-grey peer-checked:text-white font-bold peer-checked:bg-dark-theme-grey"}>{schedule}</span></label>
+                                            <label><input type="checkbox" id={schedule} name={'schedule'} value={schedule} className={"peer sr-only"}/><span className={"border-2 border-[#ccc] p-1 rounded-md select-none peer-checked:border-dark-theme-grey peer-checked:text-white font-bold peer-checked:bg-dark-theme-grey"}>{schedule}</span></label>
                                         </div>
                                     );
                                 })
@@ -316,25 +306,6 @@ export default function Filters(props) {
                                     <div className='space-x-2 space-y-5 mt-5 w-auto' onClick={updateJobResults}>
                                         <label><input type="checkbox" id={type} name={'type'} value={type} className={"peer sr-only"}/><span className={"border-2 border-[#ccc] p-1 rounded-md select-none peer-checked:border-dark-theme-grey peer-checked:text-white font-bold peer-checked:bg-dark-theme-grey"}>{type}</span></label>
                                     </div>
-                                    );
-                                })
-                            }
-                        </div>
-
-                        <div>
-                            <p className='font-bold'>Qualification</p>
-                            {filters.qualification.length > 0 &&
-                                filters.qualification.map(qualification => {
-                                    return (
-                                        // <div className='space-x-2' onClick={updateJobResults}>
-                                        //     <input id={qualification} name='qualification' type='checkbox'
-                                        //            value={qualification}/>
-                                        //     <label
-                                        //         onClick={() => document.getElementById(qualification).checked = !document.getElementById(qualification).checked}>{qualification}</label>
-                                        // </div>
-                                        <div className='space-x-2 space-y-5 mt-5 w-auto' onClick={updateJobResults}>
-                                            <label><input type="checkbox" id={qualification} name={'qualification'} value={qualification} className={"peer sr-only"}/><span className={"border-2 border-[#ccc] p-1 rounded-md select-none peer-checked:border-dark-theme-grey peer-checked:text-white font-bold peer-checked:bg-dark-theme-grey"}>{qualification}</span></label>
-                                        </div>
                                     );
                                 })
                             }
