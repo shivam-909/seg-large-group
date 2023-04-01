@@ -102,7 +102,7 @@ export default function ViewApplicationPage() {
                                     <p className='font-bold text-3xl pb-10'>CV</p>
                                     {application.cv ?
                                         <div>
-                                            <div onClick={() => {window.open(profile.searcher?.cv[1],"_blank").focus()}}
+                                            <div onClick={() => {window.open(application.cv[1],"_blank").focus()}}
                                                 className='border rounded-md border-dark-theme-grey p-2 space-y-5 inline-block cursor-pointer'>
                                                 <Document file={application.cv[1]}>
                                                     <Page pageNumber={1} className='border rounded-md overflow-ellipsis'/>
