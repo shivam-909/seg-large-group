@@ -19,6 +19,7 @@ import * as matchmakeroutes from "./service/routes/matchmaking";
 
 import cors from 'cors';
 import { FullSeed } from './seed';
+import { deseed } from './seeder/deseeder';
 
 export const db = new DB();
 
@@ -29,6 +30,10 @@ export const run = () => {
   process.argv.forEach((val, index) => {
     if (val === '--seed') {
       FullSeed(db);
+      run = false;
+      return;
+    } else if (val === '--deseed') {
+      deseed(db)
       run = false;
       return;
     }

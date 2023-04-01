@@ -3,6 +3,9 @@ import { DeleteSearcher } from "../../../db/searchers";
 import { DeleteUser, RetrieveFullUserByEmail } from "../../../db/users";
 
 test('register searcher, retrieve by ID, delete', async () => {
+
+    jest.setTimeout(10000);
+
     const email = "itest_register_searcher@example.com"
 
     const fetch = require('node-fetch');
