@@ -60,8 +60,6 @@ export const run = () => {
 
     app.get('/api/match/:id', upload.none(), utils.Route(app, matchmakeroutes.FindMatchingJobs));
 
-    app.get('/api/user/:id', upload.none(), utils.Route(app, userroutes.GetUser));
-
     app.post('/api/jobs/search', upload.none(), utils.Route(app, searchroutes.SearchListings));
 
     app.post('/api/jobs/filter', upload.none(), utils.Route(app, listingroutes.RetrieveJobListingsByFilter));
@@ -82,9 +80,9 @@ export const run = () => {
     app.delete('/api/storage/:destination/:key', upload.none(), utils.Route(app, deleteFile));
 
     app.post('/api/user/typeid', upload.none(), utils.Route(app, userroutes.GetUserByTypeID));
-    app.get('/api/user/:id', upload.none(), utils.Route(app, userroutes.GetUser));
-    app.patch('/api/users/:id', upload.none(), utils.Route(app, userroutes.UpdateUser));
-    app.delete('/api/user/:id', upload.none(), utils.Route(app, userroutes.DeleteUser));
+    app.get('/api/user', upload.none(), utils.Route(app, userroutes.GetUser));
+    app.patch('/api/users', upload.none(), utils.Route(app, userroutes.UpdateUser));
+    app.delete('/api/user', upload.none(), utils.Route(app, userroutes.DeleteUser));
 
     app.get('/api/company/:id', utils.Route(app, companiesroutes.GetCompany));
     app.get('/api/searcher/:id', utils.Route(app, searcherroutes.GetSearcher));
