@@ -22,7 +22,7 @@ export async function CreateNotification(db: DB, notification: Notification): Pr
   }
 
   user.notifications.push(notification.id)
-  await usersdb.UpdateUser(db, user.userID, { notifications: user.notifications });
+  await usersdb.UpdateUser(db, user.userID, {notifications: user.notifications});
   return notification;
 }
 
