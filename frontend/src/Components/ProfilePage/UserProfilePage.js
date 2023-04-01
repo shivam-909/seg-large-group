@@ -24,12 +24,14 @@ function UserProfilePage() {
 
     useEffect(() => {
         const getProfile = async () => {
-            if (profile.length === 0){
-                await axios.get(`${process.env.REACT_APP_BACKEND_URL}api/user/${id}`).then(r => {
-                    setProfile(r.data)
-                    setFile(r.data.searcher?.cv[0])
-                });
-                setLoading(false)
+            if (profile.length === 0) {
+                const token = localStorage.getItem('access');
+                await axios.get(`${process.env.REACT_APP_BACKEND_URL}api/user`, {headers: {Authorization: `Bearer ${token}`}})
+                    .then(r => {
+                        setProfile(r.data)
+                        setFile(r.data.searcher?.cv[0])
+                    });
+                setLoading(false);
             }
         };
         getProfile()
@@ -37,11 +39,11 @@ function UserProfilePage() {
     },[profile]) // eslint-disable-line
 
     useEffect(() => {
-        toggleKeys(false)
+        toggleKeys(false);
         const getUser = async () => {
-            if (user.length === 0){
+            if (user.length === 0) {
                 await GetData().then(r => {
-                    setUser(r)
+                    setUser(r);
                 });
             }
         };
@@ -83,7 +85,11 @@ function UserProfilePage() {
             formData.append('companyName', companyName);
             formData.append('location', location);
 
-            await axios.patch(`${process.env.REACT_APP_BACKEND_URL}api/users/${id}`, formData).then(navigate(0))
+            const token = localStorage.getItem('access');
+            if (token) {
+                await axios.patch(`${process.env.REACT_APP_BACKEND_URL}api/users`, formData, {headers: {Authorization: `Bearer ${token}`}})
+                    .then(navigate(0))
+            }
         }
     }
 
@@ -119,7 +125,11 @@ function UserProfilePage() {
                 newUserData.append("qualifications[]",subjects[i].value+","+courses[i].value+","+grades[i].value)
             }
 
-            await axios.patch(`${process.env.REACT_APP_BACKEND_URL}api/users/${id}`, newUserData).then(navigate(0))
+            const token = localStorage.getItem('access');
+            if (token) {
+                await axios.patch(`${process.env.REACT_APP_BACKEND_URL}api/users`, newUserData, {headers: {Authorization: `Bearer ${token}`}})
+                    .then(navigate(0))
+            }
         }
     }
     function validateEducation(){
@@ -164,7 +174,11 @@ function UserProfilePage() {
                 const userPatch = new FormData();
                 userPatch.append("cv[]", file.name)
                 userPatch.append("cv[]", res.data.URL)
-                await axios.patch(`${process.env.REACT_APP_BACKEND_URL}api/users/${id}`, userPatch)
+                const token = localStorage.getItem('access');
+                if (token) {
+                    await axios.patch(`${process.env.REACT_APP_BACKEND_URL}api/users`, userPatch, {headers: {Authorization: `Bearer ${token}`}})
+                        .catch(err => console.log(err));
+                }
             })
         }
     }
@@ -175,14 +189,20 @@ function UserProfilePage() {
         if (!validImageTypes.includes(fileType)) {
             // TODO: Display error if not an image
         }
-        else{
+        else {
             const formData = new FormData();
             formData.append("file", files[0])
-            await axios.post(`${process.env.REACT_APP_BACKEND_URL}api/storage/pfp/${user.userID}`, formData).then(async res => {
-                const userPatch = new FormData();
-                userPatch.append("pfpUrl", res.data.URL)
-                await axios.patch(`${process.env.REACT_APP_BACKEND_URL}api/users/${user.userID}`, userPatch);
-            })
+            await axios.post(`${process.env.REACT_APP_BACKEND_URL}api/storage/pfp/${user.userID}`, formData)
+                .then(async res => {
+                    const userPatch = new FormData();
+                    userPatch.append("pfpUrl", res.data.URL)
+                    const token = localStorage.getItem('access');
+                    if (token) {
+                        await axios.patch(`${process.env.REACT_APP_BACKEND_URL}api/users`, userPatch, {headers: {Authorization: `Bearer ${token}`}})
+                            .catch(err => console.log(err));
+                    }
+                })
+                .catch(err => console.log(err));
         }
     }
 

@@ -48,6 +48,9 @@ export const run = () => {
     // Authentication middleware
     app.use("/api/*", middleware.AuthMW);
 
+    // Error handling middleware
+    app.use(middleware.ErrorMW);
+
     app.get('/error', util.ErrorTest)
 
     app.post('/auth/login', upload.none(), utils.Route(app, authroutes.Login));
@@ -87,12 +90,7 @@ export const run = () => {
     app.get('/api/company/:id', utils.Route(app, companiesroutes.GetCompany));
     app.get('/api/searcher/:id', utils.Route(app, searcherroutes.GetSearcher));
 
-
     app.get('/', util.HealthCheck);
-
-
-    // Error handling middleware
-    app.use(middleware.ErrorMW);
 
     app.post("/api/echo", util.Echo);
 

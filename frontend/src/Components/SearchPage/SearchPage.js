@@ -7,7 +7,7 @@ import Loading from "../Loading/Loading";
 import {distanceTo} from 'geolocation-utils';
 import Geocode from "react-geocode";
 
-Geocode.setApiKey("AIzaSyC0FpC_LZEQb2iyXwOEcyM57llwjE9hBOQ");
+Geocode.setApiKey(process.env.REACT_APP_GOOGLE_API_KEY);
 
 export default function SearchPage() {
     const [isLoading, setLoading] = useState(false);

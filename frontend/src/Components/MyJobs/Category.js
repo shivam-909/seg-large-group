@@ -87,18 +87,15 @@ export default function Category(props) {
                 }
                 setLoading(false);
             })
-            .catch(error => {
-                // TODO: Display error message.
-                console.error(error);
-                setLoading(false);
-            });
+            .catch(() => setLoading(false));
     }
 
     async function getSavedJobs(){
         if (!user.userID){
             return;
         }
-        axios.get(`${process.env.REACT_APP_BACKEND_URL}api/user/${user.userID}`)
+        const token = localStorage.getItem("token");
+        axios.get(`${process.env.REACT_APP_BACKEND_URL}api/user`, {headers: {Authorization: `Bearer ${token}`}})
             .then(response => {
                 if (response.data.searcher?.savedJobs !== undefined) {
                     let savedJobs = response.data.searcher?.savedJobs
@@ -110,16 +107,10 @@ export default function Category(props) {
                                 await addCard("",job.data.id, job.data.title, companyName, job.data.location, "Saved");
                             })
                     }
-                } else {
-                    // TODO: Display for 0 Jobs
                 }
                 setLoading(false);
             })
-            .catch(error => {
-                // TODO: Display error message.
-                console.error(error);
-                setLoading(false);
-            });
+            .catch(() => setLoading(false));
     }
 
     return (
