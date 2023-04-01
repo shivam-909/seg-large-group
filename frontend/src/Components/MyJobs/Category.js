@@ -94,7 +94,7 @@ export default function Category(props) {
         if (!user.userID){
             return;
         }
-        const token = localStorage.getItem("token");
+        const token = localStorage.getItem("access");
         axios.get(`${process.env.REACT_APP_BACKEND_URL}api/user`, {headers: {Authorization: `Bearer ${token}`}})
             .then(response => {
                 if (response.data.searcher?.savedJobs !== undefined) {

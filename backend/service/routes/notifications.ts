@@ -31,7 +31,10 @@ export function AddNotification(db: DB): Handler {
 export function GetAllUserNotifs(db: DB): Handler {
   return async (req: Request, res: Response, next: NextFunction) => {
 
-    const id = req.params.id;
+    const id = req.headers["auth_username"] as string;
+    if (!id) {
+      throw new Error(errors.ErrorUserNotFound);
+    }
     const notifications = await notificationsdb.GetAllUserNotifs(db, id);
     let finalNotifs: any[] = [];
 
@@ -42,6 +45,7 @@ export function GetAllUserNotifs(db: DB): Handler {
       const application = await RetrieveApplication(db, notification.applicationID);
 
       let jobListing = null;
+      let jobListingID = null;
       let title = null;
       let company = null;
       let companyName = null;
@@ -60,6 +64,7 @@ export function GetAllUserNotifs(db: DB): Handler {
       if (user?.searcher) {
         jobListing = await RetrieveJobListing(db, application.jobListing);
         if (!jobListing) throw new Error(errors.ErrorJobListingNotFound);
+        jobListingID = jobListing.id;
         title = jobListing.title;
         company = await RetrieveCompanyByID(db, jobListing.companyID);
         if(!company) throw new Error(errors.ErrorCompanyNotFound);
@@ -78,11 +83,11 @@ export function GetAllUserNotifs(db: DB): Handler {
         firstName = searcher.firstName;
         lastName = searcher.lastName;
         applyingUserID = searchUser?.userID;
-
       }
 
       const newNotification = {
         ...notification,
+        jobListingID,
         companyName,
         title,
         firstName,

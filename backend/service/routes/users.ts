@@ -22,7 +22,7 @@ export function UpdateUser(db: DB): Handler {
     return async (req: Request, res: Response, next: NextFunction) => {
 
         const id = req.headers["auth_username"] as string;
-        if(!id){
+        if (!id) {
             throw new Error(errors.ErrorUserNotFound);
         }
         const updatedVals = req.body;
