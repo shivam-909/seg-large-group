@@ -133,11 +133,7 @@ export default function RegisterPage() {
                     </div>
                 </div>
 
-<<<<<<< HEAD
-                <div data-testid = 'confirmPassword'>
-=======
                 <div data-testid={"confirmPasword"}>
->>>>>>> master
                     <TextInputBox className='w-full' id='confirmPassword' type='password' onBlur={checkPasswordMatch} placeholder='Confirm password'/>
                     <span id="passwordMismatchError" className='invisible absolute top-0'>Passwords don't match</span>
                 </div>
