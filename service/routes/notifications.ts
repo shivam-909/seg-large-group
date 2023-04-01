@@ -1,7 +1,6 @@
 import 'express-async-errors';
 import DB from "../../db/db";
 import {
-  getErrorMessage,
   Handler
 } from "../public";
 import * as errors from "../public";

@@ -1,4 +1,4 @@
-import {User, UserExpanded} from "../models/user";
+import { User, UserExpanded } from "../models/user";
 import * as companiesdb from "./companies";
 import * as searchersdb from "./searchers";
 import DB from "./db";
@@ -21,7 +21,11 @@ export async function CreateUser(db: DB, user: User) {
 }
 
 export async function RetrieveFullUserByID(db: DB, id: string): Promise<UserExpanded | null> {
-  let docRef = db.UserCollection().doc(id)
+
+
+  let docRef = db.UserCollection().doc(id);
+
+
   let doc = await docRef.get();
 
   if (!doc.exists) {
@@ -58,19 +62,21 @@ export async function RetrieveFullUserByEmail(db: DB, email: string): Promise<Us
 
   const user = snapshot.docs[0].data() as User;
 
-  if (user.companyID) {
+  if (user.companyID !== undefined) {
     const company = await companiesdb.RetrieveCompanyByID(db, user.companyID);
 
     if (!company) throw new Error(ErrorCompanyNotFound);
 
     return UserExpanded.fromUser(user, company);
-  } else if (user.searcherID) {
+  } else if (user.searcherID !== undefined) {
     const searcher = await searchersdb.RetrieveSearcherByID(db, user.searcherID);
 
     if (!searcher) throw new Error(ErrorSearcherNotFound);
 
     return UserExpanded.fromUser(user, undefined, searcher);
   }
+
+  console.log(user)
 
   throw new Error('invalid user type');
 }
@@ -91,7 +97,9 @@ export async function UpdateUser(db: DB, id: string, data: any): Promise<void> {
   });
 
   if (Object.keys(baseData).length > 0) {
-    await db.UserCollection().doc(id).update(baseData);
+    if (typeof id === "string") {
+      await db.UserCollection().doc(id).update(baseData);
+    }
   }
   if (user!.searcherID) {
     const searcherData: { [key: string]: any } = {};
