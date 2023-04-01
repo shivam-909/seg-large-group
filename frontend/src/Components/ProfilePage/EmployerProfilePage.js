@@ -1,7 +1,6 @@
 import './ProfilePage.css';
 import React, {useState} from 'react';
 import Navbar from "../Navbar/Navbar";
-import Skills from "./Skills";
 import {setVisible} from "../Validation/validate";
 import ErrorBox from "../ErrorBox/ErrorBox";
 function EmployerProfilePage() {
