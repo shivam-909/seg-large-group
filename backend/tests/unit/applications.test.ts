@@ -10,6 +10,7 @@ import {
 } from "../../db/applications";
 import {Searcher, User} from "../../models/user";
 import {CreateSearcher} from "../../db/searchers";
+import {faker} from "@faker-js/faker";
 
 test('create application, retrieve application, update application, delete application', async () => {
 
@@ -52,11 +53,14 @@ test('create application, retrieve application, update application, delete appli
     const status = 'Applied';
     const searcher = searcherObject.searcherID;
     const jobListing = randomUUID();
+    const QnAs: Record<string, string> = {"Why haven’t you gotten your Bachelor’s Degree/Master’s Degree/Ph.D.?": faker.lorem.words(), "Give an example of when you showed leadership qualities.": faker.lorem.words()};
+    const coverLetter = "";
 
-    const updatedStatus = 'Applied';
+    const updatedStatus = 'Rejected';
     const updatedSearcher = randomUUID();
     const updatedJobListing = randomUUID();
     const updatedCv = ["Bob Marley", "https://seg-joblink.s3.eu-west-2.amazonaws.com/cv/1047a922-d91f-43dc-80f2-7273ee90acaa.png.pdf"];
+    const updatedCoverLetter = faker.lorem.paragraphs(5000).substring(0, Math.floor(Math.random() * (100 + 1)) + 500);
 
     const application = new Application(
         id,
@@ -64,6 +68,9 @@ test('create application, retrieve application, update application, delete appli
         searcher,
         jobListing,
         cv,
+        QnAs,
+        coverLetter,
+
     )
 
     const updatedApplication = new Application(
@@ -71,7 +78,8 @@ test('create application, retrieve application, update application, delete appli
         updatedStatus,
         updatedSearcher,
         updatedJobListing,
-        updatedCv
+        updatedCv,
+        updatedCoverLetter,
     )
 
     await CreateApplication(db, application);
