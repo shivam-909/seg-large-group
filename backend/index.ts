@@ -58,11 +58,12 @@ export const run = () => {
     app.get('/api/notifications/:id', utils.Route(app, notificationroutes.GetAllUserNotifs));
     app.delete('/api/notifications/:id', upload.none(), utils.Route(app, notificationroutes.DeleteNotification));
 
-    app.get('/api/match/:id', upload.none(), utils.Route(app, matchmakeroutes.getJobListingsForSearcherRoute));
+    app.get('/api/match/:id', upload.none(), utils.Route(app, matchmakeroutes.FindMatchingJobs));
 
     app.get('/api/user/:id', upload.none(), utils.Route(app, userroutes.GetUser));
 
     app.post('/api/jobs/search', upload.none(), utils.Route(app, searchroutes.SearchListings));
+
     app.post('/api/jobs/filter', upload.none(), utils.Route(app, listingroutes.RetrieveJobListingsByFilter));
     app.post('/api/jobs/', upload.none(), utils.Route(app, listingroutes.AddListing));
     app.get('/api/jobs/:id', utils.Route(app, listingroutes.GetListing));

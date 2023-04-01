@@ -163,7 +163,7 @@ function GenerateEducation(): string[] {
             qualification = `${subject}, ${level}`;
         } else if (level === 'GCSE' || level === 'A Level') {
             grade = faker.helpers.arrayElement(grades);
-            qualification = `${subject}, ${level}, ${grade}`;
+            qualification = `${subject},${level},${grade}`;
         }
 
         educations.push(qualification);
@@ -296,7 +296,7 @@ function GenerateSkills(): string[] {
     const numSkills = Math.floor(Math.random() * 5) + 1;
     const skills: string[] = [];
     for (let i = 0; i < numSkills; i++) {
-        skills.push(faker.company.bsNoun() + ", " + faker.datatype.number({'min': 1,'max': 10}).toString() + ", " + "years");
+        skills.push(faker.company.bsNoun() + "," + ((Math.floor(Math.random() * 100) / 10) + 1).toString() + "," + faker.helpers.arrayElement(["weeks", "months", "years"]));
     }
     return skills;
 }

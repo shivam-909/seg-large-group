@@ -71,7 +71,6 @@ it("create listing", async () => {
     listingFormData.append("description", description);
     listingFormData.append("location", job_location);
     listingFormData.append("qualifications", qualifications);
-    listingFormData.append("location", job_location);
     listingFormData.append("type", job_type);
     listingFormData.append("benefits", benefits);
     listingFormData.append("requirements", requirements);
