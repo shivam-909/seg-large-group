@@ -9,7 +9,7 @@ export default function Skills(props) {
     useEffect(() => {
         async function getSkills(){
             setSkills([])
-            if (props.profile.length === 0){
+            if (props.profile.length === 0 || !props.profile.searcher?.skills){
                 return;
             }
             for (const skill of props.profile.searcher?.skills){
