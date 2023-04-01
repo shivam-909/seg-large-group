@@ -19,6 +19,7 @@ import * as matchmakeroutes from "./service/routes/matchmaking";
 
 import cors from 'cors';
 import { FullSeed } from './seed';
+import { deseed } from './seeder/deseeder';
 
 export const db = new DB();
 
@@ -29,6 +30,10 @@ export const run = () => {
   process.argv.forEach((val, index) => {
     if (val === '--seed') {
       FullSeed(db);
+      run = false;
+      return;
+    } else if (val === '--deseed') {
+      deseed(db)
       run = false;
       return;
     }
@@ -45,8 +50,15 @@ export const run = () => {
     app.set('db', db);
     app.use(cors());
 
+    app.get('/api/storage/:destination/:key', upload.none(), utils.Route(app, getFile));
+    app.post('/api/storage/:destination/:id', upload.single('file'), utils.Route(app, uploadFile));
+    app.delete('/api/storage/:destination/:key', upload.none(), utils.Route(app, deleteFile));
+
     // Authentication middleware
     app.use("/api/*", middleware.AuthMW);
+
+    // Error handling middleware
+    app.use(middleware.ErrorMW);
 
     app.get('/error', util.ErrorTest)
 
@@ -59,8 +71,6 @@ export const run = () => {
     app.delete('/api/notifications/:id', upload.none(), utils.Route(app, notificationroutes.DeleteNotification));
 
     app.get('/api/match/:id', upload.none(), utils.Route(app, matchmakeroutes.FindMatchingJobs));
-
-    app.get('/api/user/:id', upload.none(), utils.Route(app, userroutes.GetUser));
 
     app.post('/api/jobs/search', upload.none(), utils.Route(app, searchroutes.SearchListings));
 
@@ -77,24 +87,15 @@ export const run = () => {
     app.delete('/api/applications/:id', upload.none(), utils.Route(app, applicationroutes.DeleteApplication));
     app.post('/api/application/filter', upload.none(), utils.Route(app, applicationroutes.RetrieveApplicationByFilter));
 
-    app.get('/api/storage/:destination/:key', upload.none(), utils.Route(app, getFile));
-    app.post('/api/storage/:destination/:id', upload.single('file'), utils.Route(app, uploadFile));
-    app.delete('/api/storage/:destination/:key', upload.none(), utils.Route(app, deleteFile));
-
     app.post('/api/user/typeid', upload.none(), utils.Route(app, userroutes.GetUserByTypeID));
-    app.get('/api/user/:id', upload.none(), utils.Route(app, userroutes.GetUser));
-    app.patch('/api/users/:id', upload.none(), utils.Route(app, userroutes.UpdateUser));
-    app.delete('/api/user/:id', upload.none(), utils.Route(app, userroutes.DeleteUser));
+    app.get('/api/user', upload.none(), utils.Route(app, userroutes.GetUser));
+    app.patch('/api/users', upload.none(), utils.Route(app, userroutes.UpdateUser));
+    app.delete('/api/user', upload.none(), utils.Route(app, userroutes.DeleteUser));
 
     app.get('/api/company/:id', utils.Route(app, companiesroutes.GetCompany));
     app.get('/api/searcher/:id', utils.Route(app, searcherroutes.GetSearcher));
 
-
     app.get('/', util.HealthCheck);
-
-
-    // Error handling middleware
-    app.use(middleware.ErrorMW);
 
     app.post("/api/echo", util.Echo);
 

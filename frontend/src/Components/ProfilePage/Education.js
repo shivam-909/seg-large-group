@@ -7,7 +7,8 @@ export default function Education(props) {
     const [count, setCount] = useState(education.length);
 
     useEffect(() => {
-        if (props.profile.length === 0){
+        console.log(props.profile)
+        if (props.profile.length === 0 || !props.profile.searcher?.qualifications){
             return;
         }
         setEducation([])
