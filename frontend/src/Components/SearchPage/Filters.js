@@ -77,7 +77,6 @@ export default function Filters(props) {
 
             const types = Array.from(new Set(allFilters.type.toString().split(',')));
             const schedules = Array.from(new Set(allFilters.schedule.toString().split(',')));
-            const qualifications = Array.from(new Set(allFilters.qualification.toString().split(',')));
             const industry = Array.from(new Set(allFilters.industry.toString().split(',')));
             const locations = Array.from(new Set(allFilters.location));
             const companies = Array.from(new Set(allFilters.company));
@@ -88,7 +87,6 @@ export default function Filters(props) {
                     salary: allSalaries,
                     type: types,
                     schedule: schedules,
-                    qualification: qualifications,
                     industry: industry,
                     location: locations,
                     company: companies,
@@ -349,10 +347,10 @@ export default function Filters(props) {
                     </div>
                     <div className='flex items-center justify-end border-b border-x rounded-b-md border-darker-grey pb-2 pr-2 mx-4 pt-8'>
                         <button className='rounded-md py-2.5 px-4 font-bold text-dark-theme-grey mr-2'
-                                onClick={clearFilters}>Clear
+                                onClick={() => {clearFilters(); setShowFilters(false)}}>Clear
                         </button>
                         <button className='bg-dark-theme-grey rounded-md py-2.5 px-4 font-bold text-white'
-                                onClick={() => setFilteredJobs(tempFilteredJobs)}>Show results ({tempFilteredJobs.length})
+                                onClick={() => {setFilteredJobs(tempFilteredJobs); setShowFilters(false)}}>Show results ({tempFilteredJobs.length})
                         </button>
                     </div>
                 </div>
