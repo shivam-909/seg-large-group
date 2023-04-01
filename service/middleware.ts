@@ -12,7 +12,6 @@ export const ErrorMW = (err: any, req: Request, res: Response, next: NextFunctio
 
 export const AuthMW = (req: Request, res: Response, next: NextFunction) => {
     const token = req.headers.authorization;
-
     if (!token) return res.status(401).json({ message: 'unauthorized' });
 
     const split = token.split(' ');

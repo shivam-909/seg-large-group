@@ -22,9 +22,7 @@ export async function CreateNotification(db: DB, notification: Notification): Pr
   }
 
   user.notifications.push(notification.id)
-  await usersdb.UpdateUser(db, user.userID, { notifications: user.notifications });
-
-
+  await usersdb.UpdateUser(db, user.userID, {notifications: user.notifications});
   return notification;
 }
 
@@ -33,6 +31,19 @@ export async function RetrieveNotification(db: DB, id: string): Promise<Notifica
   const doc = await docRef.get();
 
   return doc.data() as Notification;
+}
+
+export async function GetAllUserNotifs(db: DB, id:string): Promise<Notification[]>{ //check this
+
+  const snapshot = await db.NotificationCollection().where('userID', '==', id).get();
+  const userNotifs: Notification[] = [];
+
+  snapshot.forEach(doc => {
+    const notification = doc.data();
+    userNotifs.push(notification);
+  });
+
+  return userNotifs;
 }
 
 export async function DeleteNotification(db: DB, id: string) {
