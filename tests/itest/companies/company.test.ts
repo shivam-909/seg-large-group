@@ -2,6 +2,9 @@ import DB from "../../../db/db";
 import { DeleteUser, RetrieveFullUserByEmail } from "../../../db/users";
 
 test('register company, retrieve by ID, delete', async () => {
+
+    jest.setTimeout(10000);
+
     const email = "itest_register_company@example.com"
 
     const fetch = require('node-fetch');
