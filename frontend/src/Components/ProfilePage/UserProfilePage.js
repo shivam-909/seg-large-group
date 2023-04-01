@@ -15,7 +15,7 @@ import {Document, Page} from "react-pdf/dist/cjs/entry.webpack";
 function UserProfilePage() {
     const navigate = useNavigate();
     const { id } = useParams();
-    const [profile, setProfile] = useState([]);
+    const [profile, setProfile] = useState({});
     const [user, setUser] = useState([]);
     const [isEditing, setIsEditing]= useState(false);
     const [isCompany, setCompany] = useState(false)
@@ -24,7 +24,7 @@ function UserProfilePage() {
 
     useEffect(() => {
         const getProfile = async () => {
-            if (profile.length === 0) {
+            if (Object.keys(profile).length === 0) {
                 const token = localStorage.getItem('access');
                 await axios.get(`${process.env.REACT_APP_BACKEND_URL}api/user`, {headers: {Authorization: `Bearer ${token}`}})
                     .then(r => {
@@ -34,7 +34,6 @@ function UserProfilePage() {
             }
         };
         getProfile()
-        console.log(profile)
         setCompany(profile.searcherID === undefined)
     },[profile]) // eslint-disable-line
 
@@ -166,7 +165,6 @@ function UserProfilePage() {
         if (!validImageTypes.includes(fileType)) {
             // TODO: Display error if not an image
         } else {
-            // TODO: Add Backend Update
             const formData = new FormData();
             formData.append("file", files[0])
             await axios.post(`${process.env.REACT_APP_BACKEND_URL}api/storage/cv/${user.userID}`, formData).then(async res => {
@@ -175,8 +173,11 @@ function UserProfilePage() {
                 userPatch.append("cv[]", res.data.URL)
                 const token = localStorage.getItem('access');
                 if (token) {
-                    await axios.patch(`${process.env.REACT_APP_BACKEND_URL}api/users`, userPatch, {headers: {Authorization: `Bearer ${token}`}})
-                        .catch(err => console.log(err));
+                    await axios.patch(`${process.env.REACT_APP_BACKEND_URL}api/users`, userPatch, {headers: {Authorization: `Bearer ${token}`}}).then(r => {
+                        const searcher = {...profile.searcher, cv:[file.name, file]}
+                        const newProfile = {...profile, searcher: searcher}
+                        setProfile(newProfile)
+                    }).catch(err => console.log(err));
                 }
             })
         }
@@ -197,8 +198,15 @@ function UserProfilePage() {
                     userPatch.append("pfpUrl", res.data.URL)
                     const token = localStorage.getItem('access');
                     if (token) {
-                        await axios.patch(`${process.env.REACT_APP_BACKEND_URL}api/users`, userPatch, {headers: {Authorization: `Bearer ${token}`}})
-                            .catch(err => console.log(err));
+                        await axios.patch(`${process.env.REACT_APP_BACKEND_URL}api/users`, userPatch, {headers: {Authorization: `Bearer ${token}`}}).then(r => {
+                            let fr = new FileReader();
+                            fr.onload = function (e) {
+                                document.getElementById("pfp").src = e.target.result;
+                            }
+                            fr.readAsDataURL(files[0])
+                            // setProfile(oldProfile)
+                            // setProfile(newProfile)
+                        }).catch(err => console.log(err));
                     }
                 })
                 .catch(err => console.log(err));
@@ -222,7 +230,7 @@ function UserProfilePage() {
                         <p className={"ml-6 text-l"}>{profile.location + " "}</p>
                     </div>
                     <div className={"justify-items-end"}>
-                    <img className={"rounded-full float-right"} src={profile.pfpUrl} alt="Avatar" height={"100"} width={"100"}/>
+                    <img id={"pfp"} className={"rounded-full float-right"} src={profile.pfpUrl} alt="Avatar" height={"100"} width={"100"}/>
                         <input id={"pfpUpload"} type="file" name="myImage" accept="image/png, image/jpeg" hidden onChange={updatePfp}/>
                         {isEditing && <label for={"pfpUpload"} className={"float-right"}><i className="fa-solid fa-pen-to-square pr-2"></i></label>}
                     </div>
