@@ -12,7 +12,7 @@ import Loading from "../Loading/Loading";
 import {Location} from "./Location";
 
 function UserProfilePage() {
-    //const navigate = useNavigate();
+    const navigate = useNavigate();
     const { id } = useParams();
     const [profile, setProfile] = useState([]);
     const [user, setUser] = useState([]);
@@ -83,7 +83,6 @@ function UserProfilePage() {
             formData.append('companyName', companyName);
             formData.append('location', location);
 
-            const navigate = useNavigate();
             await axios.patch(`${process.env.REACT_APP_BACKEND_URL}api/users/${id}`, formData).then(navigate(0))
         }
     }
@@ -119,7 +118,6 @@ function UserProfilePage() {
             for(let i = 0; i < subjects.length; i++) {
                 newUserData.append("qualifications[]",subjects[i].value+","+courses[i].value+","+grades[i].value)
             }
-            const navigate = useNavigate();
             await axios.patch(`${process.env.REACT_APP_BACKEND_URL}api/users/${id}`, newUserData).then(navigate(0))
         }
     }
