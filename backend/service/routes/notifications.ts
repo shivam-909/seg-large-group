@@ -32,17 +32,21 @@ export function AddNotification(db: DB): Handler {
 export function GetAllUserNotifs(db: DB): Handler {
   return async (req: Request, res: Response, next: NextFunction) => {
 
-    const id = req.params.id;
-    const notifications = await notificationsdb.GetAllUserNotifs(db, id);
-    let finalNotifs: any[] = [];
+    const id = req.headers["auth_username"] as string;
+    console.log(id)
+    if (!id) {
+      throw new Error(errors.ErrorUserNotFound);
+    }
 
-    for(let i=0; i< notifications.length; i++){
+    const userNotifications = await notificationsdb.GetAllUserNotifs(db, id);
+    let notifications = [];
 
-      const notification = notifications[i];
+    for (const notification of userNotifications) {
       const user = await RetrieveFullUserByID(db, notification.userID);
       const application = await RetrieveApplication(db, notification.applicationID);
 
       let jobListing = null;
+      let jobListingID = null;
       let title = null;
       let company = null;
       let companyName = null;
@@ -50,16 +54,17 @@ export function GetAllUserNotifs(db: DB): Handler {
       let lastName = null;
       let applyingUserID = null;
 
-      if(!user){
+      if (!user) {
         throw new Error(errors.ErrorUserNotFound);
       }
 
-      if(!application){
+      if (!application) {
         throw new Error(errors.ErrorApplicationNotFound);
       }
 
       if (user?.searcher) {
         jobListing = await RetrieveJobListing(db, application.jobListing);
+        jobListingID = jobListing?.id;
         if (!jobListing) throw new Error(errors.ErrorJobListingNotFound);
         title = jobListing.title;
         company = await RetrieveCompanyByID(db, jobListing.companyID);
@@ -79,21 +84,21 @@ export function GetAllUserNotifs(db: DB): Handler {
         firstName = searcher.firstName;
         lastName = searcher.lastName;
         applyingUserID = searchUser?.userID;
-
       }
 
       const newNotification = {
         ...notification,
+        jobListingID,
         companyName,
         title,
         firstName,
         lastName,
         applyingUserID,
       }
-      finalNotifs.push(newNotification);
+      notifications.push(newNotification);
     }
 
-    res.status(200).json({finalNotifs});
+    res.status(200).json({notifications});
   }
 
 }

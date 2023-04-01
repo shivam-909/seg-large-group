@@ -44,13 +44,11 @@ function LoginPage() {
             navigate('/');
           }
           else {
-            // TODO: Display error message.
             setVisible("errorBox", true);
             setLoading(false);
           }
         })
-        .catch(error => {
-          // TODO: Display error message.
+        .catch(() => {
           setVisible("errorBox", true);
           setLoading(false);
         });

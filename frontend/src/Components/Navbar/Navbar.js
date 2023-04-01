@@ -17,7 +17,7 @@ export default function Navbar() {
     }, [isLoggedIn]);
 
     function showProfile() {
-        var x = document.getElementById("expandProfile");
+        const x = document.getElementById("expandProfile");
         if (x.style.display === "block") {
           x.style.display = "none";
         } else {
@@ -30,8 +30,8 @@ export default function Navbar() {
             <li className="float-left"><a href="/"><i className="fa-solid fa-house text-xl"></i></a></li>
             {isLoggedIn ?
                 <div className={"mr-5"}>
-                    <li className='float-right'><a className="" href="##" onClick={showProfile}><i className="fa-solid fa-user text-xl"></i></a></li>
-                    <li className='float-right'><a className="" href="##"><i className="fa-solid fa-bell text-xl"></i></a></li>
+                    <li className='float-right cursor-pointer'><a href='#' onClick={showProfile}><i className="fa-solid fa-user text-xl"></i></a></li>
+                    <li className='float-right'><a href="/notifications"><i className="fa-solid fa-bell text-xl"></i></a></li>
                 </div>
                 :
                 <div className='mr-5 space-x-5'>

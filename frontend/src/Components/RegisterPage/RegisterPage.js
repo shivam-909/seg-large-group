@@ -74,15 +74,11 @@ export default function RegisterPage() {
                     navigate('/');
                 }
                 else {
-                    // TODO: Display error message.
-                    console.log(response.data);
                     setVisible()
                     setLoading(false);
                 }
             })
             .catch(error => {
-                // TODO: Display error message.
-                console.log(error)
                 setErrorMsg(error.response.data.message)
                 setLoading(false);
             });
