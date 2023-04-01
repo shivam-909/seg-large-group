@@ -11,7 +11,10 @@ export default function Navbar() {
         const token = localStorage.getItem("access");
         if (token) {
             axios.post(`${process.env.REACT_APP_BACKEND_URL}api/echo`, {}, {headers: {Authorization: `Bearer ${token}`}})
-                .then(res => {setIsLoggedIn(true); setUserID(res.data)})
+                .then(res => {
+                    setIsLoggedIn(true);
+                    setUserID(res.data);
+                })
                 .catch(() => setIsLoggedIn(false));
         }
     }, [isLoggedIn]);

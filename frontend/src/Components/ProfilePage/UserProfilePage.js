@@ -24,12 +24,14 @@ function UserProfilePage() {
 
     useEffect(() => {
         const getProfile = async () => {
-            if (profile.length === 0){
-                await axios.get(`${process.env.REACT_APP_BACKEND_URL}api/user/${id}`).then(r => {
-                    setProfile(r.data)
-                    setFile(r.data.searcher?.cv[0])
-                });
-                setLoading(false)
+            if (profile.length === 0) {
+                const token = localStorage.getItem('access');
+                await axios.get(`${process.env.REACT_APP_BACKEND_URL}api/user`, {headers: {Authorization: `Bearer ${token}`}})
+                    .then(r => {
+                        setProfile(r.data)
+                        setFile(r.data.searcher?.cv[0])
+                    });
+                setLoading(false);
             }
         };
         getProfile()
@@ -37,11 +39,11 @@ function UserProfilePage() {
     },[profile]) // eslint-disable-line
 
     useEffect(() => {
-        toggleKeys(false)
+        toggleKeys(false);
         const getUser = async () => {
-            if (user.length === 0){
+            if (user.length === 0) {
                 await GetData().then(r => {
-                    setUser(r)
+                    setUser(r);
                 });
             }
         };
@@ -83,7 +85,11 @@ function UserProfilePage() {
             formData.append('companyName', companyName);
             formData.append('location', location);
 
-            await axios.patch(`${process.env.REACT_APP_BACKEND_URL}api/users/${id}`, formData).then(navigate(0))
+            const token = localStorage.getItem('access');
+            if (token) {
+                await axios.patch(`${process.env.REACT_APP_BACKEND_URL}api/users`, formData, {headers: {Authorization: `Bearer ${token}`}})
+                    .then(navigate(0))
+            }
         }
     }
 
@@ -100,19 +106,37 @@ function UserProfilePage() {
             toggleKeys(false);
             setVisible("errorBox", false);
 
-            const formData = new FormData();
-            formData.append('firstName', firstName);
-            formData.append('lastName', lastName);
-            formData.append('location', location);
+            const newUserData = new FormData();
+            newUserData.append('firstName', firstName);
+            newUserData.append('lastName', lastName);
+            newUserData.append('location', location);
 
-            await axios.patch(`${process.env.REACT_APP_BACKEND_URL}api/users/${id}`, formData).then(navigate(0))
+            let keyInputs = document.querySelectorAll("[id^=skillInput]");
+            let durationsInputs = document.querySelectorAll("[id=skillDuration]");
+            let intervalInputs = document.querySelectorAll("[id=skillInterval]");
+            for(let i = 0; i < keyInputs.length; i++) {
+                newUserData.append("skills[]",keyInputs[i].value+","+durationsInputs[i].value+","+intervalInputs[i].value)
+            }
+
+            let subjects = document.querySelectorAll("[id^=subject]");
+            let grades = document.querySelectorAll("[id^=grade]");
+            let courses = document.querySelectorAll("[id=course]");
+            for(let i = 0; i < subjects.length; i++) {
+                newUserData.append("qualifications[]",subjects[i].value+","+courses[i].value+","+grades[i].value)
+            }
+
+            const token = localStorage.getItem('access');
+            if (token) {
+                await axios.patch(`${process.env.REACT_APP_BACKEND_URL}api/users`, newUserData, {headers: {Authorization: `Bearer ${token}`}})
+                    .then(navigate(0))
+            }
         }
     }
     function validateEducation(){
         let subjects = document.querySelectorAll("[id^=subject]");
         let grades = document.querySelectorAll("[id^=grade]");
         for(let i = 0; i < subjects.length; i++) {
-            if (subjects[i].value === "" || grades[i].value === "" || subjects[i].value.includes(",") || grades[i].value.includes(",")){
+            if (subjects[i].value === "" || subjects[i].value.includes(",") || grades[i].value.includes(",")){
                 return false;
             }
         }
@@ -148,10 +172,13 @@ function UserProfilePage() {
             formData.append("file", files[0])
             await axios.post(`${process.env.REACT_APP_BACKEND_URL}api/storage/cv/${user.userID}`, formData).then(async res => {
                 const userPatch = new FormData();
-                console.log(file.name, res.data.URL)
                 userPatch.append("cv[]", file.name)
                 userPatch.append("cv[]", res.data.URL)
-                await axios.patch(`${process.env.REACT_APP_BACKEND_URL}api/users/${id}`, userPatch)
+                const token = localStorage.getItem('access');
+                if (token) {
+                    await axios.patch(`${process.env.REACT_APP_BACKEND_URL}api/users`, userPatch, {headers: {Authorization: `Bearer ${token}`}})
+                        .catch(err => console.log(err));
+                }
             })
         }
     }
@@ -162,14 +189,20 @@ function UserProfilePage() {
         if (!validImageTypes.includes(fileType)) {
             // TODO: Display error if not an image
         }
-        else{
+        else {
             const formData = new FormData();
             formData.append("file", files[0])
-            await axios.post(`${process.env.REACT_APP_BACKEND_URL}api/storage/pfp/${user.userID}`, formData).then(async res => {
-                const userPatch = new FormData();
-                userPatch.append("pfpUrl", res.data.URL)
-                await axios.patch(`${process.env.REACT_APP_BACKEND_URL}api/users/${user.userID}`, userPatch);
-            })
+            await axios.post(`${process.env.REACT_APP_BACKEND_URL}api/storage/pfp/${user.userID}`, formData)
+                .then(async res => {
+                    const userPatch = new FormData();
+                    userPatch.append("pfpUrl", res.data.URL)
+                    const token = localStorage.getItem('access');
+                    if (token) {
+                        await axios.patch(`${process.env.REACT_APP_BACKEND_URL}api/users`, userPatch, {headers: {Authorization: `Bearer ${token}`}})
+                            .catch(err => console.log(err));
+                    }
+                })
+                .catch(err => console.log(err));
         }
     }
 

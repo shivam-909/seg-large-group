@@ -29,6 +29,7 @@ export default function JobPage() {
             await axios.get(`${process.env.REACT_APP_BACKEND_URL}api/jobs/${id}`)
                 .then(async response => {
                     setJob(response.data)
+                    setJob({...job, age: Math.floor(((Date.now() / 1000) - job.datePosted._seconds) / 86400)});
                     setCompanyName(await axios.get(`${process.env.REACT_APP_BACKEND_URL}api/company/${response.data.companyID}`).then(company => company.data.companyName));
                     setLoading(false);
                 })
