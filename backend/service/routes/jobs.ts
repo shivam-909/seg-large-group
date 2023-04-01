@@ -3,10 +3,11 @@ import { NextFunction, Request, Response } from "express";
 import DB from "../../db/db";
 import JobListing from "../../models/job";
 import * as jobsdb from "../../db/jobs";
-import { ErrorFailedToCreateListing, ErrorJobListingNotFound, ErrorNoMatchingListings, Handler } from "../public";
+import { ErrorFailedToCreateListing, Handler } from "../public";
 import { randomUUID } from "crypto";
-import { ParseScreeningQuestions, StringFromCommaSeparatedList } from './routes';
+import {ParseRequireCoverLetter, ParseScreeningQuestions, StringFromCommaSeparatedList} from './routes';
 import * as validate from "../routes/validation/jobs";
+import {RetrieveFullUserByID} from "../../db/users";
 
 
 
@@ -15,35 +16,32 @@ export function AddListing(db: DB): Handler {
   return async (req: Request, res: Response, next: NextFunction) => {
     const { title, compensation, description, location, type, schedule, industry, cover_letter_required, urgent, qualifications, benefits, requirements, screening_questions } = req.body;
     const newID = randomUUID();
-    console.log("RECEIVED CREATE JOB LISTING REQUEST")
 
     // Get auth_username from headers.
-    const companyID = req.headers.auth_username as string;
-    const parsedCompensation = StringFromCommaSeparatedList(compensation);
-    const parsedQualifications = StringFromCommaSeparatedList(qualifications);
-    const parsedBenefits = StringFromCommaSeparatedList(benefits);
-    const parsedType = StringFromCommaSeparatedList(type);
-    const parsedRequirements = StringFromCommaSeparatedList(requirements);
-    const parsedSchedule = StringFromCommaSeparatedList(schedule);
+    const userID = req.headers.auth_username as string;
+    const company = await RetrieveFullUserByID(db, userID)
+    const companyID = company!.companyID || "";
+    console.log(companyID)
+    const parsedRequireCoverLetter = ParseRequireCoverLetter(cover_letter_required);
     const parsedScreeningQuestions = ParseScreeningQuestions(screening_questions);
     const datePosted = new Date();
 
     const newJobListing = new JobListing(
       newID,
       title,
-      parsedCompensation,
+      compensation,
       description,
       location,
-      parsedType,
-      parsedSchedule,
+      type,
+      schedule,
       companyID,
       industry,
-      cover_letter_required,
+      parsedRequireCoverLetter,
       urgent,
-      parsedQualifications,
+      qualifications,
       datePosted,
-      parsedBenefits,
-      parsedRequirements,
+      benefits,
+      requirements,
       parsedScreeningQuestions);
 
     const listing = await jobsdb.CreateJobListing(db, newJobListing);
@@ -73,8 +71,8 @@ export function GetListing(db: DB): Handler {
 export function UpdateListing(db: DB): Handler {
   return async (req: Request, res: Response, next: NextFunction) => {
     const id = req.params.id;
-    const listingData = req.body;
-    await validate.UpdateListing(db, id ,req.body);
+    const listingData = req.body["screeningQuestions"] ? {...req.body, screeningQuestions: ParseScreeningQuestions(req.body["screeningQuestions"])} : req.body;
+    await validate.UpdateListing(db, id, req.body);
     const listing = await jobsdb.RetrieveJobListing(db, id);
     const updatedJobListing = { ...listing, ...listingData };
 

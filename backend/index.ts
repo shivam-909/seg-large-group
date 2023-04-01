@@ -45,6 +45,9 @@ export const run = () => {
     app.set('db', db);
     app.use(cors());
 
+    // Authentication middleware
+    app.use("/api/*", middleware.AuthMW);
+
     app.get('/error', util.ErrorTest)
 
     app.post('/auth/login', upload.none(), utils.Route(app, authroutes.Login));
@@ -52,14 +55,13 @@ export const run = () => {
     app.post('/auth/refresh', upload.none(), utils.Route(app, authroutes.Refresh));
 
     app.post('/api/notifications/add', upload.none(), utils.Route(app, notificationroutes.AddNotification));
-    app.get('/api/notifications/:id', utils.Route(app, notificationroutes.GetNotification));
+    app.get('/api/notifications/:id', utils.Route(app, notificationroutes.GetAllUserNotifs));
     app.delete('/api/notifications/:id', upload.none(), utils.Route(app, notificationroutes.DeleteNotification));
 
-    app.get('/api/match/:id', upload.none(), utils.Route(app, matchmakeroutes.getJobListingsForSearcherRoute));
-
-    app.get('/api/user/:id', upload.none(), utils.Route(app, userroutes.GetUser));
+    app.get('/api/match/:id', upload.none(), utils.Route(app, matchmakeroutes.FindMatchingJobs));
 
     app.post('/api/jobs/search', upload.none(), utils.Route(app, searchroutes.SearchListings));
+
     app.post('/api/jobs/filter', upload.none(), utils.Route(app, listingroutes.RetrieveJobListingsByFilter));
     app.post('/api/jobs/', upload.none(), utils.Route(app, listingroutes.AddListing));
     app.get('/api/jobs/:id', utils.Route(app, listingroutes.GetListing));
@@ -78,9 +80,9 @@ export const run = () => {
     app.delete('/api/storage/:destination/:key', upload.none(), utils.Route(app, deleteFile));
 
     app.post('/api/user/typeid', upload.none(), utils.Route(app, userroutes.GetUserByTypeID));
-    app.get('/api/user/:id', upload.none(), utils.Route(app, userroutes.GetUser));
-    app.patch('/api/users/:id', upload.none(), utils.Route(app, userroutes.UpdateUser));
-    app.delete('/api/user/:id', upload.none(), utils.Route(app, userroutes.DeleteUser));
+    app.get('/api/user', upload.none(), utils.Route(app, userroutes.GetUser));
+    app.patch('/api/users', upload.none(), utils.Route(app, userroutes.UpdateUser));
+    app.delete('/api/user', upload.none(), utils.Route(app, userroutes.DeleteUser));
 
     app.get('/api/company/:id', utils.Route(app, companiesroutes.GetCompany));
     app.get('/api/searcher/:id', utils.Route(app, searcherroutes.GetSearcher));
@@ -91,9 +93,6 @@ export const run = () => {
 
     // Error handling middleware
     app.use(middleware.ErrorMW);
-
-    // Authentication middleware
-    app.use("/api/*", middleware.AuthMW);
 
     app.post("/api/echo", util.Echo);
 
