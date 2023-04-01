@@ -31,8 +31,8 @@ it("create listing", async () => {
     });
 
 
-    const body = await response.json() as any;
     expect(response.status).toEqual(200);
+    const body = await response.json() as any;
     expect(body).not.toBeNull();
 
     // Expect access and refresh
