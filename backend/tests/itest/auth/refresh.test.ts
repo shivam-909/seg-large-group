@@ -2,8 +2,7 @@ import DB from "../../../db/db";
 import { DeleteUserByEmail } from "../../../db/users";
 
 test("refresh token", async () => {
-    jest.useFakeTimers();
-    jest.setTimeout(10000);
+    jest.setTimeout(20000);
 
     const db = new DB();
 

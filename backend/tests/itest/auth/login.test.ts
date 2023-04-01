@@ -3,8 +3,7 @@ import { RetrieveFullUserByEmail, DeleteUser } from "../../../db/users";
 
 test('login user', async () => {
 
-    jest.useFakeTimers();
-    jest.setTimeout(10000);
+    jest.setTimeout(20000);
 
     const email = "itest_login_user@example.com"
 

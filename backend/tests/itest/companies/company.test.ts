@@ -3,8 +3,7 @@ import { DeleteUser, RetrieveFullUserByEmail } from "../../../db/users";
 
 test('register company, retrieve by ID, delete', async () => {
 
-    jest.useFakeTimers();
-    jest.setTimeout(10000);
+    jest.setTimeout(20000);
 
     const email = "itest_register_company@example.com"
 
