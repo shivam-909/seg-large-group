@@ -45,6 +45,10 @@ export const run = () => {
     app.set('db', db);
     app.use(cors());
 
+    app.get('/api/storage/:destination/:key', upload.none(), utils.Route(app, getFile));
+    app.post('/api/storage/:destination/:id', upload.single('file'), utils.Route(app, uploadFile));
+    app.delete('/api/storage/:destination/:key', upload.none(), utils.Route(app, deleteFile));
+
     // Authentication middleware
     app.use("/api/*", middleware.AuthMW);
 
@@ -77,10 +81,6 @@ export const run = () => {
     app.patch('/api/applications/:id', upload.none(), utils.Route(app, applicationroutes.UpdateApplication));
     app.delete('/api/applications/:id', upload.none(), utils.Route(app, applicationroutes.DeleteApplication));
     app.post('/api/application/filter', upload.none(), utils.Route(app, applicationroutes.RetrieveApplicationByFilter));
-
-    app.get('/api/storage/:destination/:key', upload.none(), utils.Route(app, getFile));
-    app.post('/api/storage/:destination/:id', upload.single('file'), utils.Route(app, uploadFile));
-    app.delete('/api/storage/:destination/:key', upload.none(), utils.Route(app, deleteFile));
 
     app.post('/api/user/typeid', upload.none(), utils.Route(app, userroutes.GetUserByTypeID));
     app.get('/api/user', upload.none(), utils.Route(app, userroutes.GetUser));
