@@ -1,6 +1,5 @@
 import './Skills.css';
-import React from 'react';
-import {useState} from "react";
+import React, {useState} from "react";
 
 export default function EducationDropdown(props) {
     const [valid, setValid] = useState(true);
@@ -8,11 +7,11 @@ export default function EducationDropdown(props) {
         document.getElementById("Education" + props.id).remove();
     }
     const validate = function(){
-        const regex = /^([^,]*)$/;
+        const regex = /^([^,]*)$/
         let grade = document.getElementById("grade"+props.id).value;
         let subject = document.getElementById("subject"+props.id).value;
         if (regex.test(grade) && regex.test(subject)){
-            setValid(true);
+            setValid(true)
         }
         else{
             setValid(false);
