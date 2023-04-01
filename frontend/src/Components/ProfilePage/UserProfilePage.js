@@ -215,9 +215,9 @@ function UserProfilePage() {
 
   return (
       <div>
-          <Navbar/>
+          <Navbar data-testid = 'navbar'/>
         <div className='bg-lighter-grey min-h-screen items-center justify-center flex'>
-            <div className='bg-white rounded-md sm:min-w-1/6 inline-grid px-12 py-7 space-y-3 mt-24 min-w-[40%]'>
+            <div className='bg-white rounded-md sm:min-w-1/6 inline-grid px-12 py-7 space-y-3 mt-24 min-w-[40%]' data-testid='loading'>
                 {!loading ? <div>
                 {/*<h1 className='font-bold text-3xl flex justify-center'>{isCompany ? profile.company?.companyName: profile.searcher?.firstName +" "+ profile.searcher?.lastName}'s Profile </h1>*/}
                 {/*    <h1 className='font-bold text-3xl flex justify-center'>Profile </h1>*/}
@@ -251,7 +251,7 @@ function UserProfilePage() {
                     {isCompany ? <div/>
                         : <div className={"border-[1px] border-[#ccc] rounded-md shadow-md mt-4"}>
                             <p><strong><u>Qualifications</u></strong></p>
-                            <Skills isEditing={isEditing} profile={profile}/>
+                            <Skills isEditing={isEditing} profile={profile} data-testid='skills'/>
                             <Education isEditing={isEditing} profile={profile}/>
                                 {profile.searcher?.cv ?
                                         <div>
