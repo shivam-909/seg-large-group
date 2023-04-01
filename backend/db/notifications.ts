@@ -1,53 +1,52 @@
 import Notification from "../models/notification";
 import DB from "./db";
-import {retrieveUserByID, updateUser} from "./users";
+import * as usersdb from "./users";
 
-export async function createNotification(db: DB, notification: Notification): Promise<Notification> {
-    const docRef = db.NotificationCollection().doc(notification.id);
-    let user;
+export async function CreateNotification(db: DB, notification: Notification): Promise<Notification> {
+  const docRef = db.NotificationCollection().doc(notification.id);
+  let user;
 
-    try {
-        await docRef.set({
-            ...notification,
-            id: notification.id,
-        }, );
-    } catch (err) {
-        throw err;
-    }
+  try {
+    await docRef.set({
+      ...notification,
+      id: notification.id,
+    },);
+  } catch (err) {
+    throw err;
+  }
 
-    user = await retrieveUserByID(db, notification.userID)
+  user = await usersdb.RetrieveFullUserByID(db, notification.userID)
 
-    if (user == null) {
-        throw new Error("user is null")
-    }
+  if (user == null) {
+    throw new Error("user is null")
+  }
 
-    user.notifications.push(notification.id)
-    await updateUser(db, user)
-
-    return notification;
+  user.notifications.push(notification.id)
+  await usersdb.UpdateUser(db, user.userID, {notifications: user.notifications});
+  return notification;
 }
 
-export async function retrieveNotification(db: DB, id: string): Promise<Notification | null> {
-    const docRef = db.NotificationCollection().doc(id);
-    const doc = await docRef.get();
+export async function RetrieveNotification(db: DB, id: string): Promise<Notification | null> {
+  const docRef = db.NotificationCollection().doc(id);
+  const doc = await docRef.get();
 
-    return doc.data() as Notification;
+  return doc.data() as Notification;
 }
 
+export async function GetAllUserNotifs(db: DB, id:string): Promise<Notification[]>{ //check this
 
-export async function updateNotification(db: DB, notification: Notification): Promise<void> {
-    const docRef = db.NotificationCollection().doc(notification.id);
+  const snapshot = await db.NotificationCollection().where('userID', '==', id).get();
+  const userNotifs: Notification[] = [];
 
-    const { id, ...notificationData } = notification;
+  snapshot.forEach(doc => {
+    const notification = doc.data();
+    userNotifs.push(notification);
+  });
 
-    try {
-        await docRef.update(notificationData);
-    } catch (err) {
-        throw err;
-    }
+  return userNotifs;
 }
 
-export async function deleteNotification(db: DB, id: string) {
-    const docRef = db.NotificationCollection().doc(id);
-    await docRef.delete();
+export async function DeleteNotification(db: DB, id: string) {
+  const docRef = db.NotificationCollection().doc(id);
+  await docRef.delete();
 }

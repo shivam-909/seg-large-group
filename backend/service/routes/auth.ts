@@ -1,49 +1,54 @@
+import 'express-async-errors';
 import { NextFunction, Request, Response } from "express";
 import bcrypt from 'bcrypt';
-import 'express-async-errors';
 import DB from "../../db/db";
-import {createUser, retrieveUserByEmail } from "../../db/users";
+import { CreateUser, RetrieveFullUserByEmail } from "../../db/users";
 import { Company, Searcher, User } from "../../models/user";
-import { Error, ErrorFailedToHashPassword, ErrorInvalidEmail, ErrorInvalidPassword, ErrorMissingCompanyName, ErrorMissingFirstName, ErrorMissingLastName, ErrorUserExists, getErrorMessage, Handler } from "../public";
+import { Error, ErrorFailedToHashPassword, ErrorInvalidCredentials, ErrorInvalidEmail, ErrorInvalidPassword, ErrorInvalidRefreshToken, ErrorInvalidUserType, ErrorMissingCompanyName, ErrorMissingFirstName, ErrorMissingLastName, ErrorUserExists, getErrorMessage, Handler, Token } from "../public";
 import { GenerateKeyPair, VerifyJWT } from "../tokens";
 import { randomUUID } from "crypto";
+import { CreateCompany } from "../../db/companies";
+import { CreateSearcher } from "../../db/searchers";
 
 
 // Login accepts a request containing an id and password, and return a JWT
 // access key and refresh token.
 export function Login(db: DB): Handler {
-  return (req: Request, res: Response) => {
+  return async (req: Request, res: Response, next: NextFunction) => {
     const { email, password } = req.body;
 
-    retrieveUserByEmail(db, email).then(user => {
-      if (user === null) {
-        return res.status(401).send("user does not exist");
-      }
-      const match = bcrypt.compareSync(password, user.hashedPassword);
-      if (match) {
-        let { access, refresh } = GenerateKeyPair(user.userID);
+    const user = await RetrieveFullUserByEmail(db, email);
 
-        return res.status(200).json({
-          access: access,
-          refresh: refresh,
-        });
-      }
-      else {
-        return res.status(401).send("invalid password");
-      }
-    }).catch(err => {
-        return res.status(500).json({
-            msg: err.message,
-        });
-    });
+    if (user === null || user === undefined) {
+      next(ErrorInvalidCredentials)
+      return
+    }
+
+    const valid = bcrypt.compareSync(password, user!.hashedPassword);
+
+    if (!valid) {
+      next(ErrorInvalidCredentials)
+      return
+    }
+
+    const { access, refresh } = await GenerateKeyPair(user!.userID);
+
+    return res.status(200).json({
+      access,
+      refresh,
+    })
   }
 }
 
 export function Register(db: DB): Handler {
   return async (req: Request, res: Response, next: NextFunction) => {
-    const { userType, companyName, firstName, lastName, email, password, pfpUrl, location} = req.body;
+    const { user_type, company_name, first_name, last_name, email, password, pfp_url, location } = req.body;
 
-    let user: User | null = await retrieveUserByEmail(db, email);
+    if (email == "test_listings_create@example.com") {
+      console.log("RECEIVED TEST EMAIL")
+    }
+
+    let user: User | null = await RetrieveFullUserByEmail(db, email);
 
     // Sanity check for user.
     if (user !== null) {
@@ -51,78 +56,92 @@ export function Register(db: DB): Handler {
       return
     }
 
-    if (!ValidPassword(password)) {
-      return res.status(400).json({
-        msg: "invalid password"
-      })
+    if (user_type !== "company" && user_type !== "searcher") {
+      next(ErrorInvalidUserType)
+      return;
     }
 
-    const hash = ((): string | Error => {
+    const s = ValidateRegistrationForm(
+      first_name,
+      last_name,
+      email,
+      password,
+      user_type === "company",
+      company_name,
+    );
+
+    if (s !== "") {
+      next(s);
+      return;
+    }
+
+    const hash = ((): string => {
       try {
         return bcrypt.hashSync(password, 10)
       } catch (e) {
-        return {
-          message: getErrorMessage(e),
-        }
+        console.log(e);
+        return "";
       }
     })();
 
-    if (hash instanceof Error) {
-      return res.status(500).json({
-        msg: "failed to hash password",
-      })
+    if (hash == "") {
+      next(ErrorFailedToHashPassword);
+      return;
     }
 
-    const newId = randomUUID();
+    const newUserID = randomUUID();
+    const newUser = new User(newUserID, email, hash as string, pfp_url, location, []);
 
-    let newUser: User;
+    switch (user_type) {
+      case "company":
+        const newCompanyID = randomUUID();
+        newUser.companyID = newCompanyID;
+        const newCompany = new Company(company_name, newCompanyID);
 
-    if (userType === 'company') {
-      newUser = new Company(newId, companyName, email, hash as string, pfpUrl, location, [], randomUUID());
-      console.log(newUser)
-    } else if (userType === 'searcher') {
-      newUser = new Searcher(newId, firstName, lastName, email, hash as string, pfpUrl, location, [], [], randomUUID());
-    } else {
-      return res.status(400).json({
-        msg: "invalid user type"
-      });
+        await CreateCompany(db, newUser, newCompany);
+        break;
+
+      case "searcher":
+        const newSearcherID = randomUUID();
+        newUser.searcherID = newSearcherID;
+        const newSearcher = new Searcher(first_name, last_name, [], newSearcherID, [], [], []);
+
+        await CreateSearcher(db, newUser, newSearcher);
+        break;
     }
 
-    await createUser(db, newUser).then(() => {
-      return
-    })
-
-    let { access, refresh } = GenerateKeyPair(newUser.userID);
-
+    const { access, refresh } = await GenerateKeyPair(newUser.userID);
     return res.status(200).json({
-      access: access,
-      refresh: refresh,
-    });
+      access,
+      refresh,
+    })
   }
 }
-
 
 // Refresh accepts a request containing a refresh token, and return a new JWT access key and
 // refresh token.
 export function Refresh(): Handler {
-  return async (req: Request, res: Response) => {
+  return async (req: Request, res: Response, next: NextFunction) => {
 
     const { refresh_token } = req.body;
 
-    const claims = VerifyJWT(refresh_token);
+    const claims: Token = VerifyJWT(refresh_token);
 
     if (!claims.username) {
-      res.status(401).send("invalid refresh token");
+      console.log("does not have username")
+      next(ErrorInvalidRefreshToken)
       return
     }
 
     if (claims.type !== 'refresh') {
-      res.status(401).send("invalid refresh token");
+      console.log("not refresh")
+      next(ErrorInvalidRefreshToken)
       return
     }
 
-    if (claims.exp < Date.now()) {
-      res.status(401).send("refresh token expired");
+    if (claims.exp * 1000 < Date.now()) {
+      console.log("expired ", claims.exp, Date.now())
+      next(ErrorInvalidRefreshToken)
       return
     }
 
@@ -136,12 +155,12 @@ export function Refresh(): Handler {
 }
 
 function ValidateRegistrationForm(
-    firstName: string,
-    lastName: string,
-    email: string,
-    password: string,
-    isCompany: boolean,
-    companyName: string,
+  firstName: string,
+  lastName: string,
+  email: string,
+  password: string,
+  isCompany: boolean,
+  companyName: string,
 ): string {
 
   if (email === undefined || email === "") {
@@ -152,15 +171,15 @@ function ValidateRegistrationForm(
     return ErrorInvalidPassword;
   }
 
-  if (firstName === undefined || firstName === "") {
-    return ErrorMissingFirstName;
-  }
+  if (!isCompany) {
+    if (firstName === undefined || firstName === "") {
+      return ErrorMissingFirstName;
+    }
 
-  if (lastName === undefined || lastName === "") {
-    return ErrorMissingLastName;
-  }
-
-  if (isCompany && companyName === undefined || companyName === "") {
+    if (lastName === undefined || lastName === "") {
+      return ErrorMissingLastName;
+    }
+  } else if (companyName === undefined || companyName === "") {
     return ErrorMissingCompanyName;
   }
 
@@ -175,9 +194,7 @@ function ValidateRegistrationForm(
   return "";
 }
 
-function ValidEmail(email: string): boolean {
-
-  console.log(email);
+export function ValidEmail(email: string): boolean {
 
   const parts = email.split("@");
   if (parts.length !== 2) {
@@ -190,6 +207,6 @@ function ValidEmail(email: string): boolean {
 }
 
 export function ValidPassword(password: string): boolean {
-  const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{8,20})/;
+  const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[.!@#$%^&*])(?=.{8,20})/;
   return regex.test(password);
 }

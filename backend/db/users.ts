@@ -1,203 +1,220 @@
-import {Company, Searcher, User} from "../models/user";
+import {User, UserExpanded} from "../models/user";
+import * as companiesdb from "./companies";
+import * as searchersdb from "./searchers";
 import DB from "./db";
-import {deleteJobsByCompanyID} from "./jobs";
+import { ErrorCompanyNotFound, ErrorMultipleUsersFound, ErrorSearcherNotFound, ErrorUserNotFound } from "../service/public";
 
 
-export async function createUser(db: DB, user: User) {
-    const baseUser: Omit<User, 'companyID' | 'searcherID'> = {
-        userID: user.userID,
-        email: user.email,
-        hashedPassword: user.hashedPassword,
-        pfpUrl: user.pfpUrl,
-        location: user.location,
-        notifications: user.notifications,
-    };
-
-    let type: 'company' | 'searcher' | null = null;
-    let typeID: string | null = null;
-
-    if (user.companyID) {
-        const companyUser: Company = {
-            ...baseUser,
-            companyID: user.companyID,
-            companyName: (user as Company).companyName,
-        };
-        await db.CompanyCollection().doc(user.companyID).set(companyUser);
-        type = 'company';
-        typeID = user.companyID;
-    } else if (user.searcherID) {
-        const searcherUser: Searcher = {
-            ...baseUser,
-            searcherID: user.searcherID,
-            firstName: (user as Searcher).firstName,
-            lastName: (user as Searcher).lastName,
-            savedJobs: (user as Searcher).savedJobs,
-        };
-        await db.SearcherCollection().doc(user.searcherID).set(searcherUser);
-        type = 'searcher';
-        typeID = user.searcherID;
-    }
-
-    if (type && typeID && baseUser) {
-        await db.UserCollection().doc(user.userID).set({
-            ...baseUser,
-            [`${type}ID`]: typeID,
-        } as User);
-    }
+export async function CreateUser(db: DB, user: User) {
+  await db.UserCollection().doc(user.userID).set({
+    userID: user.userID,
+    email: user.email,
+    hashedPassword: user.hashedPassword,
+    pfpUrl: user.pfpUrl,
+    location: user.location,
+    notifications: user.notifications,
+    description: user.description,
+    companyID: user.companyID,
+    searcherID: user.searcherID,
+  },
+  );
 }
 
-export async function retrieveUserByID(db: DB, id: string): Promise<Company | Searcher | null> {
-    let docRef = db.UserCollection().doc(id)
-    let doc = await docRef.get();
-
-    if (doc.exists) {
-        const data = doc.data() as Company | Searcher;
-        if (data.companyID) {
-            docRef = db.CompanyCollection().doc(data.companyID);
-            doc = await docRef.get();
-            return doc.data() as Company;
-        } else if (data.searcherID) {
-            docRef = db.SearcherCollection().doc(data.searcherID);
-            doc = await docRef.get();
-            return doc.data() as Searcher;
-        } else {
-            throw new Error('Not a User type');
-        }
-    } else {
-        return null
-    }
-}
-
-export async function retrieveUserByEmail(db: DB, email:string): Promise<Company | Searcher | null> {
-    const companySnapshot = await db.CompanyCollection().where('email', '==', email).get();
-    const searcherSnapshot = await db.SearcherCollection().where('email', '==', email).get();
-
-    let snapshot: FirebaseFirestore.QuerySnapshot<User>;
-    if (!companySnapshot.empty) {
-        snapshot = companySnapshot as FirebaseFirestore.QuerySnapshot<User>;
-    } else if (!searcherSnapshot.empty) {
-        snapshot = searcherSnapshot as FirebaseFirestore.QuerySnapshot<User>;
-    } else {
-        return null
-    }
-
-    const doc = snapshot.docs[0];
-    return doc.data() as Company | Searcher;
-}
-
-export async function updateUser(db: DB, user: Company | Searcher): Promise<void> {
-    const { userID, ...userData } = user;
-
-    let companyDocRef: FirebaseFirestore.DocumentReference;
-    let userDocRef: FirebaseFirestore.DocumentReference;
-    userDocRef = db.UserCollection().doc(userID);
-
-    if ('companyID' in user) {
-        companyDocRef = db.CompanyCollection().doc((user as unknown as Company).companyID);
-    } else if ('searcherID' in user) {
-        companyDocRef = db.SearcherCollection().doc((user as unknown as Searcher).searcherID);
-    } else {
-        throw new Error('Invalid user type');
-    }
-
-    const companyUpdate = companyDocRef.update(userData);
-
-    const baseData: { [key: string]: any } = {};
-    const updateKeys = ['email', 'hashedPassword', 'pfpUrl', 'location', 'notifications', 'companyID', 'searcherID'];
-    for (const key in user) {
-        if (updateKeys.includes(key)) {
-            baseData[key] = (user as any)[key];
-        }
-    }
-
-    const userUpdate = userDocRef.update(baseData);
-
-    try {
-        await Promise.all([companyUpdate, userUpdate]);
-    } catch (err) {
-        throw err;
-    }
-}
+export async function RetrieveFullUserByID(db: DB, id: string): Promise<UserExpanded | null> {
 
 
-export async function deleteUser(db: DB, userID: string): Promise<void> {
-    const to_delete = await retrieveUserByID(db, userID);
-    if (!to_delete) {
-        throw new Error(`User with ID ${userID} not found`);
-    }
+  let docRef = db.UserCollection().doc(id);
 
-    const userDocRef = db.UserCollection().doc(to_delete.userID);
 
-    if ('companyID' in to_delete) {
-        const companyDocRef = db.CompanyCollection().doc(to_delete?.companyID!);
-        await deleteJobsByCompanyID(db, to_delete?.companyID!);
-        await companyDocRef.delete();
-    } else if ('searcherID' in to_delete) {
-        const searcherDocRef = db.SearcherCollection().doc(to_delete?.searcherID!);
-        await searcherDocRef.delete();
-    }
-    await userDocRef.delete();
-}
+  let doc = await docRef.get();
 
-export async function getUserID(db: DB, id: string): Promise<string | null> {
-    if (!id) {
-        return null;
-    }
-
-    const companyDoc = await db.CompanyCollection().doc(id).get();
-    if (companyDoc.exists) {
-        const userID = companyDoc.data()?.userID;
-        return userID ?? null;
-    }
-
-    const searcherDoc = await db.SearcherCollection().doc(id).get();
-    if (searcherDoc.exists) {
-        const userID = searcherDoc.data()?.userID;
-        return userID ?? null;
-    }
-
+  if (!doc.exists) {
     return null;
+  }
+
+  let user = doc.data() as User;
+
+  if (user.companyID) {
+    const company = await companiesdb.RetrieveCompanyByID(db, user.companyID);
+
+    if (!company) throw new Error(ErrorCompanyNotFound);
+
+    return UserExpanded.fromUser(user, company);
+  }
+
+  if (user.searcherID) {
+    const searcher = await searchersdb.RetrieveSearcherByID(db, user.searcherID);
+
+    if (!searcher) throw new Error(ErrorSearcherNotFound);
+
+    return UserExpanded.fromUser(user, undefined, searcher);
+  }
+
+  throw new Error('invalid user type');
+}
+
+export async function RetrieveFullUserByEmail(db: DB, email: string): Promise<UserExpanded | null> {
+  const snapshot = await db.UserCollection().where('email', '==', email).get();
+
+  if (snapshot.empty) return null;
+
+  if (snapshot.docs.length > 1) throw new Error(ErrorMultipleUsersFound);
+
+  const user = snapshot.docs[0].data() as User;
+
+  if (user.companyID) {
+    const company = await companiesdb.RetrieveCompanyByID(db, user.companyID);
+
+    if (!company) throw new Error(ErrorCompanyNotFound);
+
+    return UserExpanded.fromUser(user, company);
+  } else if (user.searcherID) {
+    const searcher = await searchersdb.RetrieveSearcherByID(db, user.searcherID);
+
+    if (!searcher) throw new Error(ErrorSearcherNotFound);
+
+    return UserExpanded.fromUser(user, undefined, searcher);
+  }
+
+  throw new Error('invalid user type');
 }
 
 
-export async function getAllSearcherIDs(db: DB): Promise<string[]> {
-    const snapshot = await db.SearcherCollection().get();
-    const searcherIds: string[] = [];
+export async function UpdateUser(db: DB, id: string, data: any): Promise<void> {
 
-    snapshot.forEach(doc => {
-        const userId = doc.id;
-        searcherIds.push(userId);
+  let user = await RetrieveFullUserByID(db, id);
+
+  const baseData: { [key: string]: any } = {};
+
+  const updateKeys = ['email', 'hashedPassword', 'pfpUrl', 'location', 'notifications', 'description'];
+
+  updateKeys.forEach(key => {
+    if (key in data && key in user!) {
+      baseData[key] = data[key];
+    }
+  });
+
+  if (Object.keys(baseData).length > 0) {
+    if (typeof id === "string") {
+      await db.UserCollection().doc(id).update(baseData);
+    }
+  }
+  if (user!.searcherID) {
+    const searcherData: { [key: string]: any } = {};
+    const searcherUpdateKeys = ['savedJobs', 'skills', 'firstName', 'lastName', 'qualifications', 'cv'];
+
+    searcherUpdateKeys.forEach(key => {
+      if (key in data && key in user!.searcher!) {
+        searcherData[key] = data[key];
+      }
     });
 
-    return searcherIds;
-}
+    if (Object.keys(searcherData).length > 0) {
+      await db.SearcherCollection().doc(user!.searcherID).update(searcherData);
+    }
 
-export async function getAllCompanyIDs(db: DB): Promise<string[]> {
-    const snapshot = await db.CompanyCollection().get();
-    const companyIds: string[] = [];
+  }
 
-    snapshot.forEach(doc => {
-        const companyId = doc.id;
-        companyIds.push(companyId);
+  if (user!.companyID) {
+    const companyData: { [key: string]: any } = {};
+    const companyUpdateKeys = ['companyName'];
+
+    companyUpdateKeys.forEach(key => {
+      if (key in data && key in user!.company!) {
+        companyData[key] = data[key];
+      }
     });
 
-    return companyIds;
-}
-export async function getCompanyfromCompanyID(db: DB, companyID: string): Promise<Company | null> {
-    const companyDoc = await db.CompanyCollection().doc(companyID).get();
-    if (!companyDoc.exists) {
-        return null;
+    if (Object.keys(companyData).length > 0) {
+      await db.CompanyCollection().doc(user!.companyID).update(companyData);
     }
+  }
 
-    return companyDoc.data() as Company;
 }
 
-export async function getSearcherfromSearcherID(db: DB, searcherID: string): Promise<Searcher | null> {
-    const searcherDoc = await db.SearcherCollection().doc(searcherID).get();
-    if (!searcherDoc.exists) {
-        return null;
-    }
+export async function DeleteUser(db: DB, userID: string): Promise<void> {
+  const to_delete = await RetrieveFullUserByID(db, userID);
+  if (!to_delete) {
+    throw new Error(ErrorUserNotFound);
+  }
 
-    return searcherDoc.data() as Searcher;
+  const userDocRef = db.UserCollection().doc(to_delete.userID);
+  let searcherID = to_delete.searcherID;
+  let companyID = to_delete.companyID;
+  await userDocRef.delete();
+
+  if (companyID) {
+    await companiesdb.DeleteCompany(db, to_delete.companyID!);
+  } else if (searcherID) {
+    await searchersdb.DeleteSearcher(db, to_delete.searcherID!);
+  }
+
 }
 
+export async function DeleteUserByEmail(db: DB, email: string): Promise<void> {
+  const to_delete = await RetrieveFullUserByEmail(db, email);
+  if (!to_delete) {
+    throw new Error(ErrorUserNotFound);
+  }
+
+  const userDocRef = db.UserCollection().doc(to_delete.userID);
+
+  if (to_delete.companyID) {
+    await companiesdb.DeleteCompany(db, to_delete.companyID!);
+  } else if (to_delete.searcherID) {
+    await searchersdb.DeleteSearcher(db, to_delete.searcherID!);
+  }
+
+  await userDocRef.delete();
+}
+
+export async function GetUserID(db: DB, id: string): Promise<string | null> {
+  const snapshot = await db.UserCollection().where('companyID', '==', id).get();
+  if (!snapshot.empty) {
+    return snapshot.docs[0].id;
+  }
+
+  const snapshot2 = await db.UserCollection().where('searcherID', '==', id).get();
+  if (!snapshot2.empty) {
+    return snapshot2.docs[0].id;
+  }
+
+  return null;
+}
+
+
+export async function GetAllSearcherIDs(db: DB): Promise<string[]> {
+  const snapshot = await db.SearcherCollection().get();
+  const searcherIds: string[] = [];
+
+  snapshot.forEach(doc => {
+    const userId = doc.id;
+    searcherIds.push(userId);
+  });
+
+  return searcherIds;
+}
+
+export async function GetAllCompanyIDs(db: DB): Promise<string[]> {
+  const snapshot = await db.CompanyCollection().get();
+  const companyIds: string[] = [];
+
+  snapshot.forEach(doc => {
+    const companyId = doc.id;
+    companyIds.push(companyId);
+  });
+
+  return companyIds;
+}
+
+export async function RetrieveUserByCompanyID(db: DB, companyID: string): Promise<User | null> {
+  const snapshot = await db.UserCollection().where('companyID', '==', companyID).get();
+  if (snapshot.empty) return null;
+  return snapshot.docs[0].data() as User;
+}
+
+export async function RetrieveUserBySearcherID(db: DB, searcherID: string): Promise<User | null> {
+  const snapshot = await db.UserCollection().where('searcherID', '==', searcherID).get();
+  if (snapshot.empty) return null;
+  return snapshot.docs[0].data() as User;
+}
