@@ -1,11 +1,12 @@
 import React from 'react';
 import { render, fireEvent, screen } from '@testing-library/react';
 import SkillCard from '../Components/ProfilePage/SkillCard';
+const crypto = require('crypto');
 
 describe('SkillCard', () => {
   test('renders SkillCard correctly', () => {
     const props = {
-      id: '1',
+      id: crypto.randomUUID(),
       skill: 'React',
       duration: '6',
       interval: 'months'

@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen } from '@testing-library/react';
+import {render, screen, waitFor} from '@testing-library/react';
 import Education from '../Components/ProfilePage/Education';
 import {BrowserRouter, Route, Routes} from "react-router-dom";
 
@@ -17,13 +17,14 @@ describe("Education", () => {
     render(<Education profile={mockProfile} />);
   });
 
-  it('allows adding new education', () => {
-    render(<Education profile={mockProfile} isEditing={true} />);
-    const addButton = screen.getByRole("button", { name: "Add" });
+  it('allows adding new education', async () => {
+    render(<Education profile={mockProfile} isEditing={true}/>);
+    const addButton = screen.getByRole("button", {name: "Add"});
     expect(addButton).toBeInTheDocument();
     addButton.click();
-    expect(screen.getByText("Education:")).toBeInTheDocument();
-
+    await waitFor(() => {
+      expect(screen.getByText("Education:")).toBeInTheDocument();
+    });
   });
 
 });

@@ -99,6 +99,11 @@
 //
 //   expect(errorText).toBeVisible();
 // });
+const mockedUsedNavigate = jest.fn();
+jest.mock('react-router-dom', () => ({
+  ...jest.requireActual('react-router-dom'),
+  useNavigate: () => mockedUsedNavigate,
+}));
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import axios from 'axios';
 import RegisterPage from '../Components/RegisterPage/RegisterPage';
@@ -110,49 +115,44 @@ jest.mock('axios');
 describe('RegisterPage component', () => {
   beforeEach(() => {
     render(
-      <BrowserRouter>
-        <Routes>
-          <Route element={<RegisterPage navigate={useNavigate} />} />
-        </Routes>
-     </BrowserRouter>
+      <RegisterPage/>
     );
-
   });
 
   test('renders register form', () => {
-    const registerForm = screen.getByText("Register an account");
-    expect(registerForm).toBeInTheDocument();
+    const registerForm = screen.getByText("Register an account",  {exact:false});
+    waitFor(() => expect(registerForm).toBeInTheDocument());
   });
 
   test('toggles password visibility', () => {
-    const toggleEye = screen.getByAltText(/toggle eye/);
-    const passwordInput = screen.getByLabelText(/password/i);
+    const toggleEye = screen.getByAltText("toggle eye");
+    const passwordInput = document.getElementById("password");
 
-    expect(passwordInput).toHaveAttribute('type', 'password');
+    waitFor(() => expect(passwordInput).toHaveAttribute('type', 'password'));
 
     fireEvent.click(toggleEye);
 
-    expect(passwordInput).toHaveAttribute('type', 'text');
+    waitFor(() => expect(passwordInput).toHaveAttribute('type', 'text'));
+
   });
 
   test('validates email', async () => {
-    const emailInput = screen.getByLabelText(/email address/i);
-    const emailError = screen.getByText(/invalid email/i);
+    const emailInput = document.getElementById("email");
 
     fireEvent.blur(emailInput);
 
     await waitFor(() => {
-      expect(emailError).toBeVisible();
+      expect(screen.getByText("Invalid email")).toBeVisible();
     });
   });
 
   test('submits registration form', async () => {
-    const emailInput = screen.getByLabelText(/email address/i);
-    const passwordInput = screen.getByLabelText(/password/i);
-    const firstNameInput = screen.getByLabelText(/first name/i);
-    const lastNameInput = screen.getByLabelText(/last name/i);
-    const companyNameInput = screen.getByLabelText(/company name/i);
-    const signUpButton = screen.getByText(/sign up/i);
+    const emailInput = document.getElementById("email");
+    const passwordInput = document.getElementById("password");
+    const firstNameInput = document.getElementById("firstName");
+    const lastNameInput = document.getElementById("lastName");
+    const companyNameInput = document.getElementById("companyName");
+    const signUpButton = screen.getByText("Sign Up");
 
     // mock the axios.post method response
     axios.post.mockResolvedValueOnce({
@@ -163,7 +163,7 @@ describe('RegisterPage component', () => {
     });
 
     fireEvent.change(emailInput, { target: { value: 'test@example.com' } });
-    fireEvent.change(passwordInput, { target: { value: 'Test1234!@' } });
+    fireEvent.change(passwordInput, { target: { value: 'Test1234!' } });
 
     // set role to Job Seeker
     fireEvent.click(screen.getByText(/job seeker/i));

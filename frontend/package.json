@@ -55,6 +55,11 @@
     "postcss": "^8.4.21",
     "tailwindcss": "^3.2.7"
   },
+  "jest": {
+    "moduleNameMapper": {
+      "axios": "axios/dist/node/axios.cjs"
+    }
+  },
   "browser": {
     "crypto": false
   }

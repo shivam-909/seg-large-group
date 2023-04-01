@@ -17,7 +17,7 @@ export default function SkillCard(props) {
         }
     }
     return (
-        <div id={"Skill" + props.id} className={"grid grid-cols-2 gap-2 my-2"}>
+        <div id={"Skill" + props.id} key={"Skill"+props.id} className={"grid grid-cols-2 gap-2 my-2"}>
             <input id={"skillInput" + props.id} onChange={() => {validate("skillInput"+props.id,/^([^,]*)$/)}} className={"key"} placeholder={"Skill"} editable={"true"} defaultValue={props.skill}/>
             <div>
             <div className={"value w-[70%] float-left"}>
