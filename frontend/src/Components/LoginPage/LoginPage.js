@@ -25,8 +25,7 @@ function LoginPage() {
       localStorage.setItem("email", email)
       localStorage.setItem("password", password)
       localStorage.setItem("rememberLogin", true)
-    }
-    else {
+    } else {
       localStorage.removeItem("email")
       localStorage.removeItem("password")
       localStorage.removeItem("rememberLogin")
@@ -42,8 +41,7 @@ function LoginPage() {
             localStorage.setItem("access", response.data.access);
             localStorage.setItem("refresh", response.data.refresh);
             navigate('/');
-          }
-          else {
+          } else {
             // TODO: Display error message.
             setVisible("errorBox", true);
             setLoading(false);
@@ -70,37 +68,39 @@ function LoginPage() {
 
   return (
       <div className='bg-lighter-grey min-h-screen items-center justify-center flex'>
-          <div className='bg-white rounded-md sm:min-w-1/6 inline-grid px-12 py-7 space-y-3'>
-            <p className='mb-6 font-bold text-2xl flex justify-center'>Sign in to your account</p>
+        <div className='bg-white rounded-md sm:min-w-1/6 inline-grid px-12 py-7 space-y-3'>
+          <p className='mb-6 font-bold text-2xl flex justify-center'>Sign in to your account</p>
 
-            <div data-testid="email-input">
-              <TextInputBox id='email' type='email'  data-testid="email-input" cache={localStorage.getItem("email")} className="w-full" onBlur={()=>{validateField("email",/^\w+(\.\w+)*@\w+(-?\w+)*(\.\w{2,10})+$/)}} placeholder='Email address'/>
-              <span id="emailError"  className={"invisible absolute top-0"}>Invalid Email</span>
+            <TextInputBox data-testid="email-input" id='email' type='email' data-testid="email-input" cache={localStorage.getItem("email")}
+                          className="w-full" onBlur={() => {
+              validateField("email", /^\w+(\.\w+)*@\w+(-?\w+)*(\.\w{2,10})+$/)
+            }} placeholder='Email address'/>
+            <span id="emailError" className={"invisible absolute top-0"}>Invalid Email</span>
 
-            <div data-testid="password-input">
-            <TextInputBoxWithIcon id='password' type='password' cache={localStorage.getItem("password")} placeholder='Password' icon={<img id='toggleEye' src={showIcon} alt='' onClick={togglePasswordVisibility} className='cursor-pointer'/>}/>
-            </div>
+            <TextInputBoxWithIcon data-testid="password-input" id='password' type='password' cache={localStorage.getItem("password")}
+                                  placeholder='Password'
+                                  icon={<img id='toggleEye' src={showIcon} alt='' onClick={togglePasswordVisibility} className='cursor-pointer'/>}/>
 
-            <div data-testid='rememberLogin' className='flex space-x-2 items-center'>
-              <input id='rememberLogin' type='checkbox' className='w-4 h-4 inline-block accent-dark-theme-grey' defaultChecked={localStorage.getItem("rememberLogin")}/>
-              <p>Keep me signed in</p>
-            </div>
-            <ErrorBox message={"Invalid Login Details"}/>
-            <div className='p-0.5'></div>
-            
-            <div data-testid='signin-button'>
-              <button className='bg-dark-theme-grey rounded-md text-white p-2.5 flex items-center justify-center space-x-2' onClick={loginButton} id={"loginButton"}>
-                {loading ? <Loading className={"h-10 w-10 border-[3px] border-dark-theme-grey"}/> : <p id={"loadText"}>Sign In<i className="fa-solid fa-right-to-bracket pl-2"></i></p>}
-              </button>
-            </div>
 
-            <div data-testid='signup-link'>
-              <p className='text-center pt-4'>New user? <a className='LoginPage-link' href='/signup'>Sign up.</a></p>
-            </div>
-            <div data-testid='forgottenpw-link'>
-              <p  className='text-center'> Forgot your password? <a className= "ForgotPasswordPage-link" href="/forgotPassword" >Reset password.</a></p>
-            </div>
+          <div data-testid='rememberLogin' className='flex space-x-2 items-center'>
+            <input id='rememberLogin' type='checkbox' className='w-4 h-4 inline-block accent-dark-theme-grey'
+                   defaultChecked={localStorage.getItem("rememberLogin")}/>
+            <p>Keep me signed in</p>
           </div>
+          <ErrorBox message={"Invalid Login Details"}/>
+          <div className='p-0.5'></div>
+
+            <button data-testid='signin-button'
+                className='bg-dark-theme-grey rounded-md text-white p-2.5 flex items-center justify-center space-x-2'
+                onClick={loginButton} id={"loginButton"}>
+              {loading ? <Loading className={"h-10 w-10 border-[3px] border-dark-theme-grey"}/> :
+                  <p id={"loadText"}>Sign In<i className="fa-solid fa-right-to-bracket pl-2"></i></p>}
+            </button>
+
+            <p data-testid='signup-link' className='text-center pt-4'>New user? <a className='LoginPage-link' href='/signup'>Sign up.</a></p>
+
+            <p data-testid='forgottenpw-link' className='text-center'> Forgot your password? <a className="ForgotPasswordPage-link" href="/forgotPassword">Reset password.</a></p>
+        </div>
       </div>
   );
 }
