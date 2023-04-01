@@ -23,9 +23,9 @@ test('register searcher, retrieve by ID, delete', async () => {
         body: formData,
     });
 
-    const body = await response.json() as any;
 
     expect(response.status).toEqual(200);
+    const body = await response.json() as any;
     expect(body).not.toBeNull();
 
     // read the body as json
