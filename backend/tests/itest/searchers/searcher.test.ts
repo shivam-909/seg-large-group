@@ -1,5 +1,4 @@
 import DB from "../../../db/db";
-import { DeleteSearcher } from "../../../db/searchers";
 import { DeleteUser, RetrieveFullUserByEmail } from "../../../db/users";
 
 test('register searcher, retrieve by ID, delete', async () => {
