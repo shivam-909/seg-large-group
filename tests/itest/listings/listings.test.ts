@@ -3,8 +3,7 @@ import { DeleteJobListing } from "../../../db/jobs";
 import { DeleteUserByEmail, } from "../../../db/users";
 
 it("create listing", async () => {
-    jest.useFakeTimers();
-    jest.setTimeout(10000);
+    jest.setTimeout(20000);
 
     const fetch = require('node-fetch');
     const FormData = require('form-data');
