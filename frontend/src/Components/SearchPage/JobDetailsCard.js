@@ -14,18 +14,6 @@ import axios from "axios";
 import {GetData} from "../../Auth/GetUser";
 import App from '../../App';
 
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
-
-function App() {
-  return (
-    <Router>
-      <Switch>
-        <Route path="/job-details/:id" component={JobDetailsPage} />
-      </Switch>
-    </Router>
-  );
-}
-
 function JobDetailsCard(props) {
     const navigate = useNavigate();
     const [savedJobPost, setSavedJopPost] = useState(false);

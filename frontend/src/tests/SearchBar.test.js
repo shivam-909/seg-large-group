@@ -1,8 +1,13 @@
 import { render , screen } from "@testing-library/react";
 import userEvent from '@testing-library/user-event';
 import SearchBar from "../Components/SearchPage/SearchBar";
+import {BrowserRouter, Route, Routes} from "react-router-dom";
 
 describe('SearchBar', () => {
+  test('renders Search Bar', () => {
+    render(<BrowserRouter><Routes><Route element={ <SearchBar/> }/></Routes></BrowserRouter>);
+  });
+
   it('renders the dropdown fields with options', () => {
     // render(<SearchBar />);
     // expect(screen.getByLabelText('Date')).toBeInTheDocument();
