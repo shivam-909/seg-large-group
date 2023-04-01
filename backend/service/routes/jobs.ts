@@ -18,15 +18,10 @@ export function AddListing(db: DB): Handler {
     const newID = randomUUID();
 
 
-    console.log(screening_questions)
-
-
-
     // Get auth_username from headers.
     const userID = req.headers.auth_username as string;
     const company = await RetrieveFullUserByID(db, userID)
     const companyID = company!.companyID || "";
-    console.log(companyID)
     const parsedRequireCoverLetter = ParseRequireCoverLetter(cover_letter_required);
     const parsedScreeningQuestions = ParseScreeningQuestions(screening_questions);
     const datePosted = new Date();
