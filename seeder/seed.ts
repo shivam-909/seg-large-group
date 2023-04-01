@@ -1,15 +1,14 @@
 import DB from "../db/db";
 
-import { randomUUID } from "crypto";
-import { faker } from '@faker-js/faker';
+import {randomUUID} from "crypto";
+import {faker} from '@faker-js/faker';
 
 import JobListing from "../models/job";
-import { User } from "../models/user";
+import {Company, Searcher, User} from "../models/user";
 import Notification from "../models/notification";
-import { Status } from "../models/enums/status.enum";
-import { Company, Searcher } from "../models/user";
+import {Status} from "../models/enums/status.enum";
 import Application from "../models/application";
-import { companyNotification, searcherNotification } from "../models/enums/userNotification.enum";
+import {companyNotification, searcherNotification} from "../models/enums/userNotification.enum";
 import bcrypt from "bcrypt";
 import * as jobsdb from "../db/jobs";
 import * as usersdb from "../db/users";
@@ -20,15 +19,19 @@ import * as searcherdb from "../db/searchers";
 import {
     ErrorCompanyNotFound,
     ErrorJobListingNotFound,
-    ErrorNoCompaniesExist, ErrorSearcherNotFound,
+    ErrorNoCompaniesExist,
+    ErrorSearcherNotFound,
     ErrorUserNotFound
 } from "../service/public";
+import {RetrieveUserByCompanyID, RetrieveUserBySearcherID} from "../db/users";
+import {RetrieveJobListing} from "../db/jobs";
+import application from "../models/application";
 
 //CONTROL
-const numCompanies = 2
-const numSearchers = 10
+const numCompanies = 15
+const numSearchers = 15
 const numJobListings = 100
-const numApplications = 5
+const numApplications = 10
 
 //=====================================================USERS=====================================================
 
@@ -42,10 +45,11 @@ async function GenerateUser(): Promise<User> {
         email,
         hashPassword(password),
         faker.image.avatar(),
-        faker.address.city(),
+        GetRandomCity(),
         [],
+        faker.lorem.paragraph(),
         undefined,
-        undefined,
+        undefined
     )
 }
 
@@ -82,8 +86,6 @@ async function GenerateSearcher(db: DB): Promise<Searcher> {
     const savedJobs = await RetrieveRandomJobIDArr(db);
     const firstName = faker.name.firstName();
     const lastName = faker.name.lastName();
-    const skill = [faker.company.bsNoun() + "," + faker.datatype.number({'min': 1,'max': 10}).toString() + "," + faker.helpers.arrayElement(["weeks", "months", "years"])];
-    const qualification = faker.helpers.arrayElements([faker.helpers.arrayElement(["Engineering", "Sales", "Marketing", "Finance"]) + "," + faker.helpers.arrayElement(["GCSEs", "Bachelors", "Masters", "PhD", "High School Diploma", "International Baccalaureate"]) + "," + faker.datatype.number({'min': 1,'max': 10}) + "," + faker.datatype.number({'min': 1,'max': 10}) + "," + faker.helpers.arrayElement(["weeks", "months", "years"])]);
     const cv = [firstName + " " + lastName + "'s CV", "https://seg-joblink.s3.eu-west-2.amazonaws.com/cv/1047a922-d91f-43dc-80f2-7273ee90acaa.png.pdf"]
 
     return new Searcher(
@@ -91,8 +93,8 @@ async function GenerateSearcher(db: DB): Promise<Searcher> {
         lastName,
         savedJobs,
         id,
-        skill,
-        qualification,
+        GenerateSkills(),
+        GenerateEducation(),
         cv,
     );
 }
@@ -133,6 +135,43 @@ export function hashPassword(password: string): string {
 
     return hash as string;
 }
+
+function GenerateEducation(): string[] {
+    const subjects = ['Mathematics', 'Physics', 'Chemistry', 'Biology', 'History', 'Geography', 'English', 'French', 'German'];
+    const levels = ['Bachelors', 'Masters', 'PhD', "GCSE", "A Level"];
+    const bachClasses = ['1st', '2:1', '2:2', '3rd'];
+    const mastersClasses = ['Distinction', 'Merit', 'Pass'];
+    const grades = ['A', 'B', 'C', 'D', 'E', 'F'];
+
+    const numEducations = Math.floor(Math.random() * 2) + 1;
+
+    const educations = [];
+
+    for (let i = 0; i < numEducations; i++) {
+        const subject = faker.helpers.arrayElement(subjects);
+        const level = faker.helpers.arrayElement(levels);
+        let qualification = '';
+        let grade = '';
+
+        if (level === 'Bachelors') {
+            const bachClass = faker.helpers.arrayElement(bachClasses);
+            qualification = `${subject}, ${level}, ${bachClass}`;
+        } else if (level === 'Masters') {
+            const mastersClass = faker.helpers.arrayElement(mastersClasses);
+            qualification = `${subject}, ${level}, ${mastersClass}`;
+        } else if (level === 'PhD') {
+            qualification = `${subject}, ${level}`;
+        } else if (level === 'GCSE' || level === 'A Level') {
+            grade = faker.helpers.arrayElement(grades);
+            qualification = `${subject},${level},${grade}`;
+        }
+
+        educations.push(qualification);
+    }
+    return educations;
+}
+
+
 
 
 //=====================================================JOB-LISTINGS=====================================================
@@ -222,7 +261,6 @@ function GetRandomQuestions(): Record<string, boolean> {
 }
 
 
-
 async function GenerateJobListing(db: DB): Promise<JobListing> {
     const company = await GetRandomCompany(db);
     const user = await usersdb.RetrieveUserByCompanyID(db, company.companyID);
@@ -232,6 +270,7 @@ async function GenerateJobListing(db: DB): Promise<JobListing> {
     }
 
     const id = randomUUID();
+
     return new JobListing(
         id,
         faker.name.jobTitle(),
@@ -244,12 +283,22 @@ async function GenerateJobListing(db: DB): Promise<JobListing> {
         faker.helpers.arrayElement(["Engineering", "Sales", "Marketing", "Finance"]),
         faker.datatype.boolean(),
         faker.datatype.boolean(),
-        faker.helpers.arrayElements(["Pass in  Maths and English GCSEs", "Bachelors Degree", "Masters Degree", "PhD", "High School Diploma", "International Baccalaureate"]),
+        // faker.helpers.arrayElements(["Pass in  Maths and English GCSEs", "Bachelors Degree", "Masters Degree", "PhD", "High School Diploma", "International Baccalaureate"]),
+        GenerateEducation(),
         faker.date.past(),
         [faker.lorem.words(), faker.lorem.words(), faker.lorem.words()],
-        [faker.lorem.words(), faker.lorem.words(), faker.lorem.words()],
+        GenerateSkills(),
         GetRandomQuestions()
 );
+}
+
+function GenerateSkills(): string[] {
+    const numSkills = Math.floor(Math.random() * 5) + 1;
+    const skills: string[] = [];
+    for (let i = 0; i < numSkills; i++) {
+        skills.push(faker.company.bsNoun() + "," + ((Math.floor(Math.random() * 100) / 10) + 1).toString() + "," + faker.helpers.arrayElement(["weeks", "months", "years"]));
+    }
+    return skills;
 }
 
 export async function SeedJobListings(db: DB): Promise<void> {
@@ -278,17 +327,58 @@ export async function RetrieveRandomJobIDArr(db: DB): Promise<string[]> {
 
 //=====================================================APPLICATIONS=====================================================
 
+function GetRandomQnAs(): Record<string, string> {
+    const MAX_QnAs = Math.floor(Math.random() * 5) + 1;
+    const QnAs: Record<string, string> = {};
+
+    const interviewQuestions: [string, string][] = [
+        ["Why haven’t you gotten your Bachelor’s Degree/Master’s Degree/Ph.D.?", faker.lorem.words()],
+        ["Why have you switched jobs so many times?", faker.lorem.words()],
+        ["Why did you change your career path?", faker.lorem.words()],
+        ["Why did you decide to leave your previous/current job?", faker.lorem.words()],
+        ["Why is there a gap in your work experience?", faker.lorem.words()],
+        ["Why were you fired?", faker.lorem.words()],
+        ["How do you feel about working weekends or late hours?", faker.lorem.words()],
+        ["How would your boss describe you?", faker.lorem.words()],
+        ["Do you have any serious medical conditions?", faker.lorem.words()],
+        ["What would your first 30, 60, or 90 days look like in this role?", faker.lorem.words()],
+        ["Are you a team player?", faker.lorem.words()],
+        ["Are you a risk-taker?", faker.lorem.words()],
+        ["How do you deal with pressure or stressful situation?", faker.lorem.words()],
+        ["Do you think there is a difference between hard work and smart work?", faker.lorem.words()],
+        ["How quickly do you adapt to new technology?", faker.lorem.words()],
+        ["Do you have any interests outside of work?", faker.lorem.words()],
+        ["What do you think our company/organization could do better?", faker.lorem.words()],
+        ["Give an example of how you have handled a challenge in the workplace before.", faker.lorem.words()],
+        ["Give an example of when you performed well under pressure.", faker.lorem.words()],
+        ["Give an example of when you showed leadership qualities.", faker.lorem.words()]
+    ];
+
+    const shuffledQuestions = interviewQuestions.sort(() => Math.random() - 0.5);
+
+    for (let i = 0; i < MAX_QnAs && i < shuffledQuestions.length; i++) {
+        QnAs[shuffledQuestions[i][0]] = shuffledQuestions[i][1];
+    }
+
+    return QnAs;
+}
+
+
 async function GenerateApplicationListing(db: DB): Promise<Application> {
     const randomSearcher = await RetrieveRandomSearcherId(db);
     const randomJobListing = await RetrieveRandomJobListingID(db);
     const cv = [faker.name.fullName() + "'s CV", "https://seg-joblink.s3.eu-west-2.amazonaws.com/cv/1047a922-d91f-43dc-80f2-7273ee90acaa.png.pdf"]
+    const coverLetter = faker.lorem.paragraphs(5000).substring(0, Math.floor(Math.random() * (100 + 1)) + 500);
 
-    return new Application(
+        return new Application(
         randomUUID(),
         GetRandomStatus(),
         randomSearcher,
         randomJobListing,
         cv,
+        GetRandomQnAs(),
+        coverLetter,
+
     );
 }
 
@@ -310,99 +400,197 @@ function GetRandomStatus(): string {
 //=====================================================NOTIFICATIONS=====================================================
 
 
-
-async function GenerateSearcherNotification(db: DB, searcherID: string, applicationID: string): Promise<Notification | undefined> {
-    const user = await usersdb.RetrieveUserBySearcherID(db, searcherID);
-
-    if (!user) {
-        console.log("user not found for " + searcherID)
-        throw new Error(ErrorUserNotFound)
-    }
-
-    const content = GetRandomNotificationEnum("searcher");
-
-    return {
-        id: randomUUID(),
-        content,
-        applicationID: applicationID,
-        created: faker.date.past(),
-        userID: user.userID,
-    };
+async function getApplications(db:DB): Promise<Application[]>{
+    const applicationSnapshot = await db.ApplicationCollection().get();
+    const applications: Application[] = [];
+    applicationSnapshot.forEach(application => {
+        applications.push(application.data());
+    });
+    return applications;
 }
 
-async function GenerateCompanyNotification(db: DB, companyID: string, applicationID: string): Promise<Notification | undefined> {
-    const user = await usersdb.RetrieveUserByCompanyID(db, companyID);
 
-    if (!user) {
-        console.log("user not found for " + companyID)
-        throw new Error(ErrorUserNotFound)
+async function GenerateSearcherNotification(db: DB, application: Application){
+
+    // const applications = await getApplications(db);
+    let content = "";
+
+    if(application.status == 'Interview'){
+        console.log('Interview: ');
+        console.log(application.id);
+        content = searcherNotification.Interview.toString();
+    }
+    else if(application.status == 'Accepted'){
+        console.log('Accepted: ');
+        console.log(application.id);
+
+        content = searcherNotification.Accepted.toString();
+    }
+    else if(application.status == 'Rejected'){
+        console.log('Rejected: ');
+        console.log(application.id);
+        content = searcherNotification.Rejection.toString();
     }
 
-    const content = GetRandomNotificationEnum("company");
-
-    return {
+    let searcher = await RetrieveUserBySearcherID(db, application.searcher);
+    if(!searcher){
+        throw new Error('searcher not found');
+    }
+    let searcherNotif = {
         id: randomUUID(),
         content,
-        applicationID: applicationID,
+        applicationID: application.id,
         created: faker.date.past(),
-        userID: user.userID,
-    };
+        userID: searcher.userID,
+    }
+    await notificationsdb.CreateNotification(db, searcherNotif);
+
+
+
+
+}
+
+async function GenerateCompanyNotification(db: DB, application: Application){
+
+    let content = '';
+    // const applications = await getApplications(db);
+    let companyNotifs : any[] = [];
+
+    if(application.status == 'Applied'){
+        console.log('Applied');
+        console.log(application.id);
+        content = companyNotification.NewApplicant.toString();
+    }
+    else if(application.status == 'Archived'){
+        console.log('Archived');
+        console.log(application.id);
+
+        content = companyNotification.Withdrawal.toString();
+    }
+
+
+    let jobListing = await RetrieveJobListing(db, application.jobListing);
+    if(!jobListing){
+        throw new Error('job listing not found');
+    }
+    let company = await RetrieveUserByCompanyID(db, jobListing.companyID);
+    if(!company){
+        throw new Error('company not found');
+    }
+    let companyNotif = {
+        id: randomUUID(),
+        content,
+        applicationID: application.id,
+        created: faker.date.past(),
+        userID: company.userID,
+    }
+    await notificationsdb.CreateNotification(db, companyNotif);
+
+
+
+
 }
 
 
 export async function SeedAllNotifications(db: DB): Promise<void> {
-    const applicationsRef = db.ApplicationCollection();
-    const applicationsSnapshot = await applicationsRef.get();
+    const applications = await getApplications(db)
+    for(let i=0; i<applications.length; i++){
 
-    for (const doc of applicationsSnapshot.docs) {
-        const searcherNotif = await GenerateSearcherNotification(
-            db,
-            doc.data().searcher,
-            doc.data().id
-        );
-
-        if (!searcherNotif) {
-            console.log("searcher notif not found for " + doc.data().searcher);
-            throw new Error(ErrorSearcherNotFound);
+        const application = applications[i];
+        if(application.status == 'Accepted' || application.status == 'Rejected' || application.status == 'Interview'){
+            await GenerateSearcherNotification(db, application);
         }
 
-        const jobListing = await jobsdb.RetrieveJobListing(
-            db,
-            doc.data().jobListing
-        );
-
-        if (!jobListing) {
-            console.log("job listing not found for " + doc.data().jobListing);
-            throw new Error(ErrorJobListingNotFound);
+        else{
+            await GenerateCompanyNotification(db, application);
         }
 
-        const companyNotif = await GenerateCompanyNotification(
-            db,
-            jobListing.companyID,
-            doc.data().id
-        );
-
-        if (!companyNotif) {
-            console.log("company notif not found for " + jobListing.companyID);
-            throw new Error(ErrorCompanyNotFound);
-        }
-
-        await notificationsdb.CreateNotification(db, searcherNotif);
-        await notificationsdb.CreateNotification(db, companyNotif);
     }
-    console.log(`Seeded notifications`);
+
+    console.log('seeded notifications');
+
 }
 
 
-function GetRandomNotificationEnum(type: "company" | "searcher"): string {
-    let enums: Record<string, string>;
-    if (type == "searcher")
-        enums = searcherNotification as unknown as Record<string, string>;
-    else {
-        enums = companyNotification as unknown as Record<string, string>;
-    }
+function GetRandomCity(): string {
+    const cities = [
+        "Bath",
+        "Birmingham",
+        "Bradford",
+        "Brighton & Hove",
+        "Bristol",
+        "Cambridge",
+        "Canterbury",
+        "Carlisle",
+        "Chelmsford",
+        "Chester",
+        "Chichester",
+        "Colchester",
+        "Coventry",
+        "Derby",
+        "Doncaster",
+        "Durham",
+        "Ely",
+        "Exeter",
+        "Gloucester",
+        "Hereford",
+        "Kingston-upon-Hull",
+        "Lancaster",
+        "Leeds",
+        "Leicester",
+        "Lichfield",
+        "Lincoln",
+        "Liverpool",
+        "London",
+        "Manchester",
+        "Milton Keynes",
+        "Newcastle-upon-Tyne",
+        "Norwich",
+        "Nottingham",
+        "Oxford",
+        "Peterborough",
+        "Plymouth",
+        "Portsmouth",
+        "Preston",
+        "Ripon",
+        "Salford",
+        "Salisbury",
+        "Sheffield",
+        "Southampton",
+        "Southend-on-Sea",
+        "St Albans",
+        "Stoke on Trent",
+        "Sunderland",
+        "Truro",
+        "Wakefield",
+        "Wells",
+        "Westminster",
+        "Winchester",
+        "Wolverhampton",
+        "Worcester",
+        "York",
+        "Armagh",
+        "Bangor",
+        "Belfast",
+        "Lisburn",
+        "Londonderry",
+        "Newry",
+        "Aberdeen",
+        "Dundee",
+        "Dunfermline",
+        "Edinburgh",
+        "Glasgow",
+        "Inverness",
+        "Perth",
+        "Stirling",
+        "Bangor",
+        "Cardiff",
+        "Newport",
+        "St Asaph",
+        "St Davids",
+        "Swansea",
+        "Wrexham"
+    ]
 
-    const statusValues = Object.values(enums).filter((value) => typeof value === 'string');
-    const randomIndex = Math.floor(Math.random() * statusValues.length);
-    return statusValues[randomIndex] as string;
+    return faker.helpers.arrayElement(cities)
 }
