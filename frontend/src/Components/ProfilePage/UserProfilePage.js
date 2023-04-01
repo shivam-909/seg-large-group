@@ -10,6 +10,7 @@ import axios from "axios";
 import {useNavigate, useParams} from "react-router-dom";
 import Loading from "../Loading/Loading";
 import {Location} from "./Location";
+import {Document, Page} from "react-pdf/dist/cjs/entry.webpack";
 
 function UserProfilePage() {
     const navigate = useNavigate();
@@ -18,7 +19,6 @@ function UserProfilePage() {
     const [user, setUser] = useState([]);
     const [isEditing, setIsEditing]= useState(false);
     const [isCompany, setCompany] = useState(false)
-    const [fileName, setFile]= useState('');
     const [isOwner, setIsOwner] = useState(false);
     const [loading, setLoading] = useState(true)
 
@@ -29,12 +29,12 @@ function UserProfilePage() {
                 await axios.get(`${process.env.REACT_APP_BACKEND_URL}api/user`, {headers: {Authorization: `Bearer ${token}`}})
                     .then(r => {
                         setProfile(r.data)
-                        setFile(r.data.searcher?.cv[0])
                     });
                 setLoading(false);
             }
         };
         getProfile()
+        console.log(profile)
         setCompany(profile.searcherID === undefined)
     },[profile]) // eslint-disable-line
 
@@ -166,7 +166,6 @@ function UserProfilePage() {
         if (!validImageTypes.includes(fileType)) {
             // TODO: Display error if not an image
         } else {
-            setFile(file.name);
             // TODO: Add Backend Update
             const formData = new FormData();
             formData.append("file", files[0])
@@ -210,7 +209,7 @@ function UserProfilePage() {
       <div>
           <Navbar/>
         <div className='bg-lighter-grey min-h-screen items-center justify-center flex'>
-            <div className='bg-white rounded-md sm:min-w-1/6 inline-grid px-12 py-7 space-y-3 mt-24 max-w-lg min-w-[40%]'>
+            <div className='bg-white rounded-md sm:min-w-1/6 inline-grid px-12 py-7 space-y-3 mt-24 min-w-[40%]'>
                 {!loading ? <div>
                 {/*<h1 className='font-bold text-3xl flex justify-center'>{isCompany ? profile.company?.companyName: profile.searcher?.firstName +" "+ profile.searcher?.lastName}'s Profile </h1>*/}
                 {/*    <h1 className='font-bold text-3xl flex justify-center'>Profile </h1>*/}
@@ -246,9 +245,35 @@ function UserProfilePage() {
                             <p><strong><u>Qualifications</u></strong></p>
                             <Skills isEditing={isEditing} profile={profile}/>
                             <Education isEditing={isEditing} profile={profile}/>
-                            {!isEditing ?
-                                <p className={"mt-4 mb-2"}><strong>CV: </strong>{" "} {profile.searcher?.cv ? (<a href={profile.searcher?.cv[1]} target={"_blank"} rel={"noreferrer"} id= 'Cv' download><u>{fileName}</u></a> ):("No CV")}</p>
-                                :<div><p className={"mt-4 mb-2"}><strong>CV:</strong>  <input type="file" id="Cv" accept= ".pdf"  onChange={updateCV}/></p></div>}
+                                {profile.searcher?.cv ?
+                                        <div>
+                                            <div onClick={() => {window.open(profile.searcher?.cv[1],"_blank").focus()}}
+                                                className='border rounded-md border-dark-theme-grey p-2 space-y-5 inline-block cursor-pointer'>
+                                                <div className='flex justify-between items-center pt-2'>
+                                                    <p>{profile.searcher?.cv[0]}</p>
+                                                </div>
+                                                <Document file={profile.searcher?.cv[1]}>
+                                                    <Page pageNumber={1} className='border rounded-md overflow-ellipsis'/>
+                                                </Document>
+                                            </div>
+                                            {isEditing && <div className='pt-5'>
+                                                <button className='bg-dark-theme-grey rounded-md py-2.5 px-4 font-bold text-white'>
+                                                    <input id="upload" type="file" accept=".pdf" onChange={updateCV}
+                                                           className='hidden'/>
+                                                    <label htmlFor="upload" className='cursor-pointer'><i
+                                                        className="fa-solid fa-upload"></i> Replace</label>
+                                                </button>
+                                            </div>}
+                                        </div>
+                                        :
+                                        <div>
+                                            <p className='pb-5'>No CV.</p>
+                                            <button className='bg-dark-theme-grey rounded-md py-2.5 px-4 font-bold text-white'>
+                                                <input id="upload" type="file" accept=".pdf" onChange={updateCV} className='hidden'/>
+                                                <label htmlFor="upload" className='cursor-pointer'><i className="fa-solid fa-upload"></i> Upload</label>
+                                            </button>
+                                        </div>
+                                }
                         </div>
                     }
                 <ErrorBox message={"Please complete all required fields."}/>
