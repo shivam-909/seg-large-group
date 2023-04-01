@@ -49,19 +49,20 @@ test('renders forgot password page', () => {
     waitFor(() => expect(screen.queryByTestId('error').textContent).toEqual('Invalid Email'));
   });
 
-  // test('when submit button clicked, alert should come up', () =>{
-  //   render(
-  //     <BrowserRouter>
-  //       <Routes>
-  //         <Route element={<ForgotPassword />} />
-  //       </Routes>
-  //     </BrowserRouter>
-  //   );
+  test('when submit button clicked, alert should come up', () =>{
+    render(
+      <BrowserRouter>
+        <Routes>
+          <Route element={<ForgotPassword />} />
+        </Routes>
+      </BrowserRouter>
+    );
 
-  //   // const submitButton = screen.queryByAltText('submit-button')
-  //   fireEvent.click(screen.queryByAltText('submit-button'));
+    userEvent.click(screen.getByText('Submit'));
+    // const submitButton = screen.queryByAltText('submit-button')
+    fireEvent.click(screen.queryByAltText('submit-button'));
 
-  //   expect(alert).toBeVisible;
+    //expect(alert).toBeVisible;
 
-  // });
+  });
 

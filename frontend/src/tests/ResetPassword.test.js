@@ -2,7 +2,7 @@ import React from 'react';
 import {render, screen, fireEvent, waitFor} from '@testing-library/react';
 import ResetPassword from '../Components/ResetPassword/ResetPassword';
 import {BrowserRouter, Route, Routes} from "react-router-dom";
-// import userEvent from '@testing-library/user-event'
+import userEvent from '@testing-library/user-event'
 
 
 test('renders ResetPassword page with email, password and confirm password fields', () => {
@@ -28,7 +28,7 @@ test('renders ResetPassword page with email, password and confirm password field
 
     });
 
-test('checkPasswordMatch function validates passwords correctly', () => {
+test('checkPasswordMatch function shows error message with incorrect passwords inputs', () => {
     render(
       <BrowserRouter>
         <Routes>
@@ -41,15 +41,30 @@ test('checkPasswordMatch function validates passwords correctly', () => {
     const confirmPasswordInput = screen.queryByTestId('confirmpw-input');
     const errorText = 'Passwords do not match';
 
-    // userEvent.type(passwordInput, 'test');
-    // userEvent.type(confirmPasswordInput, 'test2');
-  
-    // fireEvent.change(passwordInput, { target: { value: 'password' } });
-    // fireEvent.change(confirmPasswordInput, { target: { value: 'password' } });
-    //
-    // waitFor(() => expect(errorText).not.toBeVisible());
-    //
-    // fireEvent.change(confirmPasswordInput, { target: { value: 'password1' } });
-    //
-    // waitFor(() => expect(errorText).toBeVisible());
+    userEvent.type(passwordInput, 'test');
+    userEvent.type(confirmPasswordInput, 'test2');
+
+    waitFor(() => expect(passwordInput).toBeInTheDocument());
+    waitFor(() => expect(confirmPasswordInput).toBeInTheDocument());
+    waitFor(() => expect(errorText).toBeVisible());
+});
+
+test('checkPasswordMatch function does not show error message with correct passwords inputs', () => {
+    render(
+        <BrowserRouter>
+            <Routes>
+                <Route element={<ResetPassword />} />
+            </Routes>
+        </BrowserRouter>
+    );
+    const passwordInput = screen.queryByTestId("pw-input");
+    const confirmPasswordInput = screen.queryByTestId('confirmpw-input');
+    const errorText = 'Passwords do not match';
+
+    userEvent.type(passwordInput, 'test');
+    userEvent.type(confirmPasswordInput, 'test');
+
+    waitFor(() => expect(passwordInput).toBeInTheDocument());
+    waitFor(() => expect(confirmPasswordInput).toBeInTheDocument());
+    waitFor(() => expect(errorText).not.toBeVisible());
 });

@@ -54,21 +54,17 @@ function ResetPassword(){
               <span id="emailError"  className={"invisible absolute top-0"}>Invalid Email</span>
             </div>
 
-            <div data-testid="pw-input">
-                <TextInputBoxWithIcon id='password' type='password' value= {password} onChange ={event => setPassword(event.target.value)} onBlur={()=>{validateField("password",/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{8,20})/)}} placeholder='New Password' icon={<img id='toggleEye' src={showIcon} alt='' onClick={togglePasswordVisibility} className='cursor-pointer'/>}/>
-                <span id="passwordError" className='invisible absolute top-0'>Invalid password</span>
-                  <div className={"text-black rounded-md border-2 border-dark-theme-grey px-2 pb-2 mt-2"}>Please include:
-                    <div>• 8-20 Characters.</div>
-                    <div>• 1 Capital Letter.</div>
-                    <div>• 1 Number.</div>
-                    <div>• 1 Special Character: (.!@#$%^&*)</div>
-                  </div>
+            <TextInputBoxWithIcon data-testid="pw-input" id='password' type='password' value= {password} onChange ={event => setPassword(event.target.value)} onBlur={()=>{validateField("password",/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{8,20})/)}} placeholder='New Password' icon={<img id='toggleEye' src={showIcon} alt='' onClick={togglePasswordVisibility} className='cursor-pointer'/>}/>
+            <span id="passwordError" className='invisible absolute top-0'>Invalid password</span>
+              <div className={"text-black rounded-md border-2 border-dark-theme-grey px-2 pb-2 mt-2"}>Please include:
+                <div>• 8-20 Characters.</div>
+                <div>• 1 Capital Letter.</div>
+                <div>• 1 Number.</div>
+                <div>• 1 Special Character: (.!@#$%^&*)</div>
               </div>
 
-              <div data-testid="confirmpw-input">
-                 <TextInputBoxWithIcon className='w-full' id='confirmPassword' type='password' onBlur={checkPasswordMatch} placeholder='Confirm Password' icon={<img id='toggleEye' src={showIcon} alt='' onClick={togglePasswordVisibility} className='cursor-pointer'/>}/>
-                  <span id="passwordMismatchError" className='invisible absolute top-0'>Passwords do not match</span>
-              </div>  
+             <TextInputBoxWithIcon data-testid="confirmpw-input" className='w-full' id='confirmPassword' type='password' onBlur={checkPasswordMatch} placeholder='Confirm Password' icon={<img id='toggleEye' src={showIcon} alt='' onClick={togglePasswordVisibility} className='cursor-pointer'/>}/>
+              <span id="passwordMismatchError" className='invisible absolute top-0'>Passwords do not match</span>
 
             <button className="bg-dark-theme-grey rounded-md text-white p-2.5 flex items-center justify-center space-x-2" disabled={!password} onClick={submitNewPassword} id={"submitNewPassword"}><a className='LoginPage-link' href='/login'>Submit</a></button>
           </div>
