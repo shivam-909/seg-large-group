@@ -137,28 +137,28 @@ test('allows valid email input to pass', () => {
   });
 
   // https://stackoverflow.com/questions/73184212/how-to-test-checkbox-checked-with-react-testing-library
-  // test('toggles element when clicking the checkbox', () => {
-  //    const {debug, getByLabelText, getByTestId, getByText} = render(
-  //     <BrowserRouter>
-  //       <Routes>
-  //         <Route element={<LoginPage />} />
-  //       </Routes>
-  //     </BrowserRouter>
-  //   );
-  //
-  //     screen.getByRole('');
-  //
-  //   // screen.getByText('Keep me signed in');
-  //
-  //   waitFor(() => expect(screen.queryByTestId('rememberLogin')).toBeInTheDocument());
-  //   waitFor(() => expect(rememberLogin).toBeChecked());
-
-//     fireEvent.click(rememberLogin);
+//   test('toggles element when clicking the checkbox', () => {
+//       render(
+//       <BrowserRouter>
+//         <Routes>
+//           <Route element={<LoginPage />} />
+//         </Routes>
+//       </BrowserRouter>
+//     );
+//       userEvent.click((screen.queryByTestId('rememberLogin')).getByText('Keep me signed in'));
+//       expect(screen.getByLabelText('Keep me signed in')).toBeChecked();
 //
-// waitFor(() => expect(screen.queryByTestId('rememberLogin')).toBeInTheDocument());
-//   waitFor(() => expect(rememberLogin).not.toBeChecked());
-
-  // });
+//       // screen.getByRole('');
+//
+//     // screen.getByText('Keep me signed in');
+//
+//     // waitFor(() => expect(screen.queryByTestId('rememberLogin')).toBeInTheDocument());
+//     // waitFor(() => expect(rememberLogin).toBeChecked());
+//
+// // waitFor(() => expect(screen.queryByTestId('rememberLogin')).toBeInTheDocument());
+// //   waitFor(() => expect(rememberLogin).not.toBeChecked());
+//
+//   });
 
 
 // test('togglePasswordVisibility function toggles password visibility', () => {

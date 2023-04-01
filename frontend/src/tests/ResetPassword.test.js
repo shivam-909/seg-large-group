@@ -3,6 +3,7 @@ import {render, screen, fireEvent, waitFor} from '@testing-library/react';
 import ResetPassword from '../Components/ResetPassword/ResetPassword';
 import {BrowserRouter, Route, Routes} from "react-router-dom";
 import userEvent from '@testing-library/user-event'
+import LoginPage from "../Components/LoginPage/LoginPage";
 
 
 test('renders ResetPassword page with email, password and confirm password fields', () => {
@@ -67,4 +68,15 @@ test('checkPasswordMatch function does not show error message with correct passw
     waitFor(() => expect(passwordInput).toBeInTheDocument());
     waitFor(() => expect(confirmPasswordInput).toBeInTheDocument());
     waitFor(() => expect(errorText).not.toBeVisible());
+});
+
+test("links with href value /login after submit button is clicked", () => {
+    render(
+        <BrowserRouter>
+            <Routes>
+                <Route element={<LoginPage />} />
+            </Routes>
+        </BrowserRouter>
+    );
+    waitFor(() => expect((screen.queryAllByTestId('submit-button')).getByRole('link',{name: 'Submit'})).toHaveAttribute('href', '/login'));
 });

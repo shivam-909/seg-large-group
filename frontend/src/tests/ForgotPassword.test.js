@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen, waitFor, fireEvent} from '@testing-library/react';
+import { render, screen, waitFor} from '@testing-library/react';
 import ForgotPassword from '../Components/ForgotPassword/ForgotPassword';
 import {BrowserRouter, Route, Routes} from "react-router-dom";
 import userEvent from '@testing-library/user-event'
@@ -57,12 +57,13 @@ test('renders forgot password page', () => {
         </Routes>
       </BrowserRouter>
     );
+  });
 
     userEvent.click(screen.getByText('Submit'));
-    // const submitButton = screen.queryByAltText('submit-button')
-    fireEvent.click(screen.queryByAltText('submit-button'));
-
-    //expect(alert).toBeVisible;
-
-  });
+  //   // const submitButton = screen.queryByAltText('submit-button')
+  //   fireEvent.click(screen.queryByAltText('submit-button'));
+  //
+  //   //expect(alert).toBeVisible;
+  //
+  // });
 

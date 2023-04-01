@@ -66,7 +66,7 @@ function ResetPassword(){
              <TextInputBoxWithIcon data-testid="confirmpw-input" className='w-full' id='confirmPassword' type='password' onBlur={checkPasswordMatch} placeholder='Confirm Password' icon={<img id='toggleEye' src={showIcon} alt='' onClick={togglePasswordVisibility} className='cursor-pointer'/>}/>
               <span id="passwordMismatchError" className='invisible absolute top-0'>Passwords do not match</span>
 
-            <button className="bg-dark-theme-grey rounded-md text-white p-2.5 flex items-center justify-center space-x-2" disabled={!password} onClick={submitNewPassword} id={"submitNewPassword"}><a className='LoginPage-link' href='/login'>Submit</a></button>
+            <button data-testid="submit-button" className="bg-dark-theme-grey rounded-md text-white p-2.5 flex items-center justify-center space-x-2" disabled={!password} onClick={submitNewPassword} id={"submitNewPassword"}><a className='LoginPage-link' href='/login'>Submit</a></button>
           </div>
       </div>
     )
