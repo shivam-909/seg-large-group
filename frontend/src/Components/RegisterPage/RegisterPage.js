@@ -116,7 +116,7 @@ export default function RegisterPage() {
                 </div>
 
                 <div>
-                    <TextInputBox id='email' className='w-full' onBlur={()=>{validateField("email",/^\w+(-?\w+)*@\w+(-?\w+)*(\.\w{2,10})+$/)}} placeholder='Email address'/>
+                    <TextInputBox id='email' className='w-full' onBlur={()=>{validateField("email",/^\w+(.-?\w+)*@\w+(-?\w+)*(\.\w{2,15})+$/)}} placeholder='Email address'/>
                     <span id="emailError" className='invisible absolute top-0'>Invalid email</span>
                 </div>
 

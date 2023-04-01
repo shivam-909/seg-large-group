@@ -21,7 +21,11 @@ export async function CreateUser(db: DB, user: User) {
 }
 
 export async function RetrieveFullUserByID(db: DB, id: string): Promise<UserExpanded | null> {
-  let docRef = db.UserCollection().doc(id)
+
+
+  let docRef = db.UserCollection().doc(id);
+
+
   let doc = await docRef.get();
 
   if (!doc.exists) {
@@ -91,7 +95,9 @@ export async function UpdateUser(db: DB, id: string, data: any): Promise<void> {
   });
 
   if (Object.keys(baseData).length > 0) {
-    await db.UserCollection().doc(id).update(baseData);
+    if (typeof id === "string") {
+      await db.UserCollection().doc(id).update(baseData);
+    }
   }
   if (user!.searcherID) {
     const searcherData: { [key: string]: any } = {};

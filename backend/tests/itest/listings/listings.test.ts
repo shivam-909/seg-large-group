@@ -47,15 +47,14 @@ it("create listing", async () => {
 
     // Create a listing
     const title = "Test Listing";
-    const compensation = "80000, 100000";
+    const compensation = "80000,year";
     const description = "Test Description";
     const job_location = "London";
-    const qualifications = "GCSE, A-Level";
-    const skills = "C++, Java, Python";
-    const job_type = "Full Time";
+    const qualifications = "French,Masters,Distinction";
+    const job_type = "Remote";
     const benefits = "Free Lunch, Free Snacks";
-    const requirements = "2 days in the office";
-    const schedule = "9-5, Mon-Fri";
+    const requirements = "C++,2,years";
+    const schedule = "Full-time";
     const screeningQuestions = JSON.stringify(
         [
             { "Do you have a degree?": true },
@@ -64,7 +63,6 @@ it("create listing", async () => {
 
     // Base 64 encode the screening questions
     const screeningQuestionsEscaped = Buffer.from(screeningQuestions).toString('base64');
-
 
     let listingFormData = new FormData();
 
@@ -78,7 +76,6 @@ it("create listing", async () => {
     listingFormData.append("requirements", requirements);
     listingFormData.append("schedule", schedule);
     listingFormData.append("screening_questions", screeningQuestionsEscaped);
-    listingFormData.append("skills", skills);
 
     // Send POST request to create listing
     const listingResponse = await fetch(`http://localhost:8000/api/jobs`, {

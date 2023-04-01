@@ -3,5 +3,6 @@ export enum Status {
     Interview,
     Rejected,
     Archived,
+    Accepted
 }
 
