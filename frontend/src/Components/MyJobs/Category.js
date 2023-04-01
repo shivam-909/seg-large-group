@@ -95,7 +95,7 @@ export default function Category(props) {
             return;
         }
         const token = localStorage.getItem("token");
-        axios.get(`${process.env.REACT_APP_BACKEND_URL}api/user`, {}, {headers: {Authorization: `Bearer ${token}`}})
+        axios.get(`${process.env.REACT_APP_BACKEND_URL}api/user`, {headers: {Authorization: `Bearer ${token}`}})
             .then(response => {
                 if (response.data.searcher?.savedJobs !== undefined) {
                     let savedJobs = response.data.searcher?.savedJobs

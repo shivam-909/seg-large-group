@@ -26,7 +26,7 @@ function UserProfilePage() {
         const getProfile = async () => {
             if (profile.length === 0) {
                 const token = localStorage.getItem('access');
-                await axios.get(`${process.env.REACT_APP_BACKEND_URL}api/user`, {}, {headers: {Authorization: `Bearer ${token}`}})
+                await axios.get(`${process.env.REACT_APP_BACKEND_URL}api/user`, {headers: {Authorization: `Bearer ${token}`}})
                     .then(r => {
                         setProfile(r.data)
                         setFile(r.data.searcher?.cv[0])
