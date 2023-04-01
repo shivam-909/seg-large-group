@@ -1,5 +1,5 @@
-import DB from "../../db/db";
-import { DeleteUserByEmail } from "../../db/users";
+import DB from "../../../db/db";
+import { DeleteUserByEmail } from "../../../db/users";
 
 test("refresh token", async () => {
     jest.setTimeout(10000);
@@ -21,7 +21,7 @@ test("refresh token", async () => {
     formData.append('location', 'London');
     formData.append('user_type', 'searcher');
 
-    const regres = await fetch('http://localhost:8000/auth/register', {
+    const regres = await fetch(`http://localhost:8000/auth/register`, {
         method: 'POST',
         body: formData,
     });
@@ -40,7 +40,7 @@ test("refresh token", async () => {
     let refreshFormData = new FormData();
     refreshFormData.append('refresh_token', registrationBody.refresh);
 
-    const refreshResponse = await fetch('http://localhost:8000/auth/refresh', {
+    const refreshResponse = await fetch(`http://localhost:8000/auth/refresh`, {
         method: 'POST',
         body: refreshFormData,
     });
@@ -59,5 +59,10 @@ test("refresh token", async () => {
     expect(refreshBody.refresh).not.toEqual('');
     expect(refreshBody.refresh).not.toEqual(regres.refresh);
 
-    await DeleteUserByEmail(db, email);
+    try {
+        await DeleteUserByEmail(db, email);
+    } catch (e) {
+        expect(e).toBeNull();
+    }
+
 });

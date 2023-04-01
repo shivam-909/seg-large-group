@@ -1,3 +1,6 @@
+import {Location} from "../ProfilePage/Location";
+import React from "react";
+
 function SearchBar(props) {
     return (
         <div className='flex items-start justify-center space-x-4'>
@@ -8,7 +11,7 @@ function SearchBar(props) {
                 }
             </div>
             <div className='w-1/4'>
-                <input id='locationInput' className="p-2 border rounded-md border-dark-theme-grey min-w-full" placeholder='Location' onChange={props.onLocationInputChange}/>
+                <Location disabled={false} onChange={props.onLocationInputChange}/>
                 {props.displayLocationInputErrorMessage &&
                     <p id='locationInputErrorMessage' className='text-sm text-red'>Please enter a location.</p>
                 }

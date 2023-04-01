@@ -4,22 +4,18 @@ import { NextFunction, Request, Response } from "express";
 import DB from "../../db/db";
 import Application from "../../models/application";
 import * as applicationdb from "../../db/applications";
-import { ErrorApplicationNotFound, getErrorMessage, Handler } from "../public";
+import { Handler } from "../public";
 import { randomUUID } from "crypto";
 import * as validate from "../routes/validation/applications";
+import 'express-async-errors';
+
 
 export function AddApplication(db: DB): Handler {
   return async (req: Request, res: Response, next: NextFunction) => {
-    try {
-      await validate.AddApplication(db, req.body);
-    } catch (err) {
-      next(err);
-      return;
-    }
-    const { status, searcher, jobListing, cv } = req.body;
+    await validate.AddApplication(db, req.body);
+    const { status, searcher, jobListing, cv, coverLetter, QnAs } = req.body;
     const newID = randomUUID();
-    const newApplication = new Application(newID, status, searcher, jobListing, cv);
-
+    const newApplication = new Application(newID, status, searcher, jobListing, cv, JSON.parse(QnAs), coverLetter);
     await applicationdb.CreateApplication(db, newApplication);
   }
 }
@@ -28,25 +24,17 @@ export function AddApplication(db: DB): Handler {
 export function GetApplication(db: DB): Handler {
   return async (req: Request, res: Response, next: NextFunction) => {
     const { id } = req.params;
-
+    await validate.ApplicationExists(db, id);
     const application = await applicationdb.RetrieveApplication(db, id);
-    if (!application) {
-      next(ErrorApplicationNotFound);
-      return
-    }
     res.status(200).json(application);
+
   };
 }
 
 export function RetrieveApplicationByFilter(db: DB): Handler {
   return async (req: Request, res: Response, next: NextFunction) => {
 
-    try {
-      await validate.RetrieveApplicationByFilter(db, req.body);
-    } catch (err) {
-      next(err);
-      return;
-    }
+    await validate.RetrieveApplicationByFilter(db, req.body);
 
     const filters = {
       id: req.body.id || '',
@@ -65,13 +53,7 @@ export function RetrieveApplicationByFilter(db: DB): Handler {
 export function UpdateApplication(db: DB): Handler {
   return async (req: Request, res: Response, next: NextFunction) => {
 
-    try {
-      await validate.UpdateApplication(db, req.params.id, req.body);
-    } catch (err) {
-      next(err);
-      return;
-    }
-
+    await validate.UpdateApplication(db, req.params.id, req.body);
     const id = req.params.id;
     const applicationData = req.body;
 
@@ -79,23 +61,19 @@ export function UpdateApplication(db: DB): Handler {
 
     const updatedApplication = { ...application, ...applicationData };
     await applicationdb.UpdateApplication(db, updatedApplication);
-    res.status(200).json(updatedApplication);
-
+    res.sendStatus(200);
   }
 }
 
 
 export function DeleteApplication(db: DB): Handler {
   return async (req: Request, res: Response, next: NextFunction) => {
+
     const id = req.params.id;
-
-    try {
-      await validate.DeleteApplication(db, id);
-    } catch (err) {
-      return next(err);
-    }
-
+    await validate.ApplicationExists(db, id);
     await applicationdb.DeleteApplication(db, id);
+    res.sendStatus(200);
+
   }
 };
 

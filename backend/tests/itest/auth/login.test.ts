@@ -1,5 +1,5 @@
-import DB from "../../db/db";
-import { RetrieveFullUserByEmail, DeleteUser } from "../../db/users";
+import DB from "../../../db/db";
+import { RetrieveFullUserByEmail, DeleteUser } from "../../../db/users";
 
 test('login user', async () => {
 
@@ -20,7 +20,7 @@ test('login user', async () => {
     formData.append('location', 'London');
     formData.append('user_type', 'searcher');
 
-    const regres = await fetch('http://localhost:8000/auth/register', {
+    const regres = await fetch(`http://localhost:8000/auth/register`, {
         method: 'POST',
         body: formData,
     });
@@ -31,7 +31,7 @@ test('login user', async () => {
     loginFormData.append('email', email);
     loginFormData.append('password', 'Password123!');
 
-    const loginResponse = await fetch('http://localhost:8000/auth/login', {
+    const loginResponse = await fetch(`http://localhost:8000/auth/login`, {
         method: 'POST',
         body: loginFormData,
     });
@@ -59,5 +59,9 @@ test('login user', async () => {
 
     expect(user).not.toBeNull();
 
-    await DeleteUser(db, user!.userID);
+    try {
+        await DeleteUser(db, user!.userID);
+    } catch (e) {
+        expect(e).toBeNull();
+    }
 });

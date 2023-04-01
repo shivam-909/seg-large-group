@@ -1,17 +1,21 @@
 import 'express-async-errors';
 import DB from "../../db/db";
-import { ErrorNotifNotFound, Handler } from "../public";
+import {
+  getErrorMessage,
+  Handler
+} from "../public";
+import * as errors from "../public";
 import { NextFunction, Request, Response } from "express";
 import * as notificationsdb from "../../db/notifications";
 import { randomUUID } from "crypto";
 import Notification from "../../models/notification";
-import {RetrieveApplication} from "../../db/applications";
-import {RetrieveJobListing} from "../../db/jobs";
-import {RetrieveCompanyByID} from "../../db/companies";
-import {RetrieveFullUserByID} from "../../db/users";
-import * as validate from "./validation/notifications";
-
-
+import { RetrieveApplication } from "../../db/applications";
+import { RetrieveJobListing } from "../../db/jobs";
+import { RetrieveCompanyByID } from "../../db/companies";
+import {RetrieveFullUserByID, RetrieveUserBySearcherID} from "../../db/users";
+import *  as validate from "../routes/validation/notifications";
+import notification from "../../models/notification";
+import {RetrieveSearcherByID} from "../../db/searchers";
 
 export function AddNotification(db: DB): Handler {
   return async (req: Request, res: Response, next: NextFunction) => {
@@ -19,68 +23,87 @@ export function AddNotification(db: DB): Handler {
     const newID = randomUUID();
     const created = new Date();
     const newNotification = new Notification(newID, content, application, created, userID);
-    try {
-      await validate.AddNotification(db, { content, application, created, userID});
-    } catch (err) {
-      next((err as Error).message);
-      return;
-    }
+    await validate.AddNotification(db, { content, application, created, userID });
     await notificationsdb.CreateNotification(db, newNotification);
+    res.sendStatus(200)
   }
 }
 
-export function GetNotification(db: DB): Handler {
+export function GetAllUserNotifs(db: DB): Handler {
   return async (req: Request, res: Response, next: NextFunction) => {
+
     const id = req.params.id;
+    const notifications = await notificationsdb.GetAllUserNotifs(db, id);
+    let finalNotifs: any[] = [];
 
-    const notification = await notificationsdb.RetrieveNotification(db, id);
+    for(let i=0; i< notifications.length; i++){
 
-    if (!notification) {
-      next(ErrorNotifNotFound);
-      return;
+      const notification = notifications[i];
+      const user = await RetrieveFullUserByID(db, notification.userID);
+      const application = await RetrieveApplication(db, notification.applicationID);
+
+      let jobListing = null;
+      let title = null;
+      let company = null;
+      let companyName = null;
+      let firstName = null;
+      let lastName = null;
+      let applyingUserID = null;
+
+      if(!user){
+        throw new Error(errors.ErrorUserNotFound);
+      }
+
+      if(!application){
+        throw new Error(errors.ErrorApplicationNotFound);
+      }
+
+      if (user?.searcher) {
+        jobListing = await RetrieveJobListing(db, application.jobListing);
+        if (!jobListing) throw new Error(errors.ErrorJobListingNotFound);
+        title = jobListing.title;
+        company = await RetrieveCompanyByID(db, jobListing.companyID);
+        if(!company) throw new Error(errors.ErrorCompanyNotFound);
+        companyName = company.companyName;
+      }
+
+      if (user?.company) {
+        const searcher = await RetrieveSearcherByID(db, application.searcher);
+        const searchUser = await RetrieveUserBySearcherID(db, application.searcher)
+        if(!searcher){
+          throw new Error(errors.ErrorSearcherNotFound);
+        }
+        if(!user){
+          throw new Error(errors.ErrorUserNotFound);
+        }
+        firstName = searcher.firstName;
+        lastName = searcher.lastName;
+        applyingUserID = searchUser?.userID;
+
+      }
+
+      const newNotification = {
+        ...notification,
+        companyName,
+        title,
+        firstName,
+        lastName,
+        applyingUserID,
+      }
+      finalNotifs.push(newNotification);
     }
 
-    const application = await RetrieveApplication(db, notification.applicationID);
-    let jobListing = null;
-    if(application) jobListing = await RetrieveJobListing(db, application.jobListing);
-    let title = null;
-    let company = null;
-    if(jobListing){
-      title = jobListing.title;
-      company = await RetrieveCompanyByID(db,jobListing.companyID);
-    }
-    let companyName = null;
-    if(company) companyName = company.companyName;
+    res.status(200).json({finalNotifs});
+  }
 
-    const user = await RetrieveFullUserByID(db, notification.userID);
-    let searcherID = null;
-    if(user) searcherID = user.searcherID;
-
-
-    const newNotification = {
-      ...notification,
-      companyName,
-      title,
-      searcherID,
-    }
-
-    res.status(200).json(newNotification);
-
-  };
 }
 
-
-export function DeleteNotification(db: DB): Handler {
-  return async (req: Request, res: Response, next: NextFunction) => {
-    const id = req.params.id;
-
-    try {
+  export function DeleteNotification(db: DB): Handler {
+    return async (req: Request, res: Response, next: NextFunction) => {
+      const id = req.params.id;
       await validate.NotificationExists(db, id);
-    } catch (err) {
-      next((err as Error).message);
-      return;
-    }
+      await notificationsdb.DeleteNotification(db, id);
+      res.sendStatus(200);
+    };
+  }
 
-    await notificationsdb.DeleteNotification(db, id);
-  };
-}
