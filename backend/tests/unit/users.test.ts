@@ -11,7 +11,7 @@ test('create searcher, retrieve searcher by email, delete user', async () => {
     const db = new DB();
     const userID = randomUUID();
     const searcherID = randomUUID();
-    const email = 'test_user_crud@example.com';
+    const email = 'test_searcher_crud@example.com';
     const password = 'Password123!';
     const firstName = 'John';
     const lastName = 'Doe';
@@ -29,6 +29,8 @@ test('create searcher, retrieve searcher by email, delete user', async () => {
         cv
     )
 
+    console.log(searcherID)
+
     const user = new User(
         userID,
         email,
@@ -36,9 +38,12 @@ test('create searcher, retrieve searcher by email, delete user', async () => {
         "",
         "",
         [],
+        "",
         searcherID,
         undefined,
     )
+
+    console.log("CREATING THIS USER: ", user)
 
     await CreateSearcher(db, user, searcher)
 
