@@ -9,7 +9,7 @@ describe('ApplicantsCard', () => {
         const props = {
             id: '1',
             name: 'Test1',
-            pfpUrl: '',
+            pfpUrl:'',
             email: 'test@gmail.com',
             status: 'Hired'
         };

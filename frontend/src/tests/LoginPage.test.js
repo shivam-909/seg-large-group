@@ -137,7 +137,7 @@ test('allows valid email input to pass', () => {
   });
 
   //https://stackoverflow.com/questions/73184212/how-to-test-checkbox-checked-with-react-testing-library
-  // test('toggles elememt when clicking the checkbox', () => {
+  // test('toggles element when clicking the checkbox', () => {
   //    render(
   //     <BrowserRouter>
   //       <Routes>
@@ -152,6 +152,12 @@ test('allows valid email input to pass', () => {
     
   //   waitFor(() => expect(screen.queryByTestId('rememberLogin')).toBeInTheDocument());
   //   waitFor(() => expect(rememberLogin).toBeChecked());
+//
+//     fireEvent.click(rememberLogin);
+
+// waitFor(() => expect(screen.queryByTestId('rememberLogin')).toBeInTheDocument());
+//   waitFor(() => expect(rememberLogin).not.toBeChecked());
+
   // });
 
 
@@ -187,8 +193,7 @@ test("links with href value /signup and /forgotPassword", () => {
     </BrowserRouter>
   );
   waitFor(() => expect((screen.queryAllByTestId('signup-link')).getByRole('link',{name: 'Sign Up'})).toHaveAttribute('href', '/signup'));
-  waitFor(() => expect((screen.queryAllByTestId('forgottenpw-link')).getByRole('link',{name: 'Reset password.'})).toHaveAttribute('href', '/forgotPassword'));  
-
+  waitFor(() => expect((screen.queryAllByTestId('forgottenpw-link')).getByRole('link',{name: 'Reset password.'})).toHaveAttribute('href', '/forgotPassword'));
 });
 
 // test('make a login request and handle response', () => {
