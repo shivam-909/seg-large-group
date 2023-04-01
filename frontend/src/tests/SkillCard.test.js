@@ -20,11 +20,11 @@ describe('SkillCard', () => {
       duration: '6',
       interval: 'months'
     };
-    const { getByLabelText, getByText } = render(<SkillCard {...props} />);
-    const skillInput = getByLabelText('Skill');
-    const durationInput = getByLabelText('Duration');
-    const intervalSelect = getByLabelText('Interval');
-    const deleteButton = getByText('Delete');
+    const { getByPlaceholderText, getByText, getByRole } = render(<SkillCard {...props} />);
+    const skillInput = getByPlaceholderText('Skill');
+    const durationInput = getByPlaceholderText('Duration');
+    const intervalSelect = getByText('Month/s');
+    const deleteButton = getByRole('button', {class:"delete w-[24%]"});
 
     expect(skillInput).toBeInTheDocument();
     expect(skillInput).toHaveValue(props.skill);
@@ -42,8 +42,8 @@ describe('SkillCard', () => {
       duration: '6',
       interval: 'months'
     };
-    const { getByLabelText, getByText } = render(<SkillCard {...props} />);
-    const skillInput = getByLabelText('Skill');
+    const { getByPlaceholderText, getByText } = render(<SkillCard {...props} />);
+    const skillInput = getByPlaceholderText('Skill');
     expect(skillInput).toHaveValue(props.skill);
 
     fireEvent.change(skillInput, { target: { value: 'ReactJS' } });
@@ -60,13 +60,12 @@ describe('SkillCard', () => {
       interval: 'months'
     };
 
-    const { getByLabelText } = render(<SkillCard {...props} />);
-    const skillInput = getByLabelText('Skill');
+    const { getByPlaceholderText } = render(<SkillCard {...props} />);
+    const skillInput = getByPlaceholderText('Skill');
     expect(skillInput).toHaveValue(props.skill);
 
     fireEvent.change(skillInput, { target: { value: 'React,JS' } });
 
     expect(skillInput).toHaveValue('React,JS');
-    //expect(queryByText('Please remove all commas')).not.toBeInTheDocument();
   });
 });
