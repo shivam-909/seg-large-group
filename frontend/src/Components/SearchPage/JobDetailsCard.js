@@ -12,6 +12,7 @@ import openInNewTabIcon from "../../icons/openInNewTabIcon.png";
 import {useNavigate} from "react-router-dom";
 import axios from "axios";
 import {GetData} from "../../Auth/GetUser";
+import App from '../../App';
 
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 
