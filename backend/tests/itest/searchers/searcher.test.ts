@@ -1,5 +1,6 @@
 import DB from "../../../db/db";
-import { RetrieveFullUserByEmail } from "../../../db/users";
+import { DeleteSearcher } from "../../../db/searchers";
+import { DeleteUser, RetrieveFullUserByEmail } from "../../../db/users";
 
 test('register searcher, retrieve by ID, delete', async () => {
     const email = "itest_register_searcher@example.com"
@@ -58,5 +59,5 @@ test('register searcher, retrieve by ID, delete', async () => {
     expect(body2).not.toBeNull();
     expect(body2).toHaveProperty('searcherID');
 
-    await db.UserCollection().doc(fullUser!.userID).delete();
+    await DeleteUser(db, fullUser!.userID);
 });
