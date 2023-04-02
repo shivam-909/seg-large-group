@@ -6,7 +6,7 @@ describe ('TextInputBox component', () => {
     const props ={
         id: 'email',
         type: 'email',
-        onChange: '',
+        onChange:'',
         onBlur: '',
         placeholder:''
     };

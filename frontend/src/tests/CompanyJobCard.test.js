@@ -10,3 +10,4 @@ test('render CompanyJobCard', () => {
             <CompanyJobCard />
         </Router>);
 });
+

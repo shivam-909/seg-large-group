@@ -3,10 +3,10 @@ jest.mock('react-router-dom', () => ({
   ...jest.requireActual('react-router-dom'),
   useNavigate: () => mockedUsedNavigate,
 }));
+
 import LoginPage from '../Components/LoginPage/LoginPage';
 import React from 'react';
-import { render, fireEvent, screen, waitFor} from "@testing-library/react";
-import {BrowserRouter, Route, Routes} from "react-router-dom";
+import { render, screen, waitFor, fireEvent} from "@testing-library/react";
 import userEvent from '@testing-library/user-event'
 
 describe('LoginPage component', () => {
@@ -75,49 +75,35 @@ describe('LoginPage component', () => {
   });
 
   // https://stackoverflow.com/questions/73184212/how-to-test-checkbox-checked-with-react-testing-library
-//   test('toggles element when clicking the checkbox', () => {
-//       render(
-//       <BrowserRouter>
-//         <Routes>
-//           <Route element={<LoginPage />} />
-//         </Routes>
-//       </BrowserRouter>
-//     );
-//       userEvent.click((screen.queryByTestId('rememberLogin')).getByText('Keep me signed in'));
-//       expect(screen.getByLabelText('Keep me signed in')).toBeChecked();
-//
-//       // screen.getByRole('');
-//
-//     // screen.getByText('Keep me signed in');
-//
-//     // waitFor(() => expect(screen.queryByTestId('rememberLogin')).toBeInTheDocument());
-//     // waitFor(() => expect(rememberLogin).toBeChecked());
-//
-// // waitFor(() => expect(screen.queryByTestId('rememberLogin')).toBeInTheDocument());
-// //   waitFor(() => expect(rememberLogin).not.toBeChecked());
-//
-//   });
+  test('toggles element when clicking the checkbox', () => {
+    const rememberLogin = screen.queryByTestId('rememberLogin');
+    userEvent.click(rememberLogin);
+
+    // screen.getByText('Keep me signed in');
+
+    waitFor(() => expect(screen.queryByTestId('rememberLogin')).toBeInTheDocument());
+    waitFor(() => expect(rememberLogin).toBeChecked());
+
+    userEvent.click(rememberLogin);
+
+    waitFor(() => expect(screen.queryByTestId('rememberLogin')).toBeInTheDocument());
+    waitFor(() => expect(rememberLogin).not.toBeChecked());
+  });
 
 
-// test('togglePasswordVisibility function toggles password visibility', () => {
-//   render(
-//     <BrowserRouter>
-//       <Routes>
-//         <Route element={<LoginPage />} />
-//       </Routes>
-//     </BrowserRouter>
-//   );
+//   test('togglePasswordVisibility function toggles password visibility', () => {
+//
 //   const passwordInput = screen.queryByTestId('password-input');
 //   const eyeIcon = screen.getByAltText('toggleEye');
-
+//
 //   expect(passwordInput.type).toBe('password');
-
+//
 //   fireEvent.click(eyeIcon);
-
+//
 //   expect(passwordField.type).toBe('text');
-
+//
 //   fireEvent.click(eyeIcon);
-
+//
 //   expect(passwordField.type).toBe('password');
 // });
 
