@@ -5,16 +5,17 @@ import {faker} from "@faker-js/faker";
 import {DeleteApplication} from "../../../db/applications";
 import FormData from "form-data";
 import fetch from "node-fetch";
+import {DeleteNotification} from "../../../db/notifications";
 
 
-it("create application", async () => {
+it("create notification", async () => {
     jest.setTimeout(20000);
 
     const fetch = require('node-fetch');
     const FormData = require('form-data');
 
     // Register as a company
-    const companyEmail = "test_applications_create@example.com"
+    const companyEmail = "notifications_company@example.com"
     const password = "Password123!"
     const pfp_url = "TestpfpUrl"
     const location = "London"
@@ -101,7 +102,7 @@ it("create application", async () => {
 
 
     //create searcher
-    const searcherEmail = "searcher@example.com"
+    const searcherEmail = "notifications_searcher@example.com"
     let searcherFormData = new FormData();
 
     searcherFormData.append('user_type', 'searcher');
@@ -124,6 +125,8 @@ it("create application", async () => {
     expect(searcherBody).toHaveProperty('typeID');
     expect(searcherBody.typeID).not.toBeNull();
     expect(searcherBody.typeID).not.toEqual('');
+    const searcherID = searcherBody.typeID;
+    const userID = searcherBody.newUserID;
 
     // read the body as json
 
@@ -138,7 +141,7 @@ it("create application", async () => {
 
 
     // Create an application
-    const status = 'Applied';
+    const status = 'Interview';
     const cv = ["John Doe's CV","https://seg-joblink.s3.eu-west-2.amazonaws.com/cv/1047a922-d91f-43dc-80f2-7273ee90acaa.png.pdf"]
     const coverLetter = faker.lorem.paragraphs(5000).substring(0, Math.floor(Math.random() * (100 + 1)) + 500); ;
     const QnAs = JSON.stringify(
@@ -176,20 +179,42 @@ it("create application", async () => {
     expect(applicationBody).toHaveProperty('id');
     expect(applicationBody.id).not.toBeNull();
     expect(applicationBody.id).not.toEqual('');
-    const id = applicationBody.id;
+    const applicationID = applicationBody.id;
+
+    let notificationFormData = new FormData();
+
+    const content = "Interview";
+
+    notificationFormData.append("applicationID", applicationID);
+    notificationFormData.append("content", content);
+    notificationFormData.append("userID", userID);
+
+    const notificationResponse = await fetch(`http://localhost:8000/api/notifications/add`, {
+        method: 'POST',
+        body: applicationFormData,
+    });
+
+    expect(notificationResponse.status).toEqual(200);
+    const notificationBody = await notificationResponse.json() as any;
+    expect(notificationBody).not.toBeNull();
+    expect(notificationBody).toHaveProperty('id');
+    expect(notificationBody.id).not.toBeNull();
+    expect(notificationBody.id).not.toEqual('');
+    const id = notificationBody.id;
 
 
     // Retrieve the application
-    const applicationResponse2 = await fetch(`http://localhost:8000/api/applications/${id}`, {
+    const notificationResponse2 = await fetch(`http://localhost:8000/api/notifications/${id}`, {
         method: 'GET',
+
     });
 
+    expect(notificationResponse2.status).toEqual(200);
+    const notificationBody2 = await notificationResponse2.json() as any;
+    expect(notificationBody2).not.toBeNull();
+    expect(notificationBody2.application).not.toBeNull();
 
-    // Expect 200 with application in body. If its not 200, print the body.
-    expect(applicationResponse2.status).toEqual(200);
-    const applicationBody2 = await applicationResponse2.json() as any;
-    expect(applicationBody2).not.toBeNull();
-    expect(applicationBody2.application).not.toBeNull();
+
 
     // Clean up by deleting the newly created application, listing and searcher.
     const db = new DB();
@@ -213,7 +238,13 @@ it("create application", async () => {
     }
 
     try {
-        await DeleteApplication(db, id);
+        await DeleteApplication(db, applicationID);
+    } catch (e) {
+        expect(e).toBeNull();
+    }
+
+    try {
+        await DeleteNotification(db, id);
     } catch (e) {
         expect(e).toBeNull();
     }
