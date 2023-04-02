@@ -6,11 +6,11 @@ jest.mock('react-router-dom', () => ({
 import {render, screen, fireEvent, waitFor} from '@testing-library/react';
 
 describe('EmployerProfilePage', () => {
-  // test('render navbar', () => {
-  //   render(<UserProfilePage />);
+  test('render navbar', () => {
+    render(<UserProfilePage />);
   //   const navbarElement = screen.queryByTestId('navbar');
   //   waitFor(() => expect(navbarElement).toBeInTheDocument())
-  // });
+  });
   //
   // test('render contact information inputs', () => {
   //   render(<UserProfilePage />);
