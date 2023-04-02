@@ -8,8 +8,7 @@ import fetch from "node-fetch";
 
 
 it("create application", async () => {
-    jest.setTimeout(20000);
-
+    // jest.setTimeout(20000);
     const fetch = require('node-fetch');
     const FormData = require('form-data');
 
