@@ -135,7 +135,8 @@ export var ErrorToCode: Map<string, number> = new Map<string, number>(
         [ErrorCvRequired, 400],
         [ErrorMissingQnAs, 400],
         [ErrorInvalidSearcherFields, 400],
-        [ErrorInvalidCompanyFields, 400]
+        [ErrorInvalidCompanyFields, 400],
+        [ErrorInvalidUserType, 400]
 
     ]
 );
