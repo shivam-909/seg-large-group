@@ -50,15 +50,14 @@ export const run = () => {
     app.set('db', db);
     app.use(cors());
 
-    app.get('/api/storage/:destination/:key', upload.none(), utils.Route(app, getFile));
-    app.post('/api/storage/:destination/:id', upload.single('file'), utils.Route(app, uploadFile));
-    app.delete('/api/storage/:destination/:key', upload.none(), utils.Route(app, deleteFile));
+
 
     // Authentication middleware
     app.use("/api/*", middleware.AuthMW);
 
-    // Error handling middleware
-    app.use(middleware.ErrorMW);
+    app.get('/api/storage/:destination/:key', upload.none(), utils.Route(app, getFile));
+    app.post('/api/storage/:destination/:id', upload.single('file'), utils.Route(app, uploadFile));
+    app.delete('/api/storage/:destination/:key', upload.none(), utils.Route(app, deleteFile));
 
     app.get('/error', util.ErrorTest)
 
@@ -67,7 +66,7 @@ export const run = () => {
     app.post('/auth/refresh', upload.none(), utils.Route(app, authroutes.Refresh));
 
     app.post('/api/notifications/add', upload.none(), utils.Route(app, notificationroutes.AddNotification));
-    app.get('/api/notifications/:id', utils.Route(app, notificationroutes.GetAllUserNotifs));
+    app.get('/api/notifications', utils.Route(app, notificationroutes.GetAllUserNotifs));
     app.delete('/api/notifications/:id', upload.none(), utils.Route(app, notificationroutes.DeleteNotification));
 
     app.get('/api/match/:id', upload.none(), utils.Route(app, matchmakeroutes.FindMatchingJobs));
@@ -98,6 +97,9 @@ export const run = () => {
     app.get('/', util.HealthCheck);
 
     app.post("/api/echo", util.Echo);
+
+
+    app.use(middleware.ErrorMW);
 
     app.listen(port, () => {
       console.log(`server running on port ${port}`);

@@ -10,9 +10,51 @@ export const ErrorMW = (err: any, req: Request, res: Response, next: NextFunctio
     res.status(code).json({ message: em || 'internal server error' });
 };
 
+// Create a map of routes to a boolean
+// If the route is in the map, don't error if the user is not logged in
+
+const allowUnauthenticated = [
+    "/api/jobs/search",
+    "/api/jobs/filter",
+    "/api/jobs/*",
+    "/api/company/*",
+    "/api/application/filter",
+    "/api/user/typeid",
+    "/api/user",
+    "/api/users",
+    "/api/notifications",
+    "/api/notifications/add",
+    "/api/applications/*",
+    "/api/searcher/*"
+];
+
+
+function doesntRequireAuth(url: string): boolean {
+
+    for (const route of allowUnauthenticated) {
+        if (route === url) {
+            return true;
+        }
+        else if (route.endsWith("*")) {
+            const routeWithoutWildcard = route.slice(0, -1);
+            if (url.startsWith(routeWithoutWildcard)) {
+                return true;
+            }
+        }
+    }
+
+    return false;
+}
+
 export const AuthMW = (req: Request, res: Response, next: NextFunction) => {
     const token = req.headers.authorization;
-    if (!token) return res.status(401).json({ message: 'unauthorized' });
+    const dontRequireAuth = doesntRequireAuth(req.originalUrl);
+    if (!token && !dontRequireAuth) {
+        return res.status(401).json({ message: 'unauthorized' });
+    }
+    else if (!token) {
+        return next()
+    }
 
     const split = token.split(' ');
 
