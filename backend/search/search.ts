@@ -38,6 +38,7 @@ function boyerMoore(term: string, query: string): number {
     return -1;
 }
 
+
 export async function FindJobListingsByQuery(db: DB, query: string): Promise<JobListing[]> {
     const jobListingsRef = db.JobListingCollection();
     const jobListingsSnapshot = await jobListingsRef.get();
@@ -69,8 +70,4 @@ export async function MatchmadeSearch(db: DB, query: string, searcherID:string):
     const results = await FindJobListingsByQuery(db, query)
     return FindMatchesFromJLArray(db, searcherID, results, true);
 }
-
-
-
-
 

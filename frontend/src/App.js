@@ -13,6 +13,7 @@ import ViewApplicationPage from "./Components/Applicants/ViewApplicationPage";
 import JobPage from "./Components/JobPage/JobPage";
 import NotificationsPage from "./Components/NotificationsPage/NotificationsPage";
 
+
 export default function App() {
     return (
       <BrowserRouter>
@@ -36,6 +37,8 @@ export default function App() {
               <Route path="/" element={ <SearchPage/> }/>
               <Route path="/login" element={ <LoginPage/> }/>
               <Route path="/signup" element={ <RegisterPage/> }/>
+              <Route path="/saved" element={ <MyJobs/> }/>
+              <Route path="/profile" element={ <UserProfilePage/> }/>
               <Route path="/viewjob/:id" element={ <JobPage/> }/>
           </Routes>
       </BrowserRouter>
