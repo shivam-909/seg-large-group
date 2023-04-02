@@ -120,7 +120,6 @@ it("create application", async () => {
 
     expect(searcherResponse.status).toEqual(200);
     const searcherBody = await searcherResponse.json() as any;
-    console.log("SEARCHER: " + searcherBody);
     expect(searcherBody).not.toBeNull();
     expect(searcherBody).toHaveProperty('typeID');
     expect(searcherBody.typeID).not.toBeNull();
