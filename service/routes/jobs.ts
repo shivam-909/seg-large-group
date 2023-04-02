@@ -5,20 +5,20 @@ import JobListing from "../../models/job";
 import * as jobsdb from "../../db/jobs";
 import { ErrorFailedToCreateListing, Handler } from "../public";
 import { randomUUID } from "crypto";
-import {ParseRequireCoverLetter, ParseScreeningQuestions, StringFromCommaSeparatedList} from './routes';
+import { ParseRequireCoverLetter, ParseScreeningQuestions, StringFromCommaSeparatedList } from './routes';
 import * as validate from "../routes/validation/jobs";
-import {RetrieveFullUserByID} from "../../db/users";
+import { RetrieveFullUserByID } from "../../db/users";
 
 export function AddListing(db: DB): Handler {
   return async (req: Request, res: Response, next: NextFunction) => {
     const { title, compensation, description, location, type, schedule, industry, cover_letter_required, urgent, qualifications, benefits, requirements, screening_questions } = req.body;
     const newID = randomUUID();
 
+
     // Get auth_username from headers.
     const userID = req.headers.auth_username as string;
     const company = await RetrieveFullUserByID(db, userID)
     const companyID = company!.companyID || "";
-    console.log(companyID)
     const parsedRequireCoverLetter = ParseRequireCoverLetter(cover_letter_required);
     const parsedScreeningQuestions = ParseScreeningQuestions(screening_questions);
     const datePosted = new Date();
@@ -48,7 +48,6 @@ export function AddListing(db: DB): Handler {
       return;
     }
 
-    console.log("CREATED LISTING")
 
     res.json({
       id: listing.id,
@@ -68,7 +67,7 @@ export function GetListing(db: DB): Handler {
 export function UpdateListing(db: DB): Handler {
   return async (req: Request, res: Response, next: NextFunction) => {
     const id = req.params.id;
-    const listingData = req.body["screeningQuestions"] ? {...req.body, screeningQuestions: ParseScreeningQuestions(req.body["screeningQuestions"])} : req.body;
+    const listingData = req.body["screeningQuestions"] ? { ...req.body, screeningQuestions: ParseScreeningQuestions(req.body["screeningQuestions"]) } : req.body;
     await validate.UpdateListing(db, id, req.body);
     const listing = await jobsdb.RetrieveJobListing(db, id);
     const updatedJobListing = { ...listing, ...listingData };
