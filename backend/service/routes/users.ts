@@ -8,7 +8,7 @@ import * as validate from "./validation/users";
 
 export function GetUser(db: DB): Handler {
     return async (req: Request, res: Response, next: NextFunction) => {
-        const uid = req.params.uid;
+        const uid = req.params.id;
         const cid = req.headers["auth_username"] as string;
 
         let id;
