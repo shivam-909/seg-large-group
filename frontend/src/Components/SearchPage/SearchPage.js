@@ -40,7 +40,6 @@ export default function SearchPage() {
             const config = user.userID ? {headers: {Authorization: `Bearer ${localStorage.getItem("access")}`}} : {};
             axios.post(`${process.env.REACT_APP_BACKEND_URL}api/jobs/search`, formData, config)
                 .then(async response => {
-                    console.log(response.data.results)
                     if (response.data.results.length === 0) {
                         setNoJobsFound(true);
                     }
