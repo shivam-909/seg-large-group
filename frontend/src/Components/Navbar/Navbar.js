@@ -34,7 +34,7 @@ export default function Navbar() {
             {isLoggedIn ?
                 <div className={"mr-5"}>
                     <li className='float-right'><a className="" href="##" onClick={showProfile}><i className="fa-solid fa-user text-xl"></i></a></li>
-                    <li className='float-right'><a className="" href="##"><i className="fa-solid fa-bell text-xl"></i></a></li>
+                    <li className='float-right'><a className="" href="/notifications"><i className="fa-solid fa-bell text-xl"></i></a></li>
                 </div>
                 :
                 <div className='mr-5 space-x-5'>

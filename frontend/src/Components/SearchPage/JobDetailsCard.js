@@ -188,7 +188,6 @@ function JobDetailsCard(props) {
 
             <Urgent urgent={props.urgent} icon={clockIcon}/>
 
-            {props.age}
             <JobPostAge age={props.age}/>
         </div>
     );
