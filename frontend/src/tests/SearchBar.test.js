@@ -1,7 +1,7 @@
 import { render , screen } from "@testing-library/react";
 import userEvent from '@testing-library/user-event';
 import SearchBar from "../Components/SearchPage/SearchBar";
-<<<<<<< HEAD
+
 import {BrowserRouter, Route, Routes} from "react-router-dom";
 
 describe('SearchBar', () => {
@@ -37,7 +37,7 @@ describe('SearchBar', () => {
   //
   // });
 
-=======
+
 
 describe('SearchBar', () => {
   it('renders the dropdown fields with options', () => {
@@ -68,5 +68,5 @@ describe('SearchBar', () => {
 
   });
 
->>>>>>> master
+
 });
