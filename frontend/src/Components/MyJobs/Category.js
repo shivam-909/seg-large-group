@@ -4,6 +4,7 @@ import axios from "axios";
 import CompanyJobCard from "./CompanyJobCard";
 import {GetData} from "../../Auth/GetUser";
 import Loading from "../Loading/Loading";
+import RefreshToken from "../../Auth/RefreshToken";
 
 export default function Category(props) {
     const [jobsList, setJobsList] = useState([]);
@@ -20,6 +21,7 @@ export default function Category(props) {
 
     useEffect(() => {
         const getUser = async () => {
+            await RefreshToken();
             if (user.length === 0) {
                 await GetData().then(r => {
                     setUser(r)
@@ -31,6 +33,7 @@ export default function Category(props) {
     useEffect(() => {
         setLoading(true)
         async function updateListings() {
+            await RefreshToken();
             if (props.filter === "Postings") {
                 await getPostings(); // eslint-disable-line
             } else if (props.filter === "Saved") {
@@ -43,6 +46,7 @@ export default function Category(props) {
     },[props.filter, user]) // eslint-disable-line
 
     async function getPostings(){
+        await RefreshToken();
         const companyID = user.companyID;
         const formData = new FormData();
         formData.append('companyID', companyID); // eslint-disable-line
@@ -67,6 +71,7 @@ export default function Category(props) {
     }
 
     async function getApplication(filter){
+        await RefreshToken();
         const formData = new FormData();
         formData.append('status', filter);
         formData.append('searcher', user.searcherID); // eslint-disable-line
@@ -94,8 +99,8 @@ export default function Category(props) {
         if (!user.userID){
             return;
         }
-        const token = localStorage.getItem("access");
-        axios.get(`${process.env.REACT_APP_BACKEND_URL}api/user`, {headers: {Authorization: `Bearer ${token}`}})
+        await RefreshToken();
+        await axios.get(`${process.env.REACT_APP_BACKEND_URL}api/user`, {headers: {Authorization: `Bearer ${localStorage.getItem("access")}`}})
             .then(response => {
                 if (response.data.searcher?.savedJobs !== undefined) {
                     let savedJobs = response.data.searcher?.savedJobs

@@ -12,6 +12,7 @@ import openInNewTabIcon from "../../icons/openInNewTabIcon.png";
 import {useNavigate} from "react-router-dom";
 import axios from "axios";
 import {GetData} from "../../Auth/GetUser";
+import RefreshToken from "../../Auth/RefreshToken";
 
 
 function JobDetailsCard(props) {
@@ -24,6 +25,7 @@ function JobDetailsCard(props) {
     useEffect(() => {
         const getUser = async () => {
             if (user.length === 0){
+                await RefreshToken();
                 await GetData().then(r => {
                     if (r !== undefined) {
                         setUser(r)
@@ -42,6 +44,7 @@ function JobDetailsCard(props) {
             if(!props.companyID){
                 return;
             }
+            await RefreshToken();
             const getCompanyUser = new FormData();
             getCompanyUser.append("companyID", props.companyID)
             await axios.post(`${process.env.REACT_APP_BACKEND_URL}api/user/typeid`, getCompanyUser).then(async r => {
@@ -53,7 +56,6 @@ function JobDetailsCard(props) {
                 userApplications.append("searcher", user.searcher?.searcherID);
                 userApplications.append("jobListing", props.id);
                 await axios.post(`${process.env.REACT_APP_BACKEND_URL}api/application/filter`, userApplications).then(res => {
-                    console.log(props.companyID)
                     setHasApplied(res.data.applications.length > 0)
                 });
             })
@@ -62,6 +64,7 @@ function JobDetailsCard(props) {
     },[props.id, user]) // eslint-disable-line
 
     async function saveJobPost() {
+        await RefreshToken();
         if (user.userID){
             if(!savedJobPost){
                 const savedJobs = user.searcher?.savedJobs;
@@ -88,9 +91,6 @@ function JobDetailsCard(props) {
                     if (token) {
                         await axios.patch(`${process.env.REACT_APP_BACKEND_URL}api/users`, newUser, {headers: {Authorization: `Bearer ${token}`}});
                     }
-                }
-                else{
-                    console.log("job not saved")
                 }
             }
             setSavedJopPost(!savedJobPost);
@@ -151,9 +151,10 @@ function JobDetailsCard(props) {
             <p className='text-xl font-bold mb-4'>Qualifications</p>
 
             <div className='space-x-1.5'>
-                {props.qualifications.map(qualification => (
-                    <PlaceholderCard content={qualification}/>
-                ))}
+                {props.qualifications.map(qualification => {
+                    qualification = qualification.split(',');
+                    return <PlaceholderCard content={`${qualification[1]} in ${qualification[0]} (Grade: ${qualification[2].trim()})`}/>;
+                })}
             </div>
 
             <div>

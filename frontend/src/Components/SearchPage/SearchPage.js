@@ -7,6 +7,7 @@ import Loading from "../Loading/Loading";
 import {distanceTo} from 'geolocation-utils';
 import Geocode from "react-geocode";
 import {GetData} from "../../Auth/GetUser";
+import RefreshToken from "../../Auth/RefreshToken";
 
 Geocode.setApiKey(process.env.REACT_APP_GOOGLE_API_KEY);
 
@@ -21,6 +22,7 @@ export default function SearchPage() {
     useEffect(() => {
         const getUser = async () => {
             if (user.length === 0){
+                await RefreshToken();
                 await GetData().then(r => {
                     if (r !== undefined) {
                         setUser(r)

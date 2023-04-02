@@ -2,6 +2,7 @@ import React, {useState} from "react";
 import {useNavigate} from "react-router-dom";
 import Modal from 'react-modal';
 import axios from "axios";
+import RefreshToken from "../../Auth/RefreshToken";
 
 export default function JobCard(props) {
     const navigate = useNavigate();
@@ -46,6 +47,7 @@ export function UpdateJobStatus(props){
     async function archive() {
         const formData = new FormData();
         formData.append("status","Archived");
+        await RefreshToken();
         await axios.patch(`${process.env.REACT_APP_BACKEND_URL}api/applications/${props.id}`,formData).then(navigate(0))
     }
 
