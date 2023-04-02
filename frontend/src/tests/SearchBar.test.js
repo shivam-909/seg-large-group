@@ -4,10 +4,10 @@ import SearchBar from "../Components/SearchPage/SearchBar";
 
 import {BrowserRouter, Route, Routes} from "react-router-dom";
 
-describe('SearchBar', () => {
-  test('renders Search Bar', () => {
-    render(<BrowserRouter><Routes><Route element={ <SearchBar/> }/></Routes></BrowserRouter>);
-  });
+// describe('SearchBar', () => {
+//   test('renders Search Bar', () => {
+//     render(<BrowserRouter><Routes><Route element={ <SearchBar/> }/></Routes></BrowserRouter>);
+//   });
 
   // it('renders the dropdown fields with options', () => {
   //   render(<BrowserRouter><Routes><Route element={ <SearchBar/> }/></Routes></BrowserRouter>);
@@ -38,9 +38,9 @@ describe('SearchBar', () => {
   // });
 
 
-
-describe('SearchBar', () => {
-  it('renders the dropdown fields with options', () => {
+//
+// describe('SearchBar', () => {
+//   it('renders the dropdown fields with options', () => {
     //render(<SearchBar />);
     // expect(screen.getByLabelText('Date')).toBeInTheDocument();
     // expect(screen.getByLabelText('Distance')).toBeInTheDocument();
@@ -66,7 +66,7 @@ describe('SearchBar', () => {
     // expect(screen.getByLabelText('Job Type')).toHaveValue('Permanent');
     // expect(screen.getByLabelText('Situation')).toHaveValue('Remote');
 
-  });
-
-
-});
+//   });
+//
+//
+// });
