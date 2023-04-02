@@ -111,7 +111,9 @@ export default function NotificationsPage() {
                                 </div>
                             </div>
                             :
+                            <div role='status'>
                             <Loading className='w-16 h-16 border-[6px] border-dark-theme-grey'/>
+                            </div>
                         }
                     </div>
                 }
