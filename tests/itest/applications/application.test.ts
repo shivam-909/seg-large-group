@@ -36,7 +36,6 @@ it("create application", async () => {
     });
 
     expect(response.status).toEqual(200);
-
     const body = await response.json() as any;
     expect(body).not.toBeNull();
 
@@ -152,7 +151,8 @@ it("create application", async () => {
     let applicationFormData = new FormData();
 
     applicationFormData.append("status", status);
-    applicationFormData.append("cv", cv);
+    applicationFormData.append("cv[]", cv[0]);
+    applicationFormData.append("cv[]", cv[1]);
     applicationFormData.append("QnAs", QnAs);
     applicationFormData.append("coverLetter", coverLetter);
     applicationFormData.append("jobListing", listingBody.id);
