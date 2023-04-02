@@ -28,7 +28,7 @@ function UserProfilePage() {
             await RefreshToken();
             if (Object.keys(profile).length === 0) {
                 const token = localStorage.getItem('access');
-                await axios.get(`${process.env.REACT_APP_BACKEND_URL}api/user`, {headers: {Authorization: `Bearer ${token}`}})
+                await axios.get(`${process.env.REACT_APP_BACKEND_URL}api/user/${id}`, {headers: {Authorization: `Bearer ${token}`}})
                     .then(r => {
                         setProfile(r.data)
                     });
