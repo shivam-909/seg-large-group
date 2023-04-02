@@ -113,6 +113,7 @@ export function Register(db: DB): Handler {
       access,
       refresh,
       typeID,
+      newUserID
 
     })
   }
