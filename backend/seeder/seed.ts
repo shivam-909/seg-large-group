@@ -5,7 +5,6 @@ import {faker} from '@faker-js/faker';
 
 import JobListing from "../models/job";
 import {Company, Searcher, User} from "../models/user";
-import Notification from "../models/notification";
 import {Status} from "../models/enums/status.enum";
 import Application from "../models/application";
 import {companyNotification, searcherNotification} from "../models/enums/userNotification.enum";
@@ -18,20 +17,17 @@ import * as notificationsdb from "../db/notifications";
 import * as searcherdb from "../db/searchers";
 import {
     ErrorCompanyNotFound,
-    ErrorJobListingNotFound,
     ErrorNoCompaniesExist,
-    ErrorSearcherNotFound,
     ErrorUserNotFound
 } from "../service/public";
 import {RetrieveUserByCompanyID, RetrieveUserBySearcherID} from "../db/users";
 import {RetrieveJobListing} from "../db/jobs";
-import application from "../models/application";
 
 //CONTROL
-const numCompanies = 1
-const numSearchers = 1
+const numCompanies = 5
+const numSearchers = 10
 const numJobListings = 100
-const numApplications = 100
+const numApplications = 20
 
 //=====================================================USERS=====================================================
 
@@ -181,7 +177,6 @@ async function GetRandomCompany(db: DB): Promise<Company> {
     const companyIds = await companiesdb.GetAllCompanyIds(db);
 
     if (companyIds.length === 0) {
-        console.log("no companies exist");
         throw new Error(ErrorNoCompaniesExist);
     }
 
@@ -190,7 +185,6 @@ async function GetRandomCompany(db: DB): Promise<Company> {
     const company = await companiesdb.RetrieveCompanyByID(db, companyId);
 
     if (!company) {
-        console.log("company not found for id: " + companyId);
         throw new Error(ErrorCompanyNotFound);
     }
 
@@ -265,7 +259,6 @@ async function GenerateJobListing(db: DB): Promise<JobListing> {
     const company = await GetRandomCompany(db);
     const user = await usersdb.RetrieveUserByCompanyID(db, company.companyID);
     if (!user) {
-        console.log("user not found for company id: " + company.companyID);
         throw new Error(ErrorUserNotFound);
     }
 
@@ -416,19 +409,13 @@ async function GenerateSearcherNotification(db: DB, application: Application){
     let content = "";
 
     if(application.status == 'Interview'){
-        console.log('Interview: ');
-        console.log(application.id);
         content = searcherNotification.Interview.toString();
     }
     else if(application.status == 'Accepted'){
-        console.log('Accepted: ');
-        console.log(application.id);
 
         content = searcherNotification.Accepted.toString();
     }
     else if(application.status == 'Rejected'){
-        console.log('Rejected: ');
-        console.log(application.id);
         content = searcherNotification.Rejection.toString();
     }
 
@@ -457,13 +444,10 @@ async function GenerateCompanyNotification(db: DB, application: Application){
     let companyNotifs : any[] = [];
 
     if(application.status == 'Applied'){
-        console.log('Applied');
-        console.log(application.id);
+
         content = companyNotification.NewApplicant.toString();
     }
     else if(application.status == 'Archived'){
-        console.log('Archived');
-        console.log(application.id);
 
         content = companyNotification.Withdrawal.toString();
     }
