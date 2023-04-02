@@ -50,10 +50,6 @@ export function UpdateJobStatus(props){
         await axios.patch(`${process.env.REACT_APP_BACKEND_URL}api/applications/${props.id}`,formData).then(navigate(0))
     }
 
-    async function withdraw() {
-        await axios.delete(`${process.env.REACT_APP_BACKEND_URL}api/applications/${props.id}`);
-    }
-
     return (
         <div>
             <Modal

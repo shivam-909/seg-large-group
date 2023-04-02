@@ -36,7 +36,8 @@ export default function NotificationsPage() {
                     <div className='w-2/3 space-y-4'>
                         <h1 className='font-bold text-3xl'>My Notifications</h1>
                         <div className='bg-darker-grey h-[1px]'></div>
-                        {notifications.map(notification => {
+                        {notifications.map( // eslint-disable-next-line
+                            notification => {
                             if (notification.content !== 'Withdrawal') {
                                 return (
                                     <div id={notification.id} className='flex p-4 rounded-md border justify-between'>
