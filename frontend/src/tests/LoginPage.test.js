@@ -80,12 +80,9 @@ describe('LoginPage component', () => {
     waitFor(() => expect(rememberLogin).not.toBeChecked());
   });
 
-  // https://stackoverflow.com/questions/73184212/how-to-test-checkbox-checked-with-react-testing-library
   test('toggles element when clicking the checkbox', () => {
     const rememberLogin = screen.queryByTestId('rememberLogin');
     userEvent.click(rememberLogin);
-
-    // screen.getByText('Keep me signed in');
 
     waitFor(() => expect(screen.queryByTestId('rememberLogin')).toBeInTheDocument());
     waitFor(() => expect(rememberLogin).toBeChecked());
