@@ -416,19 +416,13 @@ async function GenerateSearcherNotification(db: DB, application: Application){
     let content = "";
 
     if(application.status == 'Interview'){
-        console.log('Interview: ');
-        console.log(application.id);
         content = searcherNotification.Interview.toString();
     }
     else if(application.status == 'Accepted'){
-        console.log('Accepted: ');
-        console.log(application.id);
 
         content = searcherNotification.Accepted.toString();
     }
     else if(application.status == 'Rejected'){
-        console.log('Rejected: ');
-        console.log(application.id);
         content = searcherNotification.Rejection.toString();
     }
 
@@ -457,14 +451,9 @@ async function GenerateCompanyNotification(db: DB, application: Application){
     let companyNotifs : any[] = [];
 
     if(application.status == 'Applied'){
-        console.log('Applied');
-        console.log(application.id);
         content = companyNotification.NewApplicant.toString();
     }
     else if(application.status == 'Archived'){
-        console.log('Archived');
-        console.log(application.id);
-
         content = companyNotification.Withdrawal.toString();
     }
 
