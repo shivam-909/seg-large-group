@@ -1,11 +1,12 @@
 import SearchBar from "./SearchBar";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import Filters from "./Filters";
 import Navbar from "../Navbar/Navbar";
 import axios from "axios";
 import Loading from "../Loading/Loading";
 import {distanceTo} from 'geolocation-utils';
 import Geocode from "react-geocode";
+import {GetData} from "../../Auth/GetUser";
 
 Geocode.setApiKey(process.env.REACT_APP_GOOGLE_API_KEY);
 
@@ -15,15 +16,31 @@ export default function SearchPage() {
     const [showJobTitleInputErrorMessage, setShowJobTitleInputErrorMessage] = useState(false);
     const [showLocationInputErrorMessage, setShowLocationInputErrorMessage] = useState(false);
     const [noJobsFound, setNoJobsFound] = useState(false);
+    const [user, setUser] = useState([]);
+
+    useEffect(() => {
+        const getUser = async () => {
+            if (user.length === 0){
+                await GetData().then(r => {
+                    if (r !== undefined) {
+                        setUser(r)
+                    }
+                }).catch(e => console.log(e));
+            }
+        };
+        getUser()
+    },[user]) // eslint-disable-line
 
     function showResults() {
         if (isJobTitleInputValid() & isLocationInputValid()) {
-            setJobs([])
+            setJobs([]);
             setLoading(true);
             const formData = new FormData();
             formData.append('term', document.getElementById('jobTitleInput').value);
-            axios.post(`${process.env.REACT_APP_BACKEND_URL}api/jobs/search`, formData)
+            const config = user.userID ? {headers: {Authorization: `Bearer ${localStorage.getItem("access")}`}} : {};
+            axios.post(`${process.env.REACT_APP_BACKEND_URL}api/jobs/search`, formData, config)
                 .then(async response => {
+                    console.log(response.data.results)
                     if (response.data.results.length === 0) {
                         setNoJobsFound(true);
                     }
@@ -35,17 +52,15 @@ export default function SearchPage() {
                             return {lat: response.results[0].geometry.location.lat, lon: response.results[0].geometry.location.lng};
                         });
                     }
-                    catch (err){
+                    catch (err) {
                         console.log(err)
                     }
 
                     for (const job of response.data.results) {
-                        console.log(job)
                         job.age = Math.floor(((Date.now() / 1000) - job.datePosted._seconds) / 86400);
 
                         job.compensation[0] = job.compensation[0].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
                         await axios.get(`${process.env.REACT_APP_BACKEND_URL}api/company/${job.companyID}`).then(company => {
-                            console.log(company.data)
                             job.companyName = company.data.companyName;
                         });
 
@@ -60,8 +75,8 @@ export default function SearchPage() {
                                 .catch(err => console.log(err));
                             job.distance = distanceTo(locInput, jobLoc) * 0.000621371;
                         }
-                        catch(err){
-                            job.distance=10000;
+                        catch(err) {
+                            job.distance = 10000;
                         }
                     }
                     setLoading(false);

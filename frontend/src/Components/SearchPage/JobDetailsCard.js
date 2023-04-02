@@ -24,8 +24,10 @@ function JobDetailsCard(props) {
         const getUser = async () => {
             if (user.length === 0){
                 await GetData().then(r => {
-                    setUser(r)
-                });
+                    if (r !== undefined) {
+                        setUser(r)
+                    }
+                }).catch(e => console.log(e));
             }
         };
         getUser()
@@ -43,7 +45,8 @@ function JobDetailsCard(props) {
             getCompanyUser.append("companyID", props.companyID)
             await axios.post(`${process.env.REACT_APP_BACKEND_URL}api/user/typeid`, getCompanyUser).then(async r => {
                 setCompany(r.data.userID);
-                if (!user.searcher?.searcherID){
+                if (!user.searcher?.searcherID) {
+                    setHasApplied(false);
                     return;
                 }
                 const userApplications = new FormData();
