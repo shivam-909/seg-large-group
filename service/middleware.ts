@@ -20,7 +20,7 @@ const allowUnauthenticated = [
     "/api/company/*",
     "/api/application/filter",
     "/api/user/typeid",
-    "/api/user",
+    "/api/user/*",
     "/api/users",
     "/api/users/*",
     "/api/notifications",
