@@ -35,6 +35,7 @@ test('create company, retrieve company, delete company', async () => {
     await CreateCompany(db, user, companyObject);
 
     //get company
+
     const retrievedCompany = await RetrieveCompanyByID(db, companyID);
     expect(retrievedCompany).not.toBeNull();
     expect(retrievedCompany!.companyID).toEqual(companyID);
@@ -50,12 +51,11 @@ test('create company, retrieve company, delete company', async () => {
     }
     expect(repeatedID).toEqual(false);
 
-
     //delete the company
+
     await DeleteCompany(db,companyID);
     const deletedCompany = await RetrieveCompanyByID(db, companyID);
     expect(deletedCompany).toBeNull();
     await db.UserCollection().doc(userID).delete();
-
 
 });
