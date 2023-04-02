@@ -45,5 +45,5 @@ describe('UserProfilePage', () => {
   //   const locationInput = screen.getByPlaceholderText('Please enter your Location');
   //   expect(companyNameInput).toBeEnabled();
   //   expect(locationInput).toBeEnabled();
-  });
+  //});
 });
