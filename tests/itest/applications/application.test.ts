@@ -34,7 +34,6 @@ it("create application", async () => {
         method: 'POST',
         body: formData,
     });
-
     expect(response.status).toEqual(200);
     const body = await response.json() as any;
     expect(body).not.toBeNull();
@@ -121,7 +120,11 @@ it("create application", async () => {
 
     expect(searcherResponse.status).toEqual(200);
     const searcherBody = await searcherResponse.json() as any;
+    console.log("SEARCHER: " + searcherBody);
     expect(searcherBody).not.toBeNull();
+    expect(searcherBody).toHaveProperty('typeID');
+    expect(searcherBody.typeID).not.toBeNull();
+    expect(searcherBody.typeID).not.toEqual('');
 
     // read the body as json
 
@@ -156,18 +159,18 @@ it("create application", async () => {
     applicationFormData.append("QnAs", QnAs);
     applicationFormData.append("coverLetter", coverLetter);
     applicationFormData.append("jobListing", listingBody.id);
+    applicationFormData.append("searcher", searcherBody.typeID );
 
 
     // Send POST request to create listing
-    const applicationResponse = await fetch(`http://localhost:8000//api/applications/add`, {
+    const applicationResponse = await fetch(`http://localhost:8000/api/applications/add`, {
         method: 'POST',
         body: applicationFormData,
-        headers: {
-            'Authorization': `Bearer ${searcherBody.access}`
-        }
+
     });
 
     // Expect 200 with id in body
+
     expect(applicationResponse.status).toEqual(200);
     const applicationBody = await applicationResponse.json() as any;
     expect(applicationBody).not.toBeNull();
@@ -189,7 +192,6 @@ it("create application", async () => {
     // Expect 200 with application in body. If its not 200, print the body.
     expect(applicationResponse2.status).toEqual(200);
     const applicationBody2 = await applicationResponse2.json() as any;
-    console.log(applicationBody2)
     expect(applicationBody2).not.toBeNull();
     expect(applicationBody2.application).not.toBeNull();
 
