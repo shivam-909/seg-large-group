@@ -1,7 +1,7 @@
 import React from 'react';
 import { render , screen, fireEvent } from "@testing-library/react";
 import SearchPage from "../Components/SearchPage/SearchPage";
-<<<<<<< HEAD
+
 import {BrowserRouter, Route, Routes} from "react-router-dom";
 
 describe('SearchPage', () => {
@@ -26,7 +26,7 @@ describe('SearchPage', () => {
   //   expect(screen.getByText(/Please enter a job title/)).toBeInTheDocument();
   //   expect(screen.getByText(/Please enter a location/)).toBeInTheDocument();
   // });
-=======
+
 
 describe('SearchPage', () => {
   it('displays job search results when valid inputs are entered',() => {
@@ -47,5 +47,5 @@ describe('SearchPage', () => {
     // expect(screen.getByText(/Please enter a job title/)).toBeInTheDocument();
     // expect(screen.getByText(/Please enter a location/)).toBeInTheDocument();
   });
->>>>>>> master
+
 });
