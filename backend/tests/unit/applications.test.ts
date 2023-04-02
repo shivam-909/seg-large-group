@@ -3,21 +3,21 @@ import { randomUUID } from "crypto";
 import DB from "../../db/db";
 import Application from "../../models/application";
 import {
-    CreateApplication,
-    RetrieveAllApplications,
+    CreateApplication, GetApplicationsByFilter,
     RetrieveApplication,
     UpdateApplication
 } from "../../db/applications";
 import {Searcher, User} from "../../models/user";
 import {CreateSearcher} from "../../db/searchers";
 import {faker} from "@faker-js/faker";
+import {DeleteUser} from "../../db/users";
 
-test('create application, retrieve application, update application, delete application', async () => {
+test('create application, retrieve application, get application by filter, update application, delete application', async () => {
 
     const db = new DB();
     const userID = randomUUID();
     const searcherID = randomUUID();
-    const email = 'test_crd_searcher@example.com';
+    const email = 'searchertest@example.com';
     const password = 'Password123!';
     const firstName = 'John';
     const lastName = 'Doe';
@@ -41,6 +41,7 @@ test('create application, retrieve application, update application, delete appli
         "",
         "",
         [],
+        "",
         searcherID,
         undefined,
     )
@@ -61,6 +62,7 @@ test('create application, retrieve application, update application, delete appli
     const updatedJobListing = randomUUID();
     const updatedCv = ["Bob Marley", "https://seg-joblink.s3.eu-west-2.amazonaws.com/cv/1047a922-d91f-43dc-80f2-7273ee90acaa.png.pdf"];
     const updatedCoverLetter = faker.lorem.paragraphs(5000).substring(0, Math.floor(Math.random() * (100 + 1)) + 500);
+    const updatedQnAs: Record<string, string> = {"Give an example of when you showed leadership qualities.": faker.lorem.words()};
 
     const application = new Application(
         id,
@@ -79,14 +81,13 @@ test('create application, retrieve application, update application, delete appli
         updatedSearcher,
         updatedJobListing,
         updatedCv,
+        updatedQnAs,
         updatedCoverLetter,
     )
 
     await CreateApplication(db, application);
 
-    //Get all applications
-    const applications = await RetrieveAllApplications(db);
-    expect(applications.size).toEqual(1);
+
 
     // Retrieve the application by id.
     const retrievedApplication = await RetrieveApplication(db, id);
@@ -107,9 +108,19 @@ test('create application, retrieve application, update application, delete appli
     expect(retrievedUpdatedApplication!.jobListing).toEqual(updatedJobListing);
     expect(retrievedUpdatedApplication!.cv).toEqual(updatedCv);
 
+    // test get application by filter.
+    const applications = await GetApplicationsByFilter(db, {status: updatedStatus});
+    let found = false;
+    for (const application of applications) {
+        if(application.status != updatedStatus) found = true;
+    }
+    expect(found).toEqual(false);
+
+
     // Delete the application.
     await db.ApplicationCollection().doc(id).delete();
     const deletedApplication = await RetrieveApplication(db, id);
     expect(deletedApplication).toBeNull();
+    await DeleteUser(db, userID);
 
 });
