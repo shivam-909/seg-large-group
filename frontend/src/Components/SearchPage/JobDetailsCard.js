@@ -153,8 +153,7 @@ function JobDetailsCard(props) {
             <div className='space-x-1.5'>
                 {props.qualifications && props.qualifications.map(qualification => {
                     qualification = qualification.split(',');
-                    const content = qualification.length < 3 ? `${qualification[1]} in ${qualification[0]}` : `${qualification[1]} in ${qualification[0]} (Grade: ${qualification[2].trim()})`;
-                    return <PlaceholderCard content={content}/>;
+                    return <PlaceholderCard content={qualification.length < 3 ? `${qualification[1]} in ${qualification[0]}` : `${qualification[1]} in ${qualification[0]} (Grade: ${qualification[2].trim()})`}/>;
                 })}
             </div>
 
