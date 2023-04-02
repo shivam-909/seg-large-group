@@ -10,7 +10,7 @@ export default function NotificationsPage() {
         const token = localStorage.getItem('access');
         axios.get(`${process.env.REACT_APP_BACKEND_URL}api/notifications`, {headers: {Authorization: `Bearer ${token}`}})
             .then(notifications => {
-                console.log(notifications.data.finalNotifs);
+                console.log(notifications.data)
                 setNotifications(notifications.data.finalNotifs)
                 if (notifications.data.finalNotifs.length === 0) {
                     setNoNotifications(true);
@@ -35,43 +35,60 @@ export default function NotificationsPage() {
                         <h1 className='font-bold text-3xl'>My Notifications</h1>
                         <div className='bg-darker-grey h-[1px]'></div>
                         {notifications.map(notification => {
-                            return (
-                                <div id={notification.id} className='flex p-4 rounded-md border justify-between'>
-                                    <div>
-                                        {notification.content === 'Withdrawal' &&
-                                            <div className='space-y-2'>
-                                                <p className='text-red font-bold text-xl'>Application Withdrawn</p>
-                                                <p>An applicant has withdrawn their application for <span className='font-bold'><a className='underline' href={`/viewjob/${notification.jobListingID}`} target='_blank' rel='noreferrer'>{notification.title}</a></span>.</p>
-                                            </div>
-                                        }
-                                        {notification.content === 'NewApplicant' &&
-                                            <div className='space-y-2'>
-                                                <p className='text-green font-bold text-xl'>New Applicant</p>
-                                                <p>You've received a new application for <span className='font-bold'><a className='underline' href={`/viewjob/${notification.jobListingID}`} target='_blank' rel='noreferrer'>{notification.title}</a></span>.</p>
-                                            </div>
-                                        }
-                                        {notification.content === 'Interview' &&
-                                            <div className='space-y-2'>
-                                                <p className='text-orange font-bold text-xl'>Interview Invite</p>
-                                                <p><span className='font-bold'>{notification.companyName}</span> has invited you to interview for <span className='font-bold'><a className='underline' href={`/viewjob/${notification.jobListingID}`} target='_blank' rel='noreferrer'>{notification.title}</a></span>.</p>
-                                            </div>
-                                        }
-                                        {notification.content === 'Rejection' &&
-                                            <div className='space-y-2'>
-                                                <p className='text-red font-bold text-xl'>Application Rejected</p>
-                                                <p>You've been rejected for <span className='font-bold'><a className='underline' href={`/viewjob/${notification.jobListingID}`} target='_blank' rel='noreferrer'>{notification.title}</a></span>.</p>
-                                            </div>
-                                        }
-                                        {notification.content === 'Accepted' &&
-                                            <div className='space-y-2'>
-                                                <p className='text-green font-bold text-xl'>You're hired!</p>
-                                                <p>You've been accepted for <span className='font-bold'><a className='underline' href={`/viewjob/${notification.jobListingID}`} target='_blank' rel='noreferrer'>{notification.title}</a></span>.</p>
-                                            </div>
-                                        }
+                            if (notification.content !== 'Withdrawal') {
+                                return (
+                                    <div id={notification.id} className='flex p-4 rounded-md border justify-between'>
+                                        <div>
+                                            {notification.content === 'NewApplicant' &&
+                                                <div className='space-y-2'>
+                                                    <p className='text-green font-bold text-xl'>New Applicant</p>
+                                                    <p>You've received a new application for <span
+                                                        className='font-bold'><a className='underline'
+                                                                                 href={`/viewjob/${notification.jobListingID}`}
+                                                                                 target='_blank'
+                                                                                 rel='noreferrer'>{notification.title}</a></span>.
+                                                    </p>
+                                                </div>
+                                            }
+                                            {notification.content === 'Interview' &&
+                                                <div className='space-y-2'>
+                                                    <p className='text-orange font-bold text-xl'>Interview Invite</p>
+                                                    <p><span className='font-bold'>{notification.companyName}</span> has
+                                                        invited you to interview for <span className='font-bold'><a
+                                                            className='underline'
+                                                            href={`/viewjob/${notification.jobListingID}`}
+                                                            target='_blank'
+                                                            rel='noreferrer'>{notification.title}</a></span>.</p>
+                                                </div>
+                                            }
+                                            {notification.content === 'Rejection' &&
+                                                <div className='space-y-2'>
+                                                    <p className='text-red font-bold text-xl'>Application Rejected</p>
+                                                    <p><span className='font-bold'>{notification.companyName}</span> has
+                                                        rejected you for <span className='font-bold'><a
+                                                            className='underline'
+                                                            href={`/viewjob/${notification.jobListingID}`}
+                                                            target='_blank'
+                                                            rel='noreferrer'>{notification.title}</a></span>.</p>
+                                                </div>
+                                            }
+                                            {notification.content === 'Accepted' &&
+                                                <div className='space-y-2'>
+                                                    <p className='text-green font-bold text-xl'>You're hired!</p>
+                                                    <p><span className='font-bold'>{notification.companyName}</span> has
+                                                        hired you for <span className='font-bold'><a
+                                                            className='underline'
+                                                            href={`/viewjob/${notification.jobListingID}`}
+                                                            target='_blank'
+                                                            rel='noreferrer'>{notification.title}</a></span>.</p>
+                                                </div>
+                                            }
+                                        </div>
+                                        <button className='fa-solid fa-x'
+                                                onClick={() => deleteNotification(notification.id)}/>
                                     </div>
-                                    <button className='fa-solid fa-x' onClick={() => deleteNotification(notification.id)}/>
-                                </div>
-                            );
+                                );
+                            }
                         })}
                     </div>
                     :

@@ -4,6 +4,7 @@ import Modal from 'react-modal';
 import axios from "axios";
 
 export default function JobCard(props) {
+    console.log(props)
     const navigate = useNavigate();
     const [modalIsOpen, setIsOpen] = useState(false);
 
@@ -43,11 +44,16 @@ export function UpdateJobStatus(props){
         },
     };
 
-    async function archive(){
+    async function archive() {
         const formData = new FormData();
-        formData.append("status","Archived")
+        formData.append("status","Archived");
         await axios.patch(`${process.env.REACT_APP_BACKEND_URL}api/applications/${props.id}`,formData).then(navigate(0))
     }
+
+    async function withdraw() {
+        await axios.delete(`${process.env.REACT_APP_BACKEND_URL}api/applications/${props.id}`);
+    }
+
     return (
         <div>
             <Modal

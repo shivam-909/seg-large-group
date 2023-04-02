@@ -22,7 +22,10 @@ const allowUnauthenticated = [
     "/api/user/typeid",
     "/api/user",
     "/api/users",
-    "/api/notifications"
+    "/api/notifications",
+    "/api/notifications/add",
+    "/api/applications/*",
+    "/api/searcher/*"
 ];
 
 
