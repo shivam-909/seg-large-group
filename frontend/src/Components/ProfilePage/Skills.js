@@ -3,6 +3,7 @@ import {useState} from "react";
 import SkillCard from "./SkillCard";
 
 export default function Skills(props) {
+
     const [skills, setSkills] = useState([]);
     const [count, setCount] = useState(0);
 

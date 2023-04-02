@@ -14,12 +14,12 @@ export default function Education(props) {
         setEducation([])
         for (const qualification of props.profile.searcher?.qualifications){
             let qual = qualification.split(",")
-            createEducation(qual[0], qual[1], qual[2], qual[3], qual[4])
+            createEducation(qual[0], qual[1], qual[2])
         }
     },[props.profile]) // eslint-disable-line
 
-    function createEducation(subject, type, grade){
-        setEducation( prevEducation => [...prevEducation, <EducationDropdown name={"Education"} id={count} editing={props.isEditing} subject={subject} type={type} grade={grade}/>]);
+    function createEducation(subject, qualification, grade){
+        setEducation( prevEducation => [...prevEducation, <EducationDropdown name={"Education"} id={count} editing={props.isEditing} subject={subject} qualification={qualification} grade={grade}/>]);
         setCount(count + 1);
     }
     return (

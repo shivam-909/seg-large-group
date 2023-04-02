@@ -7,8 +7,8 @@ import {GetData} from "../../Auth/GetUser";
 
 export default function MyJobs() {
     const [isCompany, setCompany] = useState(false);
-    const [filter, setFilter] = useState("Saved")
-    const [user, setUser] = useState([])
+    const [filter, setFilter] = useState("Saved");
+    const [user, setUser] = useState([]);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -40,8 +40,8 @@ export default function MyJobs() {
             <p className='font-bold text-3xl flex justify-center'>My Jobs</p>
               {!isCompany ?
             <ul className={"border-b-2 border-grey flex relative"}>
-                <li className={"filterJobs"}><button id={"Saved"} className={"filters"} onClick={() => changeFilter("Saved")} disabled={filter==="Saved"}>Saved</button></li>
-                <li className={"filterJobs"}><button id={"Applied"} className={"filters"} onClick={() => changeFilter("Applied")} disabled={filter==="Applied"}>Applied</button></li>
+                <li className={"filterJobs"}><button id={"Saved"} data-testid={"Saved"} className={"filters"} onClick={() => changeFilter("Saved")} disabled={filter==="Saved"}>Saved</button></li>
+                <li className={"filterJobs"}><button id={"Applied"} data-testid={"Applied"} className={"filters"} onClick={() => changeFilter("Applied")} disabled={filter==="Applied"}>Applied</button></li>
                 <li className={"filterJobs"}><button id={"Interview"} className={"filters"} onClick={() => changeFilter("Interview")} disabled={filter==="Interview"}>Interviews</button></li>
                 <li className={"filterJobs"}><button id={"Rejected"} className={"filters"} onClick={() => changeFilter("Rejected")} disabled={filter==="Rejected"}>Rejected</button></li>
                 <li className={"filterJobs"}><button id={"Archived"} className={"filters"} onClick={() => changeFilter("Archived")} disabled={filter==="Archived"}>Archived</button></li>
