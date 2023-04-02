@@ -47,7 +47,7 @@ export default function Applicants() {
                     const searcherID = new FormData();
                     searcherID.append("searcherID",searcher.data.searcherID)
                     axios.post(`${process.env.REACT_APP_BACKEND_URL}api/user/typeid`, searcherID).then(usr => {
-                        setApplicants( current => [...current, <ApplicantCard id={applications[i].id} pfpUrl={usr.data.pfpUrl} name={searcher.data.firstName + " " + searcher.data.lastName} email={usr.data.email} status={applications[i].status}/>]);
+                        setApplicants( current => [...current, <ApplicantCard id={applications[i].id} pfpUrl={usr.data.pfpUrl} searcherID={searcher.data.searcherID} name={searcher.data.firstName + " " + searcher.data.lastName} email={usr.data.email} status={applications[i].status}/>]);
                         setLoading(false);
                     })
                 })

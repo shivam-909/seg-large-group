@@ -10,7 +10,7 @@ export default function ApplicantCard(props) {
         <div className='border-2 border-darker-grey rounded-xl w-full p-4 m-2 shadow-md'>
             <div className={"float-right"}>
                 <button onClick={() => {setIsOpen(true)}} className={"px-5 pb-2"}><i className="fa-solid fa-ellipsis-vertical text-2xl"></i></button>
-                <UpdateApplicantStatus modalIsOpen={modalIsOpen} closeModal={() => {setIsOpen(false)}} id={props.id} status={props.status}/> </div>
+                <UpdateApplicantStatus modalIsOpen={modalIsOpen} closeModal={() => {setIsOpen(false)}} id={props.id} searcherID={props.searcherID} status={props.status}/> </div>
             <img className={"rounded-full float-left mr-2"} src={props.pfpUrl} alt="Avatar" height={"80"} width={"80"}/>
             <div className={'hover:cursor-pointer'} onClick={() => {navigate("/application/"+props.id)}} >
                 <p className='font-bold text-xl'>{props.name}</p>
@@ -20,7 +20,7 @@ export default function ApplicantCard(props) {
         </div>
     );
 }
-export function UpdateApplicantStatus(props){
+export function UpdateApplicantStatus(props) {
     const navigate = useNavigate();
 
     const customStyles = {
@@ -38,10 +38,26 @@ export function UpdateApplicantStatus(props){
         },
     };
 
-    async function changeStatus(newStatus){
+    async function changeStatus(newStatus) {
+        const applicationFormData = new FormData();
+        const notificationFormData = new FormData();
         const formData = new FormData();
-        formData.append("status",newStatus)
-        await axios.patch(`${process.env.REACT_APP_BACKEND_URL}api/applications/${props.id}`,formData).then(navigate(0))
+        formData.append("searcherID", props.searcherID);
+
+        applicationFormData.append("status", newStatus);
+
+        notificationFormData.append("application", props.id);
+        if (newStatus === "Hired") newStatus = "Accepted";
+        if (newStatus === "Rejected") newStatus = "Rejection";
+        notificationFormData.append("content", newStatus);
+
+
+        await axios.post(`${process.env.REACT_APP_BACKEND_URL}api/user/typeid`, formData)
+            .then(response => {
+                notificationFormData.append("userID", response.data.userID);
+            });
+        await axios.patch(`${process.env.REACT_APP_BACKEND_URL}api/applications/${props.id}`,applicationFormData);
+        await axios.post(`${process.env.REACT_APP_BACKEND_URL}api/notifications/add`, notificationFormData).then(navigate(0));
     }
     return (
         <div>

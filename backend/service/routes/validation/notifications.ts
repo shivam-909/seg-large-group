@@ -9,12 +9,13 @@ import {RetrieveJobListing} from "../../../db/jobs";
 import {RetrieveCompanyByID} from "../../../db/companies";
 
 export async function AddNotification(db: DB, body: any): Promise<void> {
-    const {content, applicationID, created, userID} = body;
+    const {content, application, created, userID} = body;
+    console.log(application)
 
     if (!content) {
         throw new Error(errors.ErrorContentRequired);
     }
-    if (!applicationID) {
+    if (!application) {
         throw new Error(errors.ErrorApplicationIDRequired);
     }
 
@@ -27,7 +28,7 @@ export async function AddNotification(db: DB, body: any): Promise<void> {
     }
 
     await ValidateUserID(db, userID);
-    await ValidateApplicationID(db, applicationID);
+    await ValidateApplicationID(db, application);
 
 }
 
