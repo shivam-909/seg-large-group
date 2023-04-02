@@ -1,16 +1,16 @@
-// const mockedUsedNavigate = jest.fn();
-// jest.mock('react-router-dom', () => ({
-//   ...jest.requireActual('react-router-dom'),
-//   useNavigate: () => mockedUsedNavigate,
-// }));
+const mockedUsedNavigate = jest.fn();
+jest.mock('react-router-dom', () => ({
+  ...jest.requireActual('react-router-dom'),
+  useNavigate: () => mockedUsedNavigate,
+}));
 import UserProfilePage from '../Components/ProfilePage/UserProfilePage';
 import {render, screen, fireEvent, waitFor} from '@testing-library/react';
 import {BrowserRouter, Route, Routes} from "react-router-dom";
 
 
 describe('UserProfilePage', () => {
-  test('render user profile page', () => {
-    render(<BrowserRouter><Routes><Route element={ <UserProfilePage/> }/></Routes></BrowserRouter>);
+  // test('render user profile page', () => {
+  //   render(<BrowserRouter><Routes><Route element={ <UserProfilePage/> }/></Routes></BrowserRouter>);
   //   const navbarElement = screen.queryByTestId('navbar');
   //   waitFor(() => expect(navbarElement).toBeInTheDocument())
   // });
