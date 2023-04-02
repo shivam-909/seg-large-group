@@ -6,7 +6,7 @@ import {DeleteUser, DeleteUserByEmail} from "../../db/users";
 import {CreateCompany} from "../../db/companies";
 import JobListing from "../../models/job";
 import {
-    CreateJobListing,
+    CreateJobListing, DeleteJobsByCompanyID,
     GetAllJobIDs,
     RetrieveJobListing,
     RetrieveJobListingsByFilter,
@@ -22,10 +22,19 @@ test('create jobListing, retrieve jobListing, update jobListing, delete jobListi
     const email = 'test_company@example.com';
     const password = 'Password123!';
 
+    const userId = randomUUID();
+    const companyId = randomUUID();
+    const toDeleteCompanyName = "Test Company";
+    const toDeleteEmail = 'test_to_delete_company@example.com';
+
     const companyObject = new Company(
         companyName,
         companyID,
+    )
 
+    const companyToDelete = new Company(
+        toDeleteCompanyName,
+        companyId,
     )
 
     const user = new User(
@@ -40,9 +49,24 @@ test('create jobListing, retrieve jobListing, update jobListing, delete jobListi
         companyID
     )
 
+    const userToDelete = new User(
+        userId,
+        toDeleteEmail,
+        password,
+        "",
+        "",
+        [],
+        undefined,
+        undefined,
+        companyId
+    )
+
+
     await CreateCompany(db, user, companyObject);
+    await CreateCompany(db, userToDelete, companyToDelete);
 
     const id = randomUUID();
+    const tempID = randomUUID();
     const title = 'Test Job Title';
     const compensation = ["10", "hour"];
     const description = faker.lorem.paragraphs(5000).substring(0, Math.floor(Math.random() * (1000 + 1)) + 2000);
@@ -75,6 +99,25 @@ test('create jobListing, retrieve jobListing, update jobListing, delete jobListi
 
     const jobListing = new JobListing(
         id,
+        title,
+        compensation,
+        description,
+        location,
+        type,
+        schedule,
+        companyID,
+        industry,
+        coverLetterRequired,
+        urgent,
+        qualifications,
+        datePosted,
+        benefits,
+        requirements,
+        screeningQuestions,
+    )
+
+    const jobListingToDelete = new JobListing(
+        tempID,
         title,
         compensation,
         description,
@@ -171,11 +214,18 @@ test('create jobListing, retrieve jobListing, update jobListing, delete jobListi
     }
     expect(repeatedID).toEqual(false);
 
+    //test delete job listing by company ID
+    await DeleteJobsByCompanyID(db, companyId);
+    const deletedListing = await RetrieveJobListing(db, tempID);
+    expect(deletedListing).toBeUndefined();
+
+
     // Delete the job listing.
     await db.JobListingCollection().doc(id).delete();
     const deletedJobListing = await RetrieveJobListing(db, id);
     expect(deletedJobListing).toBeUndefined();
     await DeleteUser(db, userID);
+    await DeleteUser(db, userId);
 
 
 
