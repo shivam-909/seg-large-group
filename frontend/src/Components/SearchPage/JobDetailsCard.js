@@ -24,8 +24,10 @@ function JobDetailsCard(props) {
         const getUser = async () => {
             if (user.length === 0){
                 await GetData().then(r => {
-                    setUser(r)
-                });
+                    if (r !== undefined) {
+                        setUser(r)
+                    }
+                }).catch(e => console.log(e));
             }
         };
         getUser()
@@ -43,22 +45,20 @@ function JobDetailsCard(props) {
             getCompanyUser.append("companyID", props.companyID)
             await axios.post(`${process.env.REACT_APP_BACKEND_URL}api/user/typeid`, getCompanyUser).then(async r => {
                 setCompany(r.data.userID);
-                if (!user.searcher?.searcherID){
+                if (!user.searcher?.searcherID) {
                     return;
                 }
                 const userApplications = new FormData();
-                userApplications.append("searcher", user.searcher?.searcherID)
+                userApplications.append("searcher", user.searcher?.searcherID);
+                userApplications.append("jobListing", props.id);
                 await axios.post(`${process.env.REACT_APP_BACKEND_URL}api/application/filter`, userApplications).then(res => {
-                    for (const appl of res.data.applications) {
-                        if (appl.searcher === user.searcher?.searcherID) {
-                            setHasApplied(true);
-                        }
-                    }
+                    console.log(props.companyID)
+                    setHasApplied(res.data.applications.length > 0)
                 });
             })
         }
         getCompany();
-    },[props.companyID, user]) // eslint-disable-line
+    },[props.id, user]) // eslint-disable-line
 
     async function saveJobPost() {
         if (user.userID){
@@ -71,7 +71,7 @@ function JobDetailsCard(props) {
                 }
                 const token = localStorage.getItem("access");
                 if (token) {
-                    await axios.patch(`${process.env.REACT_APP_BACKEND_URL}api/users`, newUser, {headers: {Authorization: `Bearer ${user.token}`}});
+                    await axios.patch(`${process.env.REACT_APP_BACKEND_URL}api/users`, newUser, {headers: {Authorization: `Bearer ${token}`}});
                 }
             }
             else{
@@ -85,7 +85,7 @@ function JobDetailsCard(props) {
                     }
                     const token = localStorage.getItem("access");
                     if (token) {
-                        await axios.patch(`${process.env.REACT_APP_BACKEND_URL}api/users`, newUser, {headers: {Authorization: `Bearer ${user.token}`}});
+                        await axios.patch(`${process.env.REACT_APP_BACKEND_URL}api/users`, newUser, {headers: {Authorization: `Bearer ${token}`}});
                     }
                 }
                 else{

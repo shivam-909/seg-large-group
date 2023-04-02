@@ -25,7 +25,8 @@ const allowUnauthenticated = [
     "/api/notifications",
     "/api/notifications/add",
     "/api/applications/*",
-    "/api/searcher/*"
+    "/api/searcher/*",
+    "/api/storage/*"
 ];
 
 

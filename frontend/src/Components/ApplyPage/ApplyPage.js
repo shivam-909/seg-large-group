@@ -150,7 +150,7 @@ export default function ApplyPage() {
         await axios.post(`${process.env.REACT_APP_BACKEND_URL}api/notifications/add`, notificationFormData)
             .catch(err => console.log(err));
 
-        navigate("/");
+        navigate("/jobs");
     }
 
     function uploadFile(e) {
