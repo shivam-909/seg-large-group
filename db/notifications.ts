@@ -33,7 +33,7 @@ export async function RetrieveNotification(db: DB, id: string): Promise<Notifica
   return doc.data() as Notification;
 }
 
-export async function GetAllUserNotifs(db: DB, id:string): Promise<Notification[]>{ //check this
+export async function GetAllUserNotifs(db: DB, id:string): Promise<Notification[]>{
 
   const snapshot = await db.NotificationCollection().where('userID', '==', id).get();
   const userNotifs: Notification[] = [];
