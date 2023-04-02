@@ -5,7 +5,13 @@ import {faker} from "@faker-js/faker";
 import {DeleteUser, DeleteUserByEmail} from "../../db/users";
 import {CreateCompany} from "../../db/companies";
 import JobListing from "../../models/job";
-import {CreateJobListing, RetrieveJobListing, RetrieveJobListingsByFilter, UpdateJobListing} from "../../db/jobs";
+import {
+    CreateJobListing,
+    GetAllJobIDs,
+    RetrieveJobListing,
+    RetrieveJobListingsByFilter,
+    UpdateJobListing
+} from "../../db/jobs";
 
 test('create jobListing, retrieve jobListing, update jobListing, delete jobListing', async () => {
 
@@ -155,11 +161,22 @@ test('create jobListing, retrieve jobListing, update jobListing, delete jobListi
     }
     expect(found).toEqual(false);
 
+    // Get All Job IDs
+    const jobIDs = await GetAllJobIDs(db);
+    let repeatedID = false;
+    for(let i=1; i<jobIDs.length; i++){
+        if(jobIDs[i] == jobIDs[i-1]) repeatedID=true;
+    }
+    expect(repeatedID).toEqual(false);
 
     // Delete the job listing.
     await db.JobListingCollection().doc(id).delete();
     const deletedJobListing = await RetrieveJobListing(db, id);
     expect(deletedJobListing).toBeUndefined();
     await DeleteUser(db, userID);
+
+
+
+
 
 });
