@@ -1,17 +1,20 @@
+const mockedUsedNavigate = jest.fn();
+jest.mock('react-router-dom', () => ({
+  ...jest.requireActual('react-router-dom'),
+  useNavigate: () => mockedUsedNavigate,
+}));
+import {render, screen, waitFor} from '@testing-library/react';
+import LoginPage from '../Components/LoginPage/LoginPage';
 import React from 'react';
 import { render, fireEvent, screen, waitFor} from "@testing-library/react";
 import LoginPage from "../Components/LoginPage/LoginPage";
 import {BrowserRouter, Route, Routes} from "react-router-dom";
 import userEvent from '@testing-library/user-event'
 
-test('renders login page', () => {
-  render(
-    <BrowserRouter>
-      <Routes>
-        <Route element={<LoginPage />} />
-      </Routes>
-    </BrowserRouter>
-  );
+test('renders Login Page', () => {
+  render(<LoginPage/>);
+  const signInTitle = screen.getAllByText("Sign in to your account");
+  waitFor(() => expect(signInTitle).toBeInTheDocument());
 });
 
 test('render email input', () => {
@@ -183,7 +186,7 @@ test('allows valid email input to pass', () => {
 //   expect(passwordField.type).toBe('password');
 // });
 
-//Testing sign up page and forgot password link  
+//Testing sign up page and forgot password link
 test("links with href value /signup and /forgotPassword", () => {
   render(
     <BrowserRouter>

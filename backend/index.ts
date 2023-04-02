@@ -19,6 +19,7 @@ import * as matchmakeroutes from "./service/routes/matchmaking";
 
 import cors from 'cors';
 import { FullSeed } from './seed';
+import { deseed } from './seeder/deseeder';
 
 export const db = new DB();
 
@@ -29,6 +30,10 @@ export const run = () => {
   process.argv.forEach((val, index) => {
     if (val === '--seed') {
       FullSeed(db);
+      run = false;
+      return;
+    } else if (val === '--deseed') {
+      deseed(db)
       run = false;
       return;
     }
@@ -45,11 +50,14 @@ export const run = () => {
     app.set('db', db);
     app.use(cors());
 
+
+
     // Authentication middleware
     app.use("/api/*", middleware.AuthMW);
 
-    // Error handling middleware
-    app.use(middleware.ErrorMW);
+    app.get('/api/storage/:destination/:key', upload.none(), utils.Route(app, getFile));
+    app.post('/api/storage/:destination/:id', upload.single('file'), utils.Route(app, uploadFile));
+    app.delete('/api/storage/:destination/:key', upload.none(), utils.Route(app, deleteFile));
 
     app.get('/error', util.ErrorTest)
 
@@ -78,10 +86,6 @@ export const run = () => {
     app.delete('/api/applications/:id', upload.none(), utils.Route(app, applicationroutes.DeleteApplication));
     app.post('/api/application/filter', upload.none(), utils.Route(app, applicationroutes.RetrieveApplicationByFilter));
 
-    app.get('/api/storage/:destination/:key', upload.none(), utils.Route(app, getFile));
-    app.post('/api/storage/:destination/:id', upload.single('file'), utils.Route(app, uploadFile));
-    app.delete('/api/storage/:destination/:key', upload.none(), utils.Route(app, deleteFile));
-
     app.post('/api/user/typeid', upload.none(), utils.Route(app, userroutes.GetUserByTypeID));
     app.get('/api/user', upload.none(), utils.Route(app, userroutes.GetUser));
     app.patch('/api/users', upload.none(), utils.Route(app, userroutes.UpdateUser));
@@ -93,6 +97,9 @@ export const run = () => {
     app.get('/', util.HealthCheck);
 
     app.post("/api/echo", util.Echo);
+
+
+    app.use(middleware.ErrorMW);
 
     app.listen(port, () => {
       console.log(`server running on port ${port}`);
