@@ -10,7 +10,7 @@ describe('NotificationsPage', () => {
   it('renders loading spinner when notifications are being fetched', () => {
     axios.get.mockResolvedValueOnce({ data: { finalNotifs: [] } });
     render(<NotificationsPage />);
-    expect(screen.getByRole('custom')).toBeInTheDocument();
+    expect(screen.getByRole('widget')).toBeInTheDocument();
   });
 
   it('renders "No Notifications Yet" message when there are no notifications', async () => {
