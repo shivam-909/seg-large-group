@@ -101,7 +101,7 @@ function JobDetailsCard(props) {
     }
 
     return (
-        <div className={`px-5 py-8 border-2 border-darker-grey rounded-xl bg-white overflow-y-scroll max-h-[95vh] sticky top-14 ${props.fullScreen ? 'max-w-[1200px]' : 'max-w-[800px]'}`}>
+        <div className={`px-5 py-8 border-2 border-darker-grey rounded-xl bg-white overflow-y-scroll max-h-[95vh] min-w-[70%] sticky top-14 ${props.fullScreen ? 'max-w-[1200px]' : 'max-w-[800px]'}`}>
             <p className='font-bold text-xl'>{props.title}</p>
             <a href={'/profile/'+companyUser} target='_blank' rel={"noreferrer"}>{props.companyName}</a>
             <p className='mb-5'>{companyUser.location}</p>
@@ -140,7 +140,7 @@ function JobDetailsCard(props) {
                     <p className='text-sm font-bold'>Shift and schedule</p>
                 </div>
                 <div className='space-x-1.5'>
-                    {props.schedule.map(schedule => (
+                    {props.schedule && props.schedule.map(schedule => (
                         <PlaceholderCard content={schedule}/>
                     ))}
                 </div>
@@ -151,7 +151,7 @@ function JobDetailsCard(props) {
             <p className='text-xl font-bold mb-4'>Qualifications</p>
 
             <div className='space-x-1.5'>
-                {props.qualifications.map(qualification => {
+                {props.qualifications && props.qualifications.map(qualification => {
                     qualification = qualification.split(',');
                     return <PlaceholderCard content={`${qualification[1]} in ${qualification[0]} (Grade: ${qualification[2].trim()})`}/>;
                 })}
@@ -163,7 +163,7 @@ function JobDetailsCard(props) {
                 <p className='text-xl font-bold mb-4'>Requirements</p>
 
                 <div className='space-x-1.5'>
-                    {props.requirements.map(requirement => {
+                    {props.requirements && props.requirements.map(requirement => {
                         requirement = requirement.split(',');
                         return <PlaceholderCard content={`${requirement[0]} (${requirement[1]} ${requirement[2]})`}/>;
                     })}
@@ -175,7 +175,7 @@ function JobDetailsCard(props) {
             <p className='text-xl font-bold mb-4'>Benefits</p>
 
             <div className='space-x-1.5'>
-                {props.benefits.map(benefit => (
+                {props.benefits && props.benefits.map(benefit => (
                     <PlaceholderCard content={benefit}/>
                 ))}
             </div>
