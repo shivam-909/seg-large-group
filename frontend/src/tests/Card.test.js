@@ -31,10 +31,4 @@ describe ('Card component', () => {
         const aName = screen.getByTestId('id-input');
         expect(aName).toBeInTheDocument();
     });
-    //
-    // it('should render id', () => {
-    //     render(<Card {...cardProps}/>);
-    //     const anId = screen.getByText(cardProps.id);
-    //     expect(anId).toBeInTheDocument();
-    // });
 });

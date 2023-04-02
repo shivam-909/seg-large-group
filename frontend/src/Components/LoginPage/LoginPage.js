@@ -79,7 +79,7 @@ function LoginPage() {
 
             <TextInputBoxWithIcon id='password' type='password' cache={localStorage.getItem("password")}
                                   placeholder='Password'
-                                  icon={<img id='toggleEye' src={showIcon} alt='toggle eye' onClick={togglePasswordVisibility} className='cursor-pointer'/>}/>
+                                  icon={<img id='toggleEye' src={showIcon} alt='' onClick={togglePasswordVisibility} className='cursor-pointer'/>}/>
 
 
           <div className='flex space-x-2 items-center'>
