@@ -4,6 +4,7 @@ import Category from "./Category";
 import Navbar from "../Navbar/Navbar";
 import {useNavigate} from "react-router-dom";
 import {GetData} from "../../Auth/GetUser";
+import RefreshToken from "../../Auth/RefreshToken";
 
 export default function MyJobs() {
     const [isCompany, setCompany] = useState(false);
@@ -13,6 +14,7 @@ export default function MyJobs() {
 
     useEffect(() => {
         const getUser = async () => {
+            await RefreshToken();
             if (user.length === 0){
                 await GetData().then(r => {
                     setUser(r)

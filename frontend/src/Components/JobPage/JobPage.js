@@ -5,6 +5,7 @@ import {useEffect, useState} from "react";
 import axios from "axios";
 import Loading from "../Loading/Loading";
 import {GetData} from "../../Auth/GetUser";
+import RefreshToken from "../../Auth/RefreshToken";
 
 export default function JobPage() {
     const {id} = useParams();
@@ -15,6 +16,7 @@ export default function JobPage() {
 
     useEffect(() => {
         const getUser = async () => {
+            await RefreshToken();
             if (user.length === 0){
                 await GetData().then(r => {
                     setUser(r)
@@ -26,6 +28,7 @@ export default function JobPage() {
 
     useEffect(() => {
         const getJob = async () => {
+            await RefreshToken();
             await axios.get(`${process.env.REACT_APP_BACKEND_URL}api/jobs/${id}`)
                 .then(async response => {
                     setJob(response.data)

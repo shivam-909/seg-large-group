@@ -1,6 +1,7 @@
 import './Navbar.css';
 import axios from "axios";
 import {useEffect, useState} from "react";
+import RefreshToken from "../../Auth/RefreshToken";
 
 export default function Navbar() {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -8,19 +9,23 @@ export default function Navbar() {
 
 
     useEffect(() => {
-        const token = localStorage.getItem("access");
-        if (token) {
-            axios.post(`${process.env.REACT_APP_BACKEND_URL}api/echo`, {}, {headers: {Authorization: `Bearer ${token}`}})
-                .then(res => {
-                    setIsLoggedIn(true);
-                    setUserID(res.data);
-                })
-                .catch(() => setIsLoggedIn(false));
+        async function checkLoggedIn() {
+            await RefreshToken();
+            const token = localStorage.getItem("access");
+            if (token) {
+                await axios.post(`${process.env.REACT_APP_BACKEND_URL}api/echo`, {}, {headers: {Authorization: `Bearer ${token}`}})
+                    .then(res => {
+                        setIsLoggedIn(true);
+                        setUserID(res.data);
+                    })
+                    .catch(() => setIsLoggedIn(false));
+            }
         }
+        checkLoggedIn();
     }, [isLoggedIn]);
 
     function showProfile() {
-        var x = document.getElementById("expandProfile");
+        const x = document.getElementById("expandProfile");
         if (x.style.display === "block") {
           x.style.display = "none";
         } else {
@@ -48,7 +53,10 @@ export default function Navbar() {
         <div className="top-16" id="expandProfile">
             <a href={"/profile/" + userID}><i id="icon" className="fa-solid fa-id-card pr-2"></i> Profile</a>
             <a href="/jobs"><i id="icon" className="fa-solid fa-folder-open pr-2"></i>My Jobs</a>
-            <a href={'/login'} onClick={() => {localStorage.removeItem("access")}}><i
+            <a href={'/login'} onClick={() => {
+                localStorage.removeItem("access");
+                localStorage.removeItem("refresh");
+            }}><i
                 className="fa-solid fa-right-from-bracket pr-2"></i>Log Out</a>
         </div> 
     </div>

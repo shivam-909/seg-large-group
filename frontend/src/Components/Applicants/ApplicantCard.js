@@ -2,6 +2,7 @@ import {useNavigate} from "react-router-dom";
 import React, {useState} from "react";
 import axios from "axios";
 import Modal from "react-modal";
+import RefreshToken from "../../Auth/RefreshToken";
 
 export default function ApplicantCard(props) {
     const navigate = useNavigate();
@@ -51,7 +52,7 @@ export function UpdateApplicantStatus(props) {
         if (newStatus === "Rejected") newStatus = "Rejection";
         notificationFormData.append("content", newStatus);
 
-
+        await RefreshToken();
         await axios.post(`${process.env.REACT_APP_BACKEND_URL}api/user/typeid`, formData)
             .then(response => {
                 notificationFormData.append("userID", response.data.userID);

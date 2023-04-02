@@ -7,6 +7,7 @@ import {GetData} from "../../Auth/GetUser";
 import ApplicantCard from "./ApplicantCard";
 import axios from "axios";
 import Loading from "../Loading/Loading";
+import RefreshToken from "../../Auth/RefreshToken";
 
 export default function Applicants() {
     const navigate = useNavigate();
@@ -24,6 +25,7 @@ export default function Applicants() {
 
     useEffect(() => {
         const getUser = async () => {
+            await RefreshToken();
             if (user.length === 0) {
                 await GetData().then(r => {
                     setUser(r);
