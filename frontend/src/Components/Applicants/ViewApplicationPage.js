@@ -6,6 +6,7 @@ import "react-pdf/dist/esm/Page/AnnotationLayer.css";
 import {useNavigate, useParams} from "react-router-dom";
 import axios from "axios";
 import Loading from "../Loading/Loading";
+import RefreshToken from "../../Auth/RefreshToken";
 
 export default function ViewApplicationPage() {
     const {id} = useParams();
@@ -18,6 +19,7 @@ export default function ViewApplicationPage() {
 
     const getApplicationValues = async () => {
         return new Promise (async (resolve, reject) => {
+            await RefreshToken();
             await axios.get(`${process.env.REACT_APP_BACKEND_URL}api/applications/${ID}`)
                 .then(response => {
                     resolve(response.data);
@@ -31,6 +33,7 @@ export default function ViewApplicationPage() {
 
     const getUser = async (searcherID) => {
         return new Promise (async (resolve, reject) => {
+            await RefreshToken();
             const formData = new FormData();
             formData.append("searcherID", searcherID);
             await axios.post(`${process.env.REACT_APP_BACKEND_URL}api/user/typeid`,formData)
@@ -43,6 +46,7 @@ export default function ViewApplicationPage() {
 
     const getSearcher = async (searcherID) => {
         return new Promise (async (resolve, reject) => {
+            await RefreshToken();
             await axios.get(`${process.env.REACT_APP_BACKEND_URL}api/searcher/${searcherID}`)
                 .then(response => {
                     resolve(response.data);
@@ -52,6 +56,7 @@ export default function ViewApplicationPage() {
     }
 
     const getApplication = async () => {
+        await RefreshToken();
         const application = await getApplicationValues();
         const searcher = await getSearcher(application.searcher)
         const user = await getUser(application.searcher)

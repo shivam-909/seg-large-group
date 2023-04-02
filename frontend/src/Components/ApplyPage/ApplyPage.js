@@ -7,6 +7,7 @@ import {useNavigate, useParams} from "react-router-dom";
 import axios from "axios";
 import {GetData} from "../../Auth/GetUser";
 import Loading from "../Loading/Loading";
+import RefreshToken from "../../Auth/RefreshToken";
 
 export default function ApplyPage() {
     const {id} = useParams();
@@ -19,11 +20,13 @@ export default function ApplyPage() {
     const navigate = useNavigate();
 
     const getUser = async () => {
+        await RefreshToken();
         return await GetData();
     }
 
     const getJob = async () => {
         return new Promise (async (resolve, reject) => {
+            await RefreshToken();
             await axios.get(`${process.env.REACT_APP_BACKEND_URL}api/jobs/${ID}`)
                 .then(response => {
                     resolve(response.data);
@@ -37,6 +40,7 @@ export default function ApplyPage() {
 
     const getCompany = async (companyID) => {
         return new Promise (async (resolve, reject) => {
+            await RefreshToken();
             await axios.get(`${process.env.REACT_APP_BACKEND_URL}api/company/${companyID}`)
                 .then(response => {
                     resolve(response.data);
@@ -47,6 +51,7 @@ export default function ApplyPage() {
 
     const getSearcher = async (searcherID) => {
         return new Promise (async (resolve, reject) => {
+            await RefreshToken();
             await axios.get(`${process.env.REACT_APP_BACKEND_URL}api/searcher/${searcherID}`)
                 .then(response => {
                     resolve(response.data);
@@ -56,6 +61,7 @@ export default function ApplyPage() {
     }
 
     const getApplication = async () => {
+        await RefreshToken();
         const user = await getUser();
         setSearcherID(user.searcherID);
         const job = await getJob();
@@ -138,6 +144,8 @@ export default function ApplyPage() {
         const formData = new FormData();
         formData.append("companyID", companyID);
 
+        await RefreshToken();
+
         await axios.post(`${process.env.REACT_APP_BACKEND_URL}api/user/typeid`, formData)
             .then(response => {
                 notificationFormData.append("userID", response.data.userID);
@@ -150,7 +158,7 @@ export default function ApplyPage() {
         await axios.post(`${process.env.REACT_APP_BACKEND_URL}api/notifications/add`, notificationFormData)
             .catch(err => console.log(err));
 
-        navigate("/");
+        navigate("/jobs");
     }
 
     function uploadFile(e) {

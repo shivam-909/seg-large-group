@@ -9,9 +9,6 @@ import { ParseRequireCoverLetter, ParseScreeningQuestions, StringFromCommaSepara
 import * as validate from "../routes/validation/jobs";
 import { RetrieveFullUserByID } from "../../db/users";
 
-
-
-
 export function AddListing(db: DB): Handler {
   return async (req: Request, res: Response, next: NextFunction) => {
     const { title, compensation, description, location, type, schedule, industry, cover_letter_required, urgent, qualifications, benefits, requirements, screening_questions } = req.body;

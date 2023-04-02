@@ -7,31 +7,32 @@ import {GetData} from "../../Auth/GetUser";
 import ApplicantCard from "./ApplicantCard";
 import axios from "axios";
 import Loading from "../Loading/Loading";
+import RefreshToken from "../../Auth/RefreshToken";
 
 export default function Applicants() {
     const navigate = useNavigate();
-    const [user, setUser] = useState([])
-    const [applicants, setApplicants] = useState([])
+    const [user, setUser] = useState([]);
+    const [applicants, setApplicants] = useState([]);
     const { id } = useParams();
-    const [filter, setFilter] = useState("Applied")
-    const [loading, setLoading] = useState(true)
+    const [filter, setFilter] = useState("Applied");
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        setApplicants([])
+        setApplicants([]);
         setLoading(true);
-        getApplicants(filter)
+        getApplicants(filter);
     },[filter]) // eslint-disable-line
 
     useEffect(() => {
         const getUser = async () => {
-            if (user.length === 0){
+            await RefreshToken();
+            if (user.length === 0) {
                 await GetData().then(r => {
-                    setUser(r)
+                    setUser(r);
                 });
             }
         };
-        getUser()
-        // setCompany(user.searcherID === undefined)
+        getUser();
     },[user]) // eslint-disable-line
 
     function getApplicants(filter) {
