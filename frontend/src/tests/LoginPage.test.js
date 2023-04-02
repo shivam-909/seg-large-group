@@ -7,7 +7,11 @@ jest.mock('react-router-dom', () => ({
 import LoginPage from '../Components/LoginPage/LoginPage';
 import React from 'react';
 import { render, screen, waitFor, fireEvent} from "@testing-library/react";
-import userEvent from '@testing-library/user-event'
+import userEvent from '@testing-library/user-event';
+import axios from 'axios';
+
+// mock the axios.post method
+jest.mock('axios');
 
 describe('LoginPage component', () => {
   beforeEach(() => {
@@ -114,13 +118,28 @@ describe('LoginPage component', () => {
     waitFor(() => expect((screen.queryAllByTestId('forgottenpw-link')).getByRole('link',{name: 'Reset password.'})).toHaveAttribute('href', '/forgotPassword'));
   });
 
-  test('submits login form', () => {
-    const emailInput = document.getElementById("email");
-    const passwordInput = document.getElementById("password");
+  test('submits login form', async () => {
+    const emailInput = document.getElementById('email');
+    const passwordInput = document.getElementById('password');
+    const loginButton = screen.getByText('Sign In');
 
+    axios.post.mockResolvedValueOnce({
+      data: {
+        access: 'access_token',
+        refresh: 'refresh_token',
+      },
+    });
+
+    fireEvent.change(emailInput, { target: { value: 'test@example.com' } });
+    fireEvent.change(passwordInput, { target: { value: 'Test1234!' } });
+
+    fireEvent.click(loginButton);
+
+    await waitFor(() => {
+      expect(axios.post).toHaveBeenCalledTimes(1);
+      expect(axios.post).toHaveBeenCalledWith(`${process.env.REACT_APP_BACKEND_URL}auth/login`, expect.any(FormData));
+    });
   });
 });
-// test('make a login request and handle response', () => {
-//   // TODO: make a login request and handle response
-// });
+
 
