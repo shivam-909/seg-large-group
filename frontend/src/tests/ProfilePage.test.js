@@ -3,11 +3,12 @@ jest.mock('react-router-dom', () => ({
   ...jest.requireActual('react-router-dom'),
   useNavigate: () => mockedUsedNavigate,
 }));
+import UserProfilePage from '../Components/ProfilePage/UserProfilePage';
 import {render, screen, fireEvent, waitFor} from '@testing-library/react';
 
-describe('EmployerProfilePage', () => {
-  // test('render navbar', () => {
-  //   render(<UserProfilePage />);
+describe('UserProfilePage', () => {
+  test('render user profile page', () => {
+    render(<UserProfilePage />);
   //   const navbarElement = screen.queryByTestId('navbar');
   //   waitFor(() => expect(navbarElement).toBeInTheDocument())
   // });
@@ -42,5 +43,5 @@ describe('EmployerProfilePage', () => {
   //   const locationInput = screen.getByPlaceholderText('Please enter your Location');
   //   expect(companyNameInput).toBeEnabled();
   //   expect(locationInput).toBeEnabled();
-  // });
+  });
 });
