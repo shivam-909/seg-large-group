@@ -11,7 +11,9 @@ export default function NotificationsPage() {
         axios.get(`${process.env.REACT_APP_BACKEND_URL}api/notifications`, {headers: {Authorization: `Bearer ${token}`}})
             .then(notifications => {
                 console.log(notifications.data)
-                setNotifications(notifications.data.finalNotifs)
+                const unorderedNotifs = notifications.data.finalNotifs;
+                const orderedNotifs = unorderedNotifs.sort((a, b) => b.created._seconds - a.created._seconds);
+                setNotifications(orderedNotifs);
                 if (notifications.data.finalNotifs.length === 0) {
                     setNoNotifications(true);
                 }
