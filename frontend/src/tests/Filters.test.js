@@ -28,6 +28,10 @@ const mockJobs = [
 ];
 
 describe('Filters', () => {
+  it('renders the filters', () => {
+    render(<Filters jobs={mockJobs} />);
+  });
+
   it('renders the filters button and job list', () => {
     render(<Filters jobs={mockJobs} />);
     const filtersButton = screen.getByRole('button', { name: /filters/i });
