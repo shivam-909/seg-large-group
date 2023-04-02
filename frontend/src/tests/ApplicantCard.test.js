@@ -14,11 +14,7 @@ describe('ApplicantsCard', () => {
             status: 'Hired'
         };
         render(
-            <BrowserRouter>
-                <Routes>
-                    <Route element={< ApplicantCard {...props}/>} />
-                </Routes>
-            </BrowserRouter>
+
     );
     });
 

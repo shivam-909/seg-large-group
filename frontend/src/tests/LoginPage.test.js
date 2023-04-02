@@ -15,7 +15,13 @@ describe('LoginPage component', () => {
         <LoginPage/>
     );
   });
-  test('renders register form', () => {
+
+  test ('renders login form', () => {
+    const loginForm = screen.getByText('Sign in to your account');
+    waitFor(() => expect(loginForm).toBeInTheDocument());
+  });
+
+  test('renders email input', () => {
     const emailInput = screen.queryByTestId('email-input');
     waitFor(() => expect(emailInput).toBeInTheDocument());
     waitFor(() => expect(emailInput).toHaveAttribute('type', 'email'));
@@ -90,27 +96,31 @@ describe('LoginPage component', () => {
     waitFor(() => expect(rememberLogin).not.toBeChecked());
   });
 
+  test('toggles password visibility', () => {
+    const toggleEye = screen.getByAltText('');
+    const passwordInput = document.getElementById("password");
 
-//   test('togglePasswordVisibility function toggles password visibility', () => {
-//
-//   const passwordInput = screen.queryByTestId('password-input');
-//   const eyeIcon = screen.getByAltText('toggleEye');
-//
-//   expect(passwordInput.type).toBe('password');
-//
-//   fireEvent.click(eyeIcon);
-//
-//   expect(passwordField.type).toBe('text');
-//
-//   fireEvent.click(eyeIcon);
-//
-//   expect(passwordField.type).toBe('password');
-// });
+    waitFor(() => expect(passwordInput).toHaveAttribute('type', 'password'));
+
+    fireEvent.click(toggleEye);
+
+    waitFor(() => expect(passwordInput).toHaveAttribute('type', 'text'));
+
+    fireEvent.click(toggleEye);
+
+    waitFor(() => expect(passwordInput).toHaveAttribute('type', 'password'));
+  });
 
 //Testing sign up page and forgot password link
   test("links with href value /signup and /forgotPassword", () => {
     waitFor(() => expect((screen.queryAllByTestId('signup-link')).getByRole('link',{name: 'Sign Up'})).toHaveAttribute('href', '/signup'));
     waitFor(() => expect((screen.queryAllByTestId('forgottenpw-link')).getByRole('link',{name: 'Reset password.'})).toHaveAttribute('href', '/forgotPassword'));
+  });
+
+  test('submits login form', () => {
+    const emailInput = document.getElementById("email");
+    const passwordInput = document.getElementById("password");
+
   });
 });
 // test('make a login request and handle response', () => {
