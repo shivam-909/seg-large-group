@@ -23,9 +23,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">10% </span>
+                <span class="strong">95% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>2/20</span>
+                <span class='fraction'>19/20</span>
             </div>
         
             
@@ -37,16 +37,16 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">66.66% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/3</span>
+                <span class='fraction'>2/3</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">10% </span>
+                <span class="strong">95% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>2/20</span>
+                <span class='fraction'>19/20</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line low'></div>
+    <div class='status-line high'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -166,27 +166,27 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">12x</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -212,7 +212,7 @@ class JobListing {
   screeningQuestions?: Record&lt;string,boolean&gt;;
 &nbsp;
 &nbsp;
-<span class="fstat-no" title="function not covered" >  constructor(</span>
+  constructor(
     id: string,
     title: string,
     compensation: string[],
@@ -230,27 +230,27 @@ class JobListing {
     requirements?: string[],
     screeningQuestions?: Record&lt;string, boolean&gt;,
 ) {
-<span class="cstat-no" title="statement not covered" >    this.id = id;</span>
-<span class="cstat-no" title="statement not covered" >    this.title = title;</span>
-<span class="cstat-no" title="statement not covered" >    this.compensation = compensation;</span>
-<span class="cstat-no" title="statement not covered" >    this.description = description;</span>
-<span class="cstat-no" title="statement not covered" >    this.location = location;</span>
-<span class="cstat-no" title="statement not covered" >    this.type = type;</span>
-<span class="cstat-no" title="statement not covered" >    this.schedule = schedule;</span>
-<span class="cstat-no" title="statement not covered" >    this.companyID = companyID;</span>
-<span class="cstat-no" title="statement not covered" >    this.industry = industry;</span>
-<span class="cstat-no" title="statement not covered" >    this.coverLetterRequired = coverLetterRequired;</span>
-<span class="cstat-no" title="statement not covered" >    this.urgent = urgent;</span>
-<span class="cstat-no" title="statement not covered" >    this.qualifications = qualifications;</span>
-<span class="cstat-no" title="statement not covered" >    this.datePosted = datePosted;</span>
-<span class="cstat-no" title="statement not covered" >    this.benefits = benefits;</span>
-<span class="cstat-no" title="statement not covered" >    this.requirements = requirements;</span>
-<span class="cstat-no" title="statement not covered" >    this.screeningQuestions = screeningQuestions;</span>
+    this.id = id;
+    this.title = title;
+    this.compensation = compensation;
+    this.description = description;
+    this.location = location;
+    this.type = type;
+    this.schedule = schedule;
+    this.companyID = companyID;
+    this.industry = industry;
+    this.coverLetterRequired = coverLetterRequired;
+    this.urgent = urgent;
+    this.qualifications = qualifications;
+    this.datePosted = datePosted;
+    this.benefits = benefits;
+    this.requirements = requirements;
+    this.screeningQuestions = screeningQuestions;
   }
 }
 &nbsp;
 export const JobListingConverter = {
-  toFirestore: <span class="fstat-no" title="function not covered" >(j</span>obListing: JobListing) =&gt; <span class="cstat-no" title="statement not covered" >jobListing,</span>
+  toFirestore: (jobListing: JobListing) =&gt; jobListing,
   fromFirestore: <span class="fstat-no" title="function not covered" >(s</span>napshot: QueryDocumentSnapshot) =&gt; <span class="cstat-no" title="statement not covered" >snapshot.data() as JobListing</span>
 }
 &nbsp;
@@ -262,7 +262,7 @@ export default JobListing;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2023-04-02T07:28:30.298Z
+                at 2023-04-02T09:14:02.827Z
             </div>
         <script src="../prettify.js"></script>
         <script>
