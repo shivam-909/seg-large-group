@@ -10,15 +10,14 @@ export function GetUser(db: DB): Handler {
     return async (req: Request, res: Response, next: NextFunction) => {
         const uid = req.params.id;
         const cid = req.headers["auth_username"] as string;
-
         let id;
-        if (uid && cid) {
+        if (uid) {
             id = uid;
-        } else if (uid && !cid) {
-            id = uid;
-        } else if (!uid && cid) {
+        }
+        else if (cid) {
             id = cid;
-        } else {
+        }
+         else {
             throw new Error(errors.ErrorUserNotFound);
         }
 
