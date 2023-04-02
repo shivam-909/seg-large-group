@@ -13,8 +13,9 @@ import {useNavigate} from "react-router-dom";
 import axios from "axios";
 import {GetData} from "../../Auth/GetUser";
 
+
 function JobDetailsCard(props) {
-    const navigate = useNavigate()
+    const navigate = useNavigate();
     const [savedJobPost, setSavedJopPost] = useState(false);
     const [user, setUser] = useState([])
     const [companyUser, setCompany] = useState([])
