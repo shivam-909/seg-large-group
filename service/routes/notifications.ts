@@ -13,7 +13,6 @@ import { RetrieveJobListing } from "../../db/jobs";
 import { RetrieveCompanyByID } from "../../db/companies";
 import {RetrieveFullUserByID, RetrieveUserBySearcherID} from "../../db/users";
 import *  as validate from "../routes/validation/notifications";
-import notification from "../../models/notification";
 import {RetrieveSearcherByID} from "../../db/searchers";
 
 export function AddNotification(db: DB): Handler {
@@ -57,7 +56,7 @@ export function GetAllUserNotifs(db: DB): Handler {
         throw new Error(errors.ErrorUserNotFound);
       }
 
-      if(!application){
+      if (!application) {
         throw new Error(errors.ErrorApplicationNotFound);
       }
 
@@ -74,12 +73,16 @@ export function GetAllUserNotifs(db: DB): Handler {
       if (user?.company) {
         const searcher = await RetrieveSearcherByID(db, application.searcher);
         const searchUser = await RetrieveUserBySearcherID(db, application.searcher)
+        jobListing = await RetrieveJobListing(db, application.jobListing);
+        if (!jobListing) throw new Error(errors.ErrorJobListingNotFound);
         if(!searcher){
           throw new Error(errors.ErrorSearcherNotFound);
         }
         if(!user){
           throw new Error(errors.ErrorUserNotFound);
         }
+        jobListingID = jobListing.id;
+        title = jobListing.title;
         firstName = searcher.firstName;
         lastName = searcher.lastName;
         applyingUserID = searchUser?.userID;
