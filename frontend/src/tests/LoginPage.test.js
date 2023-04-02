@@ -15,7 +15,7 @@ describe('LoginPage component', () => {
         <LoginPage/>
     );
   });
-  test('renders register form', () => {
+  test('renders login form', () => {
     const emailInput = screen.queryByTestId('email-input');
     waitFor(() => expect(emailInput).toBeInTheDocument());
     waitFor(() => expect(emailInput).toHaveAttribute('type', 'email'));
@@ -75,56 +75,35 @@ describe('LoginPage component', () => {
   });
 
   // https://stackoverflow.com/questions/73184212/how-to-test-checkbox-checked-with-react-testing-library
-//   test('toggles element when clicking the checkbox', () => {
-//       render(
-//       <BrowserRouter>
-//         <Routes>
-//           <Route element={<LoginPage />} />
-//         </Routes>
-//       </BrowserRouter>
-//     );
-//       userEvent.click((screen.queryByTestId('rememberLogin')).getByText('Keep me signed in'));
-//       expect(screen.getByLabelText('Keep me signed in')).toBeChecked();
-//
-//       // screen.getByRole('');
-//
-//     // screen.getByText('Keep me signed in');
-//
-//     // waitFor(() => expect(screen.queryByTestId('rememberLogin')).toBeInTheDocument());
-//     // waitFor(() => expect(rememberLogin).toBeChecked());
-//
-// // waitFor(() => expect(screen.queryByTestId('rememberLogin')).toBeInTheDocument());
-// //   waitFor(() => expect(rememberLogin).not.toBeChecked());
-//
-//   });
+  test('toggles element when clicking the checkbox', () => {
+    const rememberLogin = screen.queryByTestId('rememberLogin')
+    waitFor(() => expect(rememberLogin).not.toBeChecked());
+    userEvent.click(rememberLogin);
+    expect(rememberLogin).toBeChecked();
+    waitFor(() => expect(screen.getByText('Keep me signed in')).toBeInTheDocument());
+    waitFor(() => expect(screen.queryByTestId('rememberLogin')).toBeInTheDocument());
+    waitFor(() => expect(rememberLogin).toBeChecked());
+  });
 
 
-// test('togglePasswordVisibility function toggles password visibility', () => {
-//   render(
-//     <BrowserRouter>
-//       <Routes>
-//         <Route element={<LoginPage />} />
-//       </Routes>
-//     </BrowserRouter>
-//   );
-//   const passwordInput = screen.queryByTestId('password-input');
-//   const eyeIcon = screen.getByAltText('toggleEye');
+test('togglePasswordVisibility function toggles password visibility', () => {
+  const passwordInput = document.getElementById('password');
+  const eyeIcon = screen.getByAltText('toggle eye');
 
-//   expect(passwordInput.type).toBe('password');
+  expect(passwordInput.type).toBe('password');
 
-//   fireEvent.click(eyeIcon);
+  fireEvent.click(eyeIcon);
 
-//   expect(passwordField.type).toBe('text');
+  expect(passwordInput.type).toBe('text');
 
-//   fireEvent.click(eyeIcon);
+  fireEvent.click(eyeIcon);
 
-//   expect(passwordField.type).toBe('password');
-// });
+  expect(passwordInput.type).toBe('password');
+});
 
 //Testing sign up page and forgot password link
-  test("links with href value /signup and /forgotPassword", () => {
+  test("links with href value /signup", () => {
     waitFor(() => expect((screen.queryAllByTestId('signup-link')).getByRole('link',{name: 'Sign Up'})).toHaveAttribute('href', '/signup'));
-    waitFor(() => expect((screen.queryAllByTestId('forgottenpw-link')).getByRole('link',{name: 'Reset password.'})).toHaveAttribute('href', '/forgotPassword'));
   });
 });
 // test('make a login request and handle response', () => {

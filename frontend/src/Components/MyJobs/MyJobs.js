@@ -7,8 +7,8 @@ import {GetData} from "../../Auth/GetUser";
 
 export default function MyJobs() {
     const [isCompany, setCompany] = useState(false);
-    const [filter, setFilter] = useState("Saved")
-    const [user, setUser] = useState([])
+    const [filter, setFilter] = useState("Saved");
+    const [user, setUser] = useState([]);
     const navigate = useNavigate();
 
     useEffect(() => {

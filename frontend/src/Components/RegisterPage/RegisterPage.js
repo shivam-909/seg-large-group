@@ -94,10 +94,10 @@ export default function RegisterPage() {
                 <p className='mb-6 font-bold text-2xl flex justify-center px-8'>Register an account</p>
 
                 <div className='flex items-center justify-center font-bold border-2 border-[#000] rounded-md'>
-                    <button className={`rounded-l p-2.5 w-full ${role === 'searcher' ? 'text-white' : 'text-black'} ${role === 'searcher' ? 'bg-[#5A5A5A]' : 'bg-[#D6D6D6]'}`} onClick={() => setRole('searcher')}>
+                    <button id={"SeekerButton"} className={`rounded-l p-2.5 w-full ${role === 'searcher' ? 'text-white' : 'text-black'} ${role === 'searcher' ? 'bg-[#5A5A5A]' : 'bg-[#D6D6D6]'}`} onClick={() => setRole('searcher')}>
                         Job Seeker
                     </button>
-                    <button className={`rounded-r p-2.5 w-full ${role === 'company' ? 'text-white' : 'text-black'} ${role === 'searcher' ? 'bg-[#D6D6D6]' : 'bg-[#5A5A5A]'}`} onClick={() => setRole('company')}>
+                    <button id={"CompanyButton"} className={`rounded-r p-2.5 w-full ${role === 'company' ? 'text-white' : 'text-black'} ${role === 'searcher' ? 'bg-[#D6D6D6]' : 'bg-[#5A5A5A]'}`} onClick={() => setRole('company')}>
                         Company
                     </button>
                 </div>
