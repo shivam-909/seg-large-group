@@ -50,8 +50,6 @@ export const run = () => {
     app.set('db', db);
     app.use(cors());
 
-
-
     // Authentication middleware
     app.use("/api/*", middleware.AuthMW);
 
@@ -97,7 +95,6 @@ export const run = () => {
     app.get('/', util.HealthCheck);
 
     app.post("/api/echo", util.Echo);
-
 
     app.use(middleware.ErrorMW);
 

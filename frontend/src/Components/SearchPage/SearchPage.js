@@ -102,17 +102,9 @@ export default function SearchPage() {
                             :
                             <div>
                                 <div className='flex flex-col items-center justify-center'>
-                                    {isLoading ?
+                                    {isLoading &&
                                         <Loading className='w-16 h-16 border-[6px] border-dark-theme-grey'/>
-                                    :
-                                        <div className='space-y-5'>
-                                            <p>Looking for a job? <a className='font-bold' href='/'>Upload your CV.</a></p>
-                                            <p>Looking for your next hire? <a className='font-bold' href='/'>Post a job.</a></p>
-                                        </div>
                                     }
-                                </div>
-                                <div className='bg-darker-grey min-w-screen flex items-center justify-center mt-24'>
-                                    <p>For You</p>
                                 </div>
                             </div>
                         }
