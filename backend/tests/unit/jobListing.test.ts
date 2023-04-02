@@ -164,8 +164,10 @@ test('create jobListing, retrieve jobListing, update jobListing, delete jobListi
     // Get All Job IDs
     const jobIDs = await GetAllJobIDs(db);
     let repeatedID = false;
-    for(let i=1; i<jobIDs.length; i++){
-        if(jobIDs[i] == jobIDs[i-1]) repeatedID=true;
+    if(jobIDs.length != 1) {
+        for (let i = 1; i < jobIDs.length; i++) {
+            if (jobIDs[i] == jobIDs[i - 1]) repeatedID = true;
+        }
     }
     expect(repeatedID).toEqual(false);
 
