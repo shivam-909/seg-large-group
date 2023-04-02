@@ -1,11 +1,11 @@
 import DB from "../../../db/db";
 import * as errors from "../../public";
-import {ValidateApplicationID, ValidateJobListing, ValidateSearcherId} from "./checks";
-import {RetrieveJobListing} from "../../../db/jobs";
+import { ValidateApplicationID, ValidateJobListing, ValidateSearcherId } from "./checks";
+import { RetrieveJobListing } from "../../../db/jobs";
 
 export async function AddApplication(db: DB, body: any): Promise<void> {
 
-    if(body === undefined){
+    if (body === undefined) {
         throw new Error(errors.ErrorMissingProperty);
     }
 
@@ -23,20 +23,21 @@ export async function AddApplication(db: DB, body: any): Promise<void> {
         throw new Error(errors.ErrorJobListingIDRequired);
     }
 
+    console.log("Calling from AddApplication")
     await ValidateJobListing(db, jobListing);
 
-    if(!cv){
+    if (!cv) {
         throw new Error(errors.ErrorCvRequired);
     }
     const job = await RetrieveJobListing(db, jobListing);
 
-    if(job) {
+    if (job) {
         if (!coverLetter && job.coverLetterRequired) {
             throw new Error(errors.ErrorMissingCoverLetter);
         }
     }
 
-    if(!QnAs){
+    if (!QnAs) {
         throw new Error(errors.ErrorMissingQnAs);
     }
 
@@ -48,7 +49,7 @@ export async function AddApplication(db: DB, body: any): Promise<void> {
 
 export async function RetrieveApplicationByFilter(db: DB, body: any): Promise<void> {
 
-    if(body === undefined){
+    if (body === undefined) {
         throw new Error(errors.ErrorMissingProperty);
     }
 
@@ -59,19 +60,20 @@ export async function RetrieveApplicationByFilter(db: DB, body: any): Promise<vo
     }
 
     if (searcher) {
-        await ValidateSearcherId(db,searcher);
+        await ValidateSearcherId(db, searcher);
     }
 
     if (jobListing) {
+        console.log("Calling from RetrieveApplicationByFilter")
         await ValidateJobListing(db, jobListing);
     }
 
 }
 
 
-export async function UpdateApplication(db: DB, id:string, req: any): Promise<void> {
+export async function UpdateApplication(db: DB, id: string, req: any): Promise<void> {
 
-    if(req === undefined){
+    if (req === undefined) {
         throw new Error(errors.ErrorMissingProperty);
     }
 
@@ -87,13 +89,14 @@ export async function UpdateApplication(db: DB, id:string, req: any): Promise<vo
     }
 
     if (jobListing) {
+        console.log("Calling from UpdateApplication")
         await ValidateJobListing(db, jobListing);
     }
 
 }
 
 export async function DeleteApplication(db: DB, id: string): Promise<void> {
-    await ValidateApplicationID(db,id);
+    await ValidateApplicationID(db, id);
 }
 
 export async function ApplicationExists(db: DB, id: string): Promise<void> {

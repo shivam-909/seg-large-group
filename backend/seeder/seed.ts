@@ -28,10 +28,10 @@ import {RetrieveJobListing} from "../db/jobs";
 import application from "../models/application";
 
 //CONTROL
-const numCompanies = 15
-const numSearchers = 15
+const numCompanies = 1
+const numSearchers = 1
 const numJobListings = 100
-const numApplications = 10
+const numApplications = 100
 
 //=====================================================USERS=====================================================
 

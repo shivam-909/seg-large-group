@@ -17,7 +17,7 @@ export default function SkillCard(props) {
         }
     }
     return (
-        <div id={"Skill" + props.id} className={"grid grid-cols-2 gap-2 my-2"}>
+        <div id={"Skill" + props.id} key={"Skill"+props.id} className={"grid grid-cols-2 gap-2 my-2"}>
             <input id={"skillInput" + props.id} onChange={() => {validate("skillInput"+props.id,/^([^,]*)$/)}} className={"key"} placeholder={"Skill"} editable={"true"} defaultValue={props.skill}/>
             <div>
             <div className={"value w-[70%] float-left"}>
@@ -28,7 +28,7 @@ export default function SkillCard(props) {
                     <option value={"years"}>Year/s</option>
                 </select>
             </div>
-            <button className={"delete w-[24%]"} onClick={deleteSkill} editable={"true"}><i className="fa-solid fa-trash"></i></button>
+            <button className={"delete w-[24%]"} onClick={deleteSkill} editable={"true"} name='Delete skill' ><i className="fa-solid fa-trash"></i></button>
             </div>
             {!valid && <div className={"text-red"}>Please remove all commas</div>}
         </div>
