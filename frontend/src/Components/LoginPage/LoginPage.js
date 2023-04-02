@@ -71,19 +71,19 @@ function LoginPage() {
         <div className='bg-white rounded-md sm:min-w-1/6 inline-grid px-12 py-7 space-y-3'>
           <p className='mb-6 font-bold text-2xl flex justify-center'>Sign in to your account</p>
 
-            <TextInputBox data-testid="email-input" id='email' type='email' data-testid="email-input" cache={localStorage.getItem("email")}
+            <TextInputBox data-testid="email-input" id='email' type='email' cache={localStorage.getItem("email")}
                           className="w-full" onBlur={() => {
               validateField("email", /^\w+(\.\w+)*@\w+(-?\w+)*(\.\w{2,10})+$/)
             }} placeholder='Email address'/>
             <span id="emailError" className={"invisible absolute top-0"}>Invalid Email</span>
 
-            <TextInputBoxWithIcon data-testid="password-input" id='password' type='password' cache={localStorage.getItem("password")}
+            <TextInputBoxWithIcon id='password' type='password' cache={localStorage.getItem("password")}
                                   placeholder='Password'
-                                  icon={<img id='toggleEye' src={showIcon} alt='' onClick={togglePasswordVisibility} className='cursor-pointer'/>}/>
+                                  icon={<img id='toggleEye' src={showIcon} alt='toggle eye' onClick={togglePasswordVisibility} className='cursor-pointer'/>}/>
 
 
-          <div data-testid='rememberLogin' className='flex space-x-2 items-center'>
-            <input id='rememberLogin' type='checkbox' className='w-4 h-4 inline-block accent-dark-theme-grey'
+          <div className='flex space-x-2 items-center'>
+            <input data-testid='rememberLogin' id='rememberLogin' type='checkbox' className='w-4 h-4 inline-block accent-dark-theme-grey'
                    defaultChecked={localStorage.getItem("rememberLogin")}/>
             <p>Keep me signed in</p>
           </div>
@@ -98,8 +98,6 @@ function LoginPage() {
             </button>
 
             <p data-testid='signup-link' className='text-center pt-4'>New user? <a className='LoginPage-link' href='/signup'>Sign up.</a></p>
-
-            <p data-testid='forgottenpw-link' className='text-center'> Forgot your password? <a className="ForgotPasswordPage-link" href="/forgotPassword">Reset password.</a></p>
         </div>
       </div>
   );

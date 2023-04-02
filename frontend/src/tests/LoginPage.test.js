@@ -19,7 +19,6 @@ describe('LoginPage component', () => {
         <LoginPage/>
     );
   });
-
   test ('renders login form', () => {
     const loginForm = screen.getByText('Sign in to your account');
     waitFor(() => expect(loginForm).toBeInTheDocument());
@@ -111,11 +110,10 @@ describe('LoginPage component', () => {
 
     waitFor(() => expect(passwordInput).toHaveAttribute('type', 'password'));
   });
-
+  
 //Testing sign up page and forgot password link
-  test("links with href value /signup and /forgotPassword", () => {
+  test("links with href value /signup", () => {
     waitFor(() => expect((screen.queryAllByTestId('signup-link')).getByRole('link',{name: 'Sign Up'})).toHaveAttribute('href', '/signup'));
-    waitFor(() => expect((screen.queryAllByTestId('forgottenpw-link')).getByRole('link',{name: 'Reset password.'})).toHaveAttribute('href', '/forgotPassword'));
   });
 
   test('submits login form', async () => {

@@ -5,14 +5,13 @@ import RegisterPage from "./Components/RegisterPage/RegisterPage";
 import PrivateRoutes from "./Auth/PrivateRoute";
 import MyJobs from "./Components/MyJobs/MyJobs";
 import UserProfilePage from "./Components/ProfilePage/UserProfilePage";
-import ForgotPassword from './Components/ForgotPassword/ForgotPassword';
-import ResetPassword from './Components/ResetPassword/ResetPassword';
 import EditJob from "./Components/MyJobs/EditJob";
 import Applicants from "./Components/Applicants/Applicants";
 import CompanyRoute from "./Auth/CompanyRoute";
 import ApplyPage from "./Components/ApplyPage/ApplyPage";
 import ViewApplicationPage from "./Components/Applicants/ViewApplicationPage";
 import JobPage from "./Components/JobPage/JobPage";
+import NotificationsPage from "./Components/NotificationsPage/NotificationsPage";
 
 
 export default function App() {
@@ -33,14 +32,13 @@ export default function App() {
                   <Route element={<CompanyRoute/>}>
                       <Route path="/application/:id" element={ <ViewApplicationPage/> }/>
                   </Route>
+                  <Route path="/notifications" element={ <NotificationsPage/> }/>
               </Route>
               <Route path="/" element={ <SearchPage/> }/>
               <Route path="/login" element={ <LoginPage/> }/>
               <Route path="/signup" element={ <RegisterPage/> }/>
               <Route path="/saved" element={ <MyJobs/> }/>
               <Route path="/profile" element={ <UserProfilePage/> }/>
-              <Route path="/forgotPassword" element={ <ForgotPassword/> }/>
-              <Route path="/reset" element={ <ResetPassword/> }/>
               <Route path="/viewjob/:id" element={ <JobPage/> }/>
           </Routes>
       </BrowserRouter>
