@@ -9,7 +9,7 @@ import {CreateJobListing} from "../../db/jobs";
 import {CreateSearcher} from "../../db/searchers";
 import Application from "../../models/application";
 import Notification from "../../models/notification"
-import {CreateNotification, RetrieveNotification} from "../../db/notifications";
+import {CreateNotification, GetAllUserNotifs, RetrieveNotification} from "../../db/notifications";
 import {CreateApplication} from "../../db/applications";
 
 test('create notification, retrieve notification, update notification, delete notification', async () => {
@@ -161,6 +161,17 @@ test('create notification, retrieve notification, update notification, delete no
     expect(retrievedNotification!.content).toEqual(content);
     expect(retrievedNotification!.applicationID).toEqual(applicationId);
     expect(retrievedNotification!.userID).toEqual(userId);
+
+    //get all user notifs
+
+    const notifs = await GetAllUserNotifs(db, userId);
+    let incorrectID = false;
+    for(const notif of notifs){
+        if(notif.userID != userId) incorrectID = true;
+    }
+    expect(incorrectID).toEqual(false);
+
+
 
     // Delete the notification.
     await db.NotificationCollection().doc(id).delete();
