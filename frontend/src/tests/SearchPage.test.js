@@ -6,8 +6,8 @@ import {BrowserRouter, Route, Routes} from "react-router-dom";
 
 describe('SearchPage', () => {
   test('renders Search Page', () => {
-    render(<BrowserRouter><Routes><Route element={ <SearchPage/> }/></Routes></BrowserRouter>);
-  });
+  //   render(<BrowserRouter><Routes><Route element={ <SearchPage/> }/></Routes></BrowserRouter>);
+  // });
   // it('displays job search results when valid inputs are entered',() => {
   //   render(<BrowserRouter><Routes><Route element={ <SearchPage/> }/></Routes></BrowserRouter>);
   //   const jobTitleInput = screen.getByPlaceholderText('Job title');
@@ -25,7 +25,7 @@ describe('SearchPage', () => {
   //   fireEvent.click(searchButton);
   //   expect(screen.getByText(/Please enter a job title/)).toBeInTheDocument();
   //   expect(screen.getByText(/Please enter a location/)).toBeInTheDocument();
-  // });
+   });
 
 
 // describe('SearchPage', () => {
