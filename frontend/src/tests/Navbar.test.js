@@ -19,7 +19,8 @@ describe('Navbar', () => {
     expect(signupButton).toBeInTheDocument();
 
     // Check that the "Profile" section is not rendered
-    const profileSection = screen.queryByRole('region', { name: 'expandProfile' });
+    // const profileSection = screen.queryByRole('region', { name: 'expandProfile' });
+    const profileSection = screen.queryByTestId('expandProfile');
     expect(profileSection).not.toBeInTheDocument();
   });
 
@@ -59,13 +60,22 @@ describe('Navbar', () => {
 
   it('should not render the navbar with login and sign up buttons when logged in', () => {
     const isLoggedIn = true;
+    // Mock the localStorage.getItem function to return a valid token
+    const localStorageMock = {
+      getItem: jest.fn(() => 'valid_token')
+    };
+    Object.defineProperty(window, 'localStorage', {
+      value: localStorageMock,
+      writable: true
+    });
     render(<Navbar />);
 
     // Check that the "Log in" button is not rendered
     const loginButton = screen.queryByText('Log in');
+
     // Check that the "Sign up" button is not rendered
     const signupButton = screen.queryByText('Sign up');
-
+    
     // Check that the "Profile" link is rendered
     const profileLink = screen.getByRole('link', { name: 'Profile' });
     expect(profileLink).toBeInTheDocument();
