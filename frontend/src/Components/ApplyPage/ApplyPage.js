@@ -12,6 +12,7 @@ export default function ApplyPage() {
     const {id} = useParams();
     const [ID, setID] = useState(id);
     const [searcherID, setSearcherID] = useState('');
+    const [companyID, setCompanyID] = useState('');
     const [job, setJob] = useState({});
     const newCVId = crypto.randomUUID();
     const [loading, setLoading] = useState(true)
@@ -60,6 +61,7 @@ export default function ApplyPage() {
         const job = await getJob();
         job.screeningQuestions = Object.entries(job.screeningQuestions);
         const company = await getCompany(job.companyID);
+        setCompanyID(job.companyID);
         const searcher = await getSearcher(user.searcherID);
         setJob({...job, company: company.companyName, cv: searcher.cv});
         setLoading(false);
@@ -108,12 +110,12 @@ export default function ApplyPage() {
         if (valid) {
             await submitApplication();
         }
-        else{
+        else {
             console.log("error")
         }
     }
 
-    function submitApplication() {
+    async function submitApplication() {
         const answers = document.getElementsByName('answer');
         const QnAs = {};
         job.screeningQuestions.forEach((question,i) => {
@@ -121,17 +123,33 @@ export default function ApplyPage() {
         });
         const coverLetter = document.getElementById('coverLetterInput').value;
 
-        const formData = new FormData();
-        formData.append('jobListing', ID);
-        formData.append('searcher', searcherID);
-        formData.append('cv[]', job.cv[0]);
-        formData.append('cv[]', job.cv[1]);
-        formData.append('status', 'Applied');
-        formData.append('QnAs', JSON.stringify(QnAs));
-        formData.append('coverLetter', coverLetter);
+        const applicationFormData = new FormData();
+        applicationFormData.append('jobListing', ID);
+        applicationFormData.append('searcher', searcherID);
+        applicationFormData.append('cv[]', job.cv[0]);
+        applicationFormData.append('cv[]', job.cv[1]);
+        applicationFormData.append('status', 'Applied');
+        applicationFormData.append('QnAs', JSON.stringify(QnAs));
+        applicationFormData.append('coverLetter', coverLetter);
 
-        axios.post(`${process.env.REACT_APP_BACKEND_URL}api/applications/add`, formData)
+        const notificationFormData = new FormData();
+        notificationFormData.append('content', 'NewApplicant')
+
+        const formData = new FormData();
+        formData.append("companyID", companyID);
+
+        await axios.post(`${process.env.REACT_APP_BACKEND_URL}api/user/typeid`, formData)
+            .then(response => {
+                notificationFormData.append("userID", response.data.userID);
+            });
+
+        await axios.post(`${process.env.REACT_APP_BACKEND_URL}api/applications/add`, applicationFormData)
+            .then(response => notificationFormData.append('application', response.data.id))
             .catch(err => console.log(err));
+
+        await axios.post(`${process.env.REACT_APP_BACKEND_URL}api/notifications/add`, notificationFormData)
+            .catch(err => console.log(err));
+
         navigate("/");
     }
 

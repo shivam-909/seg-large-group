@@ -10,8 +10,8 @@ export default function Category(props) {
     const [user, setUser] = useState([])
     const [loading, setLoading] = useState(true)
 
-    async function addCard(applicationID, jobID, title, company, location, status){
-        await setJobsList( current => [...current, <JobCard id={applicationID} jobID={jobID} title={title} company={company} location={location} status={status}/>]);
+    async function addCard(applicationID, jobID, title, company, companyID, location, status){
+        await setJobsList( current => [...current, <JobCard id={applicationID} jobID={jobID} title={title} company={company} companyID={companyID} location={location} status={status}/>]);
     }
 
     async function addCompanyCard(id, title, schedule, location, date){
@@ -79,7 +79,7 @@ export default function Category(props) {
                         axios.get(`${process.env.REACT_APP_BACKEND_URL}api/jobs/${filterJobs[i].jobListing}`)
                             .then(async job => {
                                 const companyName = await axios.get(`${process.env.REACT_APP_BACKEND_URL}api/company/${job.data.companyID}`).then(company => {return company.data.companyName})
-                                await addCard(filterJobs[i].id, job.data.id, job.data.title, companyName, job.data.location, filterJobs[i].status);
+                                await addCard(filterJobs[i].id, job.data.id, job.data.title, companyName, job.data.companyID, job.data.location, filterJobs[i].status);
                             })
                     }
                 } else {
@@ -94,7 +94,7 @@ export default function Category(props) {
         if (!user.userID){
             return;
         }
-        const token = localStorage.getItem("token");
+        const token = localStorage.getItem("access");
         axios.get(`${process.env.REACT_APP_BACKEND_URL}api/user`, {headers: {Authorization: `Bearer ${token}`}})
             .then(response => {
                 if (response.data.searcher?.savedJobs !== undefined) {

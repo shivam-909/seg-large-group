@@ -11,6 +11,8 @@ import CompanyRoute from "./Auth/CompanyRoute";
 import ApplyPage from "./Components/ApplyPage/ApplyPage";
 import ViewApplicationPage from "./Components/Applicants/ViewApplicationPage";
 import JobPage from "./Components/JobPage/JobPage";
+import NotificationsPage from "./Components/NotificationsPage/NotificationsPage";
+
 
 export default function App() {
     return (
@@ -30,10 +32,13 @@ export default function App() {
                   <Route element={<CompanyRoute/>}>
                       <Route path="/application/:id" element={ <ViewApplicationPage/> }/>
                   </Route>
+                  <Route path="/notifications" element={ <NotificationsPage/> }/>
               </Route>
               <Route path="/" element={ <SearchPage/> }/>
               <Route path="/login" element={ <LoginPage/> }/>
               <Route path="/signup" element={ <RegisterPage/> }/>
+              <Route path="/saved" element={ <MyJobs/> }/>
+              <Route path="/profile" element={ <UserProfilePage/> }/>
               <Route path="/viewjob/:id" element={ <JobPage/> }/>
           </Routes>
       </BrowserRouter>

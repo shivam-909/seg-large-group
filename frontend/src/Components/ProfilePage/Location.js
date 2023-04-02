@@ -33,7 +33,7 @@ export class Location extends React.Component {
                     <div>
                         <input id={"locationInput"}
                             {...getInputProps({
-                                placeholder: 'Search City ...',
+                                placeholder: 'Search City...',
                                 className: 'location-search-input w-full border-[1px] border-dark-theme-grey p-2 rounded-md',
                             })}
                             disabled={this.props.disabled}

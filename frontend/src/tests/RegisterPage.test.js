@@ -1,26 +1,5 @@
-// import React from 'react';
-// import { render, screen, fireEvent } from '@testing-library/react';
-// import RegisterPage from '../Components/RegisterPage/RegisterPage';
-// import {BrowserRouter, Route, Routes} from "react-router-dom";
-//
-//
-// test('renders RegisterPage component without crashing', () => {
-//   render(
-//     <BrowserRouter>
-//       <Routes>
-//         <Route element={<RegisterPage />} />
-//       </Routes>
-//     </BrowserRouter>
-//   );
-// });
-//
 //   test('toggleRole function toggles visibility of Company-Fields and Seeker-Fields sections', () => {
 //     const { getByText, getByPlaceholderText, queryByLabelText } = render(
-//       <BrowserRouter>
-//         <Routes>
-//           <Route element={<RegisterPage />} />
-//         </Routes>
-//       </BrowserRouter>
 //     );
 //     // Confirm that the Company-Fields section is not visible
 //     expect(queryByLabelText('Company name')).toBeNull();
@@ -104,10 +83,9 @@ jest.mock('react-router-dom', () => ({
   ...jest.requireActual('react-router-dom'),
   useNavigate: () => mockedUsedNavigate,
 }));
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import {render, screen, fireEvent, waitFor, getByTestId, getByRole, queryByLabelText} from '@testing-library/react';
 import axios from 'axios';
 import RegisterPage from '../Components/RegisterPage/RegisterPage';
-import {BrowserRouter, Route, Routes, useNavigate} from "react-router-dom";
 
 // mock the axios.post method
 jest.mock('axios');
@@ -122,6 +100,35 @@ describe('RegisterPage component', () => {
   test('renders register form', () => {
     const registerForm = screen.getByText("Register an account",  {exact:false});
     waitFor(() => expect(registerForm).toBeInTheDocument());
+  });
+
+    test('toggleRole function toggles visibility of Company-Fields and Seeker-Fields sections', () => {
+    // Confirm that the Company-Fields section is not visible
+      waitFor(() => {expect(document.getElementById("companyName")).not.toBeVisible()});
+
+    // Confirm that the Seeker-Fields section is visible
+    expect(document.getElementById('firstName')).toBeInTheDocument();
+    expect(document.getElementById('lastName')).toBeInTheDocument();
+
+    // Toggle role to Company
+      fireEvent.click(screen.getByRole('button', {name: /Company/i}));
+
+    // Confirm that the Company-Fields section is visible
+      waitFor(() => {expect(document.getElementById("companyName")).toBeVisible()});
+
+    // Confirm that the Seeker-Fields section is not visible
+    expect(document.getElementById('firstName')).toBeNull();
+    expect(document.getElementById('lastName')).toBeNull();
+
+    // Toggle role back to Job Seeker
+    fireEvent.click(screen.getByRole('button', {name: /Job Seeker/i}));
+
+    // Confirm that the Seeker-Fields section is visible
+    expect(document.getElementById('firstName')).toBeInTheDocument();
+    expect(document.getElementById('lastName')).toBeInTheDocument();
+
+    // Confirm that the Company-Fields section is not visible
+      waitFor(() => {expect(document.getElementById("companyName")).not.toBeVisible()});
   });
 
   test('toggles password visibility', () => {
