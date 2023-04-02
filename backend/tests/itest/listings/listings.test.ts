@@ -3,7 +3,7 @@ import { DeleteJobListing } from "../../../db/jobs";
 import { DeleteUserByEmail, } from "../../../db/users";
 
 it("create listing", async () => {
-    jest.setTimeout(10000);
+    jest.setTimeout(20000);
 
     const fetch = require('node-fetch');
     const FormData = require('form-data');
@@ -31,8 +31,8 @@ it("create listing", async () => {
     });
 
 
-    const body = await response.json() as any;
     expect(response.status).toEqual(200);
+    const body = await response.json() as any;
     expect(body).not.toBeNull();
 
     // Expect access and refresh

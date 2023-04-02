@@ -121,7 +121,7 @@ export default function RegisterPage() {
                 </div>
 
                 <div data-testid="password">
-                    <TextInputBoxWithIcon id='password' type='password' onBlur={()=>{validateField("password",/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[.!@#$%^&*])(?=.{8,20})/); checkPasswordMatch()}} placeholder='Password' icon={<img id='toggleEye' src={showIcon} alt='' onClick={togglePasswordVisibility} className='cursor-pointer'/>}/>
+                    <TextInputBoxWithIcon id='password' type='password' onBlur={()=>{validateField("password",/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[.!@#$%^&*])(?=.{8,20})/); checkPasswordMatch()}} placeholder='Password' icon={<img id='toggleEye' src={showIcon} alt='toggle eye' onClick={togglePasswordVisibility} className='cursor-pointer'/>}/>
                     <div id="passwordError" className={"invisible absolute top-0"}>
                         <span>Invalid Password </span>
                         <div className={"text-black rounded-md border-2 border-dark-theme-grey px-2 pb-2 mt-2"}>Please include:

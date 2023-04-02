@@ -18,7 +18,7 @@ export default function PrivateRoutes() {
                             localStorage.setItem("access", response.data.access);
                             localStorage.setItem("refresh", response.data.refresh);
                         })
-                        .catch(err => console.log(err));
+                        .catch(() => setIsLoggedIn(false));
                 });
         }
         else{

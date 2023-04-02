@@ -6,22 +6,23 @@ import * as usersdb from "../../../db/users";
 import * as applicationsdb from "../../../db/applications";
 import * as jobsdb from "../../../db/jobs";
 
-export async function ValidateCompanyId(db:DB, companyID: any){
+export async function ValidateCompanyId(db: DB, companyID: any) {
 
     const company = await companiesdb.RetrieveCompanyByID(db, companyID);
-    if(!company){
+    if (!company) {
         throw new Error(errors.ErrorCompanyNotFound);
     }
 }
 
-export async function ValidateJobListing(db:DB, jobListing: any){
+export async function ValidateJobListing(db: DB, jobListing: any) {
     const job = await jobsdb.RetrieveJobListing(db, jobListing);
-    if(!job){
+    if (!job) {
+        console.trace("job not found");
         throw new Error(errors.ErrorCompanyNotFound);
     }
 }
 
-export async function ValidateSearcherId(db:DB, searcherID: any){
+export async function ValidateSearcherId(db: DB, searcherID: any) {
     const searcher = await searchersdb.RetrieveSearcherByID(db, searcherID);
     if (!searcher) {
         throw new Error(errors.ErrorSearcherNotFound);
@@ -29,7 +30,7 @@ export async function ValidateSearcherId(db:DB, searcherID: any){
 
 }
 
-export async function ValidateUserID(db:DB, userID: any){
+export async function ValidateUserID(db: DB, userID: any) {
 
     const user = await usersdb.RetrieveFullUserByID(db, userID);
     if (!user) {
@@ -38,7 +39,7 @@ export async function ValidateUserID(db:DB, userID: any){
 
 }
 
-export async function ValidateApplicationID(db:DB, applicationID: any){
+export async function ValidateApplicationID(db: DB, applicationID: any) {
 
     const application = await applicationsdb.RetrieveApplication(db, applicationID);
     if (!application) {

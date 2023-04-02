@@ -10,9 +10,26 @@ export const ErrorMW = (err: any, req: Request, res: Response, next: NextFunctio
     res.status(code).json({ message: em || 'internal server error' });
 };
 
+// Create a map of routes to a boolean
+// If the route is in the map, don't error if the user is not logged in
+
+const allowUnauthenticated = new Map<string, boolean>(
+    [
+        ["/api/jobs/search", true],
+    ]
+);
+
+
 export const AuthMW = (req: Request, res: Response, next: NextFunction) => {
     const token = req.headers.authorization;
-    if (!token) return res.status(401).json({ message: 'unauthorized' });
+    const dontRequireAuth = allowUnauthenticated.get(req.originalUrl) || false;
+
+    if (!token && !dontRequireAuth) {
+        return res.status(401).json({ message: 'unauthorized' });
+    }
+    else if (!token) {
+        return next()
+    };
 
     const split = token.split(' ');
 

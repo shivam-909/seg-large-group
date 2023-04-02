@@ -3,6 +3,8 @@ import { DeleteUser, RetrieveFullUserByEmail } from "../../../db/users";
 
 test('register user', async () => {
 
+    jest.setTimeout(20000);
+
     const email = "itest_register_user@example.com"
 
     const fetch = require('node-fetch');

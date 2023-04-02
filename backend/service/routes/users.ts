@@ -9,7 +9,7 @@ import * as validate from "./validation/users";
 export function GetUser(db: DB): Handler {
     return async (req: Request, res: Response, next: NextFunction) => {
         const id = req.headers["auth_username"] as string;
-        if(!id){
+        if (!id) {
             throw new Error(errors.ErrorUserNotFound);
         }
         await validate.UserExists(db, id);

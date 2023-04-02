@@ -70,7 +70,10 @@ function JobDetailsCard(props) {
                 for (const job of savedJobs){
                     newUser.append("savedJobs[]", job)
                 }
-                await axios.patch(`${process.env.REACT_APP_BACKEND_URL}api/users/${user.userID}`,newUser)
+                const token = localStorage.getItem("access");
+                if (token) {
+                    await axios.patch(`${process.env.REACT_APP_BACKEND_URL}api/users`, newUser, {headers: {Authorization: `Bearer ${user.token}`}});
+                }
             }
             else{
                 const savedJobs = user.searcher?.savedJobs;
@@ -81,7 +84,10 @@ function JobDetailsCard(props) {
                     for (const job of savedJobs){
                         newUser.append("savedJobs[]", job)
                     }
-                    await axios.patch(`${process.env.REACT_APP_BACKEND_URL}api/users/${user.userID}`,newUser)
+                    const token = localStorage.getItem("access");
+                    if (token) {
+                        await axios.patch(`${process.env.REACT_APP_BACKEND_URL}api/users`, newUser, {headers: {Authorization: `Bearer ${user.token}`}});
+                    }
                 }
                 else{
                     console.log("job not saved")
