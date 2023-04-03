@@ -4,9 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="4982574e-0790-4121-adf6-99a374f2ef9b" name="Changes" comment="Merging main">
+    <list default="true" id="4982574e-0790-4121-adf6-99a374f2ef9b" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/tests/CompanyJobCard.test.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/tests/CompanyJobCard.test.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/public/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/public/index.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -20,6 +20,7 @@
     <option name="stateVersion" value="1" />
   </component>
   <component name="ProjectId" id="2Nu057Gb6rGfQzRQHtQg1FUmTwc" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
@@ -41,6 +42,7 @@
   <component name="RunManager" selected="Jest.Tests in tests/">
     <configuration name="Filter.renders EditJob" type="JavaScriptTestRunnerJest" temporary="true" nameIsGenerated="true">
       <node-interpreter value="project" />
+      <node-options value="" />
       <jest-package value="$PROJECT_DIR$/frontend/node_modules/react-scripts" />
       <working-dir value="$PROJECT_DIR$/frontend" />
       <envs />
@@ -54,15 +56,16 @@
     </configuration>
     <configuration name="Tests in tests/" type="JavaScriptTestRunnerJest" temporary="true" nameIsGenerated="true">
       <node-interpreter value="project" />
+      <node-options value="" />
       <jest-package value="$PROJECT_DIR$/frontend/node_modules/react-scripts" />
       <working-dir value="$PROJECT_DIR$/frontend" />
       <envs />
-      <scope-kind value="DIRECTORY" />
-      <test-directory value="$PROJECT_DIR$/frontend/src/tests" />
+      <scope-kind value="ALL" />
       <method v="2" />
     </configuration>
     <configuration name="TextInputBox component.should render component on the screen" type="JavaScriptTestRunnerJest" temporary="true" nameIsGenerated="true">
       <node-interpreter value="project" />
+      <node-options value="" />
       <jest-package value="$PROJECT_DIR$/frontend/node_modules/react-scripts" />
       <working-dir value="$PROJECT_DIR$/frontend" />
       <envs />
@@ -128,7 +131,8 @@
     <option name="LAST_COMMIT_MESSAGE" value="Merging main" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/seg_large_group_3$TextInputBox_component_should_render_component_on_the_screen.info" NAME="TextInputBox component.should render component on the screen Coverage Results" MODIFIED="1680501252529" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="JestJavaScriptTestRunnerCoverage" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />
     <SUITE FILE_PATH="coverage/seg_large_group_3$Tests_in_tests_.info" NAME="Tests in tests/ Coverage Results" MODIFIED="1680502653092" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="JestJavaScriptTestRunnerCoverage" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />
+    <SUITE FILE_PATH="coverage/seg_large_group_3$TextInputBox_component_should_render_component_on_the_screen.info" NAME="TextInputBox component.should render component on the screen Coverage Results" MODIFIED="1680501252529" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="JestJavaScriptTestRunnerCoverage" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />
+    <SUITE FILE_PATH="coverage/seg_large_group$Filter_check_if_show_filter_button_works.info" NAME="Filter.check if show filter button works Coverage Results" MODIFIED="1680494360989" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="JestJavaScriptTestRunnerCoverage" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />
   </component>
 </project>
