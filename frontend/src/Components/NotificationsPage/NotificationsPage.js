@@ -2,23 +2,28 @@ import {useEffect, useState} from "react";
 import Navbar from "../Navbar/Navbar";
 import axios from "axios";
 import Loading from "../Loading/Loading";
+import RefreshToken from "../../Auth/RefreshToken";
 export default function NotificationsPage() {
     const [notifications, setNotifications] = useState([]);
     const [noNotifications, setNoNotifications] = useState(false);
 
     useEffect(() => {
-        const token = localStorage.getItem('access');
-        axios.get(`${process.env.REACT_APP_BACKEND_URL}api/notifications`, {headers: {Authorization: `Bearer ${token}`}})
-            .then(notifications => {
-                console.log(notifications.data)
-                const unorderedNotifs = notifications.data.finalNotifs;
-                const orderedNotifs = unorderedNotifs.sort((a, b) => b.created._seconds - a.created._seconds);
-                setNotifications(orderedNotifs);
-                if (notifications.data.finalNotifs.length === 0) {
-                    setNoNotifications(true);
-                }
-            })
-            .catch(error => console.log(error));
+        async function fetchNotifications() {
+            await RefreshToken();
+            const token = localStorage.getItem('access');
+            axios.get(`${process.env.REACT_APP_BACKEND_URL}api/notifications`, {headers: {Authorization: `Bearer ${token}`}})
+                .then(notifications => {
+                    console.log(notifications.data)
+                    const unorderedNotifs = notifications.data.finalNotifs;
+                    const orderedNotifs = unorderedNotifs.sort((a, b) => b.created._seconds - a.created._seconds);
+                    setNotifications(orderedNotifs);
+                    if (notifications.data.finalNotifs.length === 0) {
+                        setNoNotifications(true);
+                    }
+                })
+                .catch(error => console.log(error));
+        }
+        fetchNotifications();
     }, []);
 
     function deleteNotification(id) {
@@ -106,7 +111,9 @@ export default function NotificationsPage() {
                                 </div>
                             </div>
                             :
+                            <div role='status'>
                             <Loading className='w-16 h-16 border-[6px] border-dark-theme-grey'/>
+                            </div>
                         }
                     </div>
                 }

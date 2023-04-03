@@ -13,6 +13,7 @@ import Loading from "../Loading/Loading";
 import {Location} from "../ProfilePage/Location";
 import EducationDropdown from "../ProfilePage/EducationDropdown";
 import QuestionCard from "./QuestionCard";
+import RefreshToken from "../../Auth/RefreshToken";
 window.Buffer = window.Buffer || require("buffer").Buffer;
 
 export default function EditJob() {
@@ -34,6 +35,7 @@ export default function EditJob() {
 
     useEffect(() => {
         const getUser = async () => {
+            await RefreshToken();
             if (user.length === 0){
                 await GetData().then(r => {
                     setUser(r)
@@ -50,6 +52,7 @@ export default function EditJob() {
 
     async function verifyCompany(){
         if (isEdit){
+            await RefreshToken();
             return await axios.get(`${process.env.REACT_APP_BACKEND_URL}api/jobs/${id}`).then(response => {return response.data.companyID === user.company?.companyID || !user.company?.companyID});
         }
         return true;
@@ -57,6 +60,7 @@ export default function EditJob() {
 
     async function getDefaultValues() {
         if (isEdit) {
+            await RefreshToken();
             await axios.get(`${process.env.REACT_APP_BACKEND_URL}api/jobs/${id}`).then(async response => {
                 setJob(prevJob => ({
                     ...prevJob,
@@ -213,7 +217,7 @@ export default function EditJob() {
         jobListing.append('description', description);
         jobListing.append('coverLetterRequired', coverLetterRequired);
 
-
+        await RefreshToken();
         isEdit ? await axios.patch(`${process.env.REACT_APP_BACKEND_URL}api/jobs/${id}`, jobListing).then(navigate(-1)) :
             await axios.post(`${process.env.REACT_APP_BACKEND_URL}api/jobs/`, jobListing, {headers: {
                 Authorization: `Bearer ${localStorage.getItem("access")}`}}).then(navigate(-1));
@@ -253,7 +257,7 @@ export default function EditJob() {
         <div>
             <Navbar/>
             <div className='bg-lighter-grey min-h-screen justify-center flex'>
-                <div className='bg-white mt-36 rounded-md px-12 py-7 space-y-3 min-w-[45%]'>
+                <div className='bg-white mt-36 rounded-md px-12 py-7 space-y-3 min-w-[55%]'>
                     <button onClick={() => {navigate(-1)}} className={"float-left mb-5 text-3xl text-red"}><i className="fa-regular fa-circle-xmark"></i></button>
                     <p className='font-bold text-3xl flex justify-center'>{isEdit ? "Edit" : "Add"} Job</p>
                     <div className={"border-b-[#ccc] border-b-2 m-4"}/>
@@ -297,11 +301,10 @@ export default function EditJob() {
                         <p><strong>Screening Questions: </strong><button className={"float-right bg-dark-theme-grey rounded-md border-2 border-dark-theme-grey text-lg text-white w-8 h-8"} onClick={() => {addQuestion("",false, questionID)}}><i className="fa-solid fa-plus"></i></button>
                             {questions}
                         </p>
-                        <p><strong className={"pr-2"}>Require Cover Letter?: </strong><div className='float-right min-w-fit mt-4'>
+                        <p><strong className={"pr-2 inline-block"}>Require Cover Letter?: </strong><div className='float-right min-w-fit mt-4'>
                             <label><input type="radio" name={'requireCoverLetter'} value={false} className={"peer sr-only"} defaultChecked={!job.requireCoverLetter}/><span className={"border-2 border-[#ccc] px-4 py-1 rounded-md select-none peer-checked:border-dark-theme-grey peer-checked:text-white font-bold peer-checked:bg-dark-theme-grey"}>No</span></label>
                             <label><input type="radio" name={'requireCoverLetter'} value={true} className={"peer sr-only"} defaultChecked={job.requireCoverLetter}/><span className={"border-2 border-[#ccc] px-4 py-1 rounded-md select-none peer-checked:border-dark-theme-grey peer-checked:text-white font-bold peer-checked:bg-dark-theme-grey"}>Yes</span></label>
                         </div></p>
-                        {/*<button className={"w-full border-2 border-dark-theme-grey rounded-md p-2 bg-dark-theme-grey text-white font-bold"}>Add Screening Questions</button>*/}
                         <ErrorBox message={"Please complete all fields"}/>
                         <button onClick={handleSubmit} className={"w-full border-2 border-dark-theme-grey rounded-md p-2 bg-dark-theme-grey text-white"}>Submit</button>
                     </div> : <div className={"justify-center flex"}><Loading className={"h-10 w-10 border-[3px] border-dark-theme-grey"}/></div>}

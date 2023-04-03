@@ -50,8 +50,6 @@ export const run = () => {
     app.set('db', db);
     app.use(cors());
 
-
-
     // Authentication middleware
     app.use("/api/*", middleware.AuthMW);
 
@@ -88,6 +86,7 @@ export const run = () => {
 
     app.post('/api/user/typeid', upload.none(), utils.Route(app, userroutes.GetUserByTypeID));
     app.get('/api/user', upload.none(), utils.Route(app, userroutes.GetUser));
+    app.get('/api/user/:id', upload.none(), utils.Route(app, userroutes.GetUser));
     app.patch('/api/users', upload.none(), utils.Route(app, userroutes.UpdateUser));
     app.delete('/api/user', upload.none(), utils.Route(app, userroutes.DeleteUser));
 
@@ -97,7 +96,6 @@ export const run = () => {
     app.get('/', util.HealthCheck);
 
     app.post("/api/echo", util.Echo);
-
 
     app.use(middleware.ErrorMW);
 
