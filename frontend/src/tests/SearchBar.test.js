@@ -13,6 +13,10 @@ describe('SearchBar', () => {
     initialize();
   });
 
+  test('render SearchBar', () => {
+    render(<SearchBar/>);
+      });
+
   test('renders the dropdown fields with options', () => {
     const props = {
       defaultValue: "London",

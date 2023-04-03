@@ -15,11 +15,11 @@ describe('EditJob', () => {
         initialize();
         setupJestCanvasMock();
     });
-    // test ('renders EditJob', () => {
-    //     render(
-    //        <EditJob/>);
-        //
-        // const navBar = screen.queryByTestId('navbar');
-        // waitFor(() => expect(navBar).toBeInTheDocument());
-        // });
+    test ('renders EditJob', () => {
+        render(
+           <EditJob/>);
+
+        const navBar = screen.queryByTestId('navbar');
+        waitFor(() => expect(navBar).toBeInTheDocument());
+        });
 });

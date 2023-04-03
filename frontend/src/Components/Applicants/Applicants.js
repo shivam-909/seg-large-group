@@ -73,7 +73,7 @@ export default function Applicants() {
                         <li className={"filterJobs"}><button id={"Applied"} className={"filters"} onClick={() => changeFilter("Applied")} disabled={filter==="Applied"}>Applied</button></li>
                         <li className={"filterJobs"}><button id={"Interview"} className={"filters"} onClick={() => changeFilter("Interview")} disabled={filter==="Interview"}>Interviews</button></li>
                         <li className={"filterJobs"}><button id={"Rejected"} className={"filters"} onClick={() => changeFilter("Rejected")} disabled={filter==="Rejected"}>Rejected</button></li>
-                        <li className={"filterJobs"}><button id={"Rejected"} className={"filters"} onClick={() => changeFilter("Hired")} disabled={filter==="Hired"}>Hired</button></li>
+                        <li className={"filterJobs"}><button id={"Hired"} className={"filters"} onClick={() => changeFilter("Hired")} disabled={filter==="Hired"}>Hired</button></li>
                     </ul>
                     <div className='items-center justify-center flex relative w-full'>
                         {!loading ? <div className={"display-block w-full"}>
