@@ -10,7 +10,7 @@ import axios from "axios";
 import {useNavigate, useParams} from "react-router-dom";
 import Loading from "../Loading/Loading";
 import {Location} from "./Location";
-import {Document, Page} from "react-pdf/dist/cjs/entry.webpack";
+import {Document, Page, pdfjs } from "react-pdf/dist/cjs/entry.webpack";
 import RefreshToken from "../../Auth/RefreshToken";
 
 function UserProfilePage() {
@@ -24,11 +24,12 @@ function UserProfilePage() {
     const [loading, setLoading] = useState(true)
 
     useEffect(() => {
+        pdfjs.GlobalWorkerOptions.workerSrc = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
         const getProfile = async () => {
             await RefreshToken();
             if (Object.keys(profile).length === 0) {
                 const token = localStorage.getItem('access');
-                await axios.get(`${process.env.REACT_APP_BACKEND_URL}api/user`, {headers: {Authorization: `Bearer ${token}`}})
+                await axios.get(`${process.env.REACT_APP_BACKEND_URL}api/user/${id}`, {headers: {Authorization: `Bearer ${token}`}})
                     .then(r => {
                         setProfile(r.data)
                     });

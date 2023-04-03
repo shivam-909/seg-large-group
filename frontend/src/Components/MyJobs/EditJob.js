@@ -257,7 +257,7 @@ export default function EditJob() {
         <div>
             <Navbar/>
             <div className='bg-lighter-grey min-h-screen justify-center flex'>
-                <div className='bg-white mt-36 rounded-md px-12 py-7 space-y-3 min-w-[45%]'>
+                <div className='bg-white mt-36 rounded-md px-12 py-7 space-y-3 min-w-[55%]'>
                     <button onClick={() => {navigate(-1)}} className={"float-left mb-5 text-3xl text-red"}><i className="fa-regular fa-circle-xmark"></i></button>
                     <p className='font-bold text-3xl flex justify-center'>{isEdit ? "Edit" : "Add"} Job</p>
                     <div className={"border-b-[#ccc] border-b-2 m-4"}/>
@@ -301,7 +301,7 @@ export default function EditJob() {
                         <p><strong>Screening Questions: </strong><button className={"float-right bg-dark-theme-grey rounded-md border-2 border-dark-theme-grey text-lg text-white w-8 h-8"} onClick={() => {addQuestion("",false, questionID)}}><i className="fa-solid fa-plus"></i></button>
                             {questions}
                         </p>
-                        <p><strong className={"pr-2"}>Require Cover Letter?: </strong><div className='float-right min-w-fit mt-4'>
+                        <p><strong className={"pr-2 inline-block"}>Require Cover Letter?: </strong><div className='float-right min-w-fit mt-4'>
                             <label><input type="radio" name={'requireCoverLetter'} value={false} className={"peer sr-only"} defaultChecked={!job.requireCoverLetter}/><span className={"border-2 border-[#ccc] px-4 py-1 rounded-md select-none peer-checked:border-dark-theme-grey peer-checked:text-white font-bold peer-checked:bg-dark-theme-grey"}>No</span></label>
                             <label><input type="radio" name={'requireCoverLetter'} value={true} className={"peer sr-only"} defaultChecked={job.requireCoverLetter}/><span className={"border-2 border-[#ccc] px-4 py-1 rounded-md select-none peer-checked:border-dark-theme-grey peer-checked:text-white font-bold peer-checked:bg-dark-theme-grey"}>Yes</span></label>
                         </div></p>
