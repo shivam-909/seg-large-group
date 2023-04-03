@@ -10,10 +10,12 @@ import {
     RetrieveFullUserByID,
     RetrieveUserBySearcherID,
     GetAllCompanyIDs,
-    GetAllSearcherIDs, RetrieveUserByCompanyID, DeleteUserByEmail
+    GetAllSearcherIDs, RetrieveUserByCompanyID, DeleteUserByEmail, DeleteUser
 } from "../../db/users";
 import {Company, Searcher, User} from "../../models/user";
 import {CreateCompany} from "../../db/companies";
+import {ErrorInvalidUserType, ErrorUserNotFound} from "../../service/public";
+
 
 test('create searcher, create company, retrieve searcher by email, retrieved user by type id, get all searcher and company IDs, delete user', async () => {
     // Create a searcher in the db.
@@ -75,18 +77,54 @@ test('create searcher, create company, retrieve searcher by email, retrieved use
         companyID
     )
 
+    const noTypeID = randomUUID();
+    const noTypeEmail = "notypeuser@example.com";
+    const noTypeUser = new User(
+        noTypeID,
+        noTypeEmail,
+        password,
+        "",
+        "",
+        [],
+        undefined,
+        undefined,
+        undefined
+    )
+
     await CreateCompany(db, companyUser, companyObject);
+    await CreateUser(db, noTypeUser);
+
+    // Retrieve user with no type id
+
+    try{
+        await RetrieveFullUserByID(db, noTypeID);
+    }catch(e){
+        expect((e as Error).message).toEqual(ErrorInvalidUserType);
+    }
 
 
+    try{
+        await RetrieveFullUserByEmail(db, noTypeEmail);
+    }catch(e){
+        expect((e as Error).message).toEqual(ErrorInvalidUserType);
+    }
+
+    // Delete a non-existing user
+    try{
+        await DeleteUser(db, randomUUID());
+    }catch(e){
+        expect((e as Error).message).toEqual(ErrorUserNotFound);
+    }
 
     // Retrieve the full searcher user
-
     const retrievedSearcherUser = await RetrieveFullUserByID(db, searcherUserID);
     expect(retrievedSearcherUser).not.toBeNull();
     expect(retrievedSearcherUser!.userID).toEqual(searcherUserID);
     expect(retrievedSearcherUser!.email).toEqual(searcherEmail);
     expect(retrievedSearcherUser!.searcherID).toEqual(searcherID);
     expect(retrievedSearcherUser!.searcher).not.toBeNull();
+
+
 
     // Retrieve the full company user
 
@@ -167,6 +205,7 @@ test('create searcher, create company, retrieve searcher by email, retrieved use
     // Delete the user.
     await DeleteUserByEmail(db, searcherEmail);
     await DeleteUserByEmail(db, companyEmail);
+    await DeleteUser(db, noTypeID);
     expect(await RetrieveFullUserByEmail(db, searcherEmail)).toBeNull();
     expect(await RetrieveFullUserByEmail(db, companyEmail)).toBeNull();
 
