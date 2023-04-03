@@ -4,13 +4,14 @@ jest.mock('react-router-dom', () => ({
   useNavigate: () => mockedUsedNavigate,
 }));
 import {render, screen, fireEvent, waitFor} from '@testing-library/react';
+import UserProfilePage from "../Components/ProfilePage/UserProfilePage";
 
-describe('EmployerProfilePage', () => {
-  // test('render navbar', () => {
-  //   render(<UserProfilePage />);
-  //   const navbarElement = screen.queryByTestId('navbar');
-  //   waitFor(() => expect(navbarElement).toBeInTheDocument())
-  // });
+describe('UserProfilePage', () => {
+  test('render navbar', () => {
+    render(<UserProfilePage />);
+    const navbarElement = screen.queryByTestId('navbar');
+    waitFor(() => expect(navbarElement).toBeInTheDocument())
+  });
   //
   // test('render contact information inputs', () => {
   //   render(<UserProfilePage />);

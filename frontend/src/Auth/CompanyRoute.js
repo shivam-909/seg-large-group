@@ -14,5 +14,5 @@ export default function CompanyRoute() {
         checkCompany();
     }, [isCompany]);
 
-    return (isCompany ? <Outlet/> : <Navigate to="/"/>);
+    return (isCompany ? <Outlet/> : <Navigate role = 'navigation' to="/"/>);
 }
