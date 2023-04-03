@@ -9,8 +9,9 @@ import {CreateJobListing} from "../../db/jobs";
 import {CreateSearcher} from "../../db/searchers";
 import Application from "../../models/application";
 import Notification from "../../models/notification"
-import {CreateNotification, GetAllUserNotifs, RetrieveNotification} from "../../db/notifications";
+import {CreateNotification, DeleteNotification, GetAllUserNotifs, RetrieveNotification} from "../../db/notifications";
 import {CreateApplication} from "../../db/applications";
+import {ErrorUserNotFound} from "../../service/public";
 
 test('create notification, retrieve notification, update notification, delete notification', async () => {
 
@@ -155,7 +156,22 @@ test('create notification, retrieve notification, update notification, delete no
         userId
     )
 
+    const notificationWithInvalidID = new Notification(
+        randomUUID(),
+        content,
+        applicationId,
+        created,
+        randomUUID(),
+    );
+
+
     await CreateNotification(db, notification);
+    try{
+         await CreateNotification(db,notificationWithInvalidID);
+    }
+    catch(e){
+        expect((e as Error).message).toEqual(ErrorUserNotFound);
+    }
 
     // Retrieve the notification by id.
     const retrievedNotification = await RetrieveNotification(db, id);
@@ -174,10 +190,9 @@ test('create notification, retrieve notification, update notification, delete no
     }
     expect(incorrectID).toEqual(false);
 
-
-
+    
     // Delete the notification.
-    await db.NotificationCollection().doc(id).delete();
+    await DeleteNotification(db, id);
     const deletedNotification = await RetrieveNotification(db, id);
     expect(deletedNotification).toBeUndefined();
     await DeleteUser(db, userID);

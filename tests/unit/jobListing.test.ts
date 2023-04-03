@@ -204,7 +204,15 @@ test('create jobListing, retrieve jobListing, update jobListing, delete jobListi
     }
     expect(found).toEqual(false);
 
+    const Listings = await RetrieveJobListingsByFilter(db, {requirements: updatedRequirements});
+    for (const listing of Listings) {
+        if(JSON.stringify(listing.requirements) != JSON.stringify(updatedRequirements)) found = true;
+    }
+    expect(found).toEqual(false);
+
+
     // Get All Job IDs
+
     const jobIDs = await GetAllJobIDs(db);
     let repeatedID = false;
     if(jobIDs.length != 1) {
