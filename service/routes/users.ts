@@ -2,16 +2,25 @@ import { NextFunction, Request, Response } from "express";
 import DB from "../../db/db";
 import * as usersdb from "../../db/users";
 import 'express-async-errors';
-import {Handler} from "../public";
+import { Handler } from "../public";
 import * as errors from "../public";
 import * as validate from "./validation/users";
 
 export function GetUser(db: DB): Handler {
     return async (req: Request, res: Response, next: NextFunction) => {
-        const id = req.headers["auth_username"] as string;
-        if (!id) {
+        const uid = req.params.id;
+        const cid = req.headers["auth_username"] as string;
+        let id;
+        if (uid) {
+            id = uid;
+        }
+        else if (cid) {
+            id = cid;
+        }
+         else {
             throw new Error(errors.ErrorUserNotFound);
         }
+
         await validate.UserExists(db, id);
         const user = await usersdb.RetrieveFullUserByID(db, id);
         res.status(200).json(user);
@@ -22,7 +31,7 @@ export function UpdateUser(db: DB): Handler {
     return async (req: Request, res: Response, next: NextFunction) => {
 
         const id = req.headers["auth_username"] as string;
-        if(!id){
+        if (!id) {
             throw new Error(errors.ErrorUserNotFound);
         }
         const updatedVals = req.body;
@@ -38,7 +47,7 @@ export function DeleteUser(db: DB): Handler {
     return async (req: Request, res: Response, next: NextFunction) => {
 
         const id = req.headers["auth_username"] as string;
-        if(!id){
+        if (!id) {
             throw new Error(errors.ErrorUserNotFound);
         }
         await validate.UserExists(db, id);
