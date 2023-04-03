@@ -14,21 +14,21 @@ export async function FindMatchesFromJLArray(db: DB, searcherID: string, jobList
     const searcher = searcherDoc.data() as Searcher;
     const matchingJobListings = jobListings
         .filter((jobListing) => {
-            const hasQualification = jobListing.qualifications.some((jobListingQualification) => {
+            const hasQualification = jobListing.qualifications?.some((jobListingQualification) => {
                 return searcher.qualifications.some((userQualification) => {
                     return IsQualified(jobListingQualification, userQualification);
                 });
             });
 
-            const matchingSkill = jobListing.requirements && jobListing.requirements.some((requirement) => {
+            const matchingSkill = jobListing.requirements?.some((requirement) => {
                 return HasMatchingSkill(searcher.skills, requirement);
             });
 
             return hasQualification || matchingSkill;
         })
         .sort((jobListingA, jobListingB) => {
-            const jobListingARequirementMatches = jobListingA.qualifications.filter((jobListingQualification: string) => searcher.qualifications.includes(jobListingQualification)).length;
-            const jobListingBRequirementMatches = jobListingB.qualifications.filter((jobListingQualification: string) => searcher.qualifications.includes(jobListingQualification)).length;
+            const jobListingARequirementMatches = jobListingA.qualifications ? jobListingA.qualifications.filter((jobListingQualification: string) => searcher.qualifications.includes(jobListingQualification)).length : 0;
+            const jobListingBRequirementMatches = jobListingB.qualifications ? jobListingB.qualifications.filter((jobListingQualification: string) => searcher.qualifications.includes(jobListingQualification)).length : 0;
             const jobListingASkillMatches = jobListingA.requirements ? jobListingA.requirements.reduce((totalMatches: number, requirement: string) => {
                 return totalMatches + (HasMatchingSkill(searcher.skills, requirement) ? 1 : 0);
             }, 0) : 0;
@@ -47,6 +47,7 @@ export async function FindMatchesFromJLArray(db: DB, searcherID: string, jobList
         return matchingJobListings;
     }
 }
+
 
 
 

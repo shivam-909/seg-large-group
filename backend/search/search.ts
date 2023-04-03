@@ -42,22 +42,24 @@ function boyerMoore(term: string, query: string): number {
 export async function FindJobListingsByQuery(db: DB, query: string): Promise<JobListing[]> {
     const jobListingsRef = db.JobListingCollection();
     const jobListingsSnapshot = await jobListingsRef.get();
-    const results: any[] = [];
+    const results: JobListing[] = [];
+    const seenIds = new Set<string>();
 
     jobListingsSnapshot.forEach((doc) => {
         const jobListing = doc.data();
         const title = jobListing.title.toLowerCase();
         const description = jobListing.description.toLowerCase();
         const industry = jobListing.industry.toLowerCase();
-        const requirements = jobListing.requirements!.map((r) => r.split(",")[0].toLowerCase());
+        const requirements = jobListing.requirements?.map((r) => r.split(",")[0].toLowerCase());
         const queryLength = query.length;
 
-        [title, description, industry, ...requirements].forEach((textToSearch) => {
+        [title, description, industry, ...(requirements ?? [])].forEach((textToSearch) => {
             const textLength = textToSearch.length;
             if (textLength >= queryLength) {
                 const index = boyerMoore(textToSearch, query);
-                if (index >= 0) {
+                if (index >= 0 && !seenIds.has(jobListing.id)) {
                     results.push(jobListing);
+                    seenIds.add(jobListing.id);
                 }
             }
         });
@@ -65,6 +67,8 @@ export async function FindJobListingsByQuery(db: DB, query: string): Promise<Job
 
     return results;
 }
+
+
 
 export async function MatchmadeSearch(db: DB, query: string, searcherID:string): Promise<JobListing[]> {
     const results = await FindJobListingsByQuery(db, query)
