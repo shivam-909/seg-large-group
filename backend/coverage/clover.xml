@@ -1,81 +1,81 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1680463099876" clover="3.2.0">
-  <project timestamp="1680463099876" name="All files">
-    <metrics statements="473" coveredstatements="315" conditionals="72" coveredconditionals="19" methods="87" coveredmethods="51" elements="632" coveredelements="385" complexity="0" loc="473" ncloc="473" packages="4" files="14" classes="14"/>
+<coverage generated="1680365843004" clover="3.2.0">
+  <project timestamp="1680365843004" name="All files">
+    <metrics statements="447" coveredstatements="247" conditionals="71" coveredconditionals="14" methods="82" coveredmethods="35" elements="600" coveredelements="296" complexity="0" loc="447" ncloc="447" packages="4" files="13" classes="13"/>
     <package name="config">
       <metrics statements="2" coveredstatements="2" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
-      <file name="config.ts" path="C:\Users\leena\WebstormProjects\seg-large-group\backend\config\config.ts">
+      <file name="config.ts" path="/Users/shivamacharya/uni/seg/large-group/backend/config/config.ts">
         <metrics statements="2" coveredstatements="2" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
-        <line num="4" count="13" type="stmt"/>
-        <line num="6" count="13" type="stmt"/>
+        <line num="4" count="9" type="stmt"/>
+        <line num="6" count="9" type="stmt"/>
       </file>
     </package>
     <package name="db">
-      <metrics statements="324" coveredstatements="178" conditionals="70" coveredconditionals="18" methods="63" coveredmethods="33"/>
-      <file name="applications.ts" path="C:\Users\leena\WebstormProjects\seg-large-group\backend\db\applications.ts">
-        <metrics statements="42" coveredstatements="16" conditionals="3" coveredconditionals="0" methods="10" coveredmethods="3"/>
-        <line num="6" count="12" type="stmt"/>
-        <line num="7" count="1" type="stmt"/>
-        <line num="9" count="1" type="stmt"/>
-        <line num="20" count="12" type="stmt"/>
+      <metrics statements="298" coveredstatements="139" conditionals="69" coveredconditionals="13" methods="58" coveredmethods="24"/>
+      <file name="applications.ts" path="/Users/shivamacharya/uni/seg/large-group/backend/db/applications.ts">
+        <metrics statements="42" coveredstatements="14" conditionals="3" coveredconditionals="0" methods="10" coveredmethods="2"/>
+        <line num="6" count="8" type="stmt"/>
+        <line num="7" count="0" type="stmt"/>
+        <line num="9" count="0" type="stmt"/>
+        <line num="20" count="8" type="stmt"/>
         <line num="21" count="0" type="stmt"/>
         <line num="22" count="0" type="stmt"/>
         <line num="24" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="25" count="0" type="stmt"/>
         <line num="27" count="0" type="stmt"/>
-        <line num="32" count="12" type="stmt"/>
+        <line num="32" count="8" type="stmt"/>
         <line num="33" count="0" type="stmt"/>
         <line num="34" count="0" type="stmt"/>
-        <line num="37" count="12" type="stmt"/>
+        <line num="37" count="8" type="stmt"/>
         <line num="38" count="0" type="stmt"/>
         <line num="40" count="0" type="stmt"/>
         <line num="41" count="0" type="stmt"/>
-        <line num="50" count="0" type="stmt"/>
-        <line num="54" count="12" type="stmt"/>
-        <line num="55" count="0" type="stmt"/>
+        <line num="51" count="0" type="stmt"/>
+        <line num="55" count="8" type="stmt"/>
         <line num="56" count="0" type="stmt"/>
-        <line num="59" count="12" type="stmt"/>
-        <line num="60" count="5" type="stmt"/>
-        <line num="62" count="5" type="stmt"/>
-        <line num="63" count="0" type="stmt"/>
-        <line num="67" count="12" type="stmt"/>
-        <line num="68" count="5" type="stmt"/>
+        <line num="57" count="0" type="stmt"/>
+        <line num="60" count="8" type="stmt"/>
+        <line num="61" count="5" type="stmt"/>
+        <line num="63" count="5" type="stmt"/>
+        <line num="64" count="0" type="stmt"/>
+        <line num="68" count="8" type="stmt"/>
         <line num="69" count="5" type="stmt"/>
-        <line num="71" count="5" type="stmt"/>
-        <line num="72" count="0" type="stmt"/>
+        <line num="70" count="5" type="stmt"/>
+        <line num="72" count="5" type="stmt"/>
         <line num="73" count="0" type="stmt"/>
-        <line num="76" count="5" type="stmt"/>
-        <line num="79" count="12" type="stmt"/>
-        <line num="80" count="0" type="stmt"/>
-        <line num="82" count="0" type="stmt"/>
-        <line num="83" count="0" type="cond" truecount="0" falsecount="1"/>
-        <line num="84" count="0" type="stmt"/>
-        <line num="88" count="0" type="stmt"/>
-        <line num="90" count="0" type="stmt"/>
-        <line num="92" count="0" type="stmt"/>
+        <line num="74" count="0" type="stmt"/>
+        <line num="77" count="5" type="stmt"/>
+        <line num="80" count="8" type="stmt"/>
+        <line num="81" count="0" type="stmt"/>
+        <line num="83" count="0" type="stmt"/>
+        <line num="84" count="0" type="cond" truecount="0" falsecount="1"/>
+        <line num="85" count="0" type="stmt"/>
+        <line num="89" count="0" type="stmt"/>
+        <line num="91" count="0" type="stmt"/>
         <line num="93" count="0" type="stmt"/>
         <line num="94" count="0" type="stmt"/>
-        <line num="97" count="0" type="stmt"/>
+        <line num="95" count="0" type="stmt"/>
+        <line num="98" count="0" type="stmt"/>
       </file>
-      <file name="companies.ts" path="C:\Users\leena\WebstormProjects\seg-large-group\backend\db\companies.ts">
-        <metrics statements="23" coveredstatements="15" conditionals="1" coveredconditionals="0" methods="5" coveredmethods="3"/>
-        <line num="3" count="12" type="stmt"/>
-        <line num="4" count="12" type="stmt"/>
-        <line num="6" count="12" type="stmt"/>
-        <line num="7" count="2" type="stmt"/>
-        <line num="8" count="2" type="stmt"/>
+      <file name="companies.ts" path="/Users/shivamacharya/uni/seg/large-group/backend/db/companies.ts">
+        <metrics statements="23" coveredstatements="12" conditionals="1" coveredconditionals="0" methods="5" coveredmethods="2"/>
+        <line num="3" count="8" type="stmt"/>
+        <line num="4" count="8" type="stmt"/>
+        <line num="6" count="8" type="stmt"/>
+        <line num="7" count="0" type="stmt"/>
+        <line num="8" count="0" type="stmt"/>
         <line num="11" count="0" type="stmt"/>
-        <line num="14" count="2" type="stmt"/>
-        <line num="20" count="12" type="stmt"/>
-        <line num="21" count="4" type="stmt"/>
-        <line num="22" count="4" type="stmt"/>
-        <line num="24" count="4" type="cond" truecount="0" falsecount="1"/>
+        <line num="14" count="0" type="stmt"/>
+        <line num="20" count="8" type="stmt"/>
+        <line num="21" count="3" type="stmt"/>
+        <line num="22" count="3" type="stmt"/>
+        <line num="24" count="3" type="cond" truecount="0" falsecount="1"/>
         <line num="25" count="0" type="stmt"/>
-        <line num="28" count="4" type="stmt"/>
-        <line num="31" count="12" type="stmt"/>
-        <line num="32" count="3" type="stmt"/>
-        <line num="33" count="3" type="stmt"/>
-        <line num="36" count="12" type="stmt"/>
+        <line num="28" count="3" type="stmt"/>
+        <line num="31" count="8" type="stmt"/>
+        <line num="32" count="2" type="stmt"/>
+        <line num="33" count="2" type="stmt"/>
+        <line num="36" count="8" type="stmt"/>
         <line num="37" count="0" type="stmt"/>
         <line num="38" count="0" type="stmt"/>
         <line num="40" count="0" type="stmt"/>
@@ -83,66 +83,66 @@
         <line num="42" count="0" type="stmt"/>
         <line num="45" count="0" type="stmt"/>
       </file>
-      <file name="db.ts" path="C:\Users\leena\WebstormProjects\seg-large-group\backend\db\db.ts">
+      <file name="db.ts" path="/Users/shivamacharya/uni/seg/large-group/backend/db/db.ts">
         <metrics statements="17" coveredstatements="16" conditionals="0" coveredconditionals="0" methods="7" coveredmethods="6"/>
-        <line num="2" count="12" type="stmt"/>
-        <line num="3" count="12" type="stmt"/>
-        <line num="4" count="12" type="stmt"/>
-        <line num="5" count="12" type="stmt"/>
-        <line num="6" count="12" type="stmt"/>
-        <line num="9" count="12" type="stmt"/>
-        <line num="10" count="12" type="stmt"/>
-        <line num="22" count="11" type="stmt"/>
-        <line num="27" count="11" type="stmt"/>
-        <line num="29" count="11" type="stmt"/>
-        <line num="35" count="30" type="stmt"/>
-        <line num="39" count="14" type="stmt"/>
-        <line num="43" count="21" type="stmt"/>
-        <line num="47" count="9" type="stmt"/>
+        <line num="2" count="8" type="stmt"/>
+        <line num="3" count="8" type="stmt"/>
+        <line num="4" count="8" type="stmt"/>
+        <line num="5" count="8" type="stmt"/>
+        <line num="6" count="8" type="stmt"/>
+        <line num="9" count="8" type="stmt"/>
+        <line num="10" count="8" type="stmt"/>
+        <line num="22" count="8" type="stmt"/>
+        <line num="27" count="8" type="stmt"/>
+        <line num="29" count="8" type="stmt"/>
+        <line num="35" count="24" type="stmt"/>
+        <line num="39" count="4" type="stmt"/>
+        <line num="43" count="19" type="stmt"/>
+        <line num="47" count="5" type="stmt"/>
         <line num="51" count="0" type="stmt"/>
-        <line num="55" count="6" type="stmt"/>
-        <line num="60" count="12" type="stmt"/>
+        <line num="55" count="5" type="stmt"/>
+        <line num="60" count="8" type="stmt"/>
       </file>
-      <file name="jobs.ts" path="C:\Users\leena\WebstormProjects\seg-large-group\backend\db\jobs.ts">
-        <metrics statements="79" coveredstatements="53" conditionals="25" coveredconditionals="6" methods="15" coveredmethods="13"/>
-        <line num="5" count="12" type="stmt"/>
-        <line num="6" count="2" type="stmt"/>
-        <line num="8" count="2" type="stmt"/>
-        <line num="9" count="2" type="stmt"/>
+      <file name="jobs.ts" path="/Users/shivamacharya/uni/seg/large-group/backend/db/jobs.ts">
+        <metrics statements="79" coveredstatements="24" conditionals="25" coveredconditionals="1" methods="15" coveredmethods="6"/>
+        <line num="5" count="8" type="stmt"/>
+        <line num="6" count="0" type="stmt"/>
+        <line num="8" count="0" type="stmt"/>
+        <line num="9" count="0" type="stmt"/>
         <line num="28" count="0" type="stmt"/>
-        <line num="31" count="1" type="stmt"/>
-        <line num="36" count="12" type="stmt"/>
-        <line num="37" count="3" type="stmt"/>
-        <line num="38" count="3" type="stmt"/>
-        <line num="40" count="3" type="stmt"/>
-        <line num="43" count="12" type="stmt"/>
-        <line num="44" count="1" type="stmt"/>
-        <line num="46" count="1" type="stmt"/>
-        <line num="48" count="1" type="stmt"/>
-        <line num="49" count="1" type="stmt"/>
+        <line num="31" count="0" type="stmt"/>
+        <line num="36" count="8" type="stmt"/>
+        <line num="37" count="0" type="stmt"/>
+        <line num="38" count="0" type="stmt"/>
+        <line num="40" count="0" type="stmt"/>
+        <line num="43" count="8" type="stmt"/>
+        <line num="44" count="0" type="stmt"/>
+        <line num="46" count="0" type="stmt"/>
+        <line num="48" count="0" type="stmt"/>
+        <line num="49" count="0" type="stmt"/>
         <line num="51" count="0" type="stmt"/>
-        <line num="56" count="12" type="stmt"/>
+        <line num="56" count="8" type="stmt"/>
         <line num="57" count="2" type="stmt"/>
         <line num="59" count="2" type="stmt"/>
         <line num="60" count="2" type="stmt"/>
-        <line num="65" count="12" type="stmt"/>
-        <line num="66" count="3" type="cond" truecount="0" falsecount="1"/>
+        <line num="65" count="8" type="stmt"/>
+        <line num="66" count="2" type="cond" truecount="0" falsecount="1"/>
         <line num="67" count="0" type="stmt"/>
-        <line num="69" count="3" type="stmt"/>
-        <line num="70" count="3" type="stmt"/>
-        <line num="71" count="3" type="stmt"/>
+        <line num="69" count="2" type="stmt"/>
+        <line num="70" count="2" type="stmt"/>
+        <line num="71" count="2" type="stmt"/>
         <line num="72" count="1" type="stmt"/>
-        <line num="79" count="12" type="stmt"/>
+        <line num="79" count="8" type="stmt"/>
         <line num="80" count="2" type="stmt"/>
         <line num="81" count="2" type="stmt"/>
-        <line num="82" count="10" type="stmt"/>
-        <line num="83" count="10" type="stmt"/>
-        <line num="84" count="10" type="cond" truecount="1" falsecount="1"/>
-        <line num="85" count="10" type="cond" truecount="0" falsecount="1"/>
+        <line num="82" count="35" type="stmt"/>
+        <line num="83" count="35" type="stmt"/>
+        <line num="84" count="35" type="cond" truecount="1" falsecount="1"/>
+        <line num="85" count="35" type="cond" truecount="0" falsecount="1"/>
         <line num="86" count="0" type="stmt"/>
         <line num="87" count="0" type="stmt"/>
         <line num="90" count="2" type="stmt"/>
-        <line num="93" count="12" type="stmt"/>
+        <line num="93" count="8" type="stmt"/>
         <line num="94" count="0" type="stmt"/>
         <line num="95" count="0" type="cond" truecount="0" falsecount="1"/>
         <line num="96" count="0" type="stmt"/>
@@ -153,20 +153,20 @@
         <line num="104" count="0" type="cond" truecount="0" falsecount="1"/>
         <line num="105" count="0" type="stmt"/>
         <line num="109" count="0" type="stmt"/>
-        <line num="112" count="12" type="stmt"/>
-        <line num="113" count="1" type="stmt"/>
-        <line num="114" count="1" type="stmt"/>
-        <line num="116" count="1" type="stmt"/>
-        <line num="117" count="104" type="stmt"/>
-        <line num="118" count="104" type="stmt"/>
-        <line num="121" count="1" type="stmt"/>
-        <line num="124" count="12" type="stmt"/>
-        <line num="125" count="1" type="stmt"/>
-        <line num="127" count="1" type="stmt"/>
-        <line num="128" count="1" type="cond" truecount="4" falsecount="0"/>
-        <line num="129" count="1" type="cond" truecount="1" falsecount="11"/>
-        <line num="138" count="1" type="stmt"/>
-        <line num="139" count="1" type="stmt"/>
+        <line num="112" count="8" type="stmt"/>
+        <line num="113" count="0" type="stmt"/>
+        <line num="114" count="0" type="stmt"/>
+        <line num="116" count="0" type="stmt"/>
+        <line num="117" count="0" type="stmt"/>
+        <line num="118" count="0" type="stmt"/>
+        <line num="121" count="0" type="stmt"/>
+        <line num="124" count="8" type="stmt"/>
+        <line num="125" count="0" type="stmt"/>
+        <line num="127" count="0" type="stmt"/>
+        <line num="128" count="0" type="cond" truecount="0" falsecount="4"/>
+        <line num="129" count="0" type="cond" truecount="0" falsecount="12"/>
+        <line num="138" count="0" type="stmt"/>
+        <line num="139" count="0" type="stmt"/>
         <line num="141" count="0" type="stmt"/>
         <line num="142" count="0" type="stmt"/>
         <line num="144" count="0" type="cond" truecount="0" falsecount="3"/>
@@ -178,61 +178,32 @@
         <line num="151" count="0" type="stmt"/>
         <line num="154" count="0" type="stmt"/>
         <line num="155" count="0" type="stmt"/>
-        <line num="160" count="1" type="stmt"/>
-        <line num="162" count="1" type="stmt"/>
-        <line num="164" count="1" type="stmt"/>
-        <line num="165" count="1" type="stmt"/>
-        <line num="166" count="1" type="stmt"/>
-        <line num="169" count="1" type="stmt"/>
+        <line num="160" count="0" type="stmt"/>
+        <line num="162" count="0" type="stmt"/>
+        <line num="164" count="0" type="stmt"/>
+        <line num="165" count="0" type="stmt"/>
+        <line num="166" count="0" type="stmt"/>
+        <line num="169" count="0" type="stmt"/>
       </file>
-      <file name="notifications.ts" path="C:\Users\leena\WebstormProjects\seg-large-group\backend\db\notifications.ts">
-        <metrics statements="26" coveredstatements="5" conditionals="1" coveredconditionals="0" methods="5" coveredmethods="0"/>
-        <line num="3" count="1" type="stmt"/>
-        <line num="5" count="1" type="stmt"/>
-        <line num="6" count="0" type="stmt"/>
-        <line num="9" count="0" type="stmt"/>
-        <line num="10" count="0" type="stmt"/>
-        <line num="15" count="0" type="stmt"/>
-        <line num="18" count="0" type="stmt"/>
-        <line num="20" count="0" type="cond" truecount="0" falsecount="1"/>
-        <line num="21" count="0" type="stmt"/>
-        <line num="24" count="0" type="stmt"/>
-        <line num="25" count="0" type="stmt"/>
-        <line num="26" count="0" type="stmt"/>
-        <line num="29" count="1" type="stmt"/>
-        <line num="30" count="0" type="stmt"/>
-        <line num="31" count="0" type="stmt"/>
-        <line num="33" count="0" type="stmt"/>
-        <line num="36" count="1" type="stmt"/>
-        <line num="38" count="0" type="stmt"/>
-        <line num="39" count="0" type="stmt"/>
-        <line num="41" count="0" type="stmt"/>
-        <line num="42" count="0" type="stmt"/>
-        <line num="43" count="0" type="stmt"/>
-        <line num="46" count="0" type="stmt"/>
-        <line num="49" count="1" type="stmt"/>
-        <line num="50" count="0" type="stmt"/>
-        <line num="51" count="0" type="stmt"/>
-      </file>
-      <file name="searchers.ts" path="C:\Users\leena\WebstormProjects\seg-large-group\backend\db\searchers.ts">
+      <file name="searchers.ts" path="/Users/shivamacharya/uni/seg/large-group/backend/db/searchers.ts">
         <metrics statements="23" coveredstatements="15" conditionals="1" coveredconditionals="0" methods="5" coveredmethods="3"/>
-        <line num="2" count="12" type="stmt"/>
-        <line num="4" count="12" type="stmt"/>
-        <line num="6" count="12" type="stmt"/>
-        <line num="7" count="4" type="stmt"/>
-        <line num="8" count="4" type="stmt"/>
+        <line num="2" count="8" type="stmt"/>
+        <line num="4" count="8" type="stmt"/>
+        <line num="6" count="8" type="stmt"/>
+        <line num="7" count="2" type="stmt"/>
+        <line num="8" count="2" type="stmt"/>
         <line num="11" count="0" type="stmt"/>
-        <line num="14" count="4" type="stmt"/>
-        <line num="25" count="12" type="stmt"/>
+        <line num="14" count="2" type="stmt"/>
+        <line num="25" count="8" type="stmt"/>
         <line num="26" count="10" type="stmt"/>
         <line num="27" count="10" type="stmt"/>
         <line num="29" count="10" type="cond" truecount="0" falsecount="1"/>
         <line num="30" count="0" type="stmt"/>
         <line num="33" count="10" type="stmt"/>
-        <line num="36" count="12" type="stmt"/>
+        <line num="36" count="8" type="stmt"/>
         <line num="37" count="5" type="stmt"/>
         <line num="38" count="5" type="stmt"/>
-        <line num="41" count="12" type="stmt"/>
+        <line num="41" count="8" type="stmt"/>
         <line num="42" count="0" type="stmt"/>
         <line num="43" count="0" type="stmt"/>
         <line num="45" count="0" type="stmt"/>
@@ -240,30 +211,30 @@
         <line num="47" count="0" type="stmt"/>
         <line num="50" count="0" type="stmt"/>
       </file>
-      <file name="users.ts" path="C:\Users\leena\WebstormProjects\seg-large-group\backend\db\users.ts">
+      <file name="users.ts" path="/Users/shivamacharya/uni/seg/large-group/backend/db/users.ts">
         <metrics statements="114" coveredstatements="58" conditionals="39" coveredconditionals="12" methods="16" coveredmethods="5"/>
-        <line num="1" count="12" type="stmt"/>
-        <line num="2" count="12" type="stmt"/>
-        <line num="3" count="12" type="stmt"/>
-        <line num="5" count="12" type="stmt"/>
-        <line num="8" count="12" type="stmt"/>
-        <line num="9" count="6" type="stmt"/>
-        <line num="23" count="12" type="stmt"/>
-        <line num="26" count="6" type="stmt"/>
-        <line num="29" count="6" type="stmt"/>
-        <line num="31" count="6" type="cond" truecount="0" falsecount="1"/>
+        <line num="1" count="8" type="stmt"/>
+        <line num="2" count="8" type="stmt"/>
+        <line num="3" count="8" type="stmt"/>
+        <line num="5" count="8" type="stmt"/>
+        <line num="8" count="8" type="stmt"/>
+        <line num="9" count="2" type="stmt"/>
+        <line num="23" count="8" type="stmt"/>
+        <line num="26" count="5" type="stmt"/>
+        <line num="29" count="5" type="stmt"/>
+        <line num="31" count="5" type="cond" truecount="0" falsecount="1"/>
         <line num="32" count="0" type="stmt"/>
-        <line num="35" count="6" type="stmt"/>
-        <line num="37" count="6" type="cond" truecount="1" falsecount="0"/>
-        <line num="38" count="2" type="stmt"/>
-        <line num="40" count="2" type="cond" truecount="0" falsecount="1"/>
-        <line num="42" count="2" type="stmt"/>
+        <line num="35" count="5" type="stmt"/>
+        <line num="37" count="5" type="cond" truecount="1" falsecount="0"/>
+        <line num="38" count="1" type="stmt"/>
+        <line num="40" count="1" type="cond" truecount="0" falsecount="1"/>
+        <line num="42" count="1" type="stmt"/>
         <line num="45" count="4" type="cond" truecount="1" falsecount="0"/>
         <line num="46" count="4" type="stmt"/>
         <line num="48" count="4" type="cond" truecount="0" falsecount="1"/>
         <line num="50" count="4" type="stmt"/>
         <line num="53" count="0" type="stmt"/>
-        <line num="56" count="12" type="stmt"/>
+        <line num="56" count="8" type="stmt"/>
         <line num="57" count="9" type="stmt"/>
         <line num="59" count="9" type="cond" truecount="1" falsecount="0"/>
         <line num="61" count="8" type="cond" truecount="0" falsecount="1"/>
@@ -278,7 +249,7 @@
         <line num="76" count="6" type="stmt"/>
         <line num="79" count="0" type="stmt"/>
         <line num="81" count="0" type="stmt"/>
-        <line num="85" count="12" type="stmt"/>
+        <line num="85" count="8" type="stmt"/>
         <line num="87" count="0" type="stmt"/>
         <line num="89" count="0" type="stmt"/>
         <line num="91" count="0" type="stmt"/>
@@ -304,19 +275,19 @@
         <line num="126" count="0" type="stmt"/>
         <line num="130" count="0" type="cond" truecount="0" falsecount="1"/>
         <line num="131" count="0" type="stmt"/>
-        <line num="137" count="12" type="stmt"/>
-        <line num="138" count="6" type="stmt"/>
-        <line num="139" count="6" type="cond" truecount="0" falsecount="1"/>
+        <line num="137" count="8" type="stmt"/>
+        <line num="138" count="5" type="stmt"/>
+        <line num="139" count="5" type="cond" truecount="0" falsecount="1"/>
         <line num="140" count="0" type="stmt"/>
-        <line num="143" count="6" type="stmt"/>
-        <line num="144" count="6" type="stmt"/>
-        <line num="145" count="6" type="stmt"/>
-        <line num="146" count="6" type="stmt"/>
-        <line num="148" count="6" type="cond" truecount="2" falsecount="0"/>
-        <line num="149" count="2" type="stmt"/>
+        <line num="143" count="5" type="stmt"/>
+        <line num="144" count="5" type="stmt"/>
+        <line num="145" count="5" type="stmt"/>
+        <line num="146" count="5" type="stmt"/>
+        <line num="148" count="5" type="cond" truecount="2" falsecount="0"/>
+        <line num="149" count="1" type="stmt"/>
         <line num="150" count="4" type="cond" truecount="1" falsecount="0"/>
         <line num="151" count="4" type="stmt"/>
-        <line num="156" count="12" type="stmt"/>
+        <line num="156" count="8" type="stmt"/>
         <line num="157" count="2" type="stmt"/>
         <line num="158" count="2" type="cond" truecount="0" falsecount="1"/>
         <line num="159" count="0" type="stmt"/>
@@ -326,7 +297,7 @@
         <line num="166" count="1" type="cond" truecount="1" falsecount="0"/>
         <line num="167" count="1" type="stmt"/>
         <line num="170" count="2" type="stmt"/>
-        <line num="173" count="12" type="stmt"/>
+        <line num="173" count="8" type="stmt"/>
         <line num="174" count="0" type="stmt"/>
         <line num="175" count="0" type="cond" truecount="0" falsecount="1"/>
         <line num="176" count="0" type="stmt"/>
@@ -334,184 +305,184 @@
         <line num="180" count="0" type="cond" truecount="0" falsecount="1"/>
         <line num="181" count="0" type="stmt"/>
         <line num="184" count="0" type="stmt"/>
-        <line num="188" count="12" type="stmt"/>
+        <line num="188" count="8" type="stmt"/>
         <line num="189" count="0" type="stmt"/>
         <line num="190" count="0" type="stmt"/>
         <line num="192" count="0" type="stmt"/>
         <line num="193" count="0" type="stmt"/>
         <line num="194" count="0" type="stmt"/>
         <line num="197" count="0" type="stmt"/>
-        <line num="200" count="12" type="stmt"/>
+        <line num="200" count="8" type="stmt"/>
         <line num="201" count="0" type="stmt"/>
         <line num="202" count="0" type="stmt"/>
         <line num="204" count="0" type="stmt"/>
         <line num="205" count="0" type="stmt"/>
         <line num="206" count="0" type="stmt"/>
         <line num="209" count="0" type="stmt"/>
-        <line num="212" count="12" type="stmt"/>
+        <line num="212" count="8" type="stmt"/>
         <line num="213" count="0" type="stmt"/>
         <line num="214" count="0" type="cond" truecount="0" falsecount="1"/>
         <line num="215" count="0" type="stmt"/>
-        <line num="218" count="12" type="stmt"/>
+        <line num="218" count="8" type="stmt"/>
         <line num="219" count="0" type="stmt"/>
         <line num="220" count="0" type="cond" truecount="0" falsecount="1"/>
         <line num="221" count="0" type="stmt"/>
       </file>
     </package>
     <package name="models">
-      <metrics statements="72" coveredstatements="64" conditionals="0" coveredconditionals="0" methods="20" coveredmethods="16"/>
-      <file name="application.ts" path="C:\Users\leena\WebstormProjects\seg-large-group\backend\models\application.ts">
-        <metrics statements="11" coveredstatements="10" conditionals="0" coveredconditionals="0" methods="3" coveredmethods="2"/>
-        <line num="15" count="2" type="stmt"/>
-        <line num="16" count="2" type="stmt"/>
-        <line num="17" count="2" type="stmt"/>
-        <line num="18" count="2" type="stmt"/>
-        <line num="19" count="2" type="stmt"/>
-        <line num="20" count="2" type="stmt"/>
-        <line num="21" count="2" type="stmt"/>
-        <line num="26" count="12" type="stmt"/>
-        <line num="27" count="1" type="stmt"/>
+      <metrics statements="72" coveredstatements="35" conditionals="0" coveredconditionals="0" methods="20" coveredmethods="9"/>
+      <file name="application.ts" path="/Users/shivamacharya/uni/seg/large-group/backend/models/application.ts">
+        <metrics statements="11" coveredstatements="2" conditionals="0" coveredconditionals="0" methods="3" coveredmethods="0"/>
+        <line num="15" count="0" type="stmt"/>
+        <line num="16" count="0" type="stmt"/>
+        <line num="17" count="0" type="stmt"/>
+        <line num="18" count="0" type="stmt"/>
+        <line num="19" count="0" type="stmt"/>
+        <line num="20" count="0" type="stmt"/>
+        <line num="21" count="0" type="stmt"/>
+        <line num="26" count="8" type="stmt"/>
+        <line num="27" count="0" type="stmt"/>
         <line num="28" count="0" type="stmt"/>
-        <line num="31" count="12" type="stmt"/>
+        <line num="31" count="8" type="stmt"/>
       </file>
-      <file name="job.ts" path="C:\Users\leena\WebstormProjects\seg-large-group\backend\models\job.ts">
-        <metrics statements="20" coveredstatements="20" conditionals="0" coveredconditionals="0" methods="3" coveredmethods="3"/>
-        <line num="40" count="3" type="stmt"/>
-        <line num="41" count="3" type="stmt"/>
-        <line num="42" count="3" type="stmt"/>
-        <line num="43" count="3" type="stmt"/>
-        <line num="44" count="3" type="stmt"/>
-        <line num="45" count="3" type="stmt"/>
-        <line num="46" count="3" type="stmt"/>
-        <line num="47" count="3" type="stmt"/>
-        <line num="48" count="3" type="stmt"/>
-        <line num="49" count="3" type="stmt"/>
-        <line num="50" count="3" type="stmt"/>
-        <line num="51" count="3" type="stmt"/>
-        <line num="52" count="3" type="stmt"/>
-        <line num="53" count="3" type="stmt"/>
-        <line num="54" count="3" type="stmt"/>
-        <line num="55" count="3" type="stmt"/>
-        <line num="59" count="12" type="stmt"/>
-        <line num="60" count="2" type="stmt"/>
-        <line num="61" count="3" type="stmt"/>
-        <line num="64" count="12" type="stmt"/>
+      <file name="job.ts" path="/Users/shivamacharya/uni/seg/large-group/backend/models/job.ts">
+        <metrics statements="20" coveredstatements="2" conditionals="0" coveredconditionals="0" methods="3" coveredmethods="0"/>
+        <line num="40" count="0" type="stmt"/>
+        <line num="41" count="0" type="stmt"/>
+        <line num="42" count="0" type="stmt"/>
+        <line num="43" count="0" type="stmt"/>
+        <line num="44" count="0" type="stmt"/>
+        <line num="45" count="0" type="stmt"/>
+        <line num="46" count="0" type="stmt"/>
+        <line num="47" count="0" type="stmt"/>
+        <line num="48" count="0" type="stmt"/>
+        <line num="49" count="0" type="stmt"/>
+        <line num="50" count="0" type="stmt"/>
+        <line num="51" count="0" type="stmt"/>
+        <line num="52" count="0" type="stmt"/>
+        <line num="53" count="0" type="stmt"/>
+        <line num="54" count="0" type="stmt"/>
+        <line num="55" count="0" type="stmt"/>
+        <line num="59" count="8" type="stmt"/>
+        <line num="60" count="0" type="stmt"/>
+        <line num="61" count="0" type="stmt"/>
+        <line num="64" count="8" type="stmt"/>
       </file>
-      <file name="notification.ts" path="C:\Users\leena\WebstormProjects\seg-large-group\backend\models\notification.ts">
+      <file name="notification.ts" path="/Users/shivamacharya/uni/seg/large-group/backend/models/notification.ts">
         <metrics statements="9" coveredstatements="2" conditionals="0" coveredconditionals="0" methods="3" coveredmethods="0"/>
         <line num="10" count="0" type="stmt"/>
         <line num="11" count="0" type="stmt"/>
         <line num="12" count="0" type="stmt"/>
         <line num="13" count="0" type="stmt"/>
         <line num="14" count="0" type="stmt"/>
-        <line num="18" count="12" type="stmt"/>
+        <line num="18" count="8" type="stmt"/>
         <line num="19" count="0" type="stmt"/>
         <line num="20" count="0" type="stmt"/>
-        <line num="23" count="12" type="stmt"/>
+        <line num="23" count="8" type="stmt"/>
       </file>
-      <file name="user.ts" path="C:\Users\leena\WebstormProjects\seg-large-group\backend\models\user.ts">
-        <metrics statements="32" coveredstatements="32" conditionals="0" coveredconditionals="0" methods="11" coveredmethods="11"/>
-        <line num="16" count="20" type="stmt"/>
-        <line num="17" count="20" type="stmt"/>
-        <line num="18" count="20" type="stmt"/>
-        <line num="19" count="20" type="stmt"/>
-        <line num="20" count="20" type="stmt"/>
-        <line num="21" count="20" type="stmt"/>
-        <line num="22" count="20" type="stmt"/>
-        <line num="23" count="20" type="stmt"/>
-        <line num="24" count="20" type="stmt"/>
-        <line num="45" count="14" type="stmt"/>
-        <line num="46" count="14" type="stmt"/>
-        <line num="47" count="14" type="stmt"/>
-        <line num="51" count="14" type="stmt"/>
-        <line num="75" count="2" type="stmt"/>
-        <line num="76" count="2" type="stmt"/>
-        <line num="97" count="4" type="stmt"/>
-        <line num="98" count="4" type="stmt"/>
-        <line num="99" count="4" type="stmt"/>
-        <line num="100" count="4" type="stmt"/>
-        <line num="101" count="4" type="stmt"/>
-        <line num="102" count="4" type="stmt"/>
-        <line num="103" count="4" type="stmt"/>
-        <line num="107" count="12" type="stmt"/>
-        <line num="108" count="6" type="stmt"/>
-        <line num="109" count="14" type="stmt"/>
-        <line num="112" count="12" type="stmt"/>
-        <line num="113" count="2" type="stmt"/>
-        <line num="114" count="4" type="stmt"/>
-        <line num="117" count="12" type="stmt"/>
-        <line num="118" count="4" type="stmt"/>
-        <line num="119" count="20" type="stmt"/>
-        <line num="122" count="12" type="stmt"/>
+      <file name="user.ts" path="/Users/shivamacharya/uni/seg/large-group/backend/models/user.ts">
+        <metrics statements="32" coveredstatements="29" conditionals="0" coveredconditionals="0" methods="11" coveredmethods="9"/>
+        <line num="16" count="15" type="stmt"/>
+        <line num="17" count="15" type="stmt"/>
+        <line num="18" count="15" type="stmt"/>
+        <line num="19" count="15" type="stmt"/>
+        <line num="20" count="15" type="stmt"/>
+        <line num="21" count="15" type="stmt"/>
+        <line num="22" count="15" type="stmt"/>
+        <line num="23" count="15" type="stmt"/>
+        <line num="24" count="15" type="stmt"/>
+        <line num="45" count="13" type="stmt"/>
+        <line num="46" count="13" type="stmt"/>
+        <line num="47" count="13" type="stmt"/>
+        <line num="51" count="13" type="stmt"/>
+        <line num="75" count="0" type="stmt"/>
+        <line num="76" count="0" type="stmt"/>
+        <line num="97" count="2" type="stmt"/>
+        <line num="98" count="2" type="stmt"/>
+        <line num="99" count="2" type="stmt"/>
+        <line num="100" count="2" type="stmt"/>
+        <line num="101" count="2" type="stmt"/>
+        <line num="102" count="2" type="stmt"/>
+        <line num="103" count="2" type="stmt"/>
+        <line num="107" count="8" type="stmt"/>
+        <line num="108" count="2" type="stmt"/>
+        <line num="109" count="13" type="stmt"/>
+        <line num="112" count="8" type="stmt"/>
+        <line num="113" count="0" type="stmt"/>
+        <line num="114" count="3" type="stmt"/>
+        <line num="117" count="8" type="stmt"/>
+        <line num="118" count="2" type="stmt"/>
+        <line num="119" count="45" type="stmt"/>
+        <line num="122" count="8" type="stmt"/>
       </file>
     </package>
     <package name="service">
       <metrics statements="75" coveredstatements="71" conditionals="2" coveredconditionals="1" methods="4" coveredmethods="2"/>
-      <file name="public.ts" path="C:\Users\leena\WebstormProjects\seg-large-group\backend\service\public.ts">
+      <file name="public.ts" path="/Users/shivamacharya/uni/seg/large-group/backend/service/public.ts">
         <metrics statements="61" coveredstatements="59" conditionals="1" coveredconditionals="0" methods="1" coveredmethods="0"/>
-        <line num="8" count="12" type="stmt"/>
+        <line num="8" count="8" type="stmt"/>
         <line num="9" count="0" type="cond" truecount="0" falsecount="1"/>
         <line num="10" count="0" type="stmt"/>
-        <line num="22" count="12" type="stmt"/>
-        <line num="24" count="12" type="stmt"/>
-        <line num="25" count="12" type="stmt"/>
-        <line num="26" count="12" type="stmt"/>
-        <line num="27" count="12" type="stmt"/>
-        <line num="28" count="12" type="stmt"/>
-        <line num="29" count="12" type="stmt"/>
-        <line num="30" count="12" type="stmt"/>
-        <line num="31" count="12" type="stmt"/>
-        <line num="32" count="12" type="stmt"/>
-        <line num="33" count="12" type="stmt"/>
-        <line num="34" count="12" type="stmt"/>
-        <line num="35" count="12" type="stmt"/>
-        <line num="36" count="12" type="stmt"/>
-        <line num="37" count="12" type="stmt"/>
-        <line num="38" count="12" type="stmt"/>
-        <line num="39" count="12" type="stmt"/>
-        <line num="40" count="12" type="stmt"/>
-        <line num="41" count="12" type="stmt"/>
-        <line num="42" count="12" type="stmt"/>
-        <line num="43" count="12" type="stmt"/>
-        <line num="44" count="12" type="stmt"/>
-        <line num="45" count="12" type="stmt"/>
-        <line num="46" count="12" type="stmt"/>
-        <line num="47" count="12" type="stmt"/>
-        <line num="48" count="12" type="stmt"/>
-        <line num="49" count="12" type="stmt"/>
-        <line num="50" count="12" type="stmt"/>
-        <line num="51" count="12" type="stmt"/>
-        <line num="52" count="12" type="stmt"/>
-        <line num="53" count="12" type="stmt"/>
-        <line num="54" count="12" type="stmt"/>
-        <line num="55" count="12" type="stmt"/>
-        <line num="56" count="12" type="stmt"/>
-        <line num="57" count="12" type="stmt"/>
-        <line num="58" count="12" type="stmt"/>
-        <line num="59" count="12" type="stmt"/>
-        <line num="60" count="12" type="stmt"/>
-        <line num="61" count="12" type="stmt"/>
-        <line num="62" count="12" type="stmt"/>
-        <line num="63" count="12" type="stmt"/>
-        <line num="64" count="12" type="stmt"/>
-        <line num="65" count="12" type="stmt"/>
-        <line num="66" count="12" type="stmt"/>
-        <line num="67" count="12" type="stmt"/>
-        <line num="68" count="12" type="stmt"/>
-        <line num="69" count="12" type="stmt"/>
-        <line num="70" count="12" type="stmt"/>
-        <line num="71" count="12" type="stmt"/>
-        <line num="72" count="12" type="stmt"/>
-        <line num="73" count="12" type="stmt"/>
-        <line num="74" count="12" type="stmt"/>
-        <line num="75" count="12" type="stmt"/>
-        <line num="76" count="12" type="stmt"/>
-        <line num="77" count="12" type="stmt"/>
-        <line num="78" count="12" type="stmt"/>
-        <line num="79" count="12" type="stmt"/>
-        <line num="83" count="12" type="stmt"/>
+        <line num="22" count="8" type="stmt"/>
+        <line num="24" count="8" type="stmt"/>
+        <line num="25" count="8" type="stmt"/>
+        <line num="26" count="8" type="stmt"/>
+        <line num="27" count="8" type="stmt"/>
+        <line num="28" count="8" type="stmt"/>
+        <line num="29" count="8" type="stmt"/>
+        <line num="30" count="8" type="stmt"/>
+        <line num="31" count="8" type="stmt"/>
+        <line num="32" count="8" type="stmt"/>
+        <line num="33" count="8" type="stmt"/>
+        <line num="34" count="8" type="stmt"/>
+        <line num="35" count="8" type="stmt"/>
+        <line num="36" count="8" type="stmt"/>
+        <line num="37" count="8" type="stmt"/>
+        <line num="38" count="8" type="stmt"/>
+        <line num="39" count="8" type="stmt"/>
+        <line num="40" count="8" type="stmt"/>
+        <line num="41" count="8" type="stmt"/>
+        <line num="42" count="8" type="stmt"/>
+        <line num="43" count="8" type="stmt"/>
+        <line num="44" count="8" type="stmt"/>
+        <line num="45" count="8" type="stmt"/>
+        <line num="46" count="8" type="stmt"/>
+        <line num="47" count="8" type="stmt"/>
+        <line num="48" count="8" type="stmt"/>
+        <line num="49" count="8" type="stmt"/>
+        <line num="50" count="8" type="stmt"/>
+        <line num="51" count="8" type="stmt"/>
+        <line num="52" count="8" type="stmt"/>
+        <line num="53" count="8" type="stmt"/>
+        <line num="54" count="8" type="stmt"/>
+        <line num="55" count="8" type="stmt"/>
+        <line num="56" count="8" type="stmt"/>
+        <line num="57" count="8" type="stmt"/>
+        <line num="58" count="8" type="stmt"/>
+        <line num="59" count="8" type="stmt"/>
+        <line num="60" count="8" type="stmt"/>
+        <line num="61" count="8" type="stmt"/>
+        <line num="62" count="8" type="stmt"/>
+        <line num="63" count="8" type="stmt"/>
+        <line num="64" count="8" type="stmt"/>
+        <line num="65" count="8" type="stmt"/>
+        <line num="66" count="8" type="stmt"/>
+        <line num="67" count="8" type="stmt"/>
+        <line num="68" count="8" type="stmt"/>
+        <line num="69" count="8" type="stmt"/>
+        <line num="70" count="8" type="stmt"/>
+        <line num="71" count="8" type="stmt"/>
+        <line num="72" count="8" type="stmt"/>
+        <line num="73" count="8" type="stmt"/>
+        <line num="74" count="8" type="stmt"/>
+        <line num="75" count="8" type="stmt"/>
+        <line num="76" count="8" type="stmt"/>
+        <line num="77" count="8" type="stmt"/>
+        <line num="78" count="8" type="stmt"/>
+        <line num="79" count="8" type="stmt"/>
+        <line num="83" count="8" type="stmt"/>
       </file>
-      <file name="tokens.ts" path="C:\Users\leena\WebstormProjects\seg-large-group\backend\service\tokens.ts">
+      <file name="tokens.ts" path="/Users/shivamacharya/uni/seg/large-group/backend/service/tokens.ts">
         <metrics statements="14" coveredstatements="12" conditionals="1" coveredconditionals="1" methods="3" coveredmethods="2"/>
         <line num="1" count="1" type="stmt"/>
         <line num="2" count="1" type="stmt"/>

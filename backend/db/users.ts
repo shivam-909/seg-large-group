@@ -2,16 +2,7 @@ import { User, UserExpanded } from "../models/user";
 import * as companiesdb from "./companies";
 import * as searchersdb from "./searchers";
 import DB from "./db";
-import {
-  ErrorCompanyNotFound,
-  ErrorInvalidUserType,
-  ErrorMultipleUsersFound,
-  ErrorSearcherNotFound,
-  ErrorUserNotFound
-} from "../service/public";
-import * as errors from "../../backend/service/public";
-
-import 'express-async-errors';
+import { ErrorCompanyNotFound, ErrorMultipleUsersFound, ErrorSearcherNotFound, ErrorUserNotFound } from "../service/public";
 
 
 export async function CreateUser(db: DB, user: User) {
@@ -59,7 +50,7 @@ export async function RetrieveFullUserByID(db: DB, id: string): Promise<UserExpa
     return UserExpanded.fromUser(user, undefined, searcher);
   }
 
-  throw new Error(errors.ErrorInvalidUserType);
+  throw new Error('invalid user type');
 }
 
 export async function RetrieveFullUserByEmail(db: DB, email: string): Promise<UserExpanded | null> {
@@ -85,7 +76,9 @@ export async function RetrieveFullUserByEmail(db: DB, email: string): Promise<Us
     return UserExpanded.fromUser(user, undefined, searcher);
   }
 
-  throw new Error(errors.ErrorInvalidUserType);
+  console.log(user)
+
+  throw new Error('invalid user type');
 }
 
 
