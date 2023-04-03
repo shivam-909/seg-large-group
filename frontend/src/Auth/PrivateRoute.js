@@ -12,7 +12,7 @@ export default function PrivateRoutes() {
             const token = localStorage.getItem("access");
             if (token) {
                 await axios.post(`${process.env.REACT_APP_BACKEND_URL}api/echo`, {}, {headers: {Authorization: `Bearer ${token}`}})
-                    .then(() => setIsLoggedIn(true))
+                    .then(res => setIsLoggedIn(res !== undefined))
                     .catch(() => setIsLoggedIn(false));
             } else {
                 setIsLoggedIn(false);
