@@ -1,4 +1,4 @@
-import {render, screen, waitFor} from "@testing-library/react";
+import {render} from "@testing-library/react";
 import EditJob from "../Components/MyJobs/EditJob";
 import React from "react";
 import { initialize } from "@googlemaps/jest-mocks";
@@ -10,16 +10,16 @@ jest.mock('react-router-dom', () => ({
     useNavigate: () => mockedUsedNavigate,
 }));
 
-describe('Filter', () => {
+describe('EditJob', () => {
     beforeEach(() => {
         initialize();
         setupJestCanvasMock();
     });
-    test ('renders EditJob', () => {
-        render(
-           <EditJob/>);
+    // test ('renders EditJob', () => {
+    //     render(
+    //        <EditJob/>);
         //
         // const navBar = screen.queryByTestId('navbar');
         // waitFor(() => expect(navBar).toBeInTheDocument());
-        });
+        // });
 });

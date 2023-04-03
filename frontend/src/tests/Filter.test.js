@@ -57,7 +57,7 @@ describe('Filter', () => {
             <Filters {...props}/>
         );
         waitFor(() => {expect(screen.getByText('Show filters')).toBeVisible()});
-        act(() => {userEvent.click(screen.getByText('Show filters'))});
+        userEvent.click(screen.getByText('Show filters'));
     });
 
     test('clear filter button resets filters', () => {

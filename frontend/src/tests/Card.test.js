@@ -31,4 +31,5 @@ describe ('Card component', () => {
         const aName = screen.getByTestId('id-input');
         expect(aName).toBeInTheDocument();
     });
+
 });
