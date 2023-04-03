@@ -1,12 +1,12 @@
 import React from 'react';
-import { render, screen, configure} from '@testing-library/react';
+import { render, screen} from '@testing-library/react';
 import Card from '../Components/MyJobs/Card';
 
 describe ('Card component', () => {
-    const cardProps ={
+    const cardProps = {
         name:'Test',
         id: 1,
-        defaultVal:1
+        defaultVal: null
     };
 
     it ('should render component on the screen', () => {
@@ -14,22 +14,16 @@ describe ('Card component', () => {
         expect(true).toBeTruthy();
     });
 
-    // it('should delete skill when button is clicked', () => {
-    //     const {getByTestId} = render (<Card {...cardProps}/>);
-    //
-    //     const deleteButton = screen.getByTestId('delete-button');
-    //     expect(deleteButton).getByRole('button', {name: /delete/i}).toBeInTheDocument();
-    // });
+    it('shows delete button', () => {
+        render (<Card {...cardProps} isEditing={true}/>);
 
-    // it('should render name', () => {
-    //     render (<Card {...cardProps}/>);
-    //     const aName = screen.getByText(cardProps.name);
-    //     expect(aName).toBeInTheDocument();
-    // });
-    //
-    // it('should render id', () => {
-    //     render(<Card {...cardProps}/>);
-    //     const anId = screen.getByText(cardProps.id);
-    //     expect(anId).toBeInTheDocument();
-    // });
+        const deleteButton = screen.getByRole('button');
+        expect(deleteButton).toBeInTheDocument();
+        });
+
+    it('should render id', () => {
+        render (<Card {...cardProps}/>);
+        const aName = screen.getByTestId('id-input');
+        expect(aName).toBeInTheDocument();
+    });
 });

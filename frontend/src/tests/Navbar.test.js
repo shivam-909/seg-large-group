@@ -113,39 +113,4 @@ describe('Navbar', () => {
     // Check that the "Log Out" link is not rendered
     const logoutLink = screen.queryByRole('link', { name: 'Log Out' });
   });
-  // 
-  // it('should log out the user when Log Out link is clicked', async () => {
-  //   // Set the isLoggedIn state to true
-  //   const isLoggedIn = true;
-  //
-  //   // Mock the localStorage.getItem function to return a valid token
-  //   const localStorageMock = {
-  //     getItem: jest.fn(() => 'valid_token'),
-  //     removeItem: jest.fn()
-  //   };
-  //   Object.defineProperty(window, 'localStorage', {
-  //     value: localStorageMock,
-  //     writable: true
-  //   });
-  //
-  //   // Mock the axios.post function to return a valid response
-  //   //const axiosPostMock = jest.fn(() => Promise.resolve({ data: 123 }));
-  //   jest.mock('axios', () => ({
-  //     post: jest.fn(() => Promise.resolve({ data: 123 }))
-  //   }));
-  //
-  //   render(<Navbar />);
-  //
-  //   // Check that the "Log Out" link is rendered
-  //   // const logoutLink = screen.getByRole('link', { name: 'Log Out' });
-  //   // userEvent.click(logoutLink);
-  //   // expect(localStorage.getItem("access")).toBeNull();
-  //   const logoutLink = screen.getByText("Log Out");
-  //   fireEvent.click(logoutLink);
-  //
-  //   expect(localStorageMock.removeItem).toHaveBeenCalledWith("access");
-  //   expect(localStorageMock.getItem("access")).toBeNull();
-  // });
-
-
 });

@@ -1,10 +1,3 @@
-import { render } from "@testing-library/react";
-import { Outlet, Navigate } from 'react-router-dom';
-import { useEffect, useState } from "react";
-import { GetData } from "../Auth/GetUser";
-import RefreshToken from "../Auth/RefreshToken";
-import CompanyRoute from "../Auth/CompanyRoute";
-
 jest.mock("../Auth/RefreshToken");
 jest.mock("../Auth/GetUser");
 

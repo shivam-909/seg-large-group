@@ -1,7 +1,4 @@
-import { render, screen } from '@testing-library/react';
 import { validateField, setVisible } from '../Components/Validation/validate';
-import {BrowserRouter, Route, Routes} from "react-router-dom";
-
 
 describe('validate', () => {
   describe('validateField', () => {

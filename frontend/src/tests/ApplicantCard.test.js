@@ -1,43 +1,38 @@
 import React from 'react';
-import { render, fireEvent, screen } from '@testing-library/react';
-import ApplicantCard from '../Components/Applicants/ApplicantCard';
-import {BrowserRouter, Route, Routes, useNavigate} from "react-router-dom";
 
+import {render, screen, waitFor} from '@testing-library/react';
+import ApplicantCard from '../Components/Applicants/ApplicantCard';
+
+const mockedUsedNavigate = jest.fn();
+jest.mock('react-router-dom', () => ({
+    ...jest.requireActual('react-router-dom'),
+    useNavigate: () => mockedUsedNavigate,
+}));
 
 describe('ApplicantsCard', () => {
-    test('renders ApplicantsCard correctly', () => {
-        const props = {
+    const props = {
             id: '1',
             name: 'Test1',
             pfpUrl:'',
             email: 'test@gmail.com',
             status: 'Hired'
         };
-        render(
-            <BrowserRouter>
-                <Routes>
-                    <Route element={< ApplicantCard {...props}/>} />
-                </Routes>
-            </BrowserRouter>
-    );
+
+    test('renders the name', () => {
+        render(<ApplicantCard {...props}/>);
+        const name = screen.getByText(props.name);
+        expect(name).toBeInTheDocument();
     });
 
+    test('renders the email', () => {
+        render(<ApplicantCard {...props}/>);
+        const email = screen.getByText(props.email);
+        expect(email).toBeInTheDocument();
+    });
+
+    test('renders the status', () => {
+        render(<ApplicantCard {...props}/>);
+        const status = screen.getByText(props.status);
+        expect(status).toBeInTheDocument();
+    });
 });
-//
-//     test ('render with props', () => {
-//         const props = {
-//             id: '1',
-//             name: 'Test1',
-//             email: 'test@gmail.com',
-//             status: 'Hired'
-//         };
-//         const  { getByLabelText, getByText } = render(<ApplicantCard {...props} />);
-//         const skillInput = getByLabelText('Skill');
-//         const durationInput = getByLabelText('Duration');
-//         const intervalSelect = getByLabelText('Interval');
-//         const deleteButton = getByText('Delete');
-//
-//
-//
-//     });
-// });

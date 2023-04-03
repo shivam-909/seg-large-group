@@ -10,7 +10,7 @@ import axios from "axios";
 import {useNavigate, useParams} from "react-router-dom";
 import Loading from "../Loading/Loading";
 import {Location} from "./Location";
-import {Document, Page, pdfjs } from "react-pdf/dist/cjs/entry.webpack";
+import { Document, Page, pdfjs } from 'react-pdf';
 import RefreshToken from "../../Auth/RefreshToken";
 
 function UserProfilePage() {

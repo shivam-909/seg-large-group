@@ -62,18 +62,18 @@ export default function Applicants() {
     }
 
     return (
-        <div>
+        <div data-testid='navbar'>
             <PrivateRoutes/>
             <Navbar/>
             <div className='bg-lighter-grey min-h-screen justify-center flex'>
                 <div className='bg-white mt-24 rounded-md px-12 py-7 space-y-3 min-w-[45%]'>
                     <button onClick={() => {navigate(-1)}} className={"float-left mb-5 text-3xl text-red"}><i className="fa-regular fa-circle-xmark"></i></button>
                     <p className='font-bold text-3xl flex justify-center'>Applicants</p>
-                    <ul className={"border-b-2 border-grey flex relative"}>
+                    <ul aria-labelledby='navbar-heading' className={"border-b-2 border-grey flex relative"}>
                         <li className={"filterJobs"}><button id={"Applied"} className={"filters"} onClick={() => changeFilter("Applied")} disabled={filter==="Applied"}>Applied</button></li>
                         <li className={"filterJobs"}><button id={"Interview"} className={"filters"} onClick={() => changeFilter("Interview")} disabled={filter==="Interview"}>Interviews</button></li>
                         <li className={"filterJobs"}><button id={"Rejected"} className={"filters"} onClick={() => changeFilter("Rejected")} disabled={filter==="Rejected"}>Rejected</button></li>
-                        <li className={"filterJobs"}><button id={"Rejected"} className={"filters"} onClick={() => changeFilter("Hired")} disabled={filter==="Hired"}>Hired</button></li>
+                        <li className={"filterJobs"}><button id={"Hired"} className={"filters"} onClick={() => changeFilter("Hired")} disabled={filter==="Hired"}>Hired</button></li>
                     </ul>
                     <div className='items-center justify-center flex relative w-full'>
                         {!loading ? <div className={"display-block w-full"}>

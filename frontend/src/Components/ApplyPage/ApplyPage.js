@@ -178,7 +178,7 @@ export default function ApplyPage() {
     return (
         <div>
             {!loading ?  (ID ?
-                <div>
+                <div data-testid='navbar'>
                     <Navbar/>
                     <div className='mt-36 flex flex-col items-center'>
                         <div>

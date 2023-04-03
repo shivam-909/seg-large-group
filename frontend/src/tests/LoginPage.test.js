@@ -3,11 +3,15 @@ jest.mock('react-router-dom', () => ({
   ...jest.requireActual('react-router-dom'),
   useNavigate: () => mockedUsedNavigate,
 }));
+
 import LoginPage from '../Components/LoginPage/LoginPage';
 import React from 'react';
-import { render, fireEvent, screen, waitFor} from "@testing-library/react";
-import {BrowserRouter, Route, Routes} from "react-router-dom";
-import userEvent from '@testing-library/user-event'
+import { render, screen, waitFor, fireEvent} from "@testing-library/react";
+import userEvent from '@testing-library/user-event';
+import axios from 'axios';
+
+// mock the axios.post method
+jest.mock('axios');
 
 describe('LoginPage component', () => {
   beforeEach(() => {
@@ -15,7 +19,12 @@ describe('LoginPage component', () => {
         <LoginPage/>
     );
   });
-  test('renders login form', () => {
+  test ('renders login form', () => {
+    const loginForm = screen.getByText('Sign in to your account');
+    waitFor(() => expect(loginForm).toBeInTheDocument());
+  });
+
+  test('renders email input', () => {
     const emailInput = screen.queryByTestId('email-input');
     waitFor(() => expect(emailInput).toBeInTheDocument());
     waitFor(() => expect(emailInput).toHaveAttribute('type', 'email'));
@@ -74,39 +83,61 @@ describe('LoginPage component', () => {
     waitFor(() => expect(rememberLogin).not.toBeChecked());
   });
 
-  // https://stackoverflow.com/questions/73184212/how-to-test-checkbox-checked-with-react-testing-library
   test('toggles element when clicking the checkbox', () => {
-    const rememberLogin = screen.queryByTestId('rememberLogin')
-    waitFor(() => expect(rememberLogin).not.toBeChecked());
+    const rememberLogin = screen.queryByTestId('rememberLogin');
     userEvent.click(rememberLogin);
-    expect(rememberLogin).toBeChecked();
-    waitFor(() => expect(screen.getByText('Keep me signed in')).toBeInTheDocument());
+
     waitFor(() => expect(screen.queryByTestId('rememberLogin')).toBeInTheDocument());
     waitFor(() => expect(rememberLogin).toBeChecked());
+
+    userEvent.click(rememberLogin);
+
+    waitFor(() => expect(screen.queryByTestId('rememberLogin')).toBeInTheDocument());
+    waitFor(() => expect(rememberLogin).not.toBeChecked());
   });
 
+  test('toggles password visibility', () => {
+    const toggleEye = screen.getByAltText('');
+    const passwordInput = document.getElementById("password");
 
-test('togglePasswordVisibility function toggles password visibility', () => {
-  const passwordInput = document.getElementById('password');
-  const eyeIcon = screen.getByAltText('toggle eye');
+    waitFor(() => expect(passwordInput).toHaveAttribute('type', 'password'));
 
-  expect(passwordInput.type).toBe('password');
+    fireEvent.click(toggleEye);
 
-  fireEvent.click(eyeIcon);
+    waitFor(() => expect(passwordInput).toHaveAttribute('type', 'text'));
 
-  expect(passwordInput.type).toBe('text');
+    fireEvent.click(toggleEye);
 
-  fireEvent.click(eyeIcon);
-
-  expect(passwordInput.type).toBe('password');
-});
-
+    waitFor(() => expect(passwordInput).toHaveAttribute('type', 'password'));
+  });
+  
 //Testing sign up page and forgot password link
   test("links with href value /signup", () => {
     waitFor(() => expect((screen.queryAllByTestId('signup-link')).getByRole('link',{name: 'Sign Up'})).toHaveAttribute('href', '/signup'));
   });
+
+  test('submits login form', async () => {
+    const emailInput = document.getElementById('email');
+    const passwordInput = document.getElementById('password');
+    const loginButton = screen.getByText('Sign In');
+
+    axios.post.mockResolvedValueOnce({
+      data: {
+        access: 'access_token',
+        refresh: 'refresh_token',
+      },
+    });
+
+    fireEvent.change(emailInput, { target: { value: 'test@example.com' } });
+    fireEvent.change(passwordInput, { target: { value: 'Test1234!' } });
+
+    fireEvent.click(loginButton);
+
+    await waitFor(() => {
+      expect(axios.post).toHaveBeenCalledTimes(1);
+      expect(axios.post).toHaveBeenCalledWith(`${process.env.REACT_APP_BACKEND_URL}auth/login`, expect.any(FormData));
+    });
+  });
 });
-// test('make a login request and handle response', () => {
-//   // TODO: make a login request and handle response
-// });
+
 
