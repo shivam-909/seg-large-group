@@ -47,13 +47,16 @@ export async function FindJobListingsByQuery(db: DB, query: string): Promise<Job
 
     jobListingsSnapshot.forEach((doc) => {
         const jobListing = doc.data();
-        const title = jobListing.title.toLowerCase();
-        const description = jobListing.description.toLowerCase();
-        const industry = jobListing.industry.toLowerCase();
-        const requirements = jobListing.requirements?.map((r) => r.split(",")[0].toLowerCase());
+        const title = jobListing.title?.toLowerCase();
+        const description = jobListing.description?.toLowerCase();
+        const industry = jobListing.industry?.toLowerCase();
+        const requirements = Array.isArray(jobListing.requirements) ? jobListing.requirements.map((r) => r.split(",")[0].toLowerCase()) : undefined;
         const queryLength = query.length;
 
         [title, description, industry, ...(requirements ?? [])].forEach((textToSearch) => {
+            if (!textToSearch) {
+                return;
+            }
             const textLength = textToSearch.length;
             if (textLength >= queryLength) {
                 const index = boyerMoore(textToSearch, query);
@@ -64,9 +67,9 @@ export async function FindJobListingsByQuery(db: DB, query: string): Promise<Job
             }
         });
     });
-
     return results;
 }
+
 
 
 
