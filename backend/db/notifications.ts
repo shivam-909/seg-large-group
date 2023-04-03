@@ -1,24 +1,23 @@
 import Notification from "../models/notification";
 import DB from "./db";
 import * as usersdb from "./users";
+import {ErrorUserNotFound} from "../service/public";
+import * as errors from "../../backend/service/public";
 
 export async function CreateNotification(db: DB, notification: Notification): Promise<Notification> {
   const docRef = db.NotificationCollection().doc(notification.id);
   let user;
 
-  try {
-    await docRef.set({
+  await docRef.set({
       ...notification,
       id: notification.id,
-    },);
-  } catch (err) {
-    throw err;
-  }
+  },);
+
 
   user = await usersdb.RetrieveFullUserByID(db, notification.userID)
 
   if (user == null) {
-    throw new Error("user is null")
+    throw new Error(errors.ErrorUserNotFound);
   }
 
   user.notifications.push(notification.id)
