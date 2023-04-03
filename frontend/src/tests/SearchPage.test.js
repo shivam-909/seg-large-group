@@ -1,16 +1,18 @@
 import React from 'react';
 import { render , screen, fireEvent } from "@testing-library/react";
 import SearchPage from "../Components/SearchPage/SearchPage";
+import Autocomplete from "react-google-autocomplete";
 
 describe('SearchPage', () => {
   it('displays job search results when valid inputs are entered',() => {
-    // render(<SearchPage />);
-    // const jobTitleInput = screen.getByPlaceholderText('Job title');
-    // const locationInput = screen.getByPlaceholderText('Location');
-    // const searchButton = screen.getByRole('button', {name: 'Search'});
-    // fireEvent.change(jobTitleInput, {target: {value:'Software Engineer'}});
-    // fireEvent.change(locationInput, {target: {value:'London, UK'}});
-    // fireEvent.click(searchButton);
+    render(<SearchPage />);
+    const jobTitleInput = screen.getByPlaceholderText('Job title');
+
+    const locationInput = screen.getByPlaceholderText('Location');
+    const searchButton = screen.getByRole('button', {name: 'Search'});
+    fireEvent.change(jobTitleInput, {target: {value:'Software Engineer'}});
+    fireEvent.change(locationInput, {target: {value:'London, UK'}});
+    fireEvent.click(searchButton);
 
   });
 

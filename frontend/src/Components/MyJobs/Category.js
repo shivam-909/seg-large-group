@@ -119,7 +119,8 @@ export default function Category(props) {
             <div className={"display-block w-full"}>
                 {jobsList}
             </div>
-                : <div><Loading className={"h-10 w-10 border-[3px] border-dark-theme-grey"}/></div>}
+                :
+            <div role='jobFound' ><Loading className={"h-10 w-10 border-[3px] border-dark-theme-grey"}/></div>}
         </div>
     );
 }
