@@ -62,12 +62,12 @@ export function Register(db: DB): Handler {
     }
 
     const s = ValidateRegistrationForm(
-      first_name,
-      last_name,
-      email,
-      password,
-      user_type === "company",
-      company_name,
+        first_name,
+        last_name,
+        email,
+        password,
+        user_type === "company",
+        company_name,
     );
 
     if (s !== "") {
@@ -91,29 +91,30 @@ export function Register(db: DB): Handler {
 
     const newUserID = randomUUID();
     const newUser = new User(newUserID, email, hash as string, pfp_url, location, []);
-
+    const typeID = randomUUID();
     switch (user_type) {
       case "company":
-        const newCompanyID = randomUUID();
-        newUser.companyID = newCompanyID;
-        const newCompany = new Company(company_name, newCompanyID);
+        newUser.companyID = typeID;
+        const newCompany = new Company(company_name, typeID);
 
         await CreateCompany(db, newUser, newCompany);
         break;
 
       case "searcher":
-        const newSearcherID = randomUUID();
-        newUser.searcherID = newSearcherID;
-        const newSearcher = new Searcher(first_name, last_name, [], newSearcherID, [], [], []);
+        newUser.searcherID = typeID;
+        const newSearcher = new Searcher(first_name, last_name, [], typeID, [], [], []);
 
         await CreateSearcher(db, newUser, newSearcher);
         break;
     }
 
-    const { access, refresh } = await GenerateKeyPair(newUser.userID);
+    const { access, refresh } = GenerateKeyPair(newUser.userID);
     return res.status(200).json({
       access,
       refresh,
+      typeID,
+      newUserID
+
     })
   }
 }
