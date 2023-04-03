@@ -1,22 +1,42 @@
-import { render , screen } from "@testing-library/react";
+const mockedUsedNavigate = jest.fn();
+jest.mock('react-router-dom', () => ({
+  ...jest.requireActual('react-router-dom'),
+  useNavigate: () => mockedUsedNavigate,
+}));
+import {render, screen, waitFor} from "@testing-library/react";
+import { initialize } from "@googlemaps/jest-mocks";
 import userEvent from '@testing-library/user-event';
 import SearchBar from "../Components/SearchPage/SearchBar";
 
-import {BrowserRouter, Route, Routes} from "react-router-dom";
-
 describe('SearchBar', () => {
-  test('renders Search Bar', () => {
-    render(<BrowserRouter><Routes><Route element={ <SearchBar/> }/></Routes></BrowserRouter>);
+  beforeEach(() => {
+    initialize();
   });
 
-//   it('renders the dropdown fields with options', () => {
-//     render(<BrowserRouter><Routes><Route element={ <SearchBar/> }/></Routes></BrowserRouter>);
-//     expect(screen.getByLabelText('Date')).toBeInTheDocument();
-//     expect(screen.getByLabelText('Distance')).toBeInTheDocument();
-//     expect(screen.getByLabelText('Salary')).toBeInTheDocument();
-//     expect(screen.getByLabelText('Job Type')).toBeInTheDocument();
-//     expect(screen.getByLabelText('Situation')).toBeInTheDocument();
-//
+  test('renders the dropdown fields with options', () => {
+    const props = {
+      defaultValue: "London",
+      displayJobTitleInputErrorMessage: false,
+      displayLocationInputErrorMessage: false,
+      onLocationInputChange: jest.fn(),
+      onJobTitleInputChange: jest.fn(),
+      onclick: jest.fn(),
+      Location: {
+        onChange: jest.fn(),
+        disabled: false,
+        defaultLocation: "London",
+      },
+    };
+    render(
+        <SearchBar {...props}/>
+    );
+    waitFor(() => {
+      expect(screen.getByPlaceholderText('Job title')).toBeInTheDocument()
+    });
+    waitFor(() => {
+      expect(screen.getByPlaceholderText('Search City...')).toBeInTheDocument()
+    });
+
 //     expect(screen.getByLabelText('Date')).toHaveValue('None');
 //     expect(screen.getByLabelText('Distance')).toHaveValue('None');
 //     expect(screen.getByLabelText('Salary')).toHaveValue('None');
@@ -67,5 +87,5 @@ describe('SearchBar', () => {
 //     expect(screen.getByLabelText('Situation')).toHaveValue('Remote');
 //
 //   });
-
+  });
 });

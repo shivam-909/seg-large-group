@@ -1,6 +1,8 @@
 import Notification from "../models/notification";
 import DB from "./db";
 import * as usersdb from "./users";
+import {ErrorUserNotFound} from "../service/public";
+import 'express-async-errors';
 
 export async function CreateNotification(db: DB, notification: Notification): Promise<Notification> {
   const docRef = db.NotificationCollection().doc(notification.id);
@@ -18,7 +20,7 @@ export async function CreateNotification(db: DB, notification: Notification): Pr
   user = await usersdb.RetrieveFullUserByID(db, notification.userID)
 
   if (user == null) {
-    throw new Error("user is null")
+    throw new Error(ErrorUserNotFound);
   }
 
   user.notifications.push(notification.id)

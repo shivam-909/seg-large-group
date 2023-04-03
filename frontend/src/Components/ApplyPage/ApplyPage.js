@@ -8,6 +8,7 @@ import axios from "axios";
 import {GetData} from "../../Auth/GetUser";
 import Loading from "../Loading/Loading";
 import RefreshToken from "../../Auth/RefreshToken";
+import {pdfjs} from "react-pdf/dist/cjs/entry.webpack";
 
 export default function ApplyPage() {
     const {id} = useParams();
@@ -74,6 +75,7 @@ export default function ApplyPage() {
     }
 
     useEffect(() => {
+        pdfjs.GlobalWorkerOptions.workerSrc = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
         setLoading(true);
         getApplication().catch(err => console.log(err));
     }, []); // eslint-disable-line

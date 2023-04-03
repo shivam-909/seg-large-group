@@ -2,6 +2,7 @@ import React from 'react';
 import {render, screen, waitFor} from '@testing-library/react';
 import Education from '../Components/ProfilePage/Education';
 import {BrowserRouter, Route, Routes} from "react-router-dom";
+import {act} from "react-test-renderer";
 
 describe("Education", () => {
   const mockProfile ={
@@ -21,7 +22,7 @@ describe("Education", () => {
     render(<Education profile={mockProfile} isEditing={true}/>);
     const addButton = screen.getByRole("button", {name: "Add"});
     expect(addButton).toBeInTheDocument();
-    addButton.click();
+    act(() => {addButton.click()});
     await waitFor(() => {
       expect(screen.getByText("Education:")).toBeInTheDocument();
     });

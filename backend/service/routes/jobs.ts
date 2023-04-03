@@ -11,7 +11,7 @@ import { RetrieveFullUserByID } from "../../db/users";
 
 export function AddListing(db: DB): Handler {
   return async (req: Request, res: Response, next: NextFunction) => {
-    const { title, compensation, description, location, type, schedule, industry, cover_letter_required, urgent, qualifications, benefits, requirements, screening_questions } = req.body;
+    const { title, compensation, description, location, type, schedule, industry, coverLetterRequired, urgent, qualifications, benefits, requirements, screeningQuestions } = req.body;
     const newID = randomUUID();
 
 
@@ -29,8 +29,8 @@ export function AddListing(db: DB): Handler {
     }
 
     const companyID = company.companyID;
-    const parsedRequireCoverLetter = ParseRequireCoverLetter(cover_letter_required);
-    const parsedScreeningQuestions = ParseScreeningQuestions(screening_questions);
+    const parsedRequireCoverLetter = ParseRequireCoverLetter(coverLetterRequired);
+    const parsedScreeningQuestions = ParseScreeningQuestions(screeningQuestions);
     const datePosted = new Date();
 
     const newJobListing = new JobListing(
@@ -77,7 +77,7 @@ export function GetListing(db: DB): Handler {
 export function UpdateListing(db: DB): Handler {
   return async (req: Request, res: Response, next: NextFunction) => {
     const id = req.params.id;
-    const listingData = req.body["screeningQuestions"] ? { ...req.body, screeningQuestions: ParseScreeningQuestions(req.body["screeningQuestions"]) } : req.body;
+    const listingData = req.body["screeningQuestions"] ? { ...req.body, coverLetterRequired: ParseRequireCoverLetter(req.body["coverLetterRequired"]), screeningQuestions: ParseScreeningQuestions(req.body["screeningQuestions"]) } : req.body;
     await validate.UpdateListing(db, id, req.body);
     const listing = await jobsdb.RetrieveJobListing(db, id);
     const updatedJobListing = { ...listing, ...listingData };
