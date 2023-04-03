@@ -83,8 +83,6 @@ export async function RetrieveFullUserByEmail(db: DB, email: string): Promise<Us
     return UserExpanded.fromUser(user, undefined, searcher);
   }
 
-  console.log(user)
-
   throw new Error(ErrorInvalidUserType);
 }
 
@@ -104,9 +102,7 @@ export async function UpdateUser(db: DB, id: string, data: any): Promise<void> {
   });
 
   if (Object.keys(baseData).length > 0) {
-    if (typeof id === "string") {
-      await db.UserCollection().doc(id).update(baseData);
-    }
+    await db.UserCollection().doc(id).update(baseData);
   }
   if (user!.searcherID) {
     const searcherData: { [key: string]: any } = {};
