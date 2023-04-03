@@ -33,7 +33,9 @@ export default function MyJobs() {
 
   return (
       <div>
+         <nav data-testid="navbar">
           <Navbar/>
+         </nav>
           {user.userID &&
       <div className='bg-lighter-grey min-h-screen justify-center flex'>
           <div className='bg-white mt-24 rounded-md px-12 py-7 space-y-3 min-w-[45%]'>
