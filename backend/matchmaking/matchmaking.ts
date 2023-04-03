@@ -14,6 +14,10 @@ export async function FindMatchesFromJLArray(db: DB, searcherID: string, jobList
     const searcher = searcherDoc.data() as Searcher;
     const matchingJobListings = jobListings
         .filter((jobListing) => {
+            if (!Array.isArray(jobListing.requirements) || !Array.isArray(searcher.skills)) {
+                return false;
+            }
+
             const hasQualification = jobListing.qualifications?.some((jobListingQualification) => {
                 return searcher.qualifications.some((userQualification) => {
                     return IsQualified(jobListingQualification, userQualification);
@@ -27,14 +31,18 @@ export async function FindMatchesFromJLArray(db: DB, searcherID: string, jobList
             return hasQualification || matchingSkill;
         })
         .sort((jobListingA, jobListingB) => {
+            if (!Array.isArray(jobListingA.requirements) || !Array.isArray(jobListingB.requirements) || !Array.isArray(searcher.skills)) {
+                return 0;
+            }
+
             const jobListingARequirementMatches = jobListingA.qualifications ? jobListingA.qualifications.filter((jobListingQualification: string) => searcher.qualifications.includes(jobListingQualification)).length : 0;
             const jobListingBRequirementMatches = jobListingB.qualifications ? jobListingB.qualifications.filter((jobListingQualification: string) => searcher.qualifications.includes(jobListingQualification)).length : 0;
-            const jobListingASkillMatches = jobListingA.requirements ? jobListingA.requirements.reduce((totalMatches: number, requirement: string) => {
+            const jobListingASkillMatches = jobListingA.requirements.reduce((totalMatches: number, requirement: string) => {
                 return totalMatches + (HasMatchingSkill(searcher.skills, requirement) ? 1 : 0);
-            }, 0) : 0;
-            const jobListingBSkillMatches = jobListingB.requirements ? jobListingB.requirements.reduce((totalMatches: number, requirement: string) => {
+            }, 0);
+            const jobListingBSkillMatches = jobListingB.requirements.reduce((totalMatches: number, requirement: string) => {
                 return totalMatches + (HasMatchingSkill(searcher.skills, requirement) ? 1 : 0);
-            }, 0) : 0;
+            }, 0);
             const jobListingATotalMatches = jobListingARequirementMatches + jobListingASkillMatches;
             const jobListingBTotalMatches = jobListingBRequirementMatches + jobListingBSkillMatches;
             return jobListingBTotalMatches - jobListingATotalMatches;
