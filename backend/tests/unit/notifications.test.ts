@@ -11,7 +11,7 @@ import Application from "../../models/application";
 import Notification from "../../models/notification"
 import {CreateNotification, DeleteNotification, GetAllUserNotifs, RetrieveNotification} from "../../db/notifications";
 import {CreateApplication} from "../../db/applications";
-import {ErrorUserNotFound} from "../../service/public";
+import {ErrorUserNotFound, getErrorMessage} from "../../service/public";
 
 test('create notification, retrieve notification, update notification, delete notification', async () => {
 
@@ -170,7 +170,7 @@ test('create notification, retrieve notification, update notification, delete no
          await CreateNotification(db,notificationWithInvalidID);
     }
     catch(e){
-        expect((e as Error).message).toEqual(ErrorUserNotFound);
+        expect(getErrorMessage(e)).toEqual(ErrorUserNotFound);
     }
 
     // Retrieve the notification by id.
