@@ -20,6 +20,4 @@ describe ('QuestionCard component', () => {
         const deleteButton = screen.getByRole('button');
         expect(deleteButton).toBeInTheDocument();
     });
-    // When trying to remove node the error below comes up
-    //NotFoundError: The node to be removed is not a child of this node.
 });

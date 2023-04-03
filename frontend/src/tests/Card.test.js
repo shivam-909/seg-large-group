@@ -19,17 +19,11 @@ describe ('Card component', () => {
 
         const deleteButton = screen.getByRole('button');
         expect(deleteButton).toBeInTheDocument();
-
-        //error that keeps coming up is NotFoundError: The node to be removed is not a child of this node.
-        // deleteButton.click();
-        // waitFor(() => { expect(screen.getByPlaceholderText(props.name)).not.toBeInTheDocument();
         });
-    // });
 
     it('should render id', () => {
         render (<Card {...cardProps}/>);
         const aName = screen.getByTestId('id-input');
         expect(aName).toBeInTheDocument();
     });
-
 });

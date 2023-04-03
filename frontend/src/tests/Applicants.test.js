@@ -21,19 +21,6 @@ describe('ApplicantsCard', () => {
     const navBar = screen.queryByTestId('navbar');
     waitFor(() => expect(navBar).toBeInTheDocument());
     });
-
-    // it('renders the Applied, Interviewed, Rejected and Hired buttons', () => {
-    //     render(
-    //         <Applicants/>);
-    //     const appliedButton = screen.getElementByClassName('button' ,{name: 'Appled', hidden:true});
-    //     expect(appliedButton).toBeInTheDocument();
-    // });
-
-
-
 });
 
-// test('button renders', () => {
-//     render(<Applicants/>);
-// })
 

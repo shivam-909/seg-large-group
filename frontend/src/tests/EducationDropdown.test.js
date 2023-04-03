@@ -28,6 +28,4 @@ describe("EducationDropdown", () => {
     });
     expect(getByText('Please remove all commas')).toBeInTheDocument();
   });
-
-
 });

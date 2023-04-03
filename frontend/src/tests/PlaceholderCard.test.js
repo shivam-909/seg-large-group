@@ -28,5 +28,4 @@ import PlaceholderCard from "../Components/SearchPage/PlaceholderCard";
 
      expect(props.onclick).toHaveBeenCalled();
    });
-
  });

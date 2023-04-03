@@ -45,9 +45,6 @@ describe('NotificationsPage', () => {
 
   });
 
-
-
-
   it('deletes notification when delete button is clicked', async () => {
     const notifications = [
       {

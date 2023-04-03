@@ -13,6 +13,4 @@ describe('Loading', () => {
     const loaderElement = screen.getByRole("status");
     expect(loaderElement).toHaveClass("custom-class");
   });
-
-
 });
