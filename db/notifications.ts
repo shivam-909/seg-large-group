@@ -1,8 +1,9 @@
 import Notification from "../models/notification";
 import DB from "./db";
 import * as usersdb from "./users";
-import {ErrorUserNotFound} from "../service/public";
 import * as errors from "../../backend/service/public";
+import 'express-async-errors';
+
 
 export async function CreateNotification(db: DB, notification: Notification): Promise<Notification> {
   const docRef = db.NotificationCollection().doc(notification.id);
