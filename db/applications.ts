@@ -39,6 +39,7 @@ export async function UpdateApplication(db: DB, application: Application): Promi
 
     try {
         await docRef.update({
+            'id': application.id,
             'status': application.status,
             'searcher': application.searcher,
             'jobListing': application.jobListing,
