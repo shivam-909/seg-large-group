@@ -21,14 +21,20 @@ Password:
 ## Installation Instructions
 1. Clone the repository.
 2. ```cd backend```
-3. ```npm install```
-4. ```npm run build```
-5. ```npm run dev```
-6. ```cd ..```
-7. ```cd frontend```
-8. ```npm install```
-9. ```npm run build```
-10. ```npm run start```
+3. Create a .env file in the backend directory and add the following environment variables: <br>
+```AWS_ACCESS_KEY_ID=AKIAWQAQTTQM4KT6WI7Y``` <br>
+```AWS_SECRET_ACCESS_KEY=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```<br>
+4. ```npm install```
+5. ```npm run build```
+6. ```npm run dev```
+7. ```cd ..```
+8. ```cd frontend```
+9. Create a .env file in the frontend directory and add the following environment variables: <br>
+```REACT_APP_BACKEND_URL=http://localhost:8000/``` <br>
+```REACT_APP_GOOGLE_API_KEY=AIzaSyC0FpC_LZEQb2iyXwOEcyM57llwjE9hBOQ```<br>
+10. ```npm install```
+11. ```npm run build```
+12. ```npm run start```
 
 ## Testing Instructions
 Run frontend tests:
