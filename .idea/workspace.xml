@@ -4,9 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="4982574e-0790-4121-adf6-99a374f2ef9b" name="Changes" comment="Merging main">
+    <list default="true" id="4982574e-0790-4121-adf6-99a374f2ef9b" name="Changes" comment="Change App title">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/tests/CompanyJobCard.test.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/tests/CompanyJobCard.test.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/Components/MyJobs/Category.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/Components/MyJobs/Category.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -14,12 +14,18 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="master" />
+      </map>
+    </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
   </component>
   <component name="ProjectId" id="2Nu057Gb6rGfQzRQHtQg1FUmTwc" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
@@ -41,6 +47,7 @@
   <component name="RunManager" selected="Jest.Tests in tests/">
     <configuration name="Filter.renders EditJob" type="JavaScriptTestRunnerJest" temporary="true" nameIsGenerated="true">
       <node-interpreter value="project" />
+      <node-options value="" />
       <jest-package value="$PROJECT_DIR$/frontend/node_modules/react-scripts" />
       <working-dir value="$PROJECT_DIR$/frontend" />
       <envs />
@@ -54,15 +61,16 @@
     </configuration>
     <configuration name="Tests in tests/" type="JavaScriptTestRunnerJest" temporary="true" nameIsGenerated="true">
       <node-interpreter value="project" />
+      <node-options value="" />
       <jest-package value="$PROJECT_DIR$/frontend/node_modules/react-scripts" />
       <working-dir value="$PROJECT_DIR$/frontend" />
       <envs />
-      <scope-kind value="DIRECTORY" />
-      <test-directory value="$PROJECT_DIR$/frontend/src/tests" />
+      <scope-kind value="ALL" />
       <method v="2" />
     </configuration>
     <configuration name="TextInputBox component.should render component on the screen" type="JavaScriptTestRunnerJest" temporary="true" nameIsGenerated="true">
       <node-interpreter value="project" />
+      <node-options value="" />
       <jest-package value="$PROJECT_DIR$/frontend/node_modules/react-scripts" />
       <working-dir value="$PROJECT_DIR$/frontend" />
       <envs />
@@ -99,7 +107,14 @@
       <option name="project" value="LOCAL" />
       <updated>1680498684177</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="Change App title">
+      <created>1680532083845</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1680532083845</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -125,10 +140,12 @@
     <MESSAGE value="Unversioned files" />
     <MESSAGE value="Pulled main in" />
     <MESSAGE value="Merging main" />
-    <option name="LAST_COMMIT_MESSAGE" value="Merging main" />
+    <MESSAGE value="Change App title" />
+    <option name="LAST_COMMIT_MESSAGE" value="Change App title" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/seg_large_group_3$TextInputBox_component_should_render_component_on_the_screen.info" NAME="TextInputBox component.should render component on the screen Coverage Results" MODIFIED="1680501252529" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="JestJavaScriptTestRunnerCoverage" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />
     <SUITE FILE_PATH="coverage/seg_large_group_3$Tests_in_tests_.info" NAME="Tests in tests/ Coverage Results" MODIFIED="1680502653092" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="JestJavaScriptTestRunnerCoverage" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />
+    <SUITE FILE_PATH="coverage/seg_large_group_3$TextInputBox_component_should_render_component_on_the_screen.info" NAME="TextInputBox component.should render component on the screen Coverage Results" MODIFIED="1680501252529" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="JestJavaScriptTestRunnerCoverage" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />
+    <SUITE FILE_PATH="coverage/seg_large_group$Filter_check_if_show_filter_button_works.info" NAME="Filter.check if show filter button works Coverage Results" MODIFIED="1680494360989" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="JestJavaScriptTestRunnerCoverage" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />
   </component>
 </project>

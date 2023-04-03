@@ -117,7 +117,6 @@ export default function Category(props) {
             })
             .catch(() => setLoading(false));
     }
-
     return (
         <div className='items-center justify-center flex relative w-full'>
             {!loading ?
@@ -125,6 +124,7 @@ export default function Category(props) {
                 {jobsList}
             </div>
                 :
+                // eslint-disable-next-line
             <div role='jobFound' ><Loading className={"h-10 w-10 border-[3px] border-dark-theme-grey"}/></div>}
         </div>
     );
