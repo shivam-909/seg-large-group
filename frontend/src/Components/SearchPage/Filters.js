@@ -108,6 +108,7 @@ export default function Filters(props) {
     }
 
     async function updateJobResults() {
+        console.log(props.jobs)
         const age = document.querySelector('input[name="age"]:checked').value;
         const distance = document.querySelector('input[name="distance"]:checked').value;
         const salaries = document.getElementsByName('salary');
