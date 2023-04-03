@@ -99,21 +99,21 @@ test('create searcher, create company, retrieve searcher by email, retrieved use
     try{
         await RetrieveFullUserByID(db, noTypeID);
     }catch(e){
-        expect((e as Error).message).toEqual(ErrorInvalidUserType);
+        expect((e as Error).message).toBe(ErrorInvalidUserType);
     }
 
 
     try{
         await RetrieveFullUserByEmail(db, noTypeEmail);
     }catch(e){
-        expect((e as Error).message).toEqual(ErrorInvalidUserType);
+        expect((e as Error).message).toBe(ErrorInvalidUserType);
     }
 
     // Delete a non-existing user
     try{
         await DeleteUser(db, randomUUID());
     }catch(e){
-        expect((e as Error).message).toEqual(ErrorUserNotFound);
+        expect((e as Error).message).toBe(ErrorUserNotFound);
     }
 
     // Retrieve the full searcher user
@@ -205,7 +205,7 @@ test('create searcher, create company, retrieve searcher by email, retrieved use
     // Delete the user.
     await DeleteUserByEmail(db, searcherEmail);
     await DeleteUserByEmail(db, companyEmail);
-    await DeleteUser(db, noTypeID);
+    await db.UserCollection().doc(noTypeID).delete();
     expect(await RetrieveFullUserByEmail(db, searcherEmail)).toBeNull();
     expect(await RetrieveFullUserByEmail(db, companyEmail)).toBeNull();
 
