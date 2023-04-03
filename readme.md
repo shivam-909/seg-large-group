@@ -11,12 +11,13 @@ Tahseen Humaira <br>
 
 ## Deployed Application
 Project URL: https://seg-large-group.vercel.app/ <br>
+If the above URL does not work properly, please use: https://classy-swan-27585b.netlify.app/ <br>
 #### Job searcher login credentials:
-Email:  <br>
-Password:
+Email: Derick.Reichert54@hotmail.com<br>
+Password: Password123!
 #### Company login credentials:
-Email:  <br>
-Password:
+Email: Destinee.Halvorson70@yahoo.com<br>
+Password: Password123!
 
 ## Installation Instructions
 1. Clone the repository.
