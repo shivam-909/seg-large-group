@@ -19,8 +19,9 @@ function JobPostCard(props) {
                     <PlaceholderCard img={suitcaseIcon} content={type}/>
                 ))}
             </div>
-
-            <Urgent urgent={props.urgent} icon={clockIcon}/>
+            <div data-testid="urgent-status">
+              <Urgent urgent={props.urgent} icon={clockIcon}/>
+            </div>
 
             {props.requirements.length > 0 &&
                 <div>

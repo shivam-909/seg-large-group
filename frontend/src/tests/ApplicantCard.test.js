@@ -1,8 +1,6 @@
 import React from 'react';
-import { render, fireEvent, screen } from '@testing-library/react';
+import { render} from '@testing-library/react';
 import ApplicantCard from '../Components/Applicants/ApplicantCard';
-import {BrowserRouter, Route, Routes, useNavigate} from "react-router-dom";
-
 
 describe('ApplicantsCard', () => {
     test('renders ApplicantsCard correctly', () => {
@@ -14,6 +12,7 @@ describe('ApplicantsCard', () => {
             status: 'Hired'
         };
         render(
+            <ApplicantCard/>
 
     );
     });

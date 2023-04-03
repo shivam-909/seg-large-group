@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="4982574e-0790-4121-adf6-99a374f2ef9b" name="Changes" comment="Merging main">
+      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/tests/itest/search/search.test.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/src/Auth/RefreshToken.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/src/tests/Filter.test.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/src/tests/JobPostAge.test.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/src/tests/JobPostCard.test.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/src/tests/NotificationPage.test.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/src/tests/PlaceholderCard.test.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/src/tests/Urgent.test.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/src/tests/__snapshots__/Filter.test.js.snap" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/backend/index.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/matchmaking/matchmaking.ts" beforeDir="false" afterPath="$PROJECT_DIR$/backend/matchmaking/matchmaking.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/search/search.ts" beforeDir="false" afterPath="$PROJECT_DIR$/backend/search/search.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/seeder/seed.ts" beforeDir="false" afterPath="$PROJECT_DIR$/backend/seeder/seed.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/service/middleware.ts" beforeDir="false" afterPath="$PROJECT_DIR$/backend/service/middleware.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/service/routes/jobs.ts" beforeDir="false" afterPath="$PROJECT_DIR$/backend/service/routes/jobs.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/service/routes/users.ts" beforeDir="false" afterPath="$PROJECT_DIR$/backend/service/routes/users.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/Auth/CompanyRoute.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/Auth/CompanyRoute.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/Auth/GetUser.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/Auth/GetUser.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/Auth/PrivateRoute.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/Auth/PrivateRoute.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/Components/Applicants/ApplicantCard.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/Components/Applicants/ApplicantCard.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/Components/Applicants/Applicants.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/Components/Applicants/Applicants.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/Components/Applicants/ViewApplicationPage.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/Components/Applicants/ViewApplicationPage.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/Components/ApplyPage/ApplyPage.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/Components/ApplyPage/ApplyPage.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/Components/JobPage/JobPage.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/Components/JobPage/JobPage.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/Components/MyJobs/Category.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/Components/MyJobs/Category.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/Components/MyJobs/CompanyJobCard.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/Components/MyJobs/CompanyJobCard.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/Components/MyJobs/EditJob.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/Components/MyJobs/EditJob.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/Components/MyJobs/JobCard.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/Components/MyJobs/JobCard.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/Components/MyJobs/MyJobs.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/Components/MyJobs/MyJobs.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/Components/Navbar/Navbar.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/Components/Navbar/Navbar.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/Components/NotificationsPage/NotificationsPage.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/Components/NotificationsPage/NotificationsPage.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/Components/ProfilePage/Location.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/Components/ProfilePage/Location.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/Components/ProfilePage/UserProfilePage.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/Components/ProfilePage/UserProfilePage.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/Components/RegisterPage/RegisterPage.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/Components/RegisterPage/RegisterPage.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/Components/SearchPage/Filters.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/Components/SearchPage/Filters.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/Components/SearchPage/JobDetailsCard.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/Components/SearchPage/JobDetailsCard.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/Components/SearchPage/JobPostCard.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/Components/SearchPage/JobPostCard.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/Components/SearchPage/PlaceholderCard.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/Components/SearchPage/PlaceholderCard.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/Components/SearchPage/SearchBar.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/Components/SearchPage/SearchBar.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/Components/SearchPage/SearchPage.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/Components/SearchPage/SearchPage.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/setupTests.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/setupTests.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/tests/ApplicantCard.test.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/tests/ApplicantCard.test.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/tests/EditJob.test.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/tests/EditJob.test.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/tests/ProfilePage.test.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/tests/SearchBar.test.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/tests/SearchBar.test.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/tests/SearchPage.test.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/tests/TextInputBox.test.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/tests/TextInputBox.test.js" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="ProjectId" id="2Nu057Gb6rGfQzRQHtQg1FUmTwc" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "WebServerToolWindowFactoryState": "false",
+    "git-widget-placeholder": "Merging tahseen-reactTesting",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs.jest.jest_package": "/Users/tahseenhumaira/Documents/GitHub/seg-large-group-3/frontend/node_modules/react-scripts",
+    "nodejs_package_manager_path": "npm",
+    "vue.rearranger.settings.migration": "true"
+  }
+}]]></component>
+  <component name="RunManager" selected="Jest.Filter.renders EditJob">
+    <configuration name="Filter.renders EditJob" type="JavaScriptTestRunnerJest" temporary="true" nameIsGenerated="true">
+      <node-interpreter value="project" />
+      <jest-package value="$PROJECT_DIR$/frontend/node_modules/react-scripts" />
+      <working-dir value="$PROJECT_DIR$/frontend" />
+      <envs />
+      <scope-kind value="TEST" />
+      <test-file value="$PROJECT_DIR$/frontend/src/tests/EditJob.test.js" />
+      <test-names>
+        <test-name value="Filter" />
+        <test-name value="renders EditJob" />
+      </test-names>
+      <method v="2" />
+    </configuration>
+    <configuration name="Tests in tests/" type="JavaScriptTestRunnerJest" temporary="true" nameIsGenerated="true">
+      <node-interpreter value="project" />
+      <jest-package value="$PROJECT_DIR$/frontend/node_modules/react-scripts" />
+      <working-dir value="$PROJECT_DIR$/frontend" />
+      <envs />
+      <scope-kind value="DIRECTORY" />
+      <test-directory value="$PROJECT_DIR$/frontend/src/tests" />
+      <method v="2" />
+    </configuration>
+    <configuration name="TextInputBox component.should render component on the screen" type="JavaScriptTestRunnerJest" temporary="true" nameIsGenerated="true">
+      <node-interpreter value="project" />
+      <jest-package value="$PROJECT_DIR$/frontend/node_modules/react-scripts" />
+      <working-dir value="$PROJECT_DIR$/frontend" />
+      <envs />
+      <scope-kind value="TEST" />
+      <test-file value="$PROJECT_DIR$/frontend/src/tests/TextInputBox.test.js" />
+      <test-names>
+        <test-name value="TextInputBox component" />
+        <test-name value="should render component on the screen" />
+      </test-names>
+      <method v="2" />
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Jest.Filter.renders EditJob" />
+        <item itemvalue="Jest.TextInputBox component.should render component on the screen" />
+        <item itemvalue="Jest.Tests in tests/" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="4982574e-0790-4121-adf6-99a374f2ef9b" name="Changes" comment="" />
+      <created>1680498476107</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1680498476107</updated>
+      <workItem from="1680498479167" duration="869000" />
+    </task>
+    <task id="LOCAL-00001" summary="Unversioned files">
+      <created>1680498684177</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1680498684177</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+    <option name="exactExcludedFiles">
+      <list>
+        <option value="$PROJECT_DIR$/backend/config/config.js" />
+      </list>
+    </option>
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Unversioned files" />
+    <MESSAGE value="Pulled main in" />
+    <MESSAGE value="Merging main" />
+    <option name="LAST_COMMIT_MESSAGE" value="Merging main" />
+  </component>
+  <component name="com.intellij.coverage.CoverageDataManagerImpl">
+    <SUITE FILE_PATH="coverage/seg_large_group_3$TextInputBox_component_should_render_component_on_the_screen.info" NAME="TextInputBox component.should render component on the screen Coverage Results" MODIFIED="1680501252529" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="JestJavaScriptTestRunnerCoverage" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />
+  </component>
+</project>

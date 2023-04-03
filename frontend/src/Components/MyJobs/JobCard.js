@@ -2,9 +2,9 @@ import React, {useState} from "react";
 import {useNavigate} from "react-router-dom";
 import Modal from 'react-modal';
 import axios from "axios";
+import RefreshToken from "../../Auth/RefreshToken";
 
 export default function JobCard(props) {
-    console.log(props)
     const navigate = useNavigate();
     const [modalIsOpen, setIsOpen] = useState(false);
 
@@ -17,7 +17,7 @@ export default function JobCard(props) {
                         <UpdateJobStatus modalIsOpen={modalIsOpen} closeModal={() => {setIsOpen(false)}} id={props.id}/> </div>}
                 <div>
                     {props.status === "Saved" && <button onClick={() => {navigate("/apply/"+props.jobID)}} className={"border-2 border-blue rounded-md px-5 py-1 text-white bg-blue float-right font-bold"}>Apply now</button>}
-                    <p onClick={() => {navigate("/viewjob/"+props.jobID)}} className='font-bold text-xl hover:cursor-pointer underline w-auto'>{props.title}</p>
+                    <p onClick={() => {window.open("/viewjob/"+props.jobID, "_blank")}} className='font-bold text-xl hover:cursor-pointer underline w-auto'>{props.title}</p>
                     <p>{props.company}</p>
                     <p className='mb-1'>{props.location}</p>
                 </div>
@@ -47,6 +47,7 @@ export function UpdateJobStatus(props){
     async function archive() {
         const formData = new FormData();
         formData.append("status","Archived");
+        await RefreshToken();
         await axios.patch(`${process.env.REACT_APP_BACKEND_URL}api/applications/${props.id}`,formData).then(navigate(0))
     }
 

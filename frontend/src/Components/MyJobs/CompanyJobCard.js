@@ -2,6 +2,7 @@ import {useNavigate} from "react-router-dom";
 import React, {useState} from "react";
 import axios from "axios";
 import Modal from "react-modal";
+import RefreshToken from "../../Auth/RefreshToken";
 
 export default function CompanyJobCard(props) {
     const navigate = useNavigate();
@@ -45,6 +46,7 @@ export function ConfirmDeleteModal(props){
     };
 
     async function deleteJob(){
+        await RefreshToken();
         await axios.delete(`${process.env.REACT_APP_BACKEND_URL}api/jobs/${props.id}`);
         window.location.reload(false)
     }

@@ -10,7 +10,8 @@ import axios from "axios";
 import {useNavigate, useParams} from "react-router-dom";
 import Loading from "../Loading/Loading";
 import {Location} from "./Location";
-import {Document, Page} from "react-pdf/dist/cjs/entry.webpack";
+import {Document, Page, pdfjs } from "react-pdf/dist/cjs/entry.webpack";
+import RefreshToken from "../../Auth/RefreshToken";
 
 function UserProfilePage() {
     const navigate = useNavigate();
@@ -23,10 +24,12 @@ function UserProfilePage() {
     const [loading, setLoading] = useState(true)
 
     useEffect(() => {
+        pdfjs.GlobalWorkerOptions.workerSrc = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
         const getProfile = async () => {
+            await RefreshToken();
             if (Object.keys(profile).length === 0) {
                 const token = localStorage.getItem('access');
-                await axios.get(`${process.env.REACT_APP_BACKEND_URL}api/user`, {headers: {Authorization: `Bearer ${token}`}})
+                await axios.get(`${process.env.REACT_APP_BACKEND_URL}api/user/${id}`, {headers: {Authorization: `Bearer ${token}`}})
                     .then(r => {
                         setProfile(r.data)
                     });
@@ -40,6 +43,7 @@ function UserProfilePage() {
     useEffect(() => {
         toggleKeys(false);
         const getUser = async () => {
+            await RefreshToken();
             if (user.length === 0) {
                 await GetData().then(r => {
                     setUser(r);
@@ -69,6 +73,7 @@ function UserProfilePage() {
     }
 
     async function saveCompany() {
+        await RefreshToken();
         let companyName = document.getElementById("firstName")?.value;
         let location = document.getElementById("locationInput").value;
 
@@ -93,6 +98,7 @@ function UserProfilePage() {
     }
 
     async function saveSearcher() {
+        await RefreshToken();
         let firstName = document.getElementById("firstName")?.value;
         let lastName = document.getElementById("lastName")?.value;
         let location = document.getElementById("locationInput").value;
@@ -158,6 +164,7 @@ function UserProfilePage() {
         }
     }
     async function updateCV(event) {
+        await RefreshToken();
         const {files} = event.target;
         const file = event.target.files[0];
         const fileType = file['type'];
@@ -183,6 +190,7 @@ function UserProfilePage() {
         }
     }
     async function updatePfp(event){
+        await RefreshToken();
         const{files} = event.target;
         const  fileType = files[0]['type'];
         const validImageTypes = ['image/jpeg', 'image/png'];

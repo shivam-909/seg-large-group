@@ -12,9 +12,11 @@ import openInNewTabIcon from "../../icons/openInNewTabIcon.png";
 import {useNavigate} from "react-router-dom";
 import axios from "axios";
 import {GetData} from "../../Auth/GetUser";
+import RefreshToken from "../../Auth/RefreshToken";
+
 
 function JobDetailsCard(props) {
-    const navigate = useNavigate()
+    const navigate = useNavigate();
     const [savedJobPost, setSavedJopPost] = useState(false);
     const [user, setUser] = useState([])
     const [companyUser, setCompany] = useState([])
@@ -23,9 +25,12 @@ function JobDetailsCard(props) {
     useEffect(() => {
         const getUser = async () => {
             if (user.length === 0){
+                await RefreshToken();
                 await GetData().then(r => {
-                    setUser(r)
-                });
+                    if (r !== undefined) {
+                        setUser(r)
+                    }
+                }).catch(e => console.log(e));
             }
         };
         getUser()
@@ -39,28 +44,27 @@ function JobDetailsCard(props) {
             if(!props.companyID){
                 return;
             }
+            await RefreshToken();
             const getCompanyUser = new FormData();
             getCompanyUser.append("companyID", props.companyID)
             await axios.post(`${process.env.REACT_APP_BACKEND_URL}api/user/typeid`, getCompanyUser).then(async r => {
                 setCompany(r.data.userID);
-                if (!user.searcher?.searcherID){
+                if (!user.searcher?.searcherID) {
                     return;
                 }
                 const userApplications = new FormData();
-                userApplications.append("searcher", user.searcher?.searcherID)
+                userApplications.append("searcher", user.searcher?.searcherID);
+                userApplications.append("jobListing", props.id);
                 await axios.post(`${process.env.REACT_APP_BACKEND_URL}api/application/filter`, userApplications).then(res => {
-                    for (const appl of res.data.applications) {
-                        if (appl.searcher === user.searcher?.searcherID) {
-                            setHasApplied(true);
-                        }
-                    }
+                    setHasApplied(res.data.applications.length > 0)
                 });
             })
         }
         getCompany();
-    },[props.companyID, user]) // eslint-disable-line
+    },[props.id, user]) // eslint-disable-line
 
     async function saveJobPost() {
+        await RefreshToken();
         if (user.userID){
             if(!savedJobPost){
                 const savedJobs = user.searcher?.savedJobs;
@@ -71,7 +75,7 @@ function JobDetailsCard(props) {
                 }
                 const token = localStorage.getItem("access");
                 if (token) {
-                    await axios.patch(`${process.env.REACT_APP_BACKEND_URL}api/users`, newUser, {headers: {Authorization: `Bearer ${user.token}`}});
+                    await axios.patch(`${process.env.REACT_APP_BACKEND_URL}api/users`, newUser, {headers: {Authorization: `Bearer ${token}`}});
                 }
             }
             else{
@@ -85,11 +89,8 @@ function JobDetailsCard(props) {
                     }
                     const token = localStorage.getItem("access");
                     if (token) {
-                        await axios.patch(`${process.env.REACT_APP_BACKEND_URL}api/users`, newUser, {headers: {Authorization: `Bearer ${user.token}`}});
+                        await axios.patch(`${process.env.REACT_APP_BACKEND_URL}api/users`, newUser, {headers: {Authorization: `Bearer ${token}`}});
                     }
-                }
-                else{
-                    console.log("job not saved")
                 }
             }
             setSavedJopPost(!savedJobPost);
@@ -100,7 +101,7 @@ function JobDetailsCard(props) {
     }
 
     return (
-        <div className={`px-5 py-8 border-2 border-darker-grey rounded-xl bg-white overflow-y-scroll max-h-[95vh] sticky top-14 ${props.fullScreen ? 'max-w-[1200px]' : 'max-w-[800px]'}`}>
+        <div className={`px-5 py-8 border-2 border-darker-grey rounded-xl bg-white overflow-y-scroll max-h-[95vh] min-w-[70%] sticky top-14 ${props.fullScreen ? 'max-w-[1200px]' : 'max-w-[800px]'}`}>
             <p className='font-bold text-xl'>{props.title}</p>
             <a href={'/profile/'+companyUser} target='_blank' rel={"noreferrer"}>{props.companyName}</a>
             <p className='mb-5'>{companyUser.location}</p>
@@ -139,7 +140,7 @@ function JobDetailsCard(props) {
                     <p className='text-sm font-bold'>Shift and schedule</p>
                 </div>
                 <div className='space-x-1.5'>
-                    {props.schedule.map(schedule => (
+                    {props.schedule && props.schedule.map(schedule => (
                         <PlaceholderCard content={schedule}/>
                     ))}
                 </div>
@@ -150,9 +151,10 @@ function JobDetailsCard(props) {
             <p className='text-xl font-bold mb-4'>Qualifications</p>
 
             <div className='space-x-1.5'>
-                {props.qualifications.map(qualification => (
-                    <PlaceholderCard content={qualification}/>
-                ))}
+                {props.qualifications && props.qualifications.map(qualification => {
+                    qualification = qualification.split(',');
+                    return <PlaceholderCard content={qualification.length < 3 ? `${qualification[1]} in ${qualification[0]}` : `${qualification[1]} in ${qualification[0]} (Grade: ${qualification[2].trim()})`}/>;
+                })}
             </div>
 
             <div>
@@ -161,7 +163,7 @@ function JobDetailsCard(props) {
                 <p className='text-xl font-bold mb-4'>Requirements</p>
 
                 <div className='space-x-1.5'>
-                    {props.requirements.map(requirement => {
+                    {props.requirements && props.requirements.map(requirement => {
                         requirement = requirement.split(',');
                         return <PlaceholderCard content={`${requirement[0]} (${requirement[1]} ${requirement[2]})`}/>;
                     })}
@@ -173,7 +175,7 @@ function JobDetailsCard(props) {
             <p className='text-xl font-bold mb-4'>Benefits</p>
 
             <div className='space-x-1.5'>
-                {props.benefits.map(benefit => (
+                {props.benefits && props.benefits.map(benefit => (
                     <PlaceholderCard content={benefit}/>
                 ))}
             </div>
