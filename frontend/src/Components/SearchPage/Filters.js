@@ -180,8 +180,16 @@ export default function Filters(props) {
     function clearFilters() {
         setFilteredJobs(originalJobResults);
         setTempFilteredJobs(originalJobResults);
-        document.getElementById('anyTime').checked = true;
-        document.getElementById('anyDistance').checked = true;
+        //document.getElementById('anyTime').checked = true;
+        //document.getElementById('anyDistance').checked = true;
+        const anyTimeCheckbox = document.getElementById('anyTime');
+        if (anyTimeCheckbox) {
+          anyTimeCheckbox.checked = true;
+        }
+        const anyDistanceCheckbox = document.getElementById('anyDistance');
+        if (anyDistanceCheckbox) {
+          anyDistanceCheckbox.checked = true;
+        }
         const hour = document.getElementById('hour');
         const day = document.getElementById('day');
         const week = document.getElementById('week');
