@@ -59,7 +59,7 @@ export default function RegisterPage() {
 
         if (role === "company") {
             const companyName = document.getElementById("companyName").value;
-            formData.append('companyName', companyName);
+            formData.append('company_name', companyName);
         }
 
         formData.append('user_type', role);

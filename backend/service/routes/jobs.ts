@@ -11,16 +11,26 @@ import { RetrieveFullUserByID } from "../../db/users";
 
 export function AddListing(db: DB): Handler {
   return async (req: Request, res: Response, next: NextFunction) => {
-    const { title, compensation, description, location, type, schedule, industry, cover_letter_required, urgent, qualifications, benefits, requirements, screening_questions } = req.body;
+    const { title, compensation, description, location, type, schedule, industry, cover_letter_required, urgent, qualifications, benefits, requirements, screeningQuestions } = req.body;
     const newID = randomUUID();
 
 
     // Get auth_username from headers.
     const userID = req.headers.auth_username as string;
     const company = await RetrieveFullUserByID(db, userID)
-    const companyID = company!.companyID || "";
+    if (company === null) {
+      next(ErrorFailedToCreateListing);
+      return;
+    }
+
+    if (company.companyID === null || company.companyID === undefined) {
+      next(ErrorFailedToCreateListing);
+      return;
+    }
+
+    const companyID = company.companyID;
     const parsedRequireCoverLetter = ParseRequireCoverLetter(cover_letter_required);
-    const parsedScreeningQuestions = ParseScreeningQuestions(screening_questions);
+    const parsedScreeningQuestions = ParseScreeningQuestions(screeningQuestions);
     const datePosted = new Date();
 
     const newJobListing = new JobListing(

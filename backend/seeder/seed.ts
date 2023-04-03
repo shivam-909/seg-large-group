@@ -444,11 +444,9 @@ async function GenerateCompanyNotification(db: DB, application: Application){
     let companyNotifs : any[] = [];
 
     if(application.status == 'Applied'){
-
         content = companyNotification.NewApplicant.toString();
     }
     else if(application.status == 'Archived'){
-
         content = companyNotification.Withdrawal.toString();
     }
 
