@@ -12,7 +12,7 @@ describe('EmployerProfilePage', () => {
     const navbarElement = screen.queryByTestId('navbar');
     waitFor(() => expect(navbarElement).toBeInTheDocument())
   });
-  //
+
   // test('render contact information inputs', () => {
   //   render(<UserProfilePage />);
   //   const firstNameInput = screen.getByPlaceholderText('Please enter your First Name');

@@ -58,10 +58,7 @@ describe('SearchBar', () => {
 //     expect(screen.getByLabelText('Salary')).toHaveValue('75000');
 //     expect(screen.getByLabelText('Job Type')).toHaveValue('Permanent');
 //     expect(screen.getByLabelText('Situation')).toHaveValue('Remote');
-//
 //   });
-//
-//
 //
 // describe('SearchBar', () => {
 //   it('renders the dropdown fields with options', () => {
@@ -89,7 +86,6 @@ describe('SearchBar', () => {
 //     expect(screen.getByLabelText('Salary')).toHaveValue('75000');
 //     expect(screen.getByLabelText('Job Type')).toHaveValue('Permanent');
 //     expect(screen.getByLabelText('Situation')).toHaveValue('Remote');
-//
 //   });
   });
 });
