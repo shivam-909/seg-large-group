@@ -21,7 +21,6 @@ describe('SearchBar', () => {
       onLocationInputChange: jest.fn(),
       onJobTitleInputChange: jest.fn(),
       onclick: jest.fn(),
-      OK: true,
       Location: {
         onChange: jest.fn(),
         disabled: false,
