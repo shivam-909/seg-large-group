@@ -111,7 +111,7 @@ export default function NotificationsPage() {
                                 </div>
                             </div>
                             :
-                            <div data-testid = 'loading-spinner'>
+                            <div role='status'>
                             <Loading className='w-16 h-16 border-[6px] border-dark-theme-grey'/>
                             </div>
                         }
