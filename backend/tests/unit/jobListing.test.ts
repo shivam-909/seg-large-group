@@ -12,6 +12,7 @@ import {
     RetrieveJobListingsByFilter,
     UpdateJobListing
 } from "../../db/jobs";
+import {getErrorMessage} from "../../service/public";
 
 test('create jobListing, retrieve jobListing, update jobListing, delete jobListing', async () => {
 
@@ -226,6 +227,14 @@ test('create jobListing, retrieve jobListing, update jobListing, delete jobListi
     await DeleteJobsByCompanyID(db, companyId);
     const deletedListing = await RetrieveJobListing(db, tempID);
     expect(deletedListing).toBeUndefined();
+
+    //test delete job listing by incorrect company id
+    try {
+        await DeleteJobsByCompanyID(db, userId);
+    }catch(e){
+        expect(getErrorMessage(e)).toEqual('Company ID is not defined');
+    }
+
 
 
     // Delete the job listing.
