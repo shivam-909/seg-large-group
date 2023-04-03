@@ -13,7 +13,7 @@ import {CreateNotification, DeleteNotification, GetAllUserNotifs, RetrieveNotifi
 import {CreateApplication} from "../../db/applications";
 import {ErrorUserNotFound, getErrorMessage} from "../../service/public";
 
-test('create notification, retrieve notification, update notification, delete notification', async () => {
+test('create notification, retrieve notification, delete notification', async () => {
 
     //create company
     const db = new DB();
