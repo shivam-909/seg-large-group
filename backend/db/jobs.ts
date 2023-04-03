@@ -5,7 +5,6 @@ import { Searcher } from "../models/user";
 export async function CreateJobListing(db: DB, jobListing: JobListing): Promise<JobListing> {
   const docRef = db.JobListingCollection().doc(jobListing.id);
 
-  try {
     await docRef.set({
       id: jobListing.id,
       title: jobListing.title,
@@ -24,9 +23,7 @@ export async function CreateJobListing(db: DB, jobListing: JobListing): Promise<
       requirements: jobListing.requirements,
       screeningQuestions: jobListing.screeningQuestions,
     });
-  } catch (err) {
-    throw err;
-  }
+
 
   return jobListing;
 }
