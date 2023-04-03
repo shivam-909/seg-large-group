@@ -3,7 +3,7 @@ jest.mock('react-router-dom', () => ({
   ...jest.requireActual('react-router-dom'),
   useNavigate: () => mockedUsedNavigate,
 }));
-import {render, screen, waitFor} from "@testing-library/react";
+import {render, screen, waitFor, act} from "@testing-library/react";
 import { initialize } from "@googlemaps/jest-mocks";
 import userEvent from '@testing-library/user-event';
 import Filters from "../Components/SearchPage/Filters";
