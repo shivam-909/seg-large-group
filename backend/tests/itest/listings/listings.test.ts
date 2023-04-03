@@ -108,7 +108,6 @@ it("create listing", async () => {
     // Expect 200 with listing in body. If its not 200, print the body.
     expect(listingResponse2.status).toEqual(200);
     const listingBody2 = await listingResponse2.json() as any;
-    console.log(listingBody2)
     expect(listingBody2).not.toBeNull();
     expect(listingBody2.listing).not.toBeNull();
 
