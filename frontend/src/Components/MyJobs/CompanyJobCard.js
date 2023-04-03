@@ -63,7 +63,7 @@ export function ConfirmDeleteModal(props){
                     <div className={"border-b-2 border-grey flex relative mb-5"}/>
                     <div className={"grid grid-cols-2"}>
                         <button onClick={props.closeModal} className={"border-2 border-dark-theme-grey bg-[#ccc] rounded-md text-lg p-1 font-bold mr-2"}>Cancel</button>
-                        <button onClick={() => {deleteJob()}} className={"border-2 border-[#000] bg-red rounded-md p-1 text-lg text-white font-bold ml-2"}>Delete</button>
+                        <button data-testid='delete-button' onClick={() => {deleteJob()}} className={"border-2 border-[#000] bg-red rounded-md p-1 text-lg text-white font-bold ml-2"}>Delete</button>
                     </div>
                 </div>
             </Modal>
