@@ -1,7 +1,6 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 import Skills from '../Components/ProfilePage/Skills';
-import userEvent from '@testing-library/user-event';
 
 describe('Skills', () => {
   const mockProfile = {
